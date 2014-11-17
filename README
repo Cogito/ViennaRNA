@@ -110,3 +110,9 @@ rna@tbi.univie.ac.at
 
 Ivo Hofacker, Spring 2006
 
+-----------------------------------------------------------------------------
+Example:
+$ Progs/RNAfold --ligand FMN:200
+
+will fold sequences assuming 200 uM of FMN in the solution.
+

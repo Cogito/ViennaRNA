@@ -25,7 +25,7 @@ extension = Extension("_RNA",
                       )
  
 setup(name="RNA",
-      version="2.1.3",
+      version="2.1.4",
       description="ViennaRNA",
       author="Ivo Hofacker, Institute for Theoretical Chemistry, University of Vienna",
       url="http://www.tbi.univie.ac.a/~ivo/RNA",

@@ -1,14 +1,15 @@
 #!/usr/local/bin/perl
 # zoom into a PostScript dot plot produced by RNAfold 
-# Last changed Time-stamp: <97/11/06 19:55:54 ivo> 
+# Last changed Time-stamp: <1998-06-27 22:00:20 ivo> 
 sub usage {
     die "Usage: $0 [-f first] [-l last] [dp_file]\n";
 }
 
 $from=1;
 
+# parse command line
 while ($_ = shift) {
-    /^-\?/ && &usage;
+    /^-[h\?]/ && &usage;
     /^-f$/ && ($from = shift, next );
     /^-l$/ && ($to   = shift, next );
     unshift (@ARGV, $_);

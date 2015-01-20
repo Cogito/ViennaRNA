@@ -48,57 +48,60 @@ PRIVATE  float   StrEdit_GotohBeta  = 1.;
 
 PUBLIC float **read_distance_matrix(char type[])
 {
-   char    *line;
+   char   *line;
    float **D;
    float   tmp;
    int     i,j,size;
    
    while(1) {
-      type[0]= '\0';
-      size   =    0;
-      D      = NULL;
-      if ((line = get_line(stdin))==NULL) return NULL;
-      if (*line =='@')    return NULL;
-      if (*line =='*') {
-         N_of_infiles++;
-         if(file_name) free(file_name);
-
-         if(strlen(line)>1) {
-	    file_name = (char *) space(sizeof(char)*strlen(line));
-            sscanf(line,"*%s",file_name);
-	 } else {
-	    file_name = (char *) space(10);
-            sprintf(file_name,"%d",N_of_infiles);
+     type[0]= '\0';
+     size   =    0;
+     D      = NULL;
+     if ((line = get_line(stdin))==NULL) return NULL;
+     if (*line =='@') return NULL;
+     if (*line =='*') {
+       N_of_infiles++;
+       if(file_name) free(file_name);
+       
+       if(strlen(line)>1) {
+	 file_name = (char *) space(sizeof(char)*strlen(line));
+	 sscanf(line,"*%s",file_name);
+       } else {
+	 file_name = (char *) space(10);
+	 sprintf(file_name,"%d",N_of_infiles);
+       }
+       read_taxa_list();
+     } 
+     else if (*line=='>') {
+       int r;
+       size = 0; 
+       r = sscanf(line,"> %1s%*[ ] %d", type, &size);
+       fprintf(stderr, "%d ", r);
+       if (r==EOF) return NULL;
+       if((r==2)&&(size>1)) {
+	 D=(float **)space((size+1)*sizeof(float *));
+	 for(i=0; i<=size; i++)
+	   D[i] = (float *)space((size+1)*sizeof(float));
+	 D[0][0] = (float)size;
+	 D[1][1] = 0.0;
+	 for(i=2; i<= size; i++) {
+	   D[i][i] = 0.0;
+	   for(j=1; j<i; j++) {
+	     if (scanf("%f", &tmp)!=1) {
+	       for(i=0;i<=size;i++) free(D[i]);
+	       free(D);
+	       return NULL;
+	     }
+	     D[i][j] = tmp;
+	     D[j][i] = tmp;
+	   }
 	 }
-         read_taxa_list();
-      } 
-      else if (*line=='>') {
-	 size = 0; type[1] = '\0';
-         if (sscanf(line,"> %c %d", type, &size)==EOF) return NULL;
-	 if(size>1) {
-	    D=(float **)space((size+1)*sizeof(float *));
-	    for(i=0; i<=size; i++)
-	       D[i] = (float *)space((size+1)*sizeof(float));
-	    D[0][0] = (float)size;
-	    D[1][1] = 0.0;
-	    for(i=2; i<= size; i++) {
-	       D[i][i] = 0.0;
-	       for(j=1; j<i; j++) {
-		  if (scanf("%f", &tmp)==EOF) {
-		     for(i=0;i<=size;i++) free(D[i]);
-		     free(D);
-		     return NULL;
-		  }
-		  D[i][j] = tmp;
-		  D[j][i] = tmp;
-	       }
-	    }
-	    return D;
-	 }
-	 else printf("%s\n",line);
-      }
-      else printf(" %s\n", line);
-      free(line);
+	 return D;
+       }
+       else printf("%s\n",line);
+     }
+     else printf(" %s\n", line);
+     free(line);
    }
 }
 
@@ -546,7 +549,7 @@ PUBLIC void  Set_StrEdit_CostMatrix(char type)
         StrEdit_GotohAlpha    = 3.;
         StrEdit_GotohBeta     = 0.;
         break;
-      default: 
+   default: 
         if(!StrEdit_GapCost) StrEdit_GapCost = 1.;  /* This is the simple distance */
    }
 }

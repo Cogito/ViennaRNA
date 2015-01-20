@@ -84,7 +84,7 @@ $give_up
 ----------------------------------------
 
 $pr
-        [ Global : float * pr ]
+        [ Global : double * pr ]
         base pairing prob. matrix 
 
 $noGU
@@ -155,6 +155,9 @@ $fold_constrained
 
 $do_backtrack
         [ Global : int do_backtrack ]
+
+$noLonelyPairs
+        [ Global : int noLonelyPairs ]
 
 $backtrack_type
         [ Global : char backtrack_type ]
@@ -304,7 +307,7 @@ init_rand();
 
 $xsubi
         [ Global : unsigned short * xsubi ]
-        48bit random number 
+        current 48bit random number 
 
 urn();
         [ returns double  ]
@@ -316,6 +319,7 @@ int_urn(from,to);
 
 filecopy(from,to);
         [ returns void  ]
+        inefficient `cp' 
 
 time_stamp();
         [ returns char * ]
@@ -323,14 +327,35 @@ time_stamp();
 
 random_string(l,symbols);
         [ returns char * ]
+        random string of length l using characters from symbols[] 
 
 hamming(s1,s2);
         [ returns int  ]
-        hamming distance 
+        calculate hamming distance 
 
 get_line(fp);
         [ returns char * ]
-        read one line 
+        read one (arbitrary length) line from fp 
+
+pack_structure(struc);
+        [ returns char * ]
+        pack secondary secondary structure, 5:1 compression using base 3
+        encoding 
+
+unpack_structure(packed);
+        [ returns char * ]
+        unpack sec structure packed with pack_structure() 
+
+make_pair_table(structure);
+        [ returns short * ]
+        returns a newly allocated table, such that: table[i]=j if (i.j)
+        pair or 0 if i is unpaired, table[0] contains the length of the
+        structure. 
+
+bp_distance(str1,str2);
+        [ returns int  ]
+        dist = {number of base pairs in one structure but not in the other}
+        same as edit distance with open-pair close-pair as move-set 
 
 PS_rna_plot(string,structure,file);
         [ returns int  ]
@@ -340,9 +365,17 @@ gmlRNA(string,structure,ssfile,option);
         [ returns int  ]
         structure drawing in gml 
 
+ssv_rna_plot(string,structure,ssfile);
+        [ returns int  ]
+        write coord file for SStructView 
+
 PS_dot_plot(string,file);
         [ returns int  ]
         produce a PostScript dot plot of the pair probability matix 
+
+$rna_plot_type
+        [ Global : int rna_plot_type ]
+        0= simple coordinates, 1= naview 
 
 read_parameter_file(fname);
         [ returns void  ]

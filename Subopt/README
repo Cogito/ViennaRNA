@@ -1,0 +1,18 @@
+This directory contains the first release of software for calculating
+all suboptimal structures within a given energy range of the minimum
+free energy (mfe). The approach is quite different from other programs 
+for suboptimal folding like Michael Zuker's mfold: While mfold tries to
+generate a (small) representative sample of structures, we generate every
+possible structure in the energy range. Be warned that it is easy to
+generate more structures than your computer can handle.
+
+A manuscript describing the method and sample applications can 
+be found at http://www.tbi.univie.ac.at/papers/98wplist.html
+
+As this program program is fairly new, expect more bugs than in other
+parts of the package.
+
+Just type  make  to build the RNAsubopt program (be sure you built the
+rest of the package first by typing make in the parent directory).
+
+See the man page RNAsubopt.man for more information.

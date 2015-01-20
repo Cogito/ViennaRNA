@@ -5,7 +5,7 @@
 use RNA;
 use Getopt::Long;
 
-# Getopt::Long::config(no_ignore_case);
+ Getopt::Long::config(no_ignore_case);
 
 $scale = "....,....1....,....2....,....3....,....4" .
     "....,....5....,....6....,....7....,....8";
@@ -16,17 +16,22 @@ $scale = "....,....1....,....2....,....3....,....4" .
 			   "p0" => \$pf0,
 			   "C"   => \$RNA::fold_constrained,
 			   "T=f" => \$RNA::temperature,
-			   "4", "d",
+			   "4", "d", "d2",
 			   "noGU" => \$RNA::noGU,
-			   "noCloseGU" => $RNA::no_closingGU,
+			   "noCloseGU" => \$RNA::no_closingGU,
+			   "noLP" => \$RNA::noLonelyPairs,
 			   "e=i" => \$RNA::energy_set,
 			   "P=s" => \$ParamFile,
 			   "nsp=s" => \$ns_bases,
 			   "S=f" => \$sfact);
 
-$pf=0 if ($pf0);
+if ($pf0) {
+  $RNA::backtrack=0;
+  $pf=1;
+}
 $RNA::tetra_loop = 0 if ($opt_4);
 $RNA::dangles = 0 if ($opt_d);
+$RNA::dangles = 2 if ($opt_d2);
 
  RNA::read_parameter_file($ParamFile) if ($ParamFile);
 
@@ -137,7 +142,7 @@ while (<>) {	# main loop: continue until end of file
 sub usage()
 {
     die("usage: " . 
-	"RNAfold [-p1|-p0] [-C] [-T temp] [-4] [-d] [-noGU] [-noCloseGU]\n" .
+	"RNAfold [-p[0]] [-C] [-T temp] [-4] [-d] [-noGU] [-noCloseGU]\n" .
 	"               [-e e_set] [-P paramfile] [-nsp pairs] [-S scale]");
 }
 

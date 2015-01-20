@@ -37,7 +37,7 @@ if ($struct eq $struc1)
 if (RNA::energy_of_struct($seq1,$struc1) == $mfe)
     {print "ok 5\n"; } else { print "not ok 5\n"; }
 # pf_fold
-$f = RNA::pf_fold($seq1, "");
+$f = RNA::pf_fold($seq1, $struct);
 if (($f<$mfe)&&($mfe-$f<0.8)) 
     {print "ok 6\n"; } else { print "not ok 6\n"; }
 # tree distance
@@ -55,16 +55,24 @@ if (RNA::ptrvalue($RNA::iindx,3)==108)
 $p1 = RNA::get_pr(2,15);
 $ii = RNA::ptrvalue($RNA::iindx, 2);
 $p2 = RNA::ptrvalue($RNA::pr, $ii-15);
-if (($p1<0.976) && ($p1>0.975) && ($p1 == $p2))
+if (($p1<0.976) && ($p1>0.975) && (abs($p1-$p2)<1e-8))
     {print "ok 9\n"; } else { print "not ok 9 $p1 $p2\n" ;}
 
 $bpf = RNA::Make_bp_profile(length($seq1));
 $bpfi = RNA::deref_any($bpf, 2);
-if ((RNA::ptrvalue($bpfi, 0, "float")+RNA::ptrvalue($bpfi,1,'float')==1)&&
-    (RNA::ptrvalue($bpfi, 1, "float")>$p1))
-    {print "ok 10\n"; } else { print "not ok 10 $p1 $p2\n" ;}
+if ((RNA::ptrvalue($bpfi, 0, "float")+RNA::ptrvalue($bpfi,1,'float')>.99999)&&
+    (RNA::ptrvalue($bpfi, 1, "float")>=$p1))
+    {print "ok 10\n"; } else { print "not ok 10 $p1 $p2 ",RNA::ptrvalue($bpfi, 1, "float"),"\n" ;}
 
+$pack = RNA::pack_structure($struc1);
+#print "$pack\n";
+if (RNA::unpack_structure($pack) eq $struc1) {
+   print "ok 11\n";
+} else {
+   print "not ok 11\n";
+}
 RNA::PS_rna_plot($seq1, $struc1, "test_ss.ps");
 RNA::PS_dot_plot($seq1, "test_dp.ps");
+RNA::ssv_rna_plot($seq1, $struct, "test.coord");
 print "$seq1, $struct, $mfe, $f\n";
 print "please check the two postscript files test_ss.ps and test_dp.ps\n";

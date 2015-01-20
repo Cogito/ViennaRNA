@@ -1,4 +1,4 @@
-/* Last Changed Time-stamp: <95/06/29 16:33:47 ivo> */
+/* Last Changed Time-stamp: <1998-05-28 17:40:15 ivo> */
 /* This program converts the bracket notation for RNA secondary structures
    produced by RNAfold to .ct files used by Michael Zukers Program.
    To compile enter:
@@ -10,11 +10,11 @@
 */
 
 #include <stdio.h>
-#define MAXLENGTH 10000
+#define MAXLENGTH 30000
 
 void write_ct_file(char *fname, char *sequence, char *structure, char *name,
 		   float energy);
-int  make_pair_table(char *structure, short *table);
+short *make_pair_table(const char *structure);
 void *space(unsigned size);
 void nrerror(char *message);
 
@@ -63,58 +63,68 @@ void write_ct_file(char *fname, char *sequence, char *structure, char *name,
    FILE *ct;
 
    length = strlen(structure);
-   table = (short *) space(length*sizeof(short));
-   if (make_pair_table(structure, table)!=0) {
-      free(table);
-      return;
+   if ((table = make_pair_table(structure))==NULL) {
+     return;
    }
    if (length!=strlen(sequence))
-      nrerror("sequence and structure have unequal length");
+     nrerror("sequence and structure have unequal length");
    
    if (strcmp(fname,"-")==0) 
-      ct = stdout;
+     ct = stdout;
    else {
-      ct = fopen(fname, "a");
-      if (ct==NULL) nrerror("can't open .ct file");
+     ct = fopen(fname, "a");
+     if (ct==NULL) nrerror("can't open .ct file");
    }
 
    fprintf(ct, "%5d ENERGY = %7.1f    %s\n", length, energy, name);
-   for (i=0; i<length; i++) 
-      fprintf(ct, "%5d %c   %5d %4d %4d %4d\n",
-	      i+1, sequence[i], i, i+2, table[i]+1, i+1);
+   for (i=1; i<=length; i++) 
+     fprintf(ct, "%5d %c   %5d %4d %4d %4d\n",
+	     i, sequence[i-1], i-1, (i+1)%(length+1), table[i], i);
    if (strcmp(fname,"-"))
-      fclose(ct);
+     fclose(ct);
    else fflush(ct);
-   free(table);
 }
 
-int make_pair_table(char *structure, short *table)
+short *make_pair_table(const char *structure)
 {
+    /* returns array representation of structure.
+       table[i] is 0 if unpaired or j if (i.j) pair.  */
    int i,j,hx;
+   int length;
    short *stack;
+   short *table;
    
-   hx=0;
-   stack = (short *) space(sizeof(short)*(strlen(structure)+1));
-             
-   for (i=0; i<strlen(structure); i++) {
-      switch (structure[i]) {
-       case '.':
-         table[i]= -1;
-         break;
+   length = strlen(structure);
+   stack = (short *) space(sizeof(short)*(length+1));
+   table = (short *) space(sizeof(short)*(length+2));
+   table[0] = length;
+   
+   for (hx=0, i=1; i<=length; i++) {
+      switch (structure[i-1]) {
        case '(': 
          stack[hx++]=i;
          break;
        case ')':
          j = stack[--hx];
-         if (hx<0) {i=strlen(structure); break;}
+         if (hx<0) {
+            fprintf(stderr, "unbalanced brackets in %s\n", structure);
+	    free(stack); free(table); return NULL;
+         }
          table[i]=j;
          table[j]=i;
          break;
-       default: free(stack); return 1;
+       default:   /* unpaired base, usually '.' */
+         table[i]= 0;
+         break;
       }
    }
    free(stack);
-   return hx;
+   if (hx!=0) {
+      fprintf(stderr, "unbalanced brackets %s\n", structure);
+      free(table);
+      return NULL;
+   }
+   return(table);
 }
 
 void *space(unsigned size)

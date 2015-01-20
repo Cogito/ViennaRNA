@@ -112,7 +112,7 @@ RNA_wrap.c</TITLE>
 <A name="s1_4_">
 <H3>1.4. Global Variables to Modify Folding</H3></A>
 <P><TT><B>$pr</B></TT>
-<BLOCKQUOTE>[ Global : float * pr ]
+<BLOCKQUOTE>[ Global : double * pr ]
 <BR>    base pairing prob. matrix   
 </BLOCKQUOTE>
 
@@ -196,6 +196,10 @@ bond_j_get(struct bond *);</B></TT>
 
 <P><TT><B>$do_backtrack</B></TT>
 <BLOCKQUOTE>[ Global : int  do_backtrack ]
+<BR></BLOCKQUOTE>
+
+<P><TT><B>$noLonelyPairs</B></TT>
+<BLOCKQUOTE>[ Global : int  noLonelyPairs ]
 <BR></BLOCKQUOTE>
 
 <P><TT><B>$backtrack_type</B></TT>
@@ -379,7 +383,7 @@ bond_j_get(struct bond *);</B></TT>
 
 <P><TT><B>$xsubi</B></TT>
 <BLOCKQUOTE>[ Global : unsigned short * xsubi ]
-<BR>   48bit random number   
+<BR>   current 48bit random number   
 </BLOCKQUOTE>
 
 <P><TT><B>urn();</B></TT>
@@ -394,7 +398,8 @@ bond_j_get(struct bond *);</B></TT>
 
 <P><TT><B>filecopy(from,to);</B></TT>
 <BLOCKQUOTE>[ returns void  ]
-<BR></BLOCKQUOTE>
+<BR>   inefficient `cp'   
+</BLOCKQUOTE>
 
 <P><TT><B>time_stamp();</B></TT>
 <BLOCKQUOTE>[ returns char * ]
@@ -403,16 +408,39 @@ bond_j_get(struct bond *);</B></TT>
 
 <P><TT><B>random_string(l,symbols);</B></TT>
 <BLOCKQUOTE>[ returns char * ]
-<BR></BLOCKQUOTE>
+<BR>   random string of length l using characters from symbols[]   
+</BLOCKQUOTE>
 
 <P><TT><B>hamming(s1,s2);</B></TT>
 <BLOCKQUOTE>[ returns int  ]
-<BR>   hamming distance   
+<BR>   calculate hamming distance   
 </BLOCKQUOTE>
 
 <P><TT><B>get_line(fp);</B></TT>
 <BLOCKQUOTE>[ returns char * ]
-<BR>   read one line   
+<BR>   read one (arbitrary length) line from fp   
+</BLOCKQUOTE>
+
+<P><TT><B>pack_structure(struc);</B></TT>
+<BLOCKQUOTE>[ returns char * ]
+<BR>   pack secondary secondary structure, 5:1 compression using base 3 encoding   
+</BLOCKQUOTE>
+
+<P><TT><B>unpack_structure(packed);</B></TT>
+<BLOCKQUOTE>[ returns char * ]
+<BR>   unpack sec structure packed with pack_structure()   
+</BLOCKQUOTE>
+
+<P><TT><B>make_pair_table(structure);</B></TT>
+<BLOCKQUOTE>[ returns short * ]
+<BR>   returns a newly allocated table, such that:  table[i]=j if (i.j) pair or
+   0 if i is unpaired, table[0] contains the length of the structure.   
+</BLOCKQUOTE>
+
+<P><TT><B>bp_distance(str1,str2);</B></TT>
+<BLOCKQUOTE>[ returns int  ]
+<BR>   dist = {number of base pairs in one structure but not in the other} 
+   same as edit distance with open-pair close-pair as move-set   
 </BLOCKQUOTE>
 
 <P><TT><B>PS_rna_plot(string,structure,file);</B></TT>
@@ -425,9 +453,19 @@ bond_j_get(struct bond *);</B></TT>
 <BR>   structure drawing in gml   
 </BLOCKQUOTE>
 
+<P><TT><B>ssv_rna_plot(string,structure,ssfile);</B></TT>
+<BLOCKQUOTE>[ returns int  ]
+<BR>  write coord file for SStructView   
+</BLOCKQUOTE>
+
 <P><TT><B>PS_dot_plot(string,file);</B></TT>
 <BLOCKQUOTE>[ returns int  ]
 <BR>   produce a PostScript dot plot of the pair probability matix   
+</BLOCKQUOTE>
+
+<P><TT><B>$rna_plot_type</B></TT>
+<BLOCKQUOTE>[ Global : int  rna_plot_type ]
+<BR>   0= simple coordinates, 1= naview   
 </BLOCKQUOTE>
 
 <P><TT><B>read_parameter_file(fname);</B></TT>

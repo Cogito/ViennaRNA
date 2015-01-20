@@ -32,11 +32,9 @@ all: $(NAME) $(SNAME)
 
 $(NAME):    $(OBJS)
 	    $(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIBS)
-	    @size $(NAME)
 
 $(SNAME):   $(SOBJS)
 	    $(CC) -o $(SNAME) $(CFLAGS) $(SOBJS) $(LIBS)
-	    @size $(SNAME)
 
 utils.o:    ../lib/utils.c
 	    $(CC) -c ../lib/utils.c $(CFLAGS)

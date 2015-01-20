@@ -1,29 +1,36 @@
-This is Version 1.2.1 of the Vienna RNA Package.
+This is Version 1.3 of the Vienna RNA Package.
 ------------------------------------------------
-See the CHANGES file for differences to version 1.2.
+See the CHANGES file for differences to previous versions.
 
 The Vienna RNA packages consists of a few stand alone programs and a 
 library that you can link your own programs with. The package allows you to
 
 - predict minimum free energy secondary structures
 - calculate the partition function for the ensemble of structures
+- calculate suboptimal structures in given energy range
 - predict melting curves
 - search for sequences folding into a given structure
 - compare secondary structures including pairwise alignment.
 
 There is also a set of programs for analysing sequence and distance
 data using split decomposition, statistical geometry, and cluster methods.
-This part of the package has not yet been tested as extensively.
+
+This version contains a Perl 5 module that allows to access all functions
+of the library from perl scripts, see the Perl subdirectory. 
+In addition a new program for calculating all suboptimal structures within 
+a given energy range can be found in the Subopt directory.
 
 Please read the copyright notice in the file COPYING.
 
 The package is known to compile under
 SunOS 4.1, AIX 3.2, hpux8 and hpux9, IRIX 4.05 and IRIX 5, DEC OSF/1 and linux.
-Porting to other UN*X flavours should present no problems.
+Other UN*X flavours should present no problems. Several people have 
+reported successful compiles under Windows.
 You need a compiler that understands ANSI C. See the INSTALL file for details.
 
 The following executables are provided:
 RNAfold		predict secondary structures
+RNAsubopt	calulate suboptimal structures in a given energy range
 RNAeval		evaluate energy for given sequence and structure
 RNAheat		calculate melting curves
 RNAdistance	compare secondary structures
@@ -32,7 +39,10 @@ RNAinverse	find sequences folding into given structures
 AnalyseSeqs	analyse sequence data
 AnalyseDists	analyse distance matrices
 
-All executables read from and write to stdout and use command line
+The RNAplot program and other useful utililities can be found in the 
+Utils directory.
+
+All executables read from stdin and write to stdout and use command line
 switches rather than menus to be easily usable in pipes.
 
 For more detailed information see the man pages.
@@ -41,19 +51,16 @@ We have included a patched version of D.G. Gilbert's readseq program
 for those who often process sequence files from databanks. See the
 the documentation in that directory for details.
 
-NEWS
--------
-This version features new energy parameters as described in Walter et.al
+
+Versions since 1.2 feature new energy parameters as described in Walter et.al
 (1994). In addition, energy parameters can now be read from file and
 therefore easily modified. The standard energy set can be found in the file 
 default.par. Many bugs have been fixed and the new version should need less 
 memory, give better error messages and (hopefully) produce fewer core dumps. 
 Almost all static arrays have been removed, all programs should work for 
-sequences up to a length of about 32700 (if you have lots of memory that is). 
+sequences up to a length of  32700 (if you have lots of memory that is). 
 RNAeval now supports a logrithmic energy function for multi-loops in addition 
 to the usual linear one.
-
-Some useful utililities can be found in the Utils directory.
 
 If you're a commercial user and find these programs useful, please consider
 supporting further developments with a donation.

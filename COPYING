@@ -13,3 +13,5 @@ University of Vienna.
 
 If you want to include this software in a commercial product, please contact 
 the authors. 
+
+Note that the file ./lib/naview.c has its own copyright attached. 

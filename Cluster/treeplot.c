@@ -95,13 +95,14 @@ PUBLIC void  PSplot_phylogeny(Union *cluster, char *filename, char *type)
    fprintf(fp,"%%%%Title: TreePlot (%s)\n",type);
    fprintf(fp,"%%%%Creator: AnalyseDists\n");
    fprintf(fp,"%%%%CreationDate: %s", time_stamp());
-   fprintf(fp,"%%%%BoundingBox: 45 45 525 640\n");
+   /* BoundingBox is only approximate */
+   fprintf(fp,"%%%%BoundingBox: 35 45 535 640\n");
    fprintf(fp,"%%%%Pages: 1\n");
    fprintf(fp,"%%%%EndComments: No comment!\n");
    fprintf(fp,"288.5 50 translate\n");
    fprintf(fp,"%3.1f setlinewidth\n"
 	      "/cmtx matrix currentmatrix def\n", lwidth);
-   fprintf(fp,"500 %g div 360 %g div scale\n", xsize,ysize); 
+   fprintf(fp,"500 %g div 360 %g div scale\n", xsize, ysize); 
    fprintf(fp,"/rotshow {gsave cmtx setmatrix\n"); 
    fprintf(fp,"          90 rotate 5 %4.1f rmoveto show grestore} def\n",
 	   -tfontsize/4);
@@ -313,7 +314,7 @@ PRIVATE void plot_branch(Node *root, FILE *fp)
 
    fprintf(fp,"currentpoint %g 0  rlineto 0 %g rlineto \n",
                      -(float)(root->left->size)/2., root->brr);
-   if((print_labels)&&(root->brr>threshold)) {
+   if((print_labels)&&(root->brr > threshold)) {
       format_number(root->brr);
       fprintf(fp,"currentpoint 0 %g rlineto \n", -root->brr/2.);
       fprintf(fp,"(%s) cshow moveto\n", str);
@@ -327,7 +328,7 @@ PRIVATE void plot_branch(Node *root, FILE *fp)
    fprintf(fp,"moveto\n");
    fprintf(fp,"currentpoint %g 0  rlineto 0 %g rlineto \n",
                      +(float)(root->right->size)/2., root->brl);
-   if((print_labels)&&(root->brl>threshold)) {
+   if((print_labels)&&(root->brl > threshold)) {
       format_number(root->brl);
       fprintf(fp,"currentpoint 0 %g rlineto \n", -root->brl/2.);
       fprintf(fp,"(%s) cshow moveto\n",str);

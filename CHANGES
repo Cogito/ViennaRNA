@@ -1,7 +1,39 @@
-Version 1.2 contained a bug in the RNAheat program causing overflow errors
+Version 1.3
+-----------
+Secondary structure plots now use E. Bruccoleri's naview routines for
+layout by default. New utility RNAplot produces secondary structure plots 
+from structures in bracket notation with several options.
+-d2 option in RNAfold and RNAeval sets dangles=2, which makes 
+energy_of_struct() and fold() treat dangling ends as in pf_fold().
+-noLP option in RNAfold etc sets noLonelyPairs=1, which avoids most
+structures containing lonely base pairs (helices of length 1).
+
+new utility functions pack_structure() unpack_structure() make_pair_table()
+and bp_distance().  RNAdistance adds bp_distance() via -DP switch.
+
+First release of RNAsubopt for complete suboptimal folding.
+
+fixed bug in asymetry penalty for interior loops.
+
+by default partition funtion folding will now use doubles
+
+
+Version 1.2.1
+-------------
+Fixed bug in version 1.2 of the RNAheat program causing overflow errors
 for most input sequences. 
 The PS_dot_plot() and PS_rna_plot() routines now return an int. The return 
 value is 0 if the file could not be written, 1 otherwise.
 This version contains the alpha version of a perl5 module, which let's you
 access all the capabilities of the Vienna RNA library from perl scripts.
 See the README file in the Perl directory for details.
+
+
+Version 1.2
+-----------
+New energy parameters from (Walter et.al 1994). 
+Energy parameters can be read from file.
+RNAeval and energy_of_struct() support logarithmic energy function for 
+multi-loops.
+gmlRNA() produces secondary structure drawing in gml (Graph Meta Language). 
+Many bug fixes.

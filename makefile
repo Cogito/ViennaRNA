@@ -1,10 +1,13 @@
-all:	library programs gammel
+all:	library programs util gammel
 
 library:
 	cd lib;	$(MAKE)
 
 programs:
 	cd Progs; $(MAKE)
+
+util:
+	cd Utils; $(MAKE)
 
 gammel:
 	cd Cluster; $(MAKE)
@@ -18,3 +21,4 @@ clean:
 	cd lib; $(MAKE) clean
 	cd Progs; $(MAKE) clean
 	cd Cluster; $(MAKE) clean
+	cd Utils; $(MAKE) clean

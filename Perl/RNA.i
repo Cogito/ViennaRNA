@@ -23,7 +23,7 @@
 %subsection "Inverse Folding"
 %include  "../H/inverse.h"
 %subsection "Global Variables to Modify Folding"
-extern float *pr;  /*  base pairing prob. matrix */
+extern double *pr;  /*  base pairing prob. matrix */
 %include  "../H/fold_vars.h"
 %{
 float get_pr(int i, int j) {

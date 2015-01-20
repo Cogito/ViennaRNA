@@ -7,13 +7,21 @@ CC CFLAGS BINDIR MANDIR and LIBDIR variables to suit your system.
 
 Type
         make all
-to produce the library and the interactive programs, and
+to build the library and the programs in the ./Progs, ./Cluster and ./Utils 
+directories.
+Type
         make install
-to copy the executables, library and man pages into the appropriate
-directories. You plan on using the library, you'll also want to install the
-header files from ./H in a suitable place. This is not done by the
-makefile. Also feel free to copy all header files into a single one, if you
-dislike using a lot of #includes in your programs.
+to copy the executables in ./Progs and ./Cluster, the library and man
+pages into the appropriate directories (as defined by the BINDIR MANDIR
+and LIBDIR variables). 
+Files in the ./Utils directory will not be installed automatically. 
+If you plan on using the library, you'll also want to install the header 
+files from ./H in a suitable place. This is not done by the makefile. 
+Also feel free to copy all header files into a single one, if you dislike 
+using a lot of #includes in your programs.
+
+To build and install the Perl module, the RNAsubopt, or readseq program,
+follow the instructions in the respective directories.
 
 There are man pages for all executables, the library is documented in
 ./man/RNAlib.texinfo. You can either print this file as a manual using
@@ -37,8 +45,16 @@ fpsetfastmode() will be called.
 
 Nothing special has to be done for AIX-3.2 and OSF/1. 
 
-If you want to fold sequences several 1000 bases in length and if you
-have enough memory you may want to add -DPF_LARGE to the CFLAGS so that
-all partition function folding will use double precision floats (needing
-twice the amount of memory). Make sure this is done for the makefiles in
-the ./lib as well as ./Prog directory.
+Partition function folding (via RNAfold -p) of long sequences can fail
+because of overflow errors. To avoid this double precision floating point 
+numbers can be used at the expense of doubling memory requirements.
+If your machine has little memory and you dont't plan to fold sequences
+several 1000 bases in length you can compile the package to do the compautions 
+in single precision by editing the file ./H/fold_vars.h and deleting the second 
+line, which normally reads
+#define LARGE_PF
+
+Memory requirements for a sequence of length n will be approximately
+12*n^2 bytes for RNAfold -p in the double precision version, and
+ 4*n^2 bytes for the minimum free energy alone.
+

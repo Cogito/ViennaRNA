@@ -161,7 +161,7 @@ main(int argc, char *argv[])
                 if(argv[i][3]==',') {
                    per_digit=-1.;
                    per_gap  =-1.;
-                   sscanf(argv[i],"%[^,],%g,%g",junk,&per_digit,&per_gap);
+                   sscanf(argv[i]+4,"%f,%f",&per_digit,&per_gap);
                    if((per_digit<0.)||(per_gap<0)) usage(); 
                    Set_StrEdit_GapCosts(per_digit,per_gap);
                 }

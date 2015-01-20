@@ -22,6 +22,7 @@ OBJ	= \
 	part_func.o \
 	fold_vars.o \
 	PS_dot.o \
+	naview.o \
 	RNAstruct.o \
 	treedist.o \
 	stringdist.o \

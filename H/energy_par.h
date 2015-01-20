@@ -8,14 +8,14 @@ extern double lxc37;   /* parameter for logarithmic loop
 			  energy extrapolation            */
 
 extern int stack37[NBPAIRS+1][NBPAIRS+1];
-extern int enthalpies[NBPAIRS+1][NBPAIRS+1]; /* stack enthalpies *
+extern int enthalpies[NBPAIRS+1][NBPAIRS+1]; /* stack enthalpies */
 extern int entropies[NBPAIRS+1][NBPAIRS+1];  /* not used anymore */
 
 extern int hairpin37[31];
 extern int bulge37[31];
 extern int internal_loop37[31];
 extern int internal2_energy;
-extern old_mismatch_37[NBPAIRS+1][5][5];
+extern int old_mismatch_37[NBPAIRS+1][5][5];
 extern int mismatchI37[NBPAIRS+1][5][5];  /* interior loop mismatches */
 extern int mismatchH37[NBPAIRS+1][5][5];  /* same for hairpins */
 extern int mism_H[NBPAIRS+1][5][5];       /* mismatch enthalpies */
@@ -25,6 +25,8 @@ extern int dangle3_37[NBPAIRS+1][5];      /* 3' dangle */
 extern int dangle3_H[NBPAIRS+1][5];       /* corresponding enthalpies */
 extern int dangle5_H[NBPAIRS+1][5];
 
+extern int Sint2_37[NBPAIRS+1][NBPAIRS+1][5][5]; /* interior llops of length 2 */
+extern int Sint2_H[NBPAIRS+1][NBPAIRS+1][5][5];  /* corresp. enthalpies */
 
 /* constants for linearly destabilizing contributions for multi-loops
    F = ML_closing + ML_intern*(k-1) + ML_BASE*u  */
@@ -42,4 +44,7 @@ extern int F_ninio37[5];
 extern char Tetraloops[201]; /* string containing the special tetraloops */
 extern int  TETRA_ENERGY37[40];  /* Bonus energy for special tetraloops */
 extern int  TETRA_ENTH37;
+extern char Triloops[241];   /* string containing the special triloops */
+extern int  Triloop_E37[40]; /* Bonus energy for special Triloops */  
+
 extern double Tmeasure;       /* temperature of param measurements */

@@ -5,11 +5,11 @@ SHELL	= /bin/sh
 
 #CC	= gcc   # insert your favorite C compiler
 
-COPT    = -O
+COPT    = -O 
 
 CFLAGS  = $(COPT) -I../H
 
-LDFLAGS = $(COPT) -L../lib -lRNA -lm 
+LDFLAGS = $(COPT) -L../lib/ -lRNA -lm 
 
 BINDIR	= /usr/local/bin
 MANDIR	= /usr/local/man/man1
@@ -29,6 +29,9 @@ RNAeval: RNAeval.o
 
 RNAinverse: RNAinverse.o
 	$(CC) -o $@ $@.o $(LDFLAGS)
+
+Jinverse: Jinverse.o
+	$(CC) -o  $@ $@.o ../lib/SGI/jnverse.o $(LDFLAGS)
 
 RNAdistance: RNAdistance.o
 	$(CC) -o $@ $@.o $(LDFLAGS)

@@ -1984,6 +1984,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>VRNA_OPTION_MULTILINE</name>
+      <anchorfile>utils_8h.html</anchorfile>
+      <anchor>abec89c09874528c6cb73140a4c3d86d7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>MIN2</name>
       <anchorfile>utils_8h.html</anchorfile>
       <anchor>ae0b9cd0ce090bd69b951aa73e8fa4f7d</anchor>

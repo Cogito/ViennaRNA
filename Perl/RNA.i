@@ -6,6 +6,7 @@
 #include  "../H/fold_vars.h"
 #undef fold
 #include  "../H/fold.h"
+#include  "../H/cofold.h"
 #include  "../H/part_func.h"
 #include  "../H/PS_dot.h"
 #include  "../H/inverse.h"
@@ -34,7 +35,13 @@
 %include typemaps.i
 %typemap(perl5,in) FILE * {
   if (SvOK($input)) /* check for undef */
-	$1 = IoIFP(sv_2io($input));
+	$1 = PerlIO_findFILE(IoIFP(sv_2io($input)));
+  else  $1 = NULL;
+}
+
+%typemap(python,in) FILE * {
+  if (PyFile_Check($input)) /* check for undef */
+        $1 = PyFile_AsFile($input);
   else  $1 = NULL;
 }
 
@@ -62,6 +69,27 @@
 char *my_fold(char *string, char *constraints = NULL, float *OUTPUT);
 %ignore fold;
 %include  "../H/fold.h"
+
+%rename (cofold) my_cofold;
+
+%{
+  char *my_cofold(char *string, char *constraints, float *energy) {
+    char *struc;
+    float en;
+    struc = calloc(strlen(string)+1,sizeof(char));
+    if (constraints && fold_constrained)
+      strncpy(struc, constraints, strlen(string));
+    *energy = cofold(string, struc);
+    if (constraints)
+      strncpy(constraints, struc, strlen(constraints));
+    return(struc);
+  }
+%}
+
+%newobject my_cofold;
+char *my_cofold(char *string, char *constraints = NULL, float *OUTPUT);
+%ignore cofold;
+%include  "../H/cofold.h"
 
 //%subsection "Partition function Folding"
 
@@ -157,6 +185,16 @@ extern  SOLUTION *subopt (char *seq, char *constraint, int delta, FILE *fp=NULL)
 extern  int subopt_sorted;                       /* sort output by energy */
 %extend SOLUTION {
 	SOLUTION *get(int i) {
+	   static int size=-1;
+	   if (size<0) {
+	     SOLUTION *s;
+	     for (s=self; s->structure; s++);
+	     size= (int) (s-self);
+	   }
+	   if (i>=size) {
+	     warn("value out of range");
+	     return NULL;
+	   }
 	   return self+i;
 	}
 

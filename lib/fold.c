@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2004-02-09 15:58:54 ivo> */
+/* Last changed Time-stamp: <2005-07-24 10:54:43 ivo> */
 /*                
 		  minimum free energy
 		  RNA secondary structure prediction
@@ -23,7 +23,7 @@
 #include "params.h"
 
 /*@unused@*/
-static char rcsid[] UNUSED = "$Id: fold.c,v 1.29 2004/02/09 16:50:26 ivo Exp $";
+static char rcsid[] UNUSED = "$Id: fold.c,v 1.33 2005/08/07 11:44:43 ivo Exp $";
 
 #define PAREN
 
@@ -53,10 +53,10 @@ PRIVATE int   stack_energy(int i, const char *string);
 PRIVATE int   ML_Energy(int i, int is_extloop);
 PRIVATE void  make_ptypes(const short *S, const char *structure);
 PRIVATE void  encode_seq(const char *sequence);
-PRIVATE void backtrack(const char *sequence);
+PRIVATE void backtrack(const char *sequence, int s);
 PRIVATE int fill_arrays(const char *sequence);
 /*@unused@*/
-inline PRIVATE  int   oldLoopEnergy(int i, int j, int p, int q, int type, int type_2);
+inline PRIVATE  int oldLoopEnergy(int i, int j, int p, int q, int type, int type_2);
 inline int  LoopEnergy(int n1, int n2, int type, int type_2,
 			 int si1, int sj1, int sp1, int sq1);
 inline int  HairpinE(int size, int type, int si1, int sj1, const char *string);
@@ -116,7 +116,7 @@ PRIVATE void get_arrays(unsigned int size)
   c     = (int *) space(sizeof(int)*((size*(size+1))/2+2));
   fML   = (int *) space(sizeof(int)*((size*(size+1))/2+2));
   if (uniq_ML)
-    fM1    = (int *) space(sizeof(int)*((size*(size+1))/2+2));
+    fM1 = (int *) space(sizeof(int)*((size*(size+1))/2+2));
 
   ptype = (char *) space(sizeof(char)*((size*(size+1))/2+2));
   f5    = (int *) space(sizeof(int)*(size+2));
@@ -135,9 +135,11 @@ void free_arrays(void)
 {
   free(indx); free(c); free(fML); free(f5); free(cc); free(cc1); 
   free(ptype);
-  if (uniq_ML) free(fM1);
+  if (fM1) {
+    free(fM1); fM1=NULL;
+  }
 
-  free(base_pair); free(Fmi);
+  free(base_pair); base_pair=NULL; free(Fmi);
   free(DMLi); free(DMLi1);free(DMLi2);
   init_length=0;
 }
@@ -175,7 +177,7 @@ float fold(const char *string, char *structure) {
   
   energy = fill_arrays(string);
 
-  backtrack(string);
+  backtrack(string, 0);
 
 #ifdef PAREN
   parenthesis_structure(structure, length);
@@ -289,7 +291,7 @@ PRIVATE int fill_arrays(const char *string) {
 #endif
 	    new_c = MIN2(energy+c[indx[q]+p], new_c);
 	    if ((p==i+1)&&(j==q+1)) stackEnergy = energy; /* remember stack energy */
-	       
+
 	  } /* end q-loop */
 	} /* end p-loop */
 	   
@@ -356,8 +358,9 @@ PRIVATE int fill_arrays(const char *string) {
       new_fML = MIN2(fML[indx[j-1]+i]+P->MLbase, new_fML);
       energy = c[ij]+P->MLintern[type];
       if (dangles==2) {  /* double dangles */
-	if (i>1)      energy += P->dangle5[type][S1[i-1]];
-	if (j<length) energy += P->dangle3[type][S1[j+1]];
+	energy += (i==1) ? /* works also for circfold */
+	  P->dangle5[type][S1[length]] : P->dangle5[type][S1[i-1]];
+	/* if (j<length) */ energy += P->dangle3[type][S1[j+1]];
       }
       new_fML = MIN2(energy, new_fML);
       if (uniq_ML)
@@ -466,30 +469,36 @@ PRIVATE int fill_arrays(const char *string) {
   return f5[length];
 }
 
-PRIVATE void backtrack(const char *string) {
+struct sect {
+  int  i;
+  int  j;
+  int ml;
+} 
+static sector[MAXSECTORS]; /* stack of partial structures for backtracking */
+
+#include "circfold.inc"
+
+PRIVATE void backtrack(const char *string, int s) {
    
   /*------------------------------------------------------------------
     trace back through the "c", "f5" and "fML" arrays to get the
     base pairing list. No search for equivalent structures is done.
     This is fast, since only few structure elements are recalculated.
     ------------------------------------------------------------------*/
-  struct sect {
-    int  i;
-    int  j;
-    int ml;
-  } 
-  sector[MAXSECTORS];   /* backtracking sectors */
 
+  /* normally s=0. 
+     If s>0 then s items have been already pushed onto the sector stack */
   int   i, j, k, length, energy, new;
   int   no_close, type, type_2, tt;
   int   bonus;
-  int   s=0, b=0;
+  int   b=0;
 
   length = strlen(string);
-  sector[++s].i = 1;
-  sector[s].j = length;
-  sector[s].ml = (backtrack_type=='M') ? 1 : ((backtrack_type=='C')?2:0);
-   
+  if (s==0) {
+    sector[++s].i = 1;
+    sector[s].j = length;
+    sector[s].ml = (backtrack_type=='M') ? 1 : ((backtrack_type=='C')?2:0);
+  }
   while (s>0) {
     int ml, fij, fi, cij, traced, i1, j1, d3, d5, mm, p, q, jj=0;
     int canonical = 1;     /* (i,j) closes a canonical structure */
@@ -570,9 +579,10 @@ PRIVATE void backtrack(const char *string) {
 
       tt  = ptype[indx[j]+i];
       cij = c[indx[j]+i] + P->MLintern[tt];
-      if (dangles==2) {       /* double dangles */
-	if (i>1)      cij += P->dangle5[tt][S1[i-1]];
-	if (j<length) cij += P->dangle3[tt][S1[j+1]];
+      if (dangles==2) {       /* double dangles, works also for circfold */
+	cij += (i==1) ? 
+	  P->dangle5[tt][S1[length]] : P->dangle5[tt][S1[i-1]];
+	/* if (j<length) */ cij += P->dangle3[tt][S1[j+1]];
       }
       else if (dangles%2==1) {  /* normal dangles */
 	tt = ptype[indx[j]+i+1];
@@ -898,8 +908,8 @@ PRIVATE void encode_seq(const char *sequence) {
   unsigned int i,l;
 
   l = strlen(sequence);
-  S = (short *) space(sizeof(short)*(l+1));
-  S1= (short *) space(sizeof(short)*(l+1));
+  S = (short *) space(sizeof(short)*(l+2));
+  S1= (short *) space(sizeof(short)*(l+2));
   /* S1 exists only for the special X K and I bases and energy_set!=0 */
   S[0] = S1[0] = (short) l;
   
@@ -907,6 +917,8 @@ PRIVATE void encode_seq(const char *sequence) {
     S[i]= (short) encode_char(toupper(sequence[i-1]));
     S1[i] = alias[S[i]];   /* for mismatches of nostandard bases */
   }
+  /* for circular folding add first base at position n+1 */
+  S[l+1] = S[1]; S1[l+1]=S1[1];
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1010,7 +1022,12 @@ int energy_of_struct_pt(const char *string, short * ptable,
     energy += stack_energy(i, string);          
     i=pair_table[i];
   }
-
+  for (i=1; !SAME_STRAND(i,length); i++) {
+    if (!SAME_STRAND(i,pair_table[i])) {
+      energy+=P->DuplexInit;
+      break;
+    }
+  }
   return energy;
 }
 
@@ -1165,7 +1182,7 @@ PRIVATE int ML_Energy(int i, int is_extloop) {
 	if ((SAME_STRAND(p-1,p))&&(p>1))
 	  dang5=P->dangle5[tt][S1[p-1]];      /* 5'dangle of pq pair */
 	if ((SAME_STRAND(i1,i1+1))&&(i1<S[0]))
-	  dang3 = P->dangle3[type][S1[i1+1]];   /* 3' dangle of previous pair */
+	  dang3 = P->dangle3[type][S1[i1+1]]; /* 3'dangle of previous pair */
 
         switch (p-i1-1) {
         case 0: /* adjacent helices */

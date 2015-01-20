@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2004-08-12 14:06:41 ivo> */
+/* Last changed Time-stamp: <2005-07-23 16:45:18 ivo> */
 /*                
 	   compute the duplex structure of two RNA strands,
 		allowing only inter-strand base pairs.
@@ -22,7 +22,7 @@
 #include "params.h"
 #include "duplex.h"
 /*@unused@*/
-static char rcsid[] UNUSED = "$Id: duplex.c,v 1.2 2004/08/12 12:10:40 ivo Exp $";
+static char rcsid[] UNUSED = "$Id: duplex.c,v 1.4 2005/07/24 08:37:40 ivo Exp $";
 
 #define PUBLIC
 #define PRIVATE static
@@ -53,6 +53,7 @@ PRIVATE int   n1,n2;    /* sequence lengths */
 extern  int  LoopEnergy(int n1, int n2, int type, int type_2,
                         int si1, int sj1, int sp1, int sq1);
 
+PRIVATE int delay_free=0;
 /*--------------------------------------------------------------------------*/
 
 
@@ -76,7 +77,7 @@ duplexT duplexfold(const char *s1, const char *s2) {
     for (j=n2; j>0; j--) {
       int type, type2, E, k,l;
       type = pair[S1[i]][S2[j]];
-      c[i][j] = type ? 0 : INF;
+      c[i][j] = type ? P->DuplexInit : INF;
       if (!type) continue;
       if (i>1)  c[i][j] += P->dangle5[type][SS1[i-1]];
       if (j<n2) c[i][j] += P->dangle3[type][SS2[j+1]];
@@ -113,6 +114,11 @@ duplexT duplexfold(const char *s1, const char *s2) {
   mfe.j = j_min;
   mfe.energy = (float) Emin/100.;
   mfe.structure = struc;
+  if (!delay_free) {
+    for (i=1; i<=n1; i++) free(c[i]);
+    free(c);
+    free(S1); free(S2); free(SS1); free(SS2);
+  }
   return mfe;
 }
 
@@ -124,17 +130,20 @@ PUBLIC duplexT *duplex_subopt(const char *s1, const char *s2, int delta, int w) 
 
   n_max=16;
   subopt = (duplexT *) space(n_max*sizeof(duplexT));
+  delay_free=1;
   mfe = duplexfold(s1, s2);
   free(mfe.structure);
   
   thresh = (int) mfe.energy*100+0.1 + delta;
   n1 = strlen(s1); n2=strlen(s2);
-  for (i=n1-1; i>0; i--) {
-    for (j=2; j<=n2; j++) {
+  for (i=n1; i>0; i--) {
+    for (j=1; j<=n2; j++) {
       int type;
       type = pair[S2[j]][S1[i]];
       if (!type) continue;
-      E = c[i][j]+P->dangle3[type][SS1[i+1]]+P->dangle5[type][SS2[j-1]];
+      E = c[i][j];
+      if (i<n1) E += P->dangle3[type][SS1[i+1]];
+      if (j>1)  E += P->dangle5[type][SS2[j-1]];
       if (type>2) E += P->TerminalAU;
       if (E<=thresh) {
 	struc = backtrack(i,j);
@@ -148,13 +157,19 @@ PUBLIC duplexT *duplex_subopt(const char *s1, const char *s2, int delta, int w) 
 	  n_max *= 2;
 	  subopt = (duplexT *) xrealloc(subopt, n_max*sizeof(duplexT));
 	}
-	subopt[n_subopt].i = i;
-	subopt[n_subopt].j = j;
+	subopt[n_subopt].i = MIN2(i+1,n1);
+	subopt[n_subopt].j = MAX2(j-1,1);
 	subopt[n_subopt].energy = E * 0.01;
 	subopt[n_subopt++].structure = struc;
       }
     }
   }
+  
+  for (i=1; i<=n1; i++) free(c[i]);
+  free(c);
+  free(S1); free(S2); free(SS1); free(SS2);
+  delay_free=0;
+
   if (subopt_sorted) qsort(subopt, n_subopt, sizeof(duplexT), compare);
   subopt[n_subopt].i =0;
   subopt[n_subopt].j =0;
@@ -199,7 +214,7 @@ PRIVATE char *backtrack(int i, int j) {
       if (i>1) E -= P->dangle5[type][SS1[i-1]];
       if (j<n2) E -= P->dangle3[type][SS2[j+1]];
       if (type>2) E -= P->TerminalAU;
-      if (E !=0) {
+      if (E != P->DuplexInit) {
 	nrerror("backtrack failed in fold duplex");
       } else break;
     }

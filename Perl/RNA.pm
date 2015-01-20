@@ -5,6 +5,8 @@ require DynaLoader;
 @ISA = qw(Exporter DynaLoader);
 package RNAc;
 bootstrap RNA;
+package RNA;
+@EXPORT = qw( );
 =head1 NAME
 
 RNA - interface to the Vienna RNA library (libRNA.a)
@@ -604,8 +606,6 @@ memory and lead to a segmentation fault.
 Ivo L. Hofacker <ivo@tbi.univie.ac.at>
 
 =cut
-package RNA;
-@EXPORT = qw( );
 
 # ---------- BASE METHODS -------------
 
@@ -667,6 +667,10 @@ package RNA;
 *free_arrays = *RNAc::free_arrays;
 *initialize_fold = *RNAc::initialize_fold;
 *update_fold_params = *RNAc::update_fold_params;
+*cofold = *RNAc::cofold;
+*free_co_arrays = *RNAc::free_co_arrays;
+*initialize_cofold = *RNAc::initialize_cofold;
+*update_cofold_params = *RNAc::update_cofold_params;
 *pf_fold = *RNAc::pf_fold;
 *init_pf_fold = *RNAc::init_pf_fold;
 *free_pf_arrays = *RNAc::free_pf_arrays;
@@ -731,6 +735,7 @@ package RNA;
 *xrna_plot = *RNAc::xrna_plot;
 *PS_dot_plot = *RNAc::PS_dot_plot;
 *PS_color_dot_plot = *RNAc::PS_color_dot_plot;
+*PS_dot_plot_list = *RNAc::PS_dot_plot_list;
 
 ############# Class : RNA::intArray ##############
 
@@ -966,6 +971,48 @@ sub DESTROY {
     delete $ITERATORS{$self};
     if (exists $OWNER{$self}) {
         RNAc::delete_cpair($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : RNA::plist ##############
+
+package RNA::plist;
+@ISA = qw( RNA );
+%OWNER = ();
+%ITERATORS = ();
+*swig_i_get = *RNAc::plist_i_get;
+*swig_i_set = *RNAc::plist_i_set;
+*swig_j_get = *RNAc::plist_j_get;
+*swig_j_set = *RNAc::plist_j_set;
+*swig_p_get = *RNAc::plist_p_get;
+*swig_p_set = *RNAc::plist_p_set;
+sub new {
+    my $pkg = shift;
+    my $self = RNAc::new_plist(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        RNAc::delete_plist($self);
         delete $OWNER{$self};
     }
 }

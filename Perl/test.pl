@@ -1,6 +1,6 @@
 #!/usr/bin/perl -Iblib/arch -Iblib/lib
 
-# Last changed Time-stamp: <2003-02-03 18:28:39 ivo>
+# Last changed Time-stamp: <2005-07-23 16:04:56 ivo>
 
 ######################### We start with some black magic to print on failure.
 # (It may become useful if the test is moved to ./t subdirectory.)
@@ -8,7 +8,7 @@ use strict;
 use Test;
 use lib qw|blib/arch blib/lib|;
 
-BEGIN {  plan tests => 14; }
+BEGIN {  plan tests => 19; }
 
 use RNA;
 use warnings;
@@ -39,9 +39,23 @@ ok($struct, $struc1);
 # new better interface
 ($struct, $mfe) = RNA::fold($seq1);
 ok($struct eq $struc1);
-
 # check energy
 ok(RNA::energy_of_struct($seq1,$struc1), $mfe);
+
+# check constrained folding
+$RNA::fold_constrained = 1;
+my($struct3, $cmfe) = RNA::fold($seq1, '....xx....xx...');
+ok($struct3, '(((..........)))');
+ok(RNA::energy_of_struct($seq1,$struct3), $cmfe);
+$RNA::fold_constrained = 0;
+
+# test cofold
+$RNA::cut_point = length($seq1)+1;
+my($costruct, $comfe) = RNA::cofold($seq1 . $seq2);
+ok($costruct, '(((.((....)).)))((((((...))).)))');
+$cmfe = RNA::energy_of_struct($seq1 . $seq2, $costruct);
+ok(abs($comfe-$cmfe)<1e-5);
+$RNA::cut_point=-1;
 
 # pf_fold
 my $f = RNA::pf_fold($seq1, $struct);
@@ -54,7 +68,7 @@ $xstruc = RNA::expand_Full($struc2);
 my $T2 = RNA::make_tree($xstruc);
 $RNA::edit_backtrack = 1;
 my $tree_dist = RNA::tree_edit_distance($T1, $T2); 
-print RNA::get_aligned_line(0), RNA::get_aligned_line(1),"\n";
+# print RNA::get_aligned_line(0), RNA::get_aligned_line(1),"\n";
 ok($tree_dist,4);
 
 # check access to a C array
@@ -102,6 +116,7 @@ my ($sinv, $cost) = RNA::inverse_fold($start, $struc1);
 my ($ss, $en) = RNA::fold($sinv);
 ok($ss, $struc1);
 
+RNA::free_pf_arrays();
 RNA::free_arrays();
 
 $RNA::subopt_sorted = 1;
@@ -109,10 +124,13 @@ $RNA::noLonelyPairs = 1;
 my $solution = RNA::subopt($seq1, undef, 500, undef);
 
 printf "%d suboptimals\n", $solution->size();
-for (0..$solution->size()-1) {
+for (0..$solution->size()) {
+  # the last access should produce a "value out of range" warning
   printf "%s %6.2f\n",  $solution->get($_)->{structure},
-  			$solution->get($_)->{energy};
+  			$solution->get($_)->{energy}
+	if defined  $solution->get($_);
 }
 $RNA::cut_point = 3;
 my $e =  RNA::energy_of_struct("GCGC", "(())");
-ok(int($e*100),-340);
+ok(int($e*100+0.5), 70);
+

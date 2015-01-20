@@ -1,4 +1,4 @@
-/* Last Changed Time-stamp: <1998-05-28 17:40:15 ivo> */
+/* Last Changed Time-stamp: <1999-09-17 16:10:55 ivo> */
 /* This program converts the bracket notation for RNA secondary structures
    produced by RNAfold to .ct files used by Michael Zukers Program.
    To compile enter:
@@ -28,30 +28,32 @@ main(void)
    while (gets(line)!=NULL) {
        if (strcmp(line,"@")==0) break;
       
-      switch (line[0]) {
+       switch (line[0]) {
        case '>': name = (char *) space(strlen(line));
 	 sscanf(line,"> %s", name);
 	 break;
        case '.':
        case '(':
        case ')': structure = (char *) space(strlen(line));
-	 sscanf(line,"%s (%f)", structure, &energy);
+	 if (sscanf(line,"%s (%f)", structure, &energy)!=2) {
+	   free(structure); structure=NULL; break;
+	 }
 	 n++;
 	 break;
        default: string = (char *) space(strlen(line)+1);
 	 sscanf(line, "%s", string);
-      }
-      if (structure!=NULL) {
+       }
+       if (structure!=NULL) {
 	 if (name==NULL) {
-	    name = (char *) space(10);
-	    sprintf(name,"%d",n);
+	   name = (char *) space(10);
+	   sprintf(name,"%d",n);
 	 }
 	 write_ct_file("-", string, structure, name, energy);
       	 free(string); 
 	 free(structure); 
 	 free(name);
 	 string = structure = name = NULL;
-      }
+       }
    }
 }
 

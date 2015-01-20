@@ -16,7 +16,7 @@ $scale = "....,....1....,....2....,....3....,....4" .
 			   "p0" => \$pf0,
 			   "C"   => \$RNA::fold_constrained,
 			   "T=f" => \$RNA::temperature,
-			   "4", "d", "d2",
+			   "4", "d", "d2", "d3",
 			   "noGU" => \$RNA::noGU,
 			   "noCloseGU" => \$RNA::no_closingGU,
 			   "noLP" => \$RNA::noLonelyPairs,
@@ -32,6 +32,7 @@ if ($pf0) {
 $RNA::tetra_loop = 0 if ($opt_4);
 $RNA::dangles = 0 if ($opt_d);
 $RNA::dangles = 2 if ($opt_d2);
+$RNA::dangles = 3 if ($opt_d3);
 
  RNA::read_parameter_file($ParamFile) if ($ParamFile);
 
@@ -138,6 +139,7 @@ while (<>) {	# main loop: continue until end of file
 
  RNA::free_pf_arrays() if ($pf);
  RNA::free_arrays();
+ RNA::write_parameter_file("test.par");
 
 sub usage()
 {

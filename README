@@ -1,4 +1,4 @@
-This is Version 1.3 of the Vienna RNA Package.
+This is Version 1.4 of the Vienna RNA Package.
 ------------------------------------------------
 See the CHANGES file for differences to previous versions.
 
@@ -52,21 +52,26 @@ for those who often process sequence files from databanks. See the
 the documentation in that directory for details.
 
 
-Versions since 1.2 feature new energy parameters as described in Walter et.al
-(1994). In addition, energy parameters can now be read from file and
-therefore easily modified. The standard energy set can be found in the file 
-default.par. Many bugs have been fixed and the new version should need less 
-memory, give better error messages and (hopefully) produce fewer core dumps. 
-Almost all static arrays have been removed, all programs should work for 
-sequences up to a length of  32700 (if you have lots of memory that is). 
-RNAeval now supports a logrithmic energy function for multi-loops in addition 
-to the usual linear one.
+Versions since 1.4 feature new energy parameters as described in Mathews
+et.al, JMB, 1999. For backward compatibility a parameter file with the
+version 1.3 parameter set (as described in Walter et.al (1994)) can be
+found in the file vienna13.par. The standard energy set is compiled in, but
+can also be found in the file default.par. Note that only free energies at
+37C are new. Temperature dependencies are still derived from the old
+parameter set.
+The code very rarely uses static arrays, and all programs should work for 
+sequences up to a length of  32700 (if you have huge amounts of memory that
+is).
 
 If you're a commercial user and find these programs useful, please consider
 supporting further developments with a donation.
 
-The most recent source code and documentation is available on the web at
+The most recent source code and documentation should always be available on
+the web at 
 http://www.tbi.univie.ac.at/~ivo/RNA/
-If you need help or have any questions send email to
-Ivo.Hofacker@tbi.univie.ac.at
+
+We need your feedback! Send your comments, suggestions, and questions to
+rna@tbi.univie.ac.at
+
+Ivo Hofacker, Summer 2000
 

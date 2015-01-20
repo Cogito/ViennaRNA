@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "utils.h"
 #define PRIVATE static
 #define PUBLIC
@@ -20,7 +21,7 @@ help ()
 {
   printf ("p-optimal filter to subopt output. usage:\n"
 	  "RNAsubopt -s < seq | popt \n");
-  exit(255);
+  exit(EXIT_FAILURE);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -45,9 +46,9 @@ int main (int argc, char *argv[])
 
   /* read the sequence */
   sequence = (char *) space (sizeof (char) * (strlen(line)+1));
-  sscanf(line, "%s", sequence);
+  (void) sscanf(line, "%s", sequence);
   free (line);
-  length = strlen(sequence);
+  length = (int) strlen(sequence);
 
   iindx = (int *) space(sizeof(int)*(length+1));
   for (i=1; i<=length; i++) 
@@ -58,17 +59,19 @@ int main (int argc, char *argv[])
   
   /* get of suboptimal structures */
 
-  while (line = get_line (stdin)) {
-    int popt;
+  while ((line = get_line (stdin))) {
+    int r, popt;
     
-    sscanf(line, "%s %f", structure, &energy);
+    r = sscanf(line, "%s %f", structure, &energy);
+    free(line);
+    if (r==0) continue;
     ptable = make_pair_table(structure);
 
     popt = 0;
     for (i = 0; i < length; i++) {
       if ((j=ptable[i])>i)
 	if (pair_seen[iindx[i]-j]==0) {
-	  pair_seen[iindx[i]-j]=1;
+	  pair_seen[iindx[i]-j]=(char) 1;
 	  if (popt==0) {
 	    printf("%s %6.2f", structure, energy);
 	    popt = 1;
@@ -76,9 +79,10 @@ int main (int argc, char *argv[])
 	  printf(" (%d,%d)", i,j);
 	}
     }
-    if (popt) printf("\n");
+    if (popt==1) printf("\n");
     free(ptable);
-    free (line);
   }
+  free(sequence); free(structure); free(iindx); free(pair_seen);
+  
   return 0;
 }

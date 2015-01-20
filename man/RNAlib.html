@@ -1,7 +1,6 @@
 <HTML>
 <HEAD>
-<!-- This HTML file has been created by texi2html 1.52
-     from RNAlib.texinfo on 7 July 1998 -->
+<!-- Created by texi2html 1.56k from RNAlib.texinfo on 28 September 2000 -->
 
 <TITLE>Vienna RNA Package</TITLE>
 </HEAD>
@@ -21,7 +20,7 @@ RNAdistance etc., which should be sufficient for most users. For those who
 wish to develop their own programs we provide a library which can be linked
 to your own code.
 
-</P>
+
 <P>
 This document only describes the library and will be primarily useful to
 programmers. The stand-alone programs are described in separate man
@@ -30,12 +29,12 @@ versions of the documentation can be found at
 the <a href="http://www.tbi.univie.ac.at/~ivo/RNA/">ViennaRNA page</a>.
 This manual documents version 1.3.
 
-</P>
+
 <P>
 Please send comments and bug reports to
 <a href="mailto:ivo@tbi.univie.ac.at">&lt;Ivo.Hofacker@tbi.univie.ac.at&gt;</a>.
 
-</P>
+
 
 
 <H1><A NAME="SEC2" HREF="RNAlib_toc.html#TOC2">Folding Routines</A></H1>
@@ -48,7 +47,6 @@ The library provides a fast dynamic programming minimum free energy
 folding algorithm as described by <CITE>Zuker &#38; Stiegler (1981)</CITE>.
 Associated functions are: 
 
-</P>
 
 <P>
 <DL>
@@ -67,7 +65,7 @@ unconstrained bases. Constrained folding works by assigning bonus energies
 to all structures compliing with the constraint.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float <B>energy_of_struct</B> <I>(char* <VAR>sequence</VAR>, char* <VAR>structure</VAR>)</I>
@@ -75,7 +73,7 @@ to all structures compliing with the constraint.
 calculates the energy of <VAR>sequence</VAR> on the <VAR>structure</VAR>
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>initialize_fold</B> <I>(int <VAR>length</VAR>)</I>
@@ -85,7 +83,7 @@ sets up pairing matrix and energy parameters. Has to be called before
 the first call to <CODE>fold()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>free_arrays</B> <I>()</I>
@@ -93,7 +91,7 @@ the first call to <CODE>fold()</CODE>.
 frees the memory allocated by <CODE>initialize_fold()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>update_fold_params</B> <I>()</I>
@@ -102,11 +100,11 @@ call this to recalculate the pair matrix and energy parameters after a
 change in folding parameters like <CODE>temperature</CODE> (see section <A HREF="RNAlib.html#SEC6">Global Variables for the Folding Routines</A>). 
 </DL>
 
-</P>
+
 <P>
 Prototypes for these functions are declared in <TT>`fold.h'</TT>.
 
-</P>
+
 
 
 <H2><A NAME="SEC4" HREF="RNAlib_toc.html#TOC4">Partition Function Folding</A></H2>
@@ -118,7 +116,6 @@ possible pair can be calculated, using a dynamic programming algorithm
 as described by <CITE>McCaskill (1990)</CITE>. The  following
 functions are provided:
 
-</P>
 
 <P>
 <DL>
@@ -142,7 +139,7 @@ be computed (saving CPU time), otherwise the <CODE>pr[iindx[i]-j]</CODE>
 and j pair.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>init_pf_fold</B> <I>(int <VAR>length</VAR>)</I>
@@ -152,7 +149,7 @@ sets up pairing matrix and energy parameters. Has to be called before
 the first call to <CODE>pf_fold()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>free_pf_arrays</B> <I>(void)</I>
@@ -160,7 +157,7 @@ the first call to <CODE>pf_fold()</CODE>.
 frees the memory allocated by <CODE>init_pf_fold()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>update_pf_params</B> <I>(int <VAR>length</VAR>)</I>
@@ -170,11 +167,11 @@ after a change in folding parameters like temperature
 (see section <A HREF="RNAlib.html#SEC6">Global Variables for the Folding Routines</A>). 
 </DL>
 
-</P>
+
 <P>
 Prototypes for these functions are declared in <TT>`part_func.h'</TT>.
 
-</P>
+
 
 
 <H2><A NAME="SEC5" HREF="RNAlib_toc.html#TOC5">Inverse Folding</A></H2>
@@ -183,7 +180,6 @@ Prototypes for these functions are declared in <TT>`part_func.h'</TT>.
 We provide two functions that search for sequences with a given
 structure, thereby inverting the folding routines.
 
-</P>
 
 <P>
 <DL>
@@ -201,7 +197,7 @@ Since <CODE>inverse_fold()</CODE> calls <CODE>fold()</CODE> you have to allocate
 for folding by calling <CODE>initialize_fold()</CODE>
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float <B>inverse_pf_fold</B> <I>(char* <VAR>start</VAR>, char* <VAR>target</VAR>)</I>
@@ -214,21 +210,21 @@ Since <CODE>inverse_pf_fold()</CODE> calls <CODE>pf_fold()</CODE> you have to al
 memory for folding by calling <CODE>init_pf_fold()</CODE>
 </DL>
 
-</P>
 
 <P>
 <DL>
-<DT><U>Variable:</U> char <B>symbolset[]</B>
+<DT><U>Variable:</U> char <B>*symbolset</B>
 <DD><A NAME="IDX13"></A>
-The global variable <CODE>char symbolset[]</CODE> contains the allowed bases, and
-is initially set to "AUGC". 
+The global variable <CODE>char *symbolset</CODE> points to the allowed bases, 
+initially <CODE>"AUGC"</CODE>.  It can be used to design sequences from reduced
+alphabets. 
 </DL>
 
-</P>
+
 <P>
 Prototypes for these functions are declared in <TT>`inverse.h'</TT>.
 
-</P>
+
 
 
 <H2><A NAME="SEC6" HREF="RNAlib_toc.html#TOC6">Global Variables for the Folding Routines</A></H2>
@@ -237,7 +233,7 @@ Prototypes for these functions are declared in <TT>`inverse.h'</TT>.
 The following global variables change the behavior the folding
 algorithms or contain additional information after folding.
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>noGU</B>
@@ -245,7 +241,7 @@ algorithms or contain additional information after folding.
 do not allow GU pairs if equal 1; default is 0.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>no_closingGU</B>
@@ -254,7 +250,7 @@ if 1 allow GU pairs only inside stacks, not as closing pairs;
 default is 0.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>noLonelyPairs</B>
@@ -264,7 +260,7 @@ of length 1). This avoids lonely base pairs in the predicted structures in
 most cases.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>tetra_loop</B>
@@ -272,7 +268,7 @@ most cases.
 include special stabilizing energies for some tetra loops; default is 1.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>energy_set</B>
@@ -282,7 +278,7 @@ pairs B, C pairs D, etc. using either GC (1) or AU parameters (2);
 default is 0, you probably don't want to change it.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> float <B>temperature</B>
@@ -292,7 +288,7 @@ Default is 37C. You have to call the update_..._params() functions after
 changing this parameter. 
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>dangles</B>
@@ -307,10 +303,19 @@ If <CODE>dangles</CODE> is set to 2, the <CODE>fold()</CODE> and
 treatment of dangling ends gives more favorable energies to helices
 directly adjacent to one another, which can be beneficial since such
 helices often do engage in stabilizing interactions through co-axial
-stacking.   Default is 1, <CODE>pf_fold()</CODE> treats 1 as 2. 
+stacking.<BR>
+If <CODE>dangles = 3</CODE> co-axial stacking is explicitely included for
+adjacent helices in mutli-loops. The option affects only mfe folding
+and energy evaluation (<CODE>fold()</CODE> and <CODE>energy_of_struct()</CODE>), as
+well as suboptimal folding via re-evaluation of energies.
+Co-axial stacking with one intervening mismatch is not considered so far.
+
+
+<P>
+Default is 1, <CODE>pf_fold()</CODE> treats 1 as 2. 
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> char* <B>nonstandards</B>
@@ -320,7 +325,7 @@ GC, CG, AU, UA, GU and UG. Nonstandard base pairs are given a stacking
 energy of 0.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> struct bond { int i,j;} <B>base_pair</B>
@@ -329,15 +334,15 @@ Contains a list of base pairs after a call to <CODE>fold()</CODE>.
 <CODE>base_pair[0].i</CODE> contains the total number of pairs.
 </DL>
 
-</P>
+
 <P>
 <DL>
-<DT><U>Variable:</U> float* <B>pr</B>
+<DT><U>Variable:</U> double* <B>pr</B>
 <DD><A NAME="IDX23"></A>
 contains the base pair probability matrix after a call to <CODE>pf_fold()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int* <B>iindx</B>
@@ -346,7 +351,7 @@ index array to move through pr. The probability for base i and j to form
 a pair is in <CODE>pr[iindx[i]-j]</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> float <B>pf_scale</B>
@@ -361,7 +366,7 @@ automatically when calling <CODE>init_pf_fold()</CODE> or
 for sequences more than a few hundred bases long.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>fold_constrained</B>
@@ -370,7 +375,7 @@ If 1, calculate constrained minimum free energy structures. See section <A HREF=
 for more information. Default is 0;
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>do_backtrack</B>
@@ -379,7 +384,7 @@ if 0, do not calculate pair probabilities in <CODE>pf_fold()</CODE>; this is abo
 twice as fast. Default is 1.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> char <B>backtrack_type</B>
@@ -389,22 +394,22 @@ only for use by <CODE>inverse_fold()</CODE>; 'C': force (1,N) to be paired,
 usual mfe structure is computed.
 </DL>
 
-</P>
+
 <P>
 include <TT>`fold_vars.h'</TT> if you want to change any of these variables
 from their defaults.
 
-</P>
+
 
 
 <H2><A NAME="SEC7" HREF="RNAlib_toc.html#TOC7">Energy Parameter Files</A></H2>
 
 <P>
-A default set of parameters, identical to the one described in <CITE>Walter
-et.al. (1994)</CITE>, is compiled into the library.
+A default set of parameters, identical to the one described in <CITE>Mathews
+et.al. (1999)</CITE>, is compiled into the library.
 Alternately, parameters can be read from and written to a file.
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>read_parameter_file</B> <I>(const char <VAR>fname</VAR>[])</I>
@@ -418,31 +423,63 @@ the parameter file.
 writes current energy parameters to the file <VAR>fname</VAR>.
 </DL>
 
-</P>
+
 <P>
 The following describes the file format expected by
 <CODE>read_parameter_file()</CODE>. All energies should be given as integers in
 units of 0.01kcal/mol.
 
-</P>
+
+<P>
+Various loop parameters depend in general on the pairs closing the loops,
+as well as unpaired bases in the loops. Internally, the library
+distinguishes 8 types of pairs (CG=1, GC=2, GU=3, UG=4, AU=5, UA=6,
+nonstandard=7, 0= no pair), and 5 types of bases (A=1, C=2, G=3, U=4 and 0
+for anything else). Parameters belonging to pairs of type 0 are not listed
+in the parameter files, but values for nonstandard pairs (type 7) and
+nonstandard bases (type 0) are. Thus, a table for symmetric size 2 interior
+loops would have 7*7*5*5 entries (2 pairs, two unpaired bases). 
+
+
+<P>
+The order of entries always uses the closing pair or pairs as the
+first indices followed by the unpaired bases in 5' to 3' direction.
+To determine the type of a pair consider the base at 5' end of each strand
+first, i.e. use the pairs <EM>(i,j)</EM> and <EM>(q,p)</EM> for an interior
+loop with <EM>i&#60;p&#60;q&#60;j</EM> . This is probably better explained by an
+example. Consider the symmetric size 4 interior loop
+
+<PRE>
+                      5'-GAUA-3' 
+                      3'-CGCU-5' 
+</PRE>
+
+<P>
+the first pair is GC, the second UA (not AU!) the unpaired bases are (in 5'
+to 3' direction, starting at the first pair) A U C G. Thus we need entry
+[2,6,1,4,2,3] of the corresponding table. Because the loop is
+symmetric you could equally well describe it by UA GC C G A U, i.e. entry
+[6,2,2,3,1,4]. Be careful to preserve this symmetry when editing
+parameter tables!
+
+
 <P>
 The first line of the file should read
 <BR><TT>## RNAfold parameter file</TT>
 
-</P>
+
 <P>
 lines of the form<BR>
 <TT># token</TT><BR>
 mark the beginning of a list of energy parameters of the type specified by
 token. The following tokens are recognized:
 
-</P>
+
 <P>
 <TT># stack_energies</TT><BR>
-The list of free energies for stacked pairs. Since the library
-distinguishes 8 types of pairs (no pair=0, CG=1, GC=2, GU=3, UG=4, AU=5,
-UA=6, nonstandard=7), the list should be formated as an 8*8 matrix. As an
-example the stacked pair 
+The list of free energies for stacked pairs, indexed by the two closing
+pairs. The list should be formated as symmetric an 7*7 matrix,conforming 
+to the order explained above. As an example the stacked pair 
 
 <PRE>
                       5'-GU-3'        5'-AC-3'
@@ -450,16 +487,17 @@ example the stacked pair
 </PRE>
 
 <P>
-corresponds to the entry [2,6], which should be identical to [5,1]. Be
-careful to preserve the symmetry when editing parameter files.
+corresponds to the entry [2,5], which should be identical to [5,2]. 
+Note that the format has changed from previous releases, to make it
+consistent with other loop parameters.
 
-</P>
+
 <P>
 <TT># stack_enthalpies</TT><BR>
 enthalpies for stacked pairs, used to rescale stacking energies to
 temperatures other than 37C. Same format as stack_energies.
 
-</P>
+
 <P>
 <TT># hairpin</TT><BR>
 Free energies of hairpin loops as a function of size. The list should
@@ -467,28 +505,27 @@ contain 31 entries on one or more lines. Since the minimum size of a
 hairpin loop is 3 and we start counting with 0, the first three values
 should be INF to indicate a forbidden value.
 
-</P>
+
 <P>
 <TT># bulge</TT><BR>
 Free energies of bulge loops. Should contain 31 entries, the first one
 being INF. 
 
-</P>
+
 <P>
 <TT># internal_loop</TT><BR>
-Free energies of internal loops. Should contain 31 entries, the first 2
-being INF. 
+Free energies of internal loops. Should contain 31 entries, the first 4
+being INF (since smaller loops are tabulated). 
 
-</P>
+
 <P>
 <TT># mismatch_interior</TT><BR>
-Free energies for the interaction between the closing pair of an interior loop
-and the two unpaired bases adjacent to the helix. This is a three
+Free energies for the interaction between the closing pair of an interior
+loop and the two unpaired bases adjacent to the helix. This is a three
 dimensional array indexed by the type of the closing pair (see above) and
-the two unpaired bases. The library distinguishes 5 bases: A=1, C=2, G=3,
-U=4 and 0 for anything else. The list therefore contains 8*5*5 entries and
-should be formated either as an 8*25 matrix or 8 5*5 matrices. The order is
-such that for example the mismatch 
+the two unpaired bases. Since we distinguish 5 bases the list contains
+8*5*5 entries and should be formated either as an 8*25 matrix or 8 5*5
+matrices. The order is such that for example the mismatch
 
 <PRE>
                                5'-CU-3'
@@ -496,19 +533,56 @@ such that for example the mismatch
 </PRE>
 
 <P>
-corresponds to entry [1,4,2] (CG=1, U=4, C=2).
+corresponds to entry [1,4,2] (CG=1, U=4, C=2), (in this notation
+the first index runs from 1 to 7, second and third from 0 to 4)
 
-</P>
+
 <P>
 <TT># mismatch_hairpin</TT><BR>
 Same as above for hairpin loops.
 
-</P>
+
 <P>
 <TT># mismatch_enthalpies</TT><BR>
 Corresponding enthalpies for rescaling to temperatures other than 37C.
 
-</P>
+
+<P>
+<TT># int11_energies</TT><BR>
+Free energies for symmetric size 2 interior loops. 7*7*5*5 entries formated
+as 49 5*5 matrices, or seven 7*25 matrices. Example:
+
+<PRE>
+                               5'-CUU-3'
+                               3'-GCA-5'
+</PRE>
+
+<P>
+corresponds to entry [1,5,4,2], which should be identical to [5,1,2,4].
+
+
+<P>
+<TT># int21_energies</TT><BR>
+Free energies for size 3 (2+1) interior loops. 7*7*5*5*5 entries formated
+in 5*5 or 5*25 matrices. The strand with a single unpaired base is listed
+first, example:
+
+<PRE>
+                               5'-CU U-3'
+                               3'-GCCA-5'
+</PRE>
+
+<P>
+corresponds to entry [1,5,4,2,2].
+
+
+<P>
+<TT># int22_energies</TT><BR>
+Free energies for symmetric size 4 interior loops. To reduce the size of
+parameter files this table only lists canonical bases (A,C,G,U) resulting in
+a 7*7*4*4*4*4 table. See above for an example.
+
+
 <P>
 <TT># dangle5</TT><BR>
 Energies for the interaction of an unpaired base on the 5' side and
@@ -525,21 +599,25 @@ matrix. For example the dangling base in
 <P>
 corresponds to entry [1,2] (CG=1, C=2);
 
-</P>
+
 <P>
 <TT># dangle3</TT><BR>
 Same as above for bases on the 3' side of a helix.
 
-</P>
+
 <P>
 <TT># ML_params</TT><BR>
 For the energy of a multi-loop a function of the form
 <CODE>E = cu*n_unpaired + ci*loop_degree + cc</CODE>
 is used where n_unpaired is the number of unpaired bases in the loop and
-loop_degree is the number of helices forming the loop. The line following
-the token should contain the values cu cc ci (in that order).
+loop_degree is the number of helices forming the loop. In addition a
+"terminal AU" penalty is applied to AU and GU pairs in the loop.
+The line following the token should contain these four values, in the order
+<CODE>cu cc ci termAU</CODE>. Ther terminal AU penalty is also used for the
+exterior loop and size 3 hairpins, for other loop types it is already
+included in the mismatch energies.
 
-</P>
+
 <P>
 <TT># Tetraloops</TT><BR>
 Some tetraloops particularly stable tetraloops are assigned an energy
@@ -554,12 +632,12 @@ following the token, one sequence per line. For example:
 assigns a bonus energy of -2 kcal/mol to tetraloops containing
 the sequence GAAA. 
 
-</P>
+
 <P>
 <TT># END</TT><BR>
 Anything beyond this token will be ignored.
 
-</P>
+
 <P>
 A parameter file need not be complete, it might may contain only a subset
 of interaction parameters, such as only stacking energies. However, for
@@ -571,13 +649,12 @@ Parameter files may contain C-style comments, i.e. any text between
 <CODE>/*</CODE> and <CODE>*/</CODE> will be ignored. However, you may have no more
 than one comment per line and no multi-line comments.
 
-</P>
+
 <P>
 A parameter file listing the default parameter set should accompany your
 distribution as <TT>`default.par'</TT>, the file <TT>`old.par'</TT> contains
 parameters used in version 1.1b of the Package. 
 
-</P>
 
 
 
@@ -604,7 +681,7 @@ labeled 'U' and weighted by its length.  Generally any string consisting
 of matching brackets and identifiers is equivalent to a plane tree with
 as many different types of nodes as there are identifiers.
 
-</P>
+
 <P>
 <CITE>Bruce Shapiro (1988)</CITE> proposed a coarse grained representation, which,
 does not retain the full information of the secondary structure. He
@@ -617,12 +694,12 @@ base pairs in the structure element.  All tree representations (except
 for the dot-bracket form) can be encapsulated into a virtual root
 (labeled 'R'), see the example below.
 
-</P>
+
 <P>
 The following example illustrates the different linear tree representations
 used by the package. All lines show the same secondary structure.
 
-</P>
+
 
 <PRE>
 a) .((((..(((...)))..((..)))).)).
@@ -646,13 +723,13 @@ equivalent.  The third line is an extension taking into account also the
 external digits.  d) weighted coarse structure, this time including the
 virtual root.
 
-</P>
+
 <P>
 For the output of aligned structures from string editing, different
 representations are needed, where we put the label on both sides.
 The above examples for tree representations would then look like:
 
-</P>
+
 
 <PRE>
 a) (UU)(P(P(P(P(UU)(UU)(P(P(P(UU)(UU)(UU)P)P)P)(UU)(UU)(P(P(UU)(U...
@@ -666,7 +743,6 @@ d) (R(E2(S2(B1(S2(M4(S3(H3)S3)((H2)S2)M4)S2)B1)S2)E2)R)
 <P>
 Aligned structures additionally contain the gap character '_'.
 
-</P>
 
 
 
@@ -676,7 +752,7 @@ Aligned structures additionally contain the gap character '_'.
 Several functions are provided for parsing structures and converting to
 different representations.
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>expand_Full</B> <I>(char* <VAR>full</VAR>)</I>
@@ -685,7 +761,7 @@ converts the <VAR>full</VAR> structure from bracket notation to the
 expanded notation including root.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>b2HIT</B> <I>(char* <VAR>full</VAR>)</I>
@@ -694,7 +770,7 @@ converts the <VAR>full</VAR> structure from bracket notation to the HIT
 notation including root.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>b2C</B> <I>(char* <VAR>full</VAR>)</I>
@@ -703,7 +779,7 @@ converts the <VAR>full</VAR> structure from bracket notation to the a
 coarse grained notation using the 'H' 'B' 'I' 'M' and 'R' identifiers. 
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>b2Shapiro</B> <I>(char* <VAR>full</VAR>)</I>
@@ -713,7 +789,7 @@ converts the <VAR>full</VAR> structure from bracket notation to the
 'R' identifiers.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>expand_Shapiro</B> <I>(char* <VAR>coarse</VAR>)</I>
@@ -722,7 +798,7 @@ inserts missing 'S' identifiers in unweighted coarse grained structures
 as obtained from <CODE>b2C()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>add_root</B> <I>(char* <VAR>any</VAR>)</I>
@@ -730,7 +806,7 @@ as obtained from <CODE>b2C()</CODE>.
 adds a root to an un-rooted tree in any except bracket notation.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>unexpand_Full</B> <I>(char* <VAR>expanded</VAR>)</I>
@@ -739,7 +815,7 @@ restores the bracket notation from an expanded full or HIT tree, that is
 any tree using only identifiers 'U' 'P' and 'R'.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>unweight</B> <I>(char* <VAR>expanded</VAR>)</I>
@@ -747,21 +823,21 @@ any tree using only identifiers 'U' 'P' and 'R'.
 strip weights from any weighted tree.
 </DL>
 
-</P>
+
 <P>
 All the above functions allocate memory for the strings they return.
 
-</P>
+
 <P>
 <DL>
-<DT><U>Function:</U> void <B>unexpand_aligned_F</B> <I>(char* <VAR>align[2]</VAR>)</I>
+<DT><U>Function:</U> void <B>unexpand_aligned_F</B> <I>(char* <VAR>align</VAR>[2])</I>
 <DD><A NAME="IDX39"></A>
 converts two aligned structures in expanded notation as produced by
 <CODE>tree_edit_distance()</CODE> function back to bracket notation with '_'
 as the gap character. The result overwrites the input.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>parse_structure</B> <I>(char* <VAR>full</VAR>)</I>
@@ -770,7 +846,7 @@ Collects a statistic of structure elements of the <VAR>full</VAR> structure in
 bracket notation, writing to the following global variables:
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>loop_size[]</B>
@@ -779,7 +855,7 @@ contains a list of all loop sizes. <CODE>loop_size[0]</CODE> contains the
 number of external bases.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>loop_degree[]</B>
@@ -787,7 +863,7 @@ number of external bases.
 contains the corresponding list of loop degrees.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>helix_size[]</B>
@@ -795,7 +871,7 @@ contains the corresponding list of loop degrees.
 contains a list of all stack sizes.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>loops</B>
@@ -803,7 +879,7 @@ contains a list of all stack sizes.
 contains the number of loops ( and therefore of stacks ).
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>pairs</B>
@@ -811,7 +887,7 @@ contains the number of loops ( and therefore of stacks ).
 contains the number of base pairs in the last parsed structure.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>unpaired</B>
@@ -819,12 +895,11 @@ contains the number of base pairs in the last parsed structure.
 contains the number of unpaired bases.
 </DL>
 
-</P>
 
 <P>
 Prototypes for the above functions can be found in <TT>`RNAstruct.h'</TT>.
 
-</P>
+
 
 
 <H2><A NAME="SEC11" HREF="RNAlib_toc.html#TOC11">Distance Measures</A></H2>
@@ -837,7 +912,7 @@ pairs that have to be opened or closed to transform one structure into the
 other. It is therefore particularly useful for comparing structures on the
 same sequence. It is implemented by 
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>bp_distance</B> <I>(char* <VAR>s1</VAR>, char* <VAR>s2</VAR>)</I>
@@ -846,7 +921,7 @@ returns the "base pair" distance between two secondary structures <VAR>s1</VAR>
 and <VAR>s2</VAR>, which should have the same length.
 </DL>
 
-</P>
+
 <P>
 For other cases a distance measure that allows for gaps is preferable.
 We can define distances between structures as edit distances between
@@ -862,7 +937,7 @@ Tree editing is therefore usually preferable, although somewhat
 slower. String edit distances are always smaller or equal to tree edit
 distances.  
 
-</P>
+
 <P>
 The different level of detail in the structure representations defined
 above naturally leads to different measures of distance. For full
@@ -870,11 +945,11 @@ structures we use a cost of 1 for deletion or insertion of an unpaired
 base and 2 for a base pair. Replacing an unpaired base for a pair incurs
 a cost of 1.
 
-</P>
+
 <P>
 Two cost matrices are provided for coarse grained structures:
 
-</P>
+
 
 <PRE>
 /*  Null,   H,   B,   I,   M,   S,   E     */
@@ -900,7 +975,6 @@ Two cost matrices are provided for coarse grained structures:
 The lower matrix uses the costs given in <CITE>Shapiro (1990)</CITE>.
 All distance functions use the following global variables:
 
-</P>
 
 <P>
 <DL>
@@ -910,7 +984,7 @@ if 0, use the default cost matrix (upper matrix in example); otherwise
 use Shapiro's costs (lower matrix).
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>edit_backtrack</B>
@@ -919,7 +993,7 @@ produce an alignment of the two structures being compared by
 tracing the editing path giving the minimum distance.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> char* <B>aligned_line[2]</B>
@@ -930,7 +1004,7 @@ functions with
 details on the representation of structures.
 </DL>
 
-</P>
+
 
 
 <H3><A NAME="SEC12" HREF="RNAlib_toc.html#TOC12">Functions for Tree Edit Distances</A></H3>
@@ -945,7 +1019,7 @@ structure <VAR>xstruc</VAR>, for use in
 <VAR>xstruc</VAR> may be any rooted structure representation.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float <B>tree_edit_distance</B> <I>(Tree* <VAR>T1</VAR>, Tree* <VAR>T2</VAR>)</I>
@@ -953,7 +1027,7 @@ structure <VAR>xstruc</VAR>, for use in
 calculates the edit distance of the two trees <VAR>T1</VAR> and <VAR>T2</VAR>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>free_tree</B> <I>(Tree* <VAR>t</VAR>)</I>
@@ -961,13 +1035,13 @@ calculates the edit distance of the two trees <VAR>T1</VAR> and <VAR>T2</VAR>.
 frees the memory allocated for <VAR>t</VAR>. 
 </DL>
 
-</P>
+
 <P>
 Prototypes for the above functions can be found in <TT>`treedist.h'</TT>. The
 type <CODE>Tree</CODE> is defined in <TT>`dist_vars.h'</TT>, which is automatically
 included with <TT>`treedist.h'</TT>
 
-</P>
+
 
 
 <H3><A NAME="SEC13" HREF="RNAlib_toc.html#TOC13">Functions for String Alignment</A></H3>
@@ -980,7 +1054,7 @@ converts the structure <VAR>xstruc</VAR> into a format suitable for
 <CODE>string_edit_distance()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float <B>string_edit_distance</B> <I>(swString* <VAR>T1</VAR>, swString* <VAR>T2</VAR>)</I>
@@ -988,11 +1062,11 @@ converts the structure <VAR>xstruc</VAR> into a format suitable for
 calculates the string edit distance of <VAR>T1</VAR> and <VAR>T2</VAR>.
 </DL>
 
-</P>
+
 <P>
 Prototypes for the above functions can be found in <TT>`stringdist.h'</TT>.
 
-</P>
+
 
 
 <H3><A NAME="SEC14" HREF="RNAlib_toc.html#TOC14">Functions for Comparison of Base Pair Probabilities</A></H3>
@@ -1001,7 +1075,7 @@ Prototypes for the above functions can be found in <TT>`stringdist.h'</TT>.
 For comparison of base pair probability matrices, the matrices are first
 condensed into probability profiles which are the compared by alignment.
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float** <B>Make_bp_profile</B> <I>(int <VAR>length</VAR>)</I>
@@ -1012,7 +1086,7 @@ paired, respectively. The returned array is suitable for
 <CODE>profile_edit_distance</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> float <B>profile_edit_distance</B> <I>(float** <VAR>T1</VAR>, float** <VAR>T2</VAR>)</I>
@@ -1020,7 +1094,7 @@ paired, respectively. The returned array is suitable for
 calculates an alignment distance of the two profiles <VAR>T1</VAR> and <VAR>T2</VAR>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>free_profile</B> <I>(float** <VAR>T</VAR>)</I>
@@ -1028,11 +1102,10 @@ calculates an alignment distance of the two profiles <VAR>T1</VAR> and <VAR>T2</
 frees the memory allocated for the profile <VAR>T</VAR>.
 </DL>
 
-</P>
+
 <P>
 Prototypes for the above functions can be found in <TT>`profiledist.h'</TT>.
 
-</P>
 
 
 
@@ -1041,7 +1114,7 @@ Prototypes for the above functions can be found in <TT>`profiledist.h'</TT>.
 <P>
 The following utilities are used and therefore provided by the library:
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>PS_dot_plot</B> <I>(char* <VAR>sequence</VAR>, char* <VAR>filename</VAR>)</I>
@@ -1055,7 +1128,7 @@ matrix. The lower part of the matrix contains the minimum free energy
 structure. 
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>PS_rna_plot</B> <I>(char* <VAR>sequence</VAR>, char* <VAR>structure</VAR>, char* <VAR>filename</VAR>)</I>
@@ -1066,7 +1139,7 @@ and now expects the structure to be plotted in dot-bracket notation as an
 argument. It does not make use of the global <CODE>base_pair</CODE> array anymore.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>gmlRNA</B> <I>(char* <VAR>sequence</VAR>, char* <VAR>structure</VAR>, char* <VAR>filename</VAR>, char <VAR>option</VAR>)</I>
@@ -1078,7 +1151,7 @@ or <KBD>'x'</KBD> the resulting file will coordinates for an initial layout of
 the graph.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> int <B>rna_plot_type</B>
@@ -1089,7 +1162,7 @@ structures in <CODE>PS_rna_plot</CODE> and <CODE>gmlRNA</CODE>. Current possibil
 the <CODE>naview</CODE> program of <CITE>Bruccoleri &#38; Heinrich (1988)</CITE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>random_string</B> <I>(int <VAR>l</VAR>, char* <VAR>symbols</VAR>)</I>
@@ -1098,7 +1171,7 @@ generates a "random" string of characters from <VAR>symbols</VAR> with
 length <VAR>l</VAR>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>hamming</B> <I>(char* <VAR>s1</VAR>, char* <VAR>s2</VAR>)</I>
@@ -1108,7 +1181,7 @@ the so called "Hamming" distance. <VAR>s1</VAR> and <VAR>s2</VAR> should have th
 same length.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> unsigned char* <B>pack_structure</B> <I>(char* <VAR>struc</VAR>)</I>
@@ -1119,7 +1192,7 @@ therefore be used with standard string functions such as strcmp().
 Useful for programs that need to keep many structures in memory.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>unpack_structure</B> <I>(unsigned char* <VAR>packed</VAR>)</I>
@@ -1128,7 +1201,7 @@ translate a compressed binary string produced by pack_structure() back into
 the familiar dot bracket notation.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> short* <B>make_pair_table</B> <I>(char* <VAR>structure</VAR>)</I>
@@ -1137,7 +1210,7 @@ returns a newly allocated table, such that:  table[i]=j if (i.j) pair or 0
 if i is unpaired, table[0] contains the length of the <VAR>structure</VAR>. 
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>time_stamp</B> <I>(void)</I>
@@ -1146,7 +1219,7 @@ returns a string containing the current date in the format
 "Fri Mar 19 21:10:57 1993".
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void <B>nrerror</B> <I>(char* <VAR>message</VAR>)</I>
@@ -1154,7 +1227,7 @@ returns a string containing the current date in the format
 writes <VAR>message</VAR> to stderr and aborts the program.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> double <B>urn</B> <I>()</I>
@@ -1163,7 +1236,7 @@ returns a pseudo random number in the range [0..1[, usually implemented
 by calling <CODE>erand48()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Variable:</U> unsigned short <B>xsubi[3]</B>
@@ -1172,7 +1245,7 @@ is used by <CODE>urn ()</CODE>. These should be set to some random number seeds
 before the first call to <CODE>urn ()</CODE>.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> int <B>int_urn</B> <I>(int <VAR>from</VAR>, int <VAR>to</VAR>)</I>
@@ -1180,7 +1253,7 @@ before the first call to <CODE>urn ()</CODE>.
 generates a pseudo random integer in the range [<VAR>from</VAR>, <VAR>to</VAR>].
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> void* <B>space</B> <I>(unsigned int <VAR>size</VAR>)</I>
@@ -1189,7 +1262,7 @@ returns a pointer to <VAR>size</VAR> bytes of allocated and 0 initialized
 memory; aborts with an error if memory is not available.
 </DL>
 
-</P>
+
 <P>
 <DL>
 <DT><U>Function:</U> char* <B>get_line</B> <I>(FILE* <VAR>fp</VAR>)</I>
@@ -1199,12 +1272,12 @@ a pointer to the resulting string. The necessary memory is allocated and
 should be released using <CODE>free()</CODE> when the string is no longer needed.
 </DL>
 
-</P>
+
 <P>
 Prototypes for <CODE>PS_rna_plot()</CODE> and <CODE>PS_dot_plot()</CODE> reside in
 <TT>`PS_dot.h'</TT>, the other functions are declared in <TT>`utils.h'</TT>.
 
-</P>
+
 
 
 <H1><A NAME="SEC16" HREF="RNAlib_toc.html#TOC16">A Small Example Program</A></H1>
@@ -1215,7 +1288,6 @@ The program folds two sequences using both the mfe and partition function
 algorithms and calculates the tree edit and profile distance of the
 resulting structures and base pairing probabilities.
 
-</P>
 
 
 <PRE>
@@ -1309,13 +1381,17 @@ and link using
 where <VAR>hpath</VAR> and <VAR>lpath</VAR> point to the location of the header
 files and library, respectively.
 
-</P>
+
 
 
 <H1><A NAME="SEC17" HREF="RNAlib_toc.html#TOC17">References</A></H1>
 
 
 <UL>
+<LI>D.H. Mathews, J. Sabina, M. Zucker and H. Turner (1999)<BR>
+
+   Expanded sequence dependence of thermodynamic parameters provides
+   robust prediction of RNA secondary structure, JMB, 288: 911-940
 <LI>M. Zuker and P. Stiegler (1981)<BR>
 
    Optimal  computer  folding  of large RNA sequences using
@@ -1345,7 +1421,7 @@ files and library, respectively.
    Thermodynamic Study of Internal Loops in Oligoribonucleotides ... ,
    Biochemistry 30: 6428--6435
 
-<LI>A. Walter, D. Turner, J. Kim, M. Lyttle, P. M&uuml;ller, D. Mathews and M. Zuker (1994)<BR>
+<LI>A. Walter, D. Turner, J. Kim, M. Lyttle, P. M@"uller, D. Mathews and M. Zuker (1994)<BR>
 
    Coaxial stacking of helices enhances binding of Oligoribonucleotides..,
    Proc. Natl. Acad. Sci. 91: 9218-9222
@@ -1516,13 +1592,14 @@ Jump to:
 <LI><A HREF="RNAlib.html#IDX30">write_parameter_file</A>
 </DIR>
 
-</P>
 
 
 
 <H1><A NAME="SEC19" HREF="RNAlib_toc.html#TOC19">Variable Index</A></H1>
 <P>
 Jump to:
+<A HREF="#vindex_*">*</A>
+-
 <A HREF="#vindex_a">a</A>
 -
 <A HREF="#vindex_b">b</A>
@@ -1549,14 +1626,16 @@ Jump to:
 -
 <A HREF="#vindex_r">r</A>
 -
-<A HREF="#vindex_s">s</A>
--
 <A HREF="#vindex_t">t</A>
 -
 <A HREF="#vindex_u">u</A>
 -
 <A HREF="#vindex_x">x</A>
 <P>
+<H2><A NAME="vindex_*">*</A></H2>
+<DIR>
+<LI><A HREF="RNAlib.html#IDX13">*symbolset</A>
+</DIR>
 <H2><A NAME="vindex_a">a</A></H2>
 <DIR>
 <LI><A HREF="RNAlib.html#IDX50">aligned_line[2]</A>
@@ -1619,10 +1698,6 @@ Jump to:
 <DIR>
 <LI><A HREF="RNAlib.html#IDX62">rna_plot_type</A>
 </DIR>
-<H2><A NAME="vindex_s">s</A></H2>
-<DIR>
-<LI><A HREF="RNAlib.html#IDX13">symbolset[]</A>
-</DIR>
 <H2><A NAME="vindex_t">t</A></H2>
 <DIR>
 <LI><A HREF="RNAlib.html#IDX19">temperature</A>
@@ -1638,8 +1713,7 @@ Jump to:
 </DIR>
      
 <P><HR><P>
-This document was generated on 7 July 1998 using the
-<A HREF="http://wwwinfo.cern.ch/dis/texi2html/">texi2html</A>
-translator version 1.52.</P>
+This document was generated on 28 September 2000 using
+<A HREF="http://wwwinfo.cern.ch/dis/texi2html/">texi2html</A>&nbsp;1.56k.
 </BODY>
 </HTML>

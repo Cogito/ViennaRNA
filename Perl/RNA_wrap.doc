@@ -3,6 +3,9 @@ RNA_wrap.c
 [ Module : RNA, Package : RNA ]
 
 
+$VERSION = 0.2
+        [ Constant: double  ]
+
 1.  Folding Routines
 ====================
 
@@ -105,14 +108,14 @@ $energy_set
 
 $dangles
         [ Global : int dangles ]
-        use dangling end energies (not in part_func!) 
+        @null@ 
 
 $nonstandards
         [ Global : char * nonstandards ]
         contains allowed non standard bases 
 
 $temperature
-        [ Global : float temperature ]
+        [ Global : double temperature ]
         rescale parameters to this temperature 
 
 $james_rule
@@ -130,12 +133,12 @@ $logML
 
 base pair 
 
-bond_i_set(struct bond *,int );
-bond_i_get(struct bond *);
+bond_i_set(self,i);
+bond_i_get(self);
         [ Member data: returns int  ]
 
-bond_j_set(struct bond *,int );
-bond_j_get(struct bond *);
+bond_j_set(self,j);
+bond_j_get(self);
         [ Member data: returns int  ]
 
 ----------
@@ -148,7 +151,7 @@ $iindx
         [ Global : int * iindx ]
 
 $pf_scale
-        [ Global : float pf_scale ]
+        [ Global : double pf_scale ]
 
 $fold_constrained
         [ Global : int fold_constrained ]
@@ -164,15 +167,16 @@ $backtrack_type
         usually 'F'; 'C' require (1,N) to be bonded; 'M' seq is part of
         a multi loop 
 
+option_string();
+        [ returns char * ]
+
 get_pr(i,j);
-        [ returns float  ]
+        [ returns double  ]
         Get probability of pair i.j from the pr array 
 
 2.  Parsing and Comparing Structures
 ====================================
-
-$STRUC = 1000
-        [ Constant: int  ]
+from RNAstruct.h
 
 b2HIT(structure);
         [ returns char * ]
@@ -292,6 +296,7 @@ $cost_matrix
 
 3.  Utilities
 =============
+from utils.h
 
 space(size);
         [ returns void * ]
@@ -368,6 +373,10 @@ gmlRNA(string,structure,ssfile,option);
 ssv_rna_plot(string,structure,ssfile);
         [ returns int  ]
         write coord file for SStructView 
+
+xrna_plot(string,structure,ssfile);
+        [ returns int  ]
+        write .ss file for further editing in XRNA 
 
 PS_dot_plot(string,file);
         [ returns int  ]
@@ -538,4 +547,10 @@ ptrmap(type1,type2);
         weird type-handling problems.
         
 deref_any(ptr,index);
+
+ptr2array(ptr,index,len,type);
+
+make_loop_index(structure);
+
+energy_of_move(string,structure,mi,mj);
 

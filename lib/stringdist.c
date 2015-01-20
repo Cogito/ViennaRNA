@@ -14,7 +14,7 @@
 #include  "dist_vars.h"
 #include  "utils.h"
 
-static char rcsid[] = "$Id: stringdist.c,v 1.2 1997/11/05 14:04:45 ivo Exp $";
+static char rcsid[] = "$Id: stringdist.c,v 1.2 1997/11/05 14:04:45 ivo Rel $";
 
 #define PUBLIC
 #define PRIVATE        static

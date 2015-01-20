@@ -11,17 +11,16 @@ to build the library and the programs in the ./Progs, ./Cluster and ./Utils
 directories.
 Type
         make install
-to copy the executables in ./Progs and ./Cluster, the library and man
-pages into the appropriate directories (as defined by the BINDIR MANDIR
-and LIBDIR variables). 
-Files in the ./Utils directory will not be installed automatically. 
+to copy the executables and man pages to the directories specified by
+BINDIR and MANDIR (./bin and ./man/man1 by default, edit makefiles to change). 
 If you plan on using the library, you'll also want to install the header 
 files from ./H in a suitable place. This is not done by the makefile. 
 Also feel free to copy all header files into a single one, if you dislike 
 using a lot of #includes in your programs.
 
-To build and install the Perl module, the RNAsubopt, or readseq program,
-follow the instructions in the respective directories.
+To install the Perl module you need root priviledges, just type
+make install in the Perl directory. To install the readseq program,
+follow the instructions in the readseq directory.
 
 There are man pages for all executables, the library is documented in
 ./man/RNAlib.texinfo. You can either print this file as a manual using

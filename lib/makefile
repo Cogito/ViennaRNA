@@ -8,12 +8,12 @@ ARFLAGS = rv
 
 RM	= rm -f
 
-#CC	= gcc   # insert your favorite compiler here
+# CC	= egcs -mpentiumpro -Wall -O -g  # insert your favorite compiler here
 
 # add -DSUN4 if compiling for SunOS 4.1*  or -DHP9  for hpux-9.?? for faster 
 # handling of floting point exceptions
 # add -DLARGE_PF if you want pf_fold() to use doubles instead of floats
-CFLAGS  = -O -I../H
+CFLAGS  = -O -I../H 
 
 LIBDIR	= /usr/local/lib
 
@@ -34,7 +34,8 @@ OBJ	= \
 	utils.o
 
 all:	libRNA.a
-	
+
+energy_par.o: intloops.h
 
 libRNA.a: $(OBJ)
 	$(RM) $@

@@ -6,5 +6,6 @@ require DynaLoader;
 package RNA;
 bootstrap RNA;
 var_RNA_init();
+package RNA;
 @EXPORT = qw( );
 1;

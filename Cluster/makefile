@@ -7,8 +7,8 @@ SNAME   =  AnalyseSeqs
 #CC	= gcc  # add your favorite compiler here
 CFLAGS  = -O
 
-BINDIR  = /usr/local/bin
-MANDIR  = /usr/local/man/man1
+BINDIR  = ../bin
+MANDIR  = ../man/man1
 
 LIBS    = -lm
 
@@ -44,8 +44,6 @@ clean:
 
 install:    all
 	    cp $(NAME) $(BINDIR)
-	    strip $(BINDIR)/$(NAME)
 	    cp $(SNAME) $(BINDIR)
-	    strip $(BINDIR)/$(SNAME)
 	    cp ../man/$(NAME).man $(MANDIR)/$(NAME).1
 	    cp ../man/$(SNAME).man $(MANDIR)/$(SNAME).1

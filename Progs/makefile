@@ -1,24 +1,24 @@
-# Edit CFLAGS to suit your compiler;  make install will copy 
-# executables and manpages to BINDIR and LIBDIR respectively.
+# Edit CFLAGS to suit your compiler;  
+# make install will copy executables to BINDIR.
 
 SHELL	= /bin/sh
 
-#CC	= gcc   # insert your favorite C compiler
+#CC	= gcc -mpentiumpro -Wall  # insert your favorite C compiler
+BINDIR	= ../bin
+MANDIR	= ../man/man1
 
-COPT    = -O 
+COPT    = -O # -g
 
 CFLAGS  = $(COPT) -I../H
 
-LDFLAGS = $(COPT) -L../lib/ -lRNA -lm 
+LDFLAGS = $(COPT) -L../lib -lRNA -lm # -ldmalloc
 
-BINDIR	= /usr/local/bin
-MANDIR	= /usr/local/man/man1
 
 ALL	= RNAfold RNAheat RNAeval RNAinverse RNAdistance RNApdist
 
 all:	$(ALL)
 
-RNAfold: RNAfold.o
+RNAfold: RNAfold.o ../lib/libRNA.a
 	$(CC) -o $@ $@.o $(LDFLAGS)
 
 RNAheat: RNAheat.o
@@ -30,9 +30,6 @@ RNAeval: RNAeval.o
 RNAinverse: RNAinverse.o
 	$(CC) -o $@ $@.o $(LDFLAGS)
 
-Jinverse: Jinverse.o
-	$(CC) -o  $@ $@.o ../lib/SGI/jnverse.o $(LDFLAGS)
-
 RNAdistance: RNAdistance.o
 	$(CC) -o $@ $@.o $(LDFLAGS)
 
@@ -43,7 +40,6 @@ RNApdist: RNApdist.o
 install:	all
 	for i in $(ALL); do \
 	cp $$i $(BINDIR); \
-	strip $(BINDIR)/$$i; \
 	cp ../man/$$i.man $(MANDIR)/$$i.1; \
 	done
 

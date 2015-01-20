@@ -1,11 +1,11 @@
-NAME1    = RNAsubopt
-
 VIENNA   = ..
 
-CFLAGS   = -O -DSUBOPT -I$(VIENNA)/H
+CFLAGS   = -O -I$(VIENNA)/H #  -g -Wall -mpentiumpro 
 
-LDFLAGS  = -O -L$(VIENNA)/lib -lRNA -lm
+LDFLAGS  = -O -L$(VIENNA)/lib -lRNA -lm  # -g -mpentiumpro
 
+BINDIR	= ../bin
+MANDIR  = ../man/man1
 
 FILES   = RNAsubopt.c\
           fold.c\
@@ -19,19 +19,24 @@ OBJ     = RNAsubopt.o\
           subopt.o
           
 
-all:	$(NAME1) popt
+all:	RNAsubopt popt
 
-$(NAME1):   $(OBJ)
-	    $(CC) -o $(NAME1) $(OBJ) $(LDFLAGS)
+RNAsubopt:   $(OBJ)
+	    $(CC) -o RNAsubopt $(OBJ) $(LDFLAGS)
+
+popt:	    popt.o
+	    $(CC) -o popt popt.o $(LDFLAGS)
 
 fold.o:	$(VIENNA)/lib/fold.c
-	   $(CC) $(CFLAGS) -c $?
+	   $(CC) $(CFLAGS) -DSUBOPT -c $?
 
-popt:	popt.o
-	$(CC) -o popt popt.o $(LDFLAGS)
+install: all
+	cp RNAsubopt $(BINDIR)
+	cp RNAsubopt.man $(MANDIR)/RNAsubopt.1	
+	cp popt	$(BINDIR)
 
 veryclean:      
-	   rm -f *.o $(NAME1)
+	   rm -f *.o RNAsubopt popt
 
 clean:      
 	   rm -f *.o

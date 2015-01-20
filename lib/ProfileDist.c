@@ -15,7 +15,7 @@
 #include  "part_func.h"
 #include  "utils.h"
 
-static char rcsid[] = "$Id: ProfileDist.c,v 1.4 1998/07/19 14:12:52 ivo Exp $";
+static char rcsid[] = "$Id: ProfileDist.c,v 1.4 1998/07/19 14:12:52 ivo Rel $";
 
 #define PUBLIC
 #define PRIVATE        static

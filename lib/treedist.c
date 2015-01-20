@@ -12,7 +12,7 @@
 #include  "edit_cost.h"
 #include  "dist_vars.h"
 #include  "utils.h"
-static char rcsid[] = "$Id: treedist.c,v 1.3 1997/11/03 10:39:43 ivo Exp $";
+static char rcsid[] = "$Id: treedist.c,v 1.3 1997/11/03 10:39:43 ivo Rel $";
 
 #define PRIVATE  static
 #define PUBLIC

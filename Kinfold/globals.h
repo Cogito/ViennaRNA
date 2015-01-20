@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2005-02-16 13:16:43 ivo>
+  Last changed Time-stamp: <2006-10-03 10:53:27 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: globals.h,v 1.2 2005/02/16 17:00:48 ivo Exp $
+  $Id: globals.h,v 1.3 2006/10/04 12:45:13 xtof Exp $
 */
 
 #ifndef GLOBDEFS_H
@@ -28,6 +28,7 @@ typedef struct _GlobVars {
   double grow;
   int    glen;
   double time;
+  double phi;
   double simTime;
 } GlobVars;
 
@@ -42,6 +43,7 @@ typedef struct _GlobArrays {
   char *currform;      /* current structure */
   char *prevform;      /* current structure of previous time step */
   float *sE;           /* energy(s) of stop structure(s) */
+  double phi_bounds[3];   /* phi_min, phi_inc, phi_max */
   unsigned short subi[3]; /* seeds for random-number-generator */
 } GlobArrays;
 
@@ -55,6 +57,7 @@ typedef struct _GlobToogles {
   int start;
   int stop;
   int silent;
+  int phi;
   int lmin;
   int fpt;
   int mc;

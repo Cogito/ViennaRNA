@@ -45,7 +45,7 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(install_sh) -d
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -74,7 +74,7 @@ am_libRNA_a_OBJECTS = libRNA_a-dist_vars.$(OBJEXT) \
 	libRNA_a-part_func_co.$(OBJEXT) libRNA_a-ProfileAln.$(OBJEXT) \
 	libRNA_a-duplex.$(OBJEXT) libRNA_a-alifold.$(OBJEXT) \
 	libRNA_a-alipfold.$(OBJEXT) libRNA_a-aln_util.$(OBJEXT) \
-	libRNA_a-LPfold.$(OBJEXT)
+	libRNA_a-aliLfold.$(OBJEXT) libRNA_a-LPfold.$(OBJEXT)
 libRNA_a_OBJECTS = $(am_libRNA_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -187,7 +187,7 @@ libRNA_a_SOURCES = dist_vars.c fold_vars.c part_func.c read_epars.c\
 	treedist.c energy_par.c inverse.c ProfileDist.c RNAstruct.c utils.c\
 	fold.c naview.c PS_dot.c stringdist.c params.c subopt.c list.c \
         Lfold.c cofold.c part_func_co.c ProfileAln.c duplex.c alifold.c \
-	alipfold.c aln_util.c LPfold.c
+	alipfold.c aln_util.c aliLfold.c LPfold.c
 
 libRNA_a_CFLAGS = $(AM_CFLAGS) @FPIC@
 noinst_HEADERS = intloops.h list.h
@@ -272,6 +272,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-ProfileAln.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-ProfileDist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-RNAstruct.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-aliLfold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-alifold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-alipfold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-aln_util.Po@am__quote@
@@ -656,6 +657,20 @@ libRNA_a-aln_util.obj: aln_util.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='aln_util.c' object='libRNA_a-aln_util.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-aln_util.obj `if test -f 'aln_util.c'; then $(CYGPATH_W) 'aln_util.c'; else $(CYGPATH_W) '$(srcdir)/aln_util.c'; fi`
+
+libRNA_a-aliLfold.o: aliLfold.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-aliLfold.o -MD -MP -MF "$(DEPDIR)/libRNA_a-aliLfold.Tpo" -c -o libRNA_a-aliLfold.o `test -f 'aliLfold.c' || echo '$(srcdir)/'`aliLfold.c; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libRNA_a-aliLfold.Tpo" "$(DEPDIR)/libRNA_a-aliLfold.Po"; else rm -f "$(DEPDIR)/libRNA_a-aliLfold.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='aliLfold.c' object='libRNA_a-aliLfold.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-aliLfold.o `test -f 'aliLfold.c' || echo '$(srcdir)/'`aliLfold.c
+
+libRNA_a-aliLfold.obj: aliLfold.c
+@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-aliLfold.obj -MD -MP -MF "$(DEPDIR)/libRNA_a-aliLfold.Tpo" -c -o libRNA_a-aliLfold.obj `if test -f 'aliLfold.c'; then $(CYGPATH_W) 'aliLfold.c'; else $(CYGPATH_W) '$(srcdir)/aliLfold.c'; fi`; \
+@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/libRNA_a-aliLfold.Tpo" "$(DEPDIR)/libRNA_a-aliLfold.Po"; else rm -f "$(DEPDIR)/libRNA_a-aliLfold.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='aliLfold.c' object='libRNA_a-aliLfold.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-aliLfold.obj `if test -f 'aliLfold.c'; then $(CYGPATH_W) 'aliLfold.c'; else $(CYGPATH_W) '$(srcdir)/aliLfold.c'; fi`
 
 libRNA_a-LPfold.o: LPfold.c
 @am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-LPfold.o -MD -MP -MF "$(DEPDIR)/libRNA_a-LPfold.Tpo" -c -o libRNA_a-LPfold.o `test -f 'LPfold.c' || echo '$(srcdir)/'`LPfold.c; \

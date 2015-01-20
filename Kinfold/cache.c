@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2001-08-02 14:59:19 xtof>
+  Last changed Time-stamp: <2006-10-03 16:31:54 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: cache.c,v 1.2 2005/02/16 17:00:48 ivo Exp $
+  $Id: cache.c,v 1.3 2006/10/04 12:45:12 xtof Exp $
 */
 
 #include <stdio.h>
@@ -41,7 +41,7 @@ static unsigned cache_f (char *x);
 /* #define CACHESIZE     4096 -1 */ /* 2^12 -1   must be power of 2 -1 */
 
 static cache_entry *cachetab[CACHESIZE+1];
-static char UNUSED rcsid[] ="$Id: cache.c,v 1.2 2005/02/16 17:00:48 ivo Exp $";
+static char UNUSED rcsid[] ="$Id: cache.c,v 1.3 2006/10/04 12:45:12 xtof Exp $";
 unsigned long collisions=0;
 
 /* stolen from perl source */
@@ -97,6 +97,7 @@ int write_cache (cache_entry *x) {
     free(c->structure);
     free(c->neighbors);
     free(c->rates);
+    free(c->energies);
     free(c);
   }
   cachetab[cacheval]=x;
@@ -115,6 +116,7 @@ void kill_cache () {
       free (cachetab[i]->structure);
       free (cachetab[i]->neighbors);
       free (cachetab[i]->rates);
+      free (cachetab[i]->energies);
       free (cachetab[i]);
     }
     cachetab[i]=NULL;

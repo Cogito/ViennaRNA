@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2005-02-18 14:24:41 ivo>
+  Last changed Time-stamp: <2006-11-09 11:28:33 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: main.c,v 1.3 2005/02/18 13:29:04 ivo Exp $
+  $Id: main.c,v 1.4 2006/11/24 08:13:55 xtof Exp $
 */
 
 #include <stdio.h>
@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "globals.h"
 
-static char UNUSED rcsid[] ="$Id: main.c,v 1.3 2005/02/18 13:29:04 ivo Exp $";
+static char UNUSED rcsid[] ="$Id: main.c,v 1.4 2006/11/24 08:13:55 xtof Exp $";
 extern void  read_parameter_file(const char fname[]);
 extern void get_from_cache(cache_entry *c);
 
@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
     /*
       initialize or reset ringlist to start conditions
     */
+    ini_or_reset_rl();
     if (GSV.grow>0) {
       if (strlen(GAV.farbe)>GSV.glen) {
 	start[GSV.glen] = '\0';

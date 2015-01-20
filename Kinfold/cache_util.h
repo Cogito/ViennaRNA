@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2001-08-02 14:58:06 xtof>
+  Last changed Time-stamp: <2006-10-03 09:37:34 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: cache_util.h,v 1.1.1.1 2001/08/02 16:48:58 xtof Exp $
+  $Id: cache_util.h,v 1.2 2006/10/04 12:45:12 xtof Exp $
 */
 
 #ifndef CACHE_UTIL_H
@@ -23,6 +23,7 @@ typedef struct {
   double energy;     /* energy of this structure */
   short *neighbors;  
   float *rates;
+  double *energies;
 } cache_entry;
 
 extern cache_entry *lookup_cache (char *x);

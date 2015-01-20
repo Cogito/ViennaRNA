@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2006-01-16 11:28:43 ivo>
+  Last changed Time-stamp: <2006-10-03 15:06:51 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: nachbar.c,v 1.6 2006/01/16 10:38:11 ivo Exp $
+  $Id: nachbar.c,v 1.7 2006/10/04 12:45:13 xtof Exp $
 */
 
 #include <stdio.h>
@@ -21,11 +21,21 @@
 #include "cache_util.h"
 #include "baum.h"
 
-static char UNUSED rcsid[]="$Id: nachbar.c,v 1.6 2006/01/16 10:38:11 ivo Exp $";
+static char UNUSED rcsid[]="$Id: nachbar.c,v 1.7 2006/10/04 12:45:13 xtof Exp $";
 
 /* arrays */
 static short *neighbor_list=NULL;
-static float *bmf; /* boltzmann weight of structure */
+static float *bmf=NULL; /* boltzmann weight of structure */
+
+
+/* globals for laplace stuff */
+static double L = 0.0;
+static double D = 0.0;
+static double sumT = 0.0;
+static double sumK = 0.0;
+static double sumKK = 0.0;
+static double sumD = 0.0;
+static double *energies=NULL; /* energies of neighbors */
 
 /* variables */
 /*  static double highestE = -1000.0; */
@@ -71,6 +81,10 @@ void ini_nbList(int chords) {
   bmf = (float *)calloc(2*chords, sizeof(double));
   assert(bmf != NULL);
 
+  /* list of neighbor energies */
+  energies = (double*)calloc(2*chords, sizeof(double));
+  assert(energies != NULL);
+  
   /* open log-file */
   logFP = fopen(strcat(strcpy(logFN, GAV.BaseName), ".log"), "a+");
   assert(logFP != NULL);
@@ -87,17 +101,24 @@ void update_nbList(int i, int j, int iE) {
   E = (double)iE/100.;
   neighbor_list[2*top] = (short )i;
   neighbor_list[2*top+1] = (short )j;
-
+  
   /* compute rates and some statistics */
   /*    meanE += E; */
   dE = E-GSV.currE;
+
+  /* laplace stuff */
+  energies[top] = E;
+  L += GSV.currE-E;
+  D++;
+  /* fprintf(stderr, ">>%g %g<<\n", L, D); */
+  
   if( GTV.mc ) {
     /* metropolis rule */
     if (dE < 0) p = 1;
-    else p = exp(-(dE / _RT));
+    else p = exp(-(dE / _RT*GSV.phi));
   }
   else  /* kawasaki rule */
-    p = exp(-0.5 * (dE / _RT));
+    p = exp(-0.5 * (dE / _RT*GSV.phi));
 
   totalflux += p;
   bmf[top++] = (float )p;
@@ -113,6 +134,7 @@ void get_from_cache(cache_entry *c) {
   lmin = c->lmin;
   memcpy(neighbor_list, c->neighbors, 2*top*sizeof(short));
   memcpy(bmf, c->rates, top*sizeof(float));
+  memcpy(energies, c->energies, top*sizeof(double));
   is_from_cache = 1;
 }
 
@@ -130,6 +152,8 @@ void put_in_cache(void) {
   memcpy(c->neighbors,neighbor_list,top*2*sizeof(short));
   c->rates = (float *) malloc(top*sizeof(float));
   memcpy(c->rates, bmf, top*sizeof(float));
+  c->energies = (double*)malloc(top*sizeof(double));
+  memcpy(c->energies, energies, top*sizeof(double));
   c->top = top;
   c->lmin = lmin;
   c->flux = totalflux;
@@ -142,13 +166,19 @@ void put_in_cache(void) {
 int sel_nb(void) {
 
   char trans, **s;
-  int next;
+  int next, i;
   double pegel = 0.0, schwelle = 0.0, zufall = 0.0;
   int found_stop=0;
 
   /* before we select a move, store current conformation in cache */
   /* ... unless it just came from there */
   if ( !is_from_cache ) put_in_cache();
+  else
+    /* laplace stuff */
+    for (i=0; i<top; i++) {
+      L += (GSV.currE - energies[i]);
+      D++;
+    }
   is_from_cache = 0;
 
   /* draw 2 different a random number */
@@ -164,6 +194,12 @@ int sel_nb(void) {
   }
 
   Zeit += zeitInc;
+
+  /* laplace stuff */
+  sumK  += L*zeitInc;
+  sumKK += L*L*zeitInc;
+  sumD  += D*zeitInc;
+  
   if (GSV.grow>0 && GSV.len < strlen(GAV.farbe_full)) grow_chain();
 
   /* meanE /= (double)top; */
@@ -194,19 +230,49 @@ int sel_nb(void) {
   if ( ((found_stop > 0) && (GTV.fpt == 1)) || (Zeit > GSV.time) ) {
     /* met condition to stop simulation */
 
+    /* laplace stuff */
+    double K, KK, N, sigma;
+    K = sumK/Zeit;
+    KK = sumKK/Zeit;
+    N = sumD/Zeit;
+    /* graph Laplacian is - Laplace-Beltrami operator */
+    sigma = -1.0*sqrt((KK-K*K)/N)/(K/N);
+    
     /* this gose to stdout */
     if ( !GTV.silent ) {
       printf("%s %6.2f %10.3f", GAV.currform, GSV.currE, Zeit);
-      if ( GTV.verbose ) printf("%4d _ %d", top, lmin);
+
+      /* laplace stuff*/
+      if (GTV.phi) printf(" %8.3f %8.3f %3g", zeitInc, L, D); 
+
+      if (GTV.verbose) printf(" %4d _ %d", top, lmin);
       if (found_stop) printf(" X%d\n", found_stop);/* found a stop structure */
       else printf(" O\n"); /* time for simulation is exceeded */
+
+      /* laplace stuff */
+      if (GTV.phi) printf("Curvature fluctuation sigma = %7.5f\n", sigma);
+
       fflush(stdout);
     }
 
     /* this goes to log */
     /* comment log steps of simulation as well !!! %6.2f  round */
-    if ( found_stop ) fprintf(logFP," X%02d %12.3f\n", found_stop, Zeit);
-    else fprintf(logFP," O   %12.3f %d %s\n", Zeit, lmin, GAV.currform);
+    if ( found_stop ) {
+      fprintf(logFP," X%02d %12.3f", found_stop, Zeit);
+
+      /* laplace stuff */
+      if (GTV.phi) fprintf(logFP, " %3g %7.5f", GSV.phi, sigma);
+
+      fprintf(logFP,"\n");
+    }
+    else {
+      fprintf(logFP," O   %12.3f", Zeit);
+
+      /* laplace stuff */
+      if (GTV.phi) fprintf(logFP, " %3g %7.5f", GSV.phi, sigma);      
+
+      fprintf(logFP," %d %s\n", lmin, GAV.currform);
+    }
     GAV.subi[0] = xsubi[0];
     GAV.subi[1] = xsubi[1];
     GAV.subi[2] = xsubi[2];
@@ -214,6 +280,15 @@ int sel_nb(void) {
     fflush(logFP);
 
     Zeit = 0.0;
+
+    /* reset laplace stuff for next trajectory */
+    sumT = 0.0;
+    sumK = 0.0;
+    sumKK = 0.0;
+    sumD = 0.0;
+    L = 0.0;
+    D = 0.0;
+    
     /*  highestE = OhighestE = -1000.0; */
     reset_nbList();
     return(1);
@@ -222,12 +297,20 @@ int sel_nb(void) {
     /* continue simulation */
     int flag = 0;
     if( (!GTV.silent) && (GSV.currE <= GSV.stopE+GSV.cut) ) {
+
       if (!GTV.lmin || (lmin==1 && strcmp(GAV.prevform, GAV.currform) != 0)) {
 	char format[64];
 	flag = 1;
 	sprintf(format, "%%-%ds %%6.2f %%10.3f", strlen(GAV.farbe_full));
 	printf(format, GAV.currform, GSV.currE, Zeit);
       }
+
+      /* laplace stuff */
+      if (GTV.phi) {
+	printf(" %8.3f %8.3f %3g", zeitInc, L, D);
+	L = D = 0.0; /* reset L and D for next structure */
+      }
+
       if ( flag && GTV.verbose ) {
 	int ii, jj;
 	if (next<0) trans='g'; /* growth */
@@ -244,7 +327,7 @@ int sel_nb(void) {
 	    else trans = 'D';
 	  }
 	}
-	printf("%4d %c %d", top, trans, lmin);
+	printf(" %4d %c %d", top, trans, lmin);
       }
       if (flag) printf("\n");
     }
@@ -306,6 +389,7 @@ void clean_up_nbList(void){
 
   free(neighbor_list);
   free(bmf);
+  free(energies);
   fprintf(logFP,"\n");
   fclose(logFP);
 }

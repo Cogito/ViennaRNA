@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2006-01-16 11:27:31 ivo>
+  Last changed Time-stamp: <2006-11-09 11:24:43 xtof>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: baum.c,v 1.5 2006/01/16 10:37:47 ivo Exp $
+  $Id: baum.c,v 1.7 2006/11/24 08:12:35 xtof Exp $
 */
 
 #include <stdio.h>
@@ -32,15 +32,15 @@ typedef struct _baum {
   struct _baum *down;
 } baum;
 
-static char UNUSED rcsid[]="$Id: baum.c,v 1.5 2006/01/16 10:37:47 ivo Exp $";
+static char UNUSED rcsid[]="$Id: baum.c,v 1.7 2006/11/24 08:12:35 xtof Exp $";
 static int poListop = 0; /* polist counter = no_of_bp */
-static short *pairList;
-static short *typeList;
-static short *aliasList;
-static baum *rl;         /* ringlist */
-static baum *wurzl;      /* virtualroot of ringlist-tree */
-static baum **poList;    /* post order list of bp's */
-static char **ptype;
+static short *pairList = NULL;
+static short *typeList = NULL;
+static short *aliasList = NULL;
+static baum *rl = NULL;         /* ringlist */
+static baum *wurzl = NULL;      /* virtualroot of ringlist-tree */
+static baum **poList = NULL;    /* post order list of bp's */
+static char **ptype = NULL;
 
 static int comp_struc(const void *A, const void *B);
 extern int energy_of_struct_pt (char *string,
@@ -666,13 +666,17 @@ void move_it (void) {
 
 /**/
 void clean_up_rl(void) {
-
+  int i;
   free(pairList); pairList=NULL;
   free(typeList); typeList = NULL;
   free(aliasList); aliasList = NULL;
   free(rl); rl=NULL;
   free(wurzl);  wurzl=NULL;
   free(poList); poList=NULL; poListop=0;
+  for (i=0; i<=GSV.len; i++)
+    free(ptype[i]);
+  free(ptype);
+  ptype=NULL;
 }
 
 /**/

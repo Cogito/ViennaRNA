@@ -1,5 +1,9 @@
 /*
   $Log: subopt.c,v $
+  Revision 1.10  1999/05/06 10:13:35  ivo
+  recalculte energies before printing if logML is set
+  + cosmetic changes
+
   Revision 1.9  1998/05/19 16:31:52  ivo
   added support for constrained folding
 
@@ -36,7 +40,7 @@
 #include "pair_mat.h"
 #include "list.h"
 
-PRIVATE char rcsid[] = "$Id: subopt.c,v 1.9 1998/05/19 16:31:52 ivo Exp ivo $";
+PRIVATE char rcsid[] = "$Id: subopt.c,v 1.10 1999/05/06 10:13:35 ivo Exp $";
 
 /*Typedefinitions ----------------------------------------------------------- */
 
@@ -151,6 +155,8 @@ PRIVATE int length;
 PRIVATE int minimal_energy;                            /* minimum free energy */
 PRIVATE int element_energy;        /* internal energy of a structural element */
 PRIVATE int threshold;                              /* minimal_energy + delta */
+
+PUBLIC  float print_energy;        /* printing threshold for use with logML */
 
 /*----------------------------------------------------------------------------*/
 /*List routines---------------------------------------------------------------*/
@@ -644,22 +650,27 @@ subopt (int delta)
 		      state->partial_energy / 100., structure_energy );
 	      exit (1);
 	    }
-#else
+#endif
 	  if (logML) { /* recalc energy */
 	    ss = S; ss1=S1;  /* save the pointers */
 	    structure_energy = energy_of_struct (sequence, structure);
 	    S = ss; S1=ss1;
 	  }
-#endif
-	  if (!sorted) { 
-	    /* print and forget */
-	    printf("%s %6.2f\n", structure, structure_energy);
+
+	  /* if logML is set discard structures with energies>print_energy */
+	  if (logML&&(structure_energy>print_energy)) {
 	    free(structure);
-	  }
-	  else {
-	    /* store solution */
-	    new_solution = make_solution (structure_energy, structure);
-	    push (SolutionList, new_solution);
+	  } else {
+	    if (!sorted) { 
+	      /* print and forget */
+	      printf("%s %6.2f\n", structure, structure_energy);
+	      free(structure);
+	    }
+	    else {
+	      /* store solution */
+	      new_solution = make_solution (structure_energy, structure);
+	      push (SolutionList, new_solution);
+	    }
 	  }
 	}
       else

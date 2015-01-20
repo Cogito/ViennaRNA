@@ -3,7 +3,7 @@
 .SH NAME
 RNAsubopt \- calculate suboptimal secondary structures of RNAs
 .SH SYNOPSIS
-\fBRNAsubopt [\-e\ \fIrange\fP] [\-s] [\-lodos] [\-T\ \fItemp\fP] [\-d] [\-4] [\-noGU] [\-noCloseGU] [\-P\ paramfile] [\-nsp\ pairs]
+\fBRNAsubopt [\-e\ \fIrange\fP] [\-ep prange] [\-s] [\-lodos] [\-T\ \fItemp\fP] [\-d] [\-4] [\-noGU] [\-noCloseGU] [\-P\ paramfile] [\-logML] [\-nsp\ pairs]
 
 .SH DESCRIPTION
 .I subopt
@@ -20,7 +20,7 @@ Default is 1.
 .TP
 .B \-s
 Sort the structures by energy. Uses more memory and CPU
-time. Alternatively, pipe the output through `sort +1n'.
+time. For larger calculations, better pipe the output through `sort +1n'.
 .TP
 .B \-lodos 
 Calculate the Lower Density of States. Output lines consist of an energy
@@ -31,9 +31,28 @@ plotting the density of states. Does not print the structures themseleves.
 do not assign dangling end energies to bases adjacent to helices in
 multi-loops and free ends. By default RNAsubopt treats dangling ends in the
 same way as partion function folding, or mfe folding with RNAfold -d2.
+.TP
+.B \-logML
+recalculate energies of structures using a logarithmic energy function for
+multi-loops. This option does not effect structure generation, only the
+energies that is printed out. Since logML lowers energies somewhat, some
+structures may be missing.
+.TP
+.B \-ep \fIprange\fP
+Only print structures with energy within prange of the mfe. Only useful in
+conjunction with -logML.
 .PP
 The \fB\-T\fP, \fB\-4\fP, \fB\-noGU\fP, \fB\-noCloseGU\fP, \fB\-noLP\fP
 \fB\-P\fP, \fB\-nsp\fP, options work as in RNAfold.
 .TP
+
+.SH REFERENCES
+Please cite:
+.br
+S. Wuchty, W. Fontana, I. L. Hofacker and P. Schuster
+"Complete Suboptimal Folding of RNA and the Stability of
+Secondary Structures",
+Biopolymers, 49, 145-165 (1999)
+
 .SH AUTHORS
 Stefan Wuchty, Ivo L Hofacker, Walter Fontana.

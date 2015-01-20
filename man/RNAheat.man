@@ -31,7 +31,7 @@ The \fB\-d\fP, \fB\-4\fP, \fB\-noGU\fP, \fB\-noCloseGU\fP, \fB\-e\fP,
 \fB\-P\fP, \fB\-nsp\fP, options work as in RNAfold.
 .SH EXAMPLES
 .nf
-	RNAheat -Tmin -30 -Tmax 120 -h 0.1 -m 4 < tRNA.seq | xvgr -pipe
+	RNAheat -Tmin -30 -Tmax 120 -h 0.1 -m 4 < tRNA.seq | xmgr -pipe
 .nf
 produces plots of the specific heat of the sequences in tRNA.seq.
 .SH REFERENCES

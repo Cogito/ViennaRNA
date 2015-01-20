@@ -20,7 +20,7 @@
 #define MAXLENGTH  10000
 #define MAXSEQ      1000
 
-static char rcsid[] = "$Id: RNApdist.c,v 1.4 1998/07/19 16:16:30 ivo Exp $";
+static char rcsid[] = "$Id: RNApdist.c,v 1.5 1999/05/06 09:51:46 ivo Exp $";
 
 PRIVATE void command_line(int argc, char *argv[]);
 PRIVATE void usage(void);

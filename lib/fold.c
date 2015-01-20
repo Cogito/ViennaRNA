@@ -20,7 +20,7 @@
 #include "fold_vars.h"
 #include "pair_mat.h"
 
-static char rcsid[] = "$Id: fold.c,v 1.11 1998/07/19 14:18:00 ivo Exp ivo $";
+static char rcsid[] = "$Id: fold.c,v 1.12 1999/05/06 09:38:41 ivo Exp $";
 
 #define PAREN
 #ifdef LETTER

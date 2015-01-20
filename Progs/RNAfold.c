@@ -18,7 +18,7 @@
 #include "utils.h"
 extern void  read_parameter_file(const char fname[]);
 
-static char rcsid[] = "$Id: RNAfold.c,v 1.9 1998/07/19 16:15:49 ivo Exp ivo $";
+static char rcsid[] = "$Id: RNAfold.c,v 1.10 1999/05/06 09:52:29 ivo Exp $";
 
 #define PRIVATE static
 

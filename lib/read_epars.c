@@ -16,7 +16,7 @@
 #include "energy_const.h"
 #include "energy_par.h"
 
-static char rcsid[] = "$Id: read_epars.c,v 1.4 1997/11/06 16:46:07 ivo Rel ivo $";
+static char rcsid[] = "$Id: read_epars.c,v 1.5 1999/05/06 09:40:13 ivo Exp $";
 
 #define PUBLIC
 #define PRIVATE   static

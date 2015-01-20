@@ -28,7 +28,7 @@
 #include "fold_vars.h"
 #include "pair_mat.h"
 
-static char rcsid[] = "$Id: inverse.c,v 1.6 1998/05/19 17:41:59 ivo Exp ivo $";
+static char rcsid[] = "$Id: inverse.c,v 1.7 1999/05/06 09:50:09 ivo Exp $";
 #define PUBLIC
 #define PRIVATE static
 PRIVATE float  adaptive_walk(char *start, char *target);

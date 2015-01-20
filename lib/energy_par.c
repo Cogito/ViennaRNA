@@ -27,7 +27,7 @@
 */
 
 #include "energy_const.h"
-static char rcsid[] = "$Id: energy_par.c,v 1.2 1997/11/05 14:38:04 ivo Rel ivo $";
+static char rcsid[] = "$Id: energy_par.c,v 1.3 1999/05/06 09:48:27 ivo Exp $";
 
 #define NST 0     /* Energy for nonstandard stacked pairs */
 #define DEF -50   /* Default terminal mismatch, used for I */

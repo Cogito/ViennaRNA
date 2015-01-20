@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define UREADSEQ_G
 #include "ureadseq.h"
@@ -1578,7 +1579,7 @@ short writeSeq(FILE *outf, const char *seq, const long seqlen,
 
   short linesout = 0, seqtype = kNucleic;
   long  i, j, l, l1, ibase;
-  char  idword[31], endstr[10];
+  char  idword[31], endstr[15];
   char  seqnamestore[128], *seqname = seqnamestore;
   char  s[kMaxseqwidth], *cp;
   char  nameform[10], numform[10], nocountsymbols[10];

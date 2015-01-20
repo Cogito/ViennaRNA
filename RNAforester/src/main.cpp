@@ -19,6 +19,8 @@
 #include <list>
 #include <sstream>
 #include <string>
+#include <cstring>
+#include <climits>
 #include <map>
 
 //#include <sys/timeb.h>

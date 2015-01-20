@@ -6,8 +6,9 @@ AC_PREREQ(2.61)
 AC_INIT([kinfold], [1.3], [rna@tbi.univie.ac.at], [Kinfold])
 AC_CONFIG_SRCDIR([cache_util.h])
 
+AM_SILENT_RULES([yes])
 dnl Every other copy of the package version number gets its value from here
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([1.11])
 
 dnl configure options
 AM_WITH_DMALLOC
@@ -17,7 +18,7 @@ AC_PROG_CC
 dnl AC_PROG_MAKE_SET
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 
 AC_SUBST(VERSION)
 
@@ -38,7 +39,6 @@ AC_ARG_WITH(ViennaRNA-lib,
   [ --with-ViennaRNA-lib	where to search for libRNA.a],
   ac_VRNA_lib="$withval",
   )
-
 AC_OPENMP
 
 AC_PATH_VRNA

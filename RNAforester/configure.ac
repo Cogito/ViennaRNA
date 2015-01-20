@@ -1,8 +1,10 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_REVISION($Revision: 1.13 $)
 AC_INIT(RNAforester,1.5,mhoechsm@techfak.uni-bielefeld.de,RNAforester)
-AC_PREREQ(2.53)
-AM_INIT_AUTOMAKE
+AC_PREREQ([2.59])
+
+AM_SILENT_RULES([yes])
+AM_INIT_AUTOMAKE([1.11])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
@@ -21,11 +23,17 @@ AC_ARG_WITH(ViennaRNA-lib,
   [--with-ViennaRNA-lib        where to search for libRNA.a],
   [LIBS=["$withval/libRNA.a ${LIBS}"] && AC_DEFINE(HAVE_LIBRNA,1,Define to 1 if you have the `RNA' library (-lRNA).)
   LDFLAGS="-L$withval -R$withval ${LDFLAGS}"],
-  LDFLAGS="-L../../lib ${LDFLAGS} ${OPENMP_CXXFLAGS}" 
+  LDFLAGS="-L../../lib -L../../ViennaRNA ${LDFLAGS} ${OPENMP_CXXFLAGS}" 
   if test -r "../lib/fold.c"; then
-     AC_DEFINE(HAVE_LIBRNA)
-     LIBS=["-lRNA ${LIBS}"]
-     AC_MSG_RESULT([using (to be built) libRNA.a in ../lib])
+    AC_DEFINE(HAVE_LIBRNA)
+    LIBS=["-lRNA ${LIBS}"]
+    AC_MSG_RESULT([using (to be built) libRNA.a in ../lib])
+  else
+    if test -r "../ViennaRNA/fold.c"; then
+      AC_DEFINE(HAVE_LIBRNA)
+      LIBS=["-lRNA ${LIBS}"]
+      AC_MSG_RESULT([using (to be built) libRNA.a in ../ViennaRNA])
+    fi
   fi
  ) 
 dnl AC_CHECK_LIB(RNA, fold,,AC_MSG_WARN(Vienna RNA library libRNA.a was not found. RNAforester will be compiled without the structure prediction option -p and graphical output))
@@ -49,7 +57,7 @@ AC_ARG_WITH([xmlplusplus-lib],
 save_CPPFLAGS=$CPPFLAGS	
 CPPFLAGS=["-Ig2-0.70/src/ ${CPPFLAGS}"]
 
-AC_CHECK_LIB(gd,main,,)
+dnl AC_CHECK_LIB(gd,main,,)
 		  
 dnl Checks for header files.
 AC_HEADER_STDC

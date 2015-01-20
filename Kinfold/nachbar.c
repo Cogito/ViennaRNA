@@ -1,5 +1,5 @@
 /*
-  Last changed Time-stamp: <2010-06-24 15:55:36 ivo>
+  Last changed Time-stamp: <2011-03-10 18:02:10 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
@@ -415,28 +415,26 @@ static const char *costring(const char *str) {
   static char* buffer=NULL;
   static int size=0;
   int n;
-  if ((str==NULL) && (buffer)) {
-    /* make it possible to free buffer */
-    free(buffer);
-    buffer  = NULL;
-    size    = 0;
+  if (str==NULL) {
+    if (buffer) {
+      /* make it possible to free buffer */
+      free(buffer);
+      size = 0; buffer = NULL;
+    }
     return NULL;
   }
-  if(str){
-    n=strlen(str);
-    if (n>size) {
-      size = n+2;
-      buffer = realloc(buffer, size);
-    }
-    if ((cut_point>0)&&(cut_point<=n)) {
-      strncpy(buffer, str, cut_point-1);
-      buffer[cut_point-1] = '&';
-      strncpy(buffer+cut_point, str+cut_point-1, n-cut_point+1);
-      buffer[n+1] = '\0';
-    } else {
-      strncpy(buffer, str, n+1);
-    }
-    return buffer;
+  n=strlen(str);
+  if (n>=size) {
+    size = n+2;
+    buffer = realloc(buffer, size);
   }
-  else return NULL;
+  if ((cut_point>0)&&(cut_point<=n)) {
+    strncpy(buffer, str, cut_point-1);
+    buffer[cut_point-1] = '&';
+    strncpy(buffer+cut_point, str+cut_point-1, n-cut_point+1);
+    buffer[n+1] = '\0';
+  } else {
+    strncpy(buffer, str, n+1);
+  }
+  return buffer;
 }

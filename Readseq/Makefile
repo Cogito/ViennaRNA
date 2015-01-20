@@ -40,7 +40,7 @@ all: build test
 
 build: $(SOURCES)
 	@echo "Compiling readseq..."
-	$(CC) $(CFLAGS) -o readseq readseq.c ureadseq.c
+	$(CC) $(LDFLAGS) $(CFLAGS) -o readseq readseq.c ureadseq.c
 
 # if using NCBI, uncomment these lines in place of build: above
 #build: $(SOURCES)

@@ -18,3 +18,5 @@ globals.o: cmdline.h
 
 cmdline.h cmdline.c: kinfold.ggo
 	gengetopt -i kinfold.ggo
+
+dist_man_MANS = Kinfold.1

@@ -32,8 +32,8 @@ $CCFLAGS .= ' $(AM_CXXFLAGS) $(CXXFLAGS)';
 $OPTIMIZE =~ s/-march=[a-zA-Z0-9_\-]+//g;
 $OPTIMIZE =~ s/-mtune=[a-zA-Z0-9_\-]+//g;
 
-print "CCFLAGS:\t", $CCFLAGS, "\n";
-print "OPTIMIZE:\t", $OPTIMIZE, "\n";
+# print "CCFLAGS:\t", $CCFLAGS, "\n";
+# print "OPTIMIZE:\t", $OPTIMIZE, "\n";
 
 WriteMakefile(
               MAKEFILE    =>  "Makefile.perl",
@@ -47,5 +47,5 @@ WriteMakefile(
               OBJECT      =>  "RNA_wrap.o",
               dynamic_lib =>  {OTHERLDFLAGS => '$(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -fopenmp'},
               AUTHOR      =>  'Ivo Hofacker <ivo@tbi.univie.ac.at>',
-              VERSION     =>  '2.1.0'
+              VERSION     =>  '2.1.1'
 );

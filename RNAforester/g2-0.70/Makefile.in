@@ -130,11 +130,11 @@ doc:
 
 
 clean:
-	-(cd ./demo ; make clean)
+	-(cd ./demo ; $(MAKE) clean)
 	-rm -f $(OBJ)
 	-rm -f libg2.a config.cache config.log Makefile.bak config.status
 	-$(FIND) . -name "*~" -exec rm -f {} \;
-	-(cd ./g2_perl ; make clean)
+	-(cd ./g2_perl ; $(MAKE) clean)
 	-rm -f ./g2_perl/test.ps
 	-rm -f ./g2_perl/test.png
 	-rm -f ./g2_perl/test.jpg
@@ -148,8 +148,6 @@ clean:
 distclean:  clean
 
 maintainer-clean:   clean
-
-check:	
 
 demo:	libg2.a
 	(cd ./demo ; make)

@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <climits>
+#include <cstring>
 
 #include "algebra.h"
 #include "debug.h"

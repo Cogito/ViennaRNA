@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.2: H/loop_energies.h File Reference</title>
+<title>RNAlib-2.0.3: H/loop_energies.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.2</div>
+   <div id="projectname">RNAlib-2.0.3</div>
   </td>
  </tr>
  </tbody>
@@ -179,7 +179,7 @@ Functions</h2></td></tr>
  3'-mismatch: a_n<br/>
  </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>Base pairs are always denoted in 5'-&gt;3' direction. Thus the enclosed base pair must be 'turned arround' when evaluating the free energy of the interior-loop </dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd>scale_parameters() </dd>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="params_8h.html#a527ef619cd8210b84d5d53be1e0e29b6" title="Get precomputed energy contributions for all the known loop types.">scale_parameters()</a> </dd>
 <dd>
 <a class="el" href="structparamT.html" title="The datastructure that contains temperature scaled energy parameters.">paramT</a> </dd></dl>
 <dl class="note"><dt><b>Note:</b></dt><dd>This function is threadsafe</dd></dl>
@@ -262,7 +262,7 @@ Functions</h2></td></tr>
   </pre><p> where X-Y marks the closing pair [e.g. a <b>(G,C)</b> pair]. The length of this loop is 6 as there are six unpaired nucleotides (a1-a6) enclosed by (X,Y). The 5' mismatching nucleotide is a1 while the 3' mismatch is a6. The nucleotide sequence of this loop is "a1.a2.a3.a4.a5.a6" <br/>
  </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>The parameter sequence should contain the sequence of the loop in capital letters of the nucleic acid alphabet if the loop size is below 7. This is useful for unusually stable tri-, tetra- and hexa-loops which are treated differently (based on experimental data) if they are tabulated. </dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd>scale_parameters() </dd>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="params_8h.html#a527ef619cd8210b84d5d53be1e0e29b6" title="Get precomputed energy contributions for all the known loop types.">scale_parameters()</a> </dd>
 <dd>
 <a class="el" href="structparamT.html" title="The datastructure that contains temperature scaled energy parameters.">paramT</a> </dd></dl>
 <dl class="warning"><dt><b>Warning:</b></dt><dd>Not (really) thread safe! A threadsafe implementation will replace this function in a future release!<br/>
@@ -570,7 +570,7 @@ E_ExtLoop() </dd></dl>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="loop__energies_8h.html">loop_energies.h</a>      </li>
-      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.3 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

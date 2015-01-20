@@ -112,13 +112,6 @@
       <arglist>(const char **strings, char *structure)</arglist>
     </member>
     <member kind="function">
-      <type>FLT_OR_DBL *</type>
-      <name>alipf_export_bppm</name>
-      <anchorfile>alifold_8h.html</anchorfile>
-      <anchor>ad394c96ec91614f6951344b301a6d6a6</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
       <type>void</type>
       <name>free_alifold_arrays</name>
       <anchorfile>alifold_8h.html</anchorfile>
@@ -166,6 +159,13 @@
       <anchorfile>alifold_8h.html</anchorfile>
       <anchor>a298a420a8c879202e2617b3f724fde38</anchor>
       <arglist>(unsigned int n_seq, short ***S, short ***S5, short ***S3, unsigned short ***a2s, char ***Ss)</arglist>
+    </member>
+    <member kind="function">
+      <type>float</type>
+      <name>alipf_fold_par</name>
+      <anchorfile>alifold_8h.html</anchorfile>
+      <anchor>a4d2ff54d8210fc7cceeeff389d4dbd1d</anchor>
+      <arglist>(const char **sequences, char *structure, plist **pl, pf_paramT *parameters, int calculate_bppm, int is_constrained, int is_circular)</arglist>
     </member>
     <member kind="function">
       <type>float</type>
@@ -440,6 +440,7 @@
     <class kind="struct">sect</class>
     <class kind="struct">bondT</class>
     <class kind="struct">bondTEn</class>
+    <class kind="struct">model_detailsT</class>
     <class kind="struct">paramT</class>
     <class kind="struct">pf_paramT</class>
     <class kind="struct">PAIR</class>
@@ -590,9 +591,23 @@
     <filename>fold_8h</filename>
     <member kind="function">
       <type>float</type>
+      <name>fold_par</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>adb973133c241d57c04b253df35e4d34e</anchor>
+      <arglist>(const char *sequence, char *structure, paramT *parameters, int is_constrained, int is_circular)</arglist>
+    </member>
+    <member kind="function">
+      <type>float</type>
       <name>fold</name>
       <anchorfile>fold_8h.html</anchorfile>
       <anchor>aadafcb0f140795ae62e5ca027e335a9b</anchor>
+      <arglist>(const char *sequence, char *structure)</arglist>
+    </member>
+    <member kind="function">
+      <type>float</type>
+      <name>circfold</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>a4ac63ab3e8d9a80ced28b8052d94e423</anchor>
       <arglist>(const char *sequence, char *structure)</arglist>
     </member>
     <member kind="function">
@@ -603,11 +618,39 @@
       <arglist>(const char *string, const char *structure, int verbosity_level)</arglist>
     </member>
     <member kind="function">
+      <type>float</type>
+      <name>energy_of_struct_par</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>ab5169ea4f72f250e43811463a33f4e40</anchor>
+      <arglist>(const char *string, const char *structure, paramT *parameters, int verbosity_level)</arglist>
+    </member>
+    <member kind="function">
+      <type>float</type>
+      <name>energy_of_circ_structure</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>aeb14f3664aec67fc03268ac75253f0f8</anchor>
+      <arglist>(const char *string, const char *structure, int verbosity_level)</arglist>
+    </member>
+    <member kind="function">
+      <type>float</type>
+      <name>energy_of_circ_struct_par</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>a75dc765ee4a1177832bc817c94cf88e5</anchor>
+      <arglist>(const char *string, const char *structure, paramT *parameters, int verbosity_level)</arglist>
+    </member>
+    <member kind="function">
       <type>int</type>
       <name>energy_of_structure_pt</name>
       <anchorfile>fold_8h.html</anchorfile>
       <anchor>a8831445966b761417e713360791299d8</anchor>
       <arglist>(const char *string, short *ptable, short *s, short *s1, int verbosity_level)</arglist>
+    </member>
+    <member kind="function">
+      <type>int</type>
+      <name>energy_of_struct_pt_par</name>
+      <anchorfile>fold_8h.html</anchorfile>
+      <anchor>ada4701dd7519b29da75ceac147601f4e</anchor>
+      <arglist>(const char *string, short *ptable, short *s, short *s1, paramT *parameters, int verbosity_level)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -636,20 +679,6 @@
       <anchorfile>fold_8h.html</anchorfile>
       <anchor>a41bf8f6fa15b94471f7095cad9f0ccf3</anchor>
       <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>float</type>
-      <name>circfold</name>
-      <anchorfile>fold_8h.html</anchorfile>
-      <anchor>a9d9bb005bd2fa8ce8b37f17bcd2b26bb</anchor>
-      <arglist>(const char *string, char *structure)</arglist>
-    </member>
-    <member kind="function">
-      <type>float</type>
-      <name>energy_of_circ_structure</name>
-      <anchorfile>fold_8h.html</anchorfile>
-      <anchor>aeb14f3664aec67fc03268ac75253f0f8</anchor>
-      <arglist>(const char *string, const char *structure, int verbosity_level)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -733,6 +762,13 @@
     <name>fold_vars.h</name>
     <path>/home/mescalin/ronny/public_html/programs/ViennaRNA/H/</path>
     <filename>fold__vars_8h</filename>
+    <member kind="function">
+      <type>void</type>
+      <name>set_model_details</name>
+      <anchorfile>fold__vars_8h.html</anchorfile>
+      <anchor>a4c3257186a796182462f18a5480ac8b3</anchor>
+      <arglist>(model_detailsT *md)</arglist>
+    </member>
     <member kind="variable">
       <type>int</type>
       <name>fold_constrained</name>
@@ -1082,6 +1118,20 @@
     <path>/home/mescalin/ronny/public_html/programs/ViennaRNA/H/</path>
     <filename>params_8h</filename>
     <member kind="function">
+      <type>paramT *</type>
+      <name>scale_parameters</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>a527ef619cd8210b84d5d53be1e0e29b6</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>paramT *</type>
+      <name>get_scaled_parameters</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>ac2f3ca440b7eaf4d999fb27da949fe72</anchor>
+      <arglist>(double temperature, model_detailsT md)</arglist>
+    </member>
+    <member kind="function">
       <type>pf_paramT *</type>
       <name>get_scaled_pf_parameters</name>
       <anchorfile>params_8h.html</anchorfile>
@@ -1092,14 +1142,42 @@
       <type>pf_paramT *</type>
       <name>get_boltzmann_factors</name>
       <anchorfile>params_8h.html</anchorfile>
-      <anchor>aac0b8167e3824b5c64cdf2aa04c92df5</anchor>
-      <arglist>(int dangle_model, double temperature, double alpha, double pf_scale)</arglist>
+      <anchor>a6fc2f3eef5a3024d44963ac59a42e39d</anchor>
+      <arglist>(double temperature, double betaScale, model_detailsT md, double pf_scale)</arglist>
+    </member>
+    <member kind="function">
+      <type>pf_paramT *</type>
+      <name>get_boltzmann_factor_copy</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>acba212326a051734797e65987260fdd0</anchor>
+      <arglist>(pf_paramT *parameters)</arglist>
+    </member>
+    <member kind="function">
+      <type>pf_paramT *</type>
+      <name>get_scaled_alipf_parameters</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>aa6a4297a2b91d6f7ae47dd61ca1862a0</anchor>
+      <arglist>(unsigned int n_seq)</arglist>
+    </member>
+    <member kind="function">
+      <type>pf_paramT *</type>
+      <name>get_boltzmann_factors_ali</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>af0c74574b40f2778556535bf9d382828</anchor>
+      <arglist>(unsigned int n_seq, double temperature, double betaScale, model_detailsT md, double pf_scale)</arglist>
     </member>
   </compound>
   <compound kind="file">
     <name>part_func.h</name>
     <path>/home/mescalin/ronny/public_html/programs/ViennaRNA/H/</path>
     <filename>part__func_8h</filename>
+    <member kind="function">
+      <type>float</type>
+      <name>pf_fold_par</name>
+      <anchorfile>part__func_8h.html</anchorfile>
+      <anchor>a1839c61275760944b3a007c41d5c0823</anchor>
+      <arglist>(const char *sequence, char *structure, pf_paramT *parameters, int calculate_bppm, int is_constrained, int is_circular)</arglist>
+    </member>
     <member kind="function">
       <type>float</type>
       <name>pf_fold</name>
@@ -1260,6 +1338,13 @@
       <arglist>(char *sequence, char *structure)</arglist>
     </member>
     <member kind="function">
+      <type>cofoldF</type>
+      <name>co_pf_fold_par</name>
+      <anchorfile>part__func__co_8h.html</anchorfile>
+      <anchor>abd873b450832ab5f21101fc5ab354d21</anchor>
+      <arglist>(char *sequence, char *structure, pf_paramT *parameters, int calculate_bppm, int is_constrained)</arglist>
+    </member>
+    <member kind="function">
       <type>FLT_OR_DBL *</type>
       <name>export_co_bppm</name>
       <anchorfile>part__func__co_8h.html</anchorfile>
@@ -1279,6 +1364,13 @@
       <anchorfile>part__func__co_8h.html</anchorfile>
       <anchor>a6e0f36c1f9b7d9dd4bfbad914c1119e5</anchor>
       <arglist>(int length)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>update_co_pf_params_par</name>
+      <anchorfile>part__func__co_8h.html</anchorfile>
+      <anchor>a117d880df45bef444d5e2785ffa40a53</anchor>
+      <arglist>(int length, pf_paramT *parameters)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -2287,6 +2379,10 @@
   <compound kind="struct">
     <name>LST_BUCKET</name>
     <filename>structLST__BUCKET.html</filename>
+  </compound>
+  <compound kind="struct">
+    <name>model_detailsT</name>
+    <filename>structmodel__detailsT.html</filename>
   </compound>
   <compound kind="struct">
     <name>move_t</name>

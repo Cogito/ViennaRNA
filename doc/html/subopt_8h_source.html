@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.2: H/subopt.h Source File</title>
+<title>RNAlib-2.0.3: H/subopt.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.2</div>
+   <div id="projectname">RNAlib-2.0.3</div>
   </td>
  </tr>
  </tbody>
@@ -73,25 +73,33 @@ $(document).ready(initResizable);
 <a name="l00031"></a>00031                   <span class="keywordtype">int</span> delta,
 <a name="l00032"></a>00032                   FILE *fp);
 <a name="l00033"></a>00033 
-<a name="l00046"></a>00046 <a class="code" href="structSOLUTION.html" title="solution element from subopt.c">SOLUTION</a> *<a class="code" href="subopt_8h.html#a8634516e4740e0b6c9a46d2bae940340" title="Returns list of circular subopt structures or writes to fp.">subopt_circ</a> ( <span class="keywordtype">char</span> *seq,
-<a name="l00047"></a>00047                         <span class="keywordtype">char</span> *sequence,
-<a name="l00048"></a>00048                         <span class="keywordtype">int</span> delta,
-<a name="l00049"></a>00049                         FILE *fp);
-<a name="l00050"></a>00050 
-<a name="l00054"></a>00054 <span class="keyword">extern</span>  <span class="keywordtype">int</span>     subopt_sorted;
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056 <span class="keyword">extern</span>  <span class="keywordtype">int</span>     density_of_states[<a class="code" href="data__structures_8h.html#a5ec740b80afb4906ba4311dbd8ddbd89" title="Maximum density of states discretization for subopt.">MAXDOS</a>+1];
-<a name="l00057"></a>00057 
-<a name="l00061"></a>00061 <span class="keyword">extern</span>  <span class="keywordtype">double</span>  <a class="code" href="subopt_8h.html#a5e57d914bcb5feeecdf520e25313fcfe" title="printing threshold for use with logML">print_energy</a>;
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="preprocessor">#endif</span>
-<a name="l00064"></a>00064 <span class="preprocessor"></span><span class="comment">/* End of file */</span>
+<a name="l00034"></a>00034 <a class="code" href="structSOLUTION.html" title="solution element from subopt.c">SOLUTION</a> *subopt_par( <span class="keywordtype">char</span> *seq,
+<a name="l00035"></a>00035                       <span class="keywordtype">char</span> *structure,
+<a name="l00036"></a>00036                       <a class="code" href="structparamT.html" title="The datastructure that contains temperature scaled energy parameters.">paramT</a> *parameters,
+<a name="l00037"></a>00037                       <span class="keywordtype">int</span> delta,
+<a name="l00038"></a>00038                       <span class="keywordtype">int</span> is_constrained,
+<a name="l00039"></a>00039                       <span class="keywordtype">int</span> is_circular,
+<a name="l00040"></a>00040                       FILE *fp);
+<a name="l00041"></a>00041 
+<a name="l00054"></a>00054 <a class="code" href="structSOLUTION.html" title="solution element from subopt.c">SOLUTION</a> *<a class="code" href="subopt_8h.html#a8634516e4740e0b6c9a46d2bae940340" title="Returns list of circular subopt structures or writes to fp.">subopt_circ</a> ( <span class="keywordtype">char</span> *seq,
+<a name="l00055"></a>00055                         <span class="keywordtype">char</span> *sequence,
+<a name="l00056"></a>00056                         <span class="keywordtype">int</span> delta,
+<a name="l00057"></a>00057                         FILE *fp);
+<a name="l00058"></a>00058 
+<a name="l00062"></a>00062 <span class="keyword">extern</span>  <span class="keywordtype">int</span>     subopt_sorted;
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="keyword">extern</span>  <span class="keywordtype">int</span>     density_of_states[<a class="code" href="data__structures_8h.html#a5ec740b80afb4906ba4311dbd8ddbd89" title="Maximum density of states discretization for subopt.">MAXDOS</a>+1];
+<a name="l00065"></a>00065 
+<a name="l00069"></a>00069 <span class="keyword">extern</span>  <span class="keywordtype">double</span>  <a class="code" href="subopt_8h.html#a5e57d914bcb5feeecdf520e25313fcfe" title="printing threshold for use with logML">print_energy</a>;
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="preprocessor">#endif</span>
+<a name="l00072"></a>00072 <span class="preprocessor"></span><span class="comment">/* End of file */</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="subopt_8h.html">subopt.h</a>      </li>
-      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.3 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

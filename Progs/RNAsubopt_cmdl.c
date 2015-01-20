@@ -65,6 +65,8 @@ const char *RNAsubopt_args_info_detailed_help[] = {
   "      --noClosingGU             Do not allow GU pairs at the end of helices\n                                  \n                                    (default=off)",
   "      --logML                   Recalculate energies of structures using a \n                                  logarithmic energy function for multi-loops \n                                  before output.  (default=off)",
   "  This option does not effect structure generation, only the energies that are \n  printed out. Since logML lowers energies somewhat, some structures may be \n  missing.\n  \n",
+  "      --betaScale=DOUBLE        Set the scaling of the Boltzmann factors\n                                    (default=`1.')",
+  "  The argument provided with this option enables to scale the thermodynamic \n  temperature used in the Boltzmann factors independently from the temperature \n  used to scale the individual energy contributions of the loop types. The \n  Boltzmann factors then become exp(-dG/(kT*betaScale)) where k is the \n  Boltzmann constant, dG the free energy contribution of the state and T the \n  absolute temperature.\n  \n",
   "  -P, --paramFile=paramfile     Read energy parameters from paramfile, instead \n                                  of using the default parameter set.\n",
   "  A sample parameter file should accompany your distribution.\n  See the RNAlib documentation for details on the file format.\n  \n",
   "      --nsp=STRING              Allow other pairs in addition to the usual \n                                  AU,GC,and GU pairs.\n",
@@ -104,11 +106,12 @@ init_full_help_array(void)
   RNAsubopt_args_info_full_help[26] = RNAsubopt_args_info_detailed_help[34];
   RNAsubopt_args_info_full_help[27] = RNAsubopt_args_info_detailed_help[36];
   RNAsubopt_args_info_full_help[28] = RNAsubopt_args_info_detailed_help[38];
-  RNAsubopt_args_info_full_help[29] = 0; 
+  RNAsubopt_args_info_full_help[29] = RNAsubopt_args_info_detailed_help[40];
+  RNAsubopt_args_info_full_help[30] = 0; 
   
 }
 
-const char *RNAsubopt_args_info_full_help[30];
+const char *RNAsubopt_args_info_full_help[31];
 
 static void
 init_help_array(void)
@@ -138,8 +141,8 @@ init_help_array(void)
   RNAsubopt_args_info_help[22] = RNAsubopt_args_info_detailed_help[30];
   RNAsubopt_args_info_help[23] = RNAsubopt_args_info_detailed_help[31];
   RNAsubopt_args_info_help[24] = RNAsubopt_args_info_detailed_help[32];
-  RNAsubopt_args_info_help[25] = RNAsubopt_args_info_detailed_help[34];
-  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[38];
+  RNAsubopt_args_info_help[25] = RNAsubopt_args_info_detailed_help[36];
+  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[40];
   RNAsubopt_args_info_help[27] = 0; 
   
 }
@@ -163,6 +166,8 @@ static int
 RNAsubopt_cmdline_parser_internal (int argc, char **argv, struct RNAsubopt_args_info *args_info,
                         struct RNAsubopt_cmdline_parser_params *params, const char *additional_error);
 
+static int
+RNAsubopt_cmdline_parser_required2 (struct RNAsubopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
 static char *
 gengetopt_strdup (const char *s);
@@ -191,6 +196,7 @@ void clear_given (struct RNAsubopt_args_info *args_info)
   args_info->noGU_given = 0 ;
   args_info->noClosingGU_given = 0 ;
   args_info->logML_given = 0 ;
+  args_info->betaScale_given = 0 ;
   args_info->paramFile_given = 0 ;
   args_info->nsp_given = 0 ;
 }
@@ -217,6 +223,8 @@ void clear_args (struct RNAsubopt_args_info *args_info)
   args_info->noGU_flag = 0;
   args_info->noClosingGU_flag = 0;
   args_info->logML_flag = 0;
+  args_info->betaScale_arg = 1.;
+  args_info->betaScale_orig = NULL;
   args_info->paramFile_arg = NULL;
   args_info->paramFile_orig = NULL;
   args_info->nsp_arg = NULL;
@@ -250,8 +258,9 @@ void init_args_info(struct RNAsubopt_args_info *args_info)
   args_info->noGU_help = RNAsubopt_args_info_detailed_help[30] ;
   args_info->noClosingGU_help = RNAsubopt_args_info_detailed_help[31] ;
   args_info->logML_help = RNAsubopt_args_info_detailed_help[32] ;
-  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[34] ;
-  args_info->nsp_help = RNAsubopt_args_info_detailed_help[36] ;
+  args_info->betaScale_help = RNAsubopt_args_info_detailed_help[34] ;
+  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[36] ;
+  args_info->nsp_help = RNAsubopt_args_info_detailed_help[38] ;
   
 }
 
@@ -356,6 +365,7 @@ RNAsubopt_cmdline_parser_release (struct RNAsubopt_args_info *args_info)
   free_string_field (&(args_info->pfScale_orig));
   free_string_field (&(args_info->temp_orig));
   free_string_field (&(args_info->dangles_orig));
+  free_string_field (&(args_info->betaScale_orig));
   free_string_field (&(args_info->paramFile_arg));
   free_string_field (&(args_info->paramFile_orig));
   free_string_field (&(args_info->nsp_arg));
@@ -432,6 +442,8 @@ RNAsubopt_cmdline_parser_dump(FILE *outfile, struct RNAsubopt_args_info *args_in
     write_into_file(outfile, "noClosingGU", 0, 0 );
   if (args_info->logML_given)
     write_into_file(outfile, "logML", 0, 0 );
+  if (args_info->betaScale_given)
+    write_into_file(outfile, "betaScale", args_info->betaScale_orig, 0);
   if (args_info->paramFile_given)
     write_into_file(outfile, "paramFile", args_info->paramFile_orig, 0);
   if (args_info->nsp_given)
@@ -531,9 +543,36 @@ RNAsubopt_cmdline_parser2 (int argc, char **argv, struct RNAsubopt_args_info *ar
 int
 RNAsubopt_cmdline_parser_required (struct RNAsubopt_args_info *args_info, const char *prog_name)
 {
-  FIX_UNUSED (args_info);
-  FIX_UNUSED (prog_name);
-  return EXIT_SUCCESS;
+  int result = EXIT_SUCCESS;
+
+  if (RNAsubopt_cmdline_parser_required2(args_info, prog_name, 0) > 0)
+    result = EXIT_FAILURE;
+
+  if (result == EXIT_FAILURE)
+    {
+      RNAsubopt_cmdline_parser_free (args_info);
+      exit (EXIT_FAILURE);
+    }
+  
+  return result;
+}
+
+int
+RNAsubopt_cmdline_parser_required2 (struct RNAsubopt_args_info *args_info, const char *prog_name, const char *additional_error)
+{
+  int error = 0;
+  FIX_UNUSED (additional_error);
+
+  /* checks for required options */
+  
+  /* checks for dependences among options */
+  if (args_info->betaScale_given && ! args_info->stochBT_given)
+    {
+      fprintf (stderr, "%s: '--betaScale' option depends on option 'stochBT'%s\n", prog_name, (additional_error ? additional_error : ""));
+      error = 1;
+    }
+
+  return error;
 }
 
 /*
@@ -1316,6 +1355,7 @@ RNAsubopt_cmdline_parser_internal (
         { "noGU",	0, NULL, 0 },
         { "noClosingGU",	0, NULL, 0 },
         { "logML",	0, NULL, 0 },
+        { "betaScale",	1, NULL, 0 },
         { "paramFile",	1, NULL, 'P' },
         { "nsp",	1, NULL, 0 },
         { 0,  0, 0, 0 }
@@ -1567,6 +1607,20 @@ RNAsubopt_cmdline_parser_internal (
               goto failure;
           
           }
+          /* Set the scaling of the Boltzmann factors\n.  */
+          else if (strcmp (long_options[option_index].name, "betaScale") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->betaScale_arg), 
+                 &(args_info->betaScale_orig), &(args_info->betaScale_given),
+                &(local_args_info.betaScale_given), optarg, 0, "1.", ARG_DOUBLE,
+                check_ambiguity, override, 0, 0,
+                "betaScale", '-',
+                additional_error))
+              goto failure;
+          
+          }
           /* Allow other pairs in addition to the usual AU,GC,and GU pairs.\n.  */
           else if (strcmp (long_options[option_index].name, "nsp") == 0)
           {
@@ -1595,6 +1649,10 @@ RNAsubopt_cmdline_parser_internal (
 
 
 
+  if (check_required)
+    {
+      error += RNAsubopt_cmdline_parser_required2 (args_info, argv[0], additional_error);
+    }
 
   RNAsubopt_cmdline_parser_release (&local_args_info);
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.2: H/part_func.h File Reference</title>
+<title>RNAlib-2.0.3: H/part_func.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.2</div>
+   <div id="projectname">RNAlib-2.0.3</div>
   </td>
  </tr>
  </tbody>
@@ -78,6 +78,8 @@ Include dependency graph for part_func.h:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#a1839c61275760944b3a007c41d5c0823">pf_fold_par</a> (const char *sequence, char *structure, <a class="el" href="structpf__paramT.html">pf_paramT</a> *parameters, int calculate_bppm, int is_constrained, int is_circular)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> for a given RNA sequence.  <a href="#a1839c61275760944b3a007c41d5c0823"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2">pf_fold</a> (const char *sequence, char *structure)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> of an RNA sequence.  <a href="#adc3db3d98742427e7001a7fd36ef28c2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735">pf_circ_fold</a> (const char *sequence, char *structure)</td></tr>
@@ -129,6 +131,74 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <p>This file includes (almost) all function declarations within the <b>RNAlib</b> that are related to Partion function folding...</p>
 <dl class="note"><dt><b>Note:</b></dt><dd>If you plan on using the functions provided from this section of the RNAlib concurrently via <b>OpenMP</b> you have to place a <em>COPYIN</em> clause right before your <em>PARALLEL</em> directive! Otherwise, some functions may not behave as expected. A complete list of variables that have to be passed to the <em>COPYIN</em> clause can be found in the detailed description of each function below. </dd></dl>
 </div><hr/><h2>Function Documentation</h2>
+<a class="anchor" id="a1839c61275760944b3a007c41d5c0823"></a><!-- doxytag: member="part_func.h::pf_fold_par" ref="a1839c61275760944b3a007c41d5c0823" args="(const char *sequence, char *structure, pf_paramT *parameters, int calculate_bppm, int is_constrained, int is_circular)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float pf_fold_par </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sequence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structpf__paramT.html">pf_paramT</a> *&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>calculate_bppm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>is_constrained</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>is_circular</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> for a given RNA sequence. </p>
+<p>If <em>structure</em> is not a NULL pointer on input, it contains on return a string consisting of the letters " . , | { } ( ) " denoting bases that are essentially unpaired, weakly paired, strongly paired without preference, weakly upstream (downstream) paired, or strongly up- (down-)stream paired bases, respectively. If <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a> is not 0, the <em>structure</em> string is interpreted on input as a list of constraints for the folding. The character "x" marks bases that must be unpaired, matching brackets " ( ) " denote base pairs, all other characters are ignored. Any pairs conflicting with the constraint will be forbidden. This is usually sufficient to ensure the constraints are honored. If tha parameter calculate_bppm is set to 0 base pairing probabilities will not be computed (saving CPU time), otherwise after calculations took place <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> will contain the probability that bases <em>i</em> and <em>j</em> pair. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>The global array <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> is deprecated and the user who wants the calculated base pair probabilities for further computations is advised to use the function <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a>, <a class="el" href="part__func_8h.html#a129d81c4a1ead793c5b2311333e03dfa" title="Create a dot-bracket like structure string from base pair probability matrix.">bppm_to_structure()</a>, <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a>, <a class="el" href="params_8h.html#a6fc2f3eef5a3024d44963ac59a42e39d" title="Get precomputed Boltzmann factors of the loop type dependent energy contributions with independent th...">get_boltzmann_factors()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sequence</td><td>The RNA sequence input </td></tr>
+    <tr><td class="paramname">structure</td><td>A pointer to a char array where a base pair probability information can be stored in a pseudo-dot-bracket notation (may be NULL, too) </td></tr>
+    <tr><td class="paramname">parameters</td><td>Data structure containing the precalculated Boltzmann factors </td></tr>
+    <tr><td class="paramname">calculate_bppm</td><td>Switch to Base pair probability calculations on/off (0==off) </td></tr>
+    <tr><td class="paramname">is_constrained</td><td>Switch to indicate that a structure contraint is passed via the structure argument (0==off) </td></tr>
+    <tr><td class="paramname">is_circular</td><td>Switch to (de-)activate postprocessing steps in case RNA sequence is circular (0==off) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The Gibbs free energy of the ensemble ( <img class="formulaInl" alt="$G = -RT \cdot \log(Q) $" src="form_15.png"/>) in kcal/mol </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="adc3db3d98742427e7001a7fd36ef28c2"></a><!-- doxytag: member="part_func.h::pf_fold" ref="adc3db3d98742427e7001a7fd36ef28c2" args="(const char *sequence, char *structure)" -->
 <div class="memitem">
 <div class="memproto">
@@ -156,11 +226,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 
 <p>Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> of an RNA sequence. </p>
 <p>If <em>structure</em> is not a NULL pointer on input, it contains on return a string consisting of the letters " . , | { } ( ) " denoting bases that are essentially unpaired, weakly paired, strongly paired without preference, weakly upstream (downstream) paired, or strongly up- (down-)stream paired bases, respectively. If <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a> is not 0, the <em>structure</em> string is interpreted on input as a list of constraints for the folding. The character "x" marks bases that must be unpaired, matching brackets " ( ) " denote base pairs, all other characters are ignored. Any pairs conflicting with the constraint will be forbidden. This is usually sufficient to ensure the constraints are honored. If <a class="el" href="fold__vars_8h.html#ad512b5dd4dbec60faccfe137bb474489" title="do backtracking, i.e.">do_backtrack</a> has been set to 0 base pairing probabilities will not be computed (saving CPU time), otherwise <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> will contain the probability that bases <em>i</em> and <em>j</em> pair. </p>
-<dl class="note"><dt><b>Note:</b></dt><dd>The global array <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> is deprecated and the user who wants the calculated base pair probabilities for further computations is advised to use the function <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd>
-<dd>
-<b>OpenMP notice:</b><br/>
-This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause:<br/>
- q, qb, qm, qm1, qqm, qqm1, qq, qq1, prml, prm_l, prm_l1, q1k, qln, probs, scale, expMLbase, jindx, init_length, circular, ptype, pf_params, S, S1, bt</dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>The global array <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> is deprecated and the user who wants the calculated base pair probabilities for further computations is advised to use the function <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a>, <a class="el" href="part__func_8h.html#a129d81c4a1ead793c5b2311333e03dfa" title="Create a dot-bracket like structure string from base pair probability matrix.">bppm_to_structure()</a>, <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -199,10 +265,7 @@ This function relies on passing the following variables to the appropriate <em>C
 <div class="memdoc">
 
 <p>Compute the partition function of a circular RNA sequence. </p>
-<dl class="note"><dt><b>Note:</b></dt><dd><b>OpenMP notice:</b><br/>
-This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause:<br/>
- q, qb, qm, qm1, qqm, qqm1, qq, qq1, qo, qho, qio, qmo, qm2, prml, prm_l, prm_l1, q1k, qln, probs, scale, expMLbase, jindx, init_length, circular, ptype, pf_params, S, S1, bt</dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a></dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>, <a class="el" href="part__func_8h.html#a1839c61275760944b3a007c41d5c0823" title="Compute the partition function  for a given RNA sequence.">pf_fold_par()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">sequence</td><td>The RNA sequence input </td></tr>
@@ -821,7 +884,7 @@ This function relies on passing the following variables to the appropriate <em>C
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="part__func_8h.html">part_func.h</a>      </li>
-      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.3 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

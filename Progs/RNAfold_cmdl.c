@@ -68,8 +68,8 @@ const char *RNAfold_args_info_detailed_help[] = {
   "      --nsp=STRING              Allow other pairs in addition to the usual \n                                  AU,GC,and GU pairs.\n",
   "  Its argument is a comma separated list of additionally allowed pairs. If the \n  first character is a \"-\" then AB will imply that AB and BA are allowed \n  pairs.\n  e.g. RNAfold -nsp -GA  will allow GA and AG pairs. Nonstandard pairs are \n  given 0 stacking energy.\n  \n",
   "  -e, --energyModel=INT         Rarely used option to fold sequences from the \n                                  artificial ABCD... alphabet, where A pairs B, \n                                  C-D etc.  Use the energy parameters for GC \n                                  (-e 1) or AU (-e 2) pairs.\n                                  \n",
-  "      --betaScale=DOUBLE        Set the scaling of the boltzmann factors\n                                    (default=`1.')",
-  "  The argument provided with this option enables to scale the thermodynamic \n  temperature used in the boltzmann factors independently from the temperature \n  used to scale the individual energy contributions of the loop types. The \n  boltzmann factors then become exp(-dG/kT*betaScale) where k is the Boltzmann \n  constant, dG the free energy contribution of the state and T the absolute \n  temperature.\n  \n",
+  "      --betaScale=DOUBLE        Set the scaling of the Boltzmann factors\n                                    (default=`1.')",
+  "  The argument provided with this option enables to scale the thermodynamic \n  temperature used in the Boltzmann factors independently from the temperature \n  used to scale the individual energy contributions of the loop types. The \n  Boltzmann factors then become exp(-dG/(kT*betaScale)) where k is the \n  Boltzmann constant, dG the free energy contribution of the state and T the \n  absolute temperature.\n  \n",
   "\nIf in doubt our program is right, nature is at fault.\nComments should be sent to rna@tbi.univie.ac.at.\n\n",
     0
 };
@@ -1609,7 +1609,7 @@ RNAfold_cmdline_parser_internal (
               goto failure;
           
           }
-          /* Set the scaling of the boltzmann factors\n.  */
+          /* Set the scaling of the Boltzmann factors\n.  */
           else if (strcmp (long_options[option_index].name, "betaScale") == 0)
           {
           

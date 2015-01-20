@@ -81,6 +81,9 @@ struct RNAsubopt_args_info
   const char *noClosingGU_help; /**< @brief Do not allow GU pairs at the end of helices\n\n help description.  */
   int logML_flag;	/**< @brief Recalculate energies of structures using a logarithmic energy function for multi-loops before output. (default=off).  */
   const char *logML_help; /**< @brief Recalculate energies of structures using a logarithmic energy function for multi-loops before output. help description.  */
+  double betaScale_arg;	/**< @brief Set the scaling of the Boltzmann factors\n (default='1.').  */
+  char * betaScale_orig;	/**< @brief Set the scaling of the Boltzmann factors\n original value given at command line.  */
+  const char *betaScale_help; /**< @brief Set the scaling of the Boltzmann factors\n help description.  */
   char * paramFile_arg;	/**< @brief Read energy parameters from paramfile, instead of using the default parameter set.\n.  */
   char * paramFile_orig;	/**< @brief Read energy parameters from paramfile, instead of using the default parameter set.\n original value given at command line.  */
   const char *paramFile_help; /**< @brief Read energy parameters from paramfile, instead of using the default parameter set.\n help description.  */
@@ -109,6 +112,7 @@ struct RNAsubopt_args_info
   unsigned int noGU_given ;	/**< @brief Whether noGU was given.  */
   unsigned int noClosingGU_given ;	/**< @brief Whether noClosingGU was given.  */
   unsigned int logML_given ;	/**< @brief Whether logML was given.  */
+  unsigned int betaScale_given ;	/**< @brief Whether betaScale was given.  */
   unsigned int paramFile_given ;	/**< @brief Whether paramFile was given.  */
   unsigned int nsp_given ;	/**< @brief Whether nsp was given.  */
 

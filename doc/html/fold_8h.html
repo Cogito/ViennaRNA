@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.2: H/fold.h File Reference</title>
+<title>RNAlib-2.0.3: H/fold.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.2</div>
+   <div id="projectname">RNAlib-2.0.3</div>
   </td>
  </tr>
  </tbody>
@@ -78,12 +78,24 @@ Include dependency graph for fold.h:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e">fold_par</a> (const char *sequence, char *structure, <a class="el" href="structparamT.html">paramT</a> *parameters, int is_constrained, int is_circular)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute minimum free energy and an appropriate secondary structure of an RNA sequence.  <a href="#adb973133c241d57c04b253df35e4d34e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#aadafcb0f140795ae62e5ca027e335a9b">fold</a> (const char *sequence, char *structure)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute minimum free energy and an appropriate secondary structure of an RNA sequence.  <a href="#aadafcb0f140795ae62e5ca027e335a9b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a4ac63ab3e8d9a80ced28b8052d94e423">circfold</a> (const char *sequence, char *structure)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute minimum free energy and an appropriate secondary structure of a circular RNA sequence.  <a href="#a4ac63ab3e8d9a80ced28b8052d94e423"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf">energy_of_structure</a> (const char *string, const char *structure, int verbosity_level)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded RNA.  <a href="#af93986cb3cb29770ec9cca69c9fab8cf"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded RNA using global model detail settings.  <a href="#af93986cb3cb29770ec9cca69c9fab8cf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40">energy_of_struct_par</a> (const char *string, const char *structure, <a class="el" href="structparamT.html">paramT</a> *parameters, int verbosity_level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded RNA.  <a href="#ab5169ea4f72f250e43811463a33f4e40"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#aeb14f3664aec67fc03268ac75253f0f8">energy_of_circ_structure</a> (const char *string, const char *structure, int verbosity_level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded circular RNA.  <a href="#aeb14f3664aec67fc03268ac75253f0f8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a75dc765ee4a1177832bc817c94cf88e5">energy_of_circ_struct_par</a> (const char *string, const char *structure, <a class="el" href="structparamT.html">paramT</a> *parameters, int verbosity_level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded circular RNA.  <a href="#a75dc765ee4a1177832bc817c94cf88e5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a8831445966b761417e713360791299d8">energy_of_structure_pt</a> (const char *string, short *ptable, short *s, short *s1, int verbosity_level)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded RNA.  <a href="#a8831445966b761417e713360791299d8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#ada4701dd7519b29da75ceac147601f4e">energy_of_struct_pt_par</a> (const char *string, short *ptable, short *s, short *s1, <a class="el" href="structparamT.html">paramT</a> *parameters, int verbosity_level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded RNA.  <a href="#ada4701dd7519b29da75ceac147601f4e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a107fdfe5fd641868156bfd849f6866c7"></a><!-- doxytag: member="fold.h::free_arrays" ref="a107fdfe5fd641868156bfd849f6866c7" args="(void)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a107fdfe5fd641868156bfd849f6866c7">free_arrays</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free arrays for mfe folding. <br/></td></tr>
@@ -94,10 +106,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41bf8f6fa15b94471f7095cad9f0ccf3"></a><!-- doxytag: member="fold.h::update_fold_params" ref="a41bf8f6fa15b94471f7095cad9f0ccf3" args="(void)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a41bf8f6fa15b94471f7095cad9f0ccf3">update_fold_params</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Recalculate energy parameters. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a9d9bb005bd2fa8ce8b37f17bcd2b26bb">circfold</a> (const char *string, char *structure)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute minimum free energy and an appropriate secondary structure of an RNA sequence assuming it to be circular instead of linear.  <a href="#a9d9bb005bd2fa8ce8b37f17bcd2b26bb"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#aeb14f3664aec67fc03268ac75253f0f8">energy_of_circ_structure</a> (const char *string, const char *structure, int verbosity_level)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the free energy of an already folded circular RNA.  <a href="#aeb14f3664aec67fc03268ac75253f0f8"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#adaa59b81664e2e36cb9932e891558fae">assign_plist_from_db</a> (<a class="el" href="structplist.html">plist</a> **pl, const char *struc, float <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f">pr</a>)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a plist from a dot-bracket string.  <a href="#adaa59b81664e2e36cb9932e891558fae"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_8h.html#a2163034a25c6115d894b199e97e03f6c">LoopEnergy</a> (int n1, int n2, int type, int type_2, int si1, int sj1, int sp1, int sq1)</td></tr>
@@ -130,6 +138,74 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 <div class="textblock"><p>MFE calculations and energy evaluations for single RNA sequences. </p>
 <p>This file includes (almost) all function declarations within the RNAlib that are related to MFE folding... </p>
 </div><hr/><h2>Function Documentation</h2>
+<a class="anchor" id="adb973133c241d57c04b253df35e4d34e"></a><!-- doxytag: member="fold.h::fold_par" ref="adb973133c241d57c04b253df35e4d34e" args="(const char *sequence, char *structure, paramT *parameters, int is_constrained, int is_circular)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float fold_par </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sequence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structparamT.html">paramT</a> *&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>is_constrained</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>is_circular</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute minimum free energy and an appropriate secondary structure of an RNA sequence. </p>
+<p>The first parameter given, the RNA sequence, must be <em>uppercase</em> and should only contain an alphabet <img class="formulaInl" alt="$\Sigma$" src="form_0.png"/> that is understood by the RNAlib<br/>
+ (e.g. <img class="formulaInl" alt="$ \Sigma = \{A,U,C,G\} $" src="form_1.png"/>)<br/>
+</p>
+<p>The second parameter, <em>structure</em>, must always point to an allocated block of memory with a size of at least <img class="formulaInl" alt="$\mathrm{strlen}(\mathrm{sequence})+1$" src="form_2.png"/></p>
+<p>If the third parameter is NULL, global model detail settings are assumed for the folding recursions. Otherwise, the provided parameters are used.</p>
+<p>The fourth parameter indicates whether a secondary structure constraint in enhanced dot-bracket notation is passed through the structure parameter or not. If so, the characters " | x &lt; &gt; " are recognized to mark bases that are paired, unpaired, paired upstream, or downstream, respectively. Matching brackets " ( ) " denote base pairs, dots "." are used for unconstrained bases.</p>
+<p>To indicate that the RNA sequence is circular and thus has to be post-processed, set the last parameter to non-zero</p>
+<p>After a successful call of <a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a>, a backtracked secondary structure (in dot-bracket notation) that exhibits the minimum of free energy will be written to the memory <em>structure</em> is pointing to. The function returns the minimum of free energy for any fold of the sequence given.</p>
+<dl class="note"><dt><b>Note:</b></dt><dd>OpenMP: Passing NULL to the 'parameters' argument involves access to several global model detail variables and thus is not to be considered threadsafe</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#aadafcb0f140795ae62e5ca027e335a9b" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold()</a>, <a class="el" href="fold_8h.html#a4ac63ab3e8d9a80ced28b8052d94e423" title="Compute minimum free energy and an appropriate secondary structure of a circular RNA sequence...">circfold()</a>, <a class="el" href="structmodel__detailsT.html" title="The data structure that contains the complete model details used throughout the calculations.">model_detailsT</a>, set_energy_model(), <a class="el" href="params_8h.html#ac2f3ca440b7eaf4d999fb27da949fe72" title="Get precomputed energy contributions for all the known loop types.">get_scaled_parameters()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sequence</td><td>RNA sequence </td></tr>
+    <tr><td class="paramname">structure</td><td>A pointer to the character array where the secondary structure in dot-bracket notation will be written to </td></tr>
+    <tr><td class="paramname">parameters</td><td>A data structure containing the prescaled energy contributions and the model details. (NULL may be passed, see OpenMP notes above) </td></tr>
+    <tr><td class="paramname">is_constrained</td><td>Switch to indicate that a structure contraint is passed via the structure argument (0==off) </td></tr>
+    <tr><td class="paramname">is_circular</td><td>Switch to (de-)activate postprocessing steps in case RNA sequence is circular (0==off)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the minimum free energy (MFE) in kcal/mol </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="aadafcb0f140795ae62e5ca027e335a9b"></a><!-- doxytag: member="fold.h::fold" ref="aadafcb0f140795ae62e5ca027e335a9b" args="(const char *sequence, char *structure)" -->
 <div class="memitem">
 <div class="memproto">
@@ -156,11 +232,49 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 <div class="memdoc">
 
 <p>Compute minimum free energy and an appropriate secondary structure of an RNA sequence. </p>
-<p>The first parameter given, the RNA sequence, must be <em>uppercase</em> and should only contain an alphabet <img class="formulaInl" alt="$\Sigma$" src="form_0.png"/> that is understood by the RNAlib<br/>
- (e.g. <img class="formulaInl" alt="$ \Sigma = \{A,U,C,G\} $" src="form_1.png"/>)<br/>
- The second parameter, <em>structure</em>, must always point to an allocated block of memory with a size of at least <img class="formulaInl" alt="$\mathrm{strlen}(\mathrm{sequence})+1$" src="form_2.png"/> Depending on the global variable <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a> <em>structure</em> may contain a secondary structure constraint in an enhanced dot-bracket notation. The characters " | x &lt; &gt; " mark bases that are paired, unpaired, paired upstream, or downstream, respectively. Matching brackets " ( ) " denote base pairs, dots "." are used for unconstrained bases. Constrained folding works by assigning bonus energies to all structures that comply with the constraint.</p>
-<p>After a successful call of <a class="el" href="fold_8h.html#aadafcb0f140795ae62e5ca027e335a9b" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold()</a>, a backtracked secondary structure (in dot-bracket notation) that exhibits the minimum of free energy will be written to the memory <em>structure</em> is pointing to. The function returns the minimum of free energy for any fold of the sequence given. Of course, the resulting free energy depends strongly on the energy model selected.</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#a9d9bb005bd2fa8ce8b37f17bcd2b26bb" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence assuming it to ...">circfold()</a>, <a class="el" href="fold__vars_8h.html#a72b511ed1201f7e23ec437e468790d74" title="Switch the energy model for dangling end contributions (0, 1, 2, 3)">dangles</a>, <a class="el" href="fold__vars_8h.html#a097eccaabd6ae8b4fef83cccff85bb5d" title="Global switch to avoid/allow helices of length 1.">noLonelyPairs</a>, <a class="el" href="fold__vars_8h.html#abf380d09e4f1ab94fc6af57cf0ad5d32" title="Global switch to forbid/allow GU base pairs at all.">noGU</a>, <a class="el" href="fold__vars_8h.html#aa8d1c7b92489179e1eafa562b7bdd259" title="GU allowed only inside stacks if set to 1.">no_closingGU</a>, <a class="el" href="fold__vars_8h.html#a4f6265bdf0ead7ff4628a360adbfd77e" title="Include special stabilizing energies for some tri-, tetra- and hexa-loops;.">tetra_loop</a></dd></dl>
+<p>This function essentially does the same thing as <a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a>. However, it takes its model details, i.e. <a class="el" href="fold__vars_8h.html#ab4b11c8d9c758430960896bc3fe82ead" title="Rescale energy parameters to a temperature in degC.">temperature</a>, <a class="el" href="fold__vars_8h.html#a72b511ed1201f7e23ec437e468790d74" title="Switch the energy model for dangling end contributions (0, 1, 2, 3)">dangles</a>, <a class="el" href="fold__vars_8h.html#a4f6265bdf0ead7ff4628a360adbfd77e" title="Include special stabilizing energies for some tri-, tetra- and hexa-loops;.">tetra_loop</a>, <a class="el" href="fold__vars_8h.html#abf380d09e4f1ab94fc6af57cf0ad5d32" title="Global switch to forbid/allow GU base pairs at all.">noGU</a>, <a class="el" href="fold__vars_8h.html#aa8d1c7b92489179e1eafa562b7bdd259" title="GU allowed only inside stacks if set to 1.">no_closingGU</a>, <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a>, <a class="el" href="fold__vars_8h.html#a097eccaabd6ae8b4fef83cccff85bb5d" title="Global switch to avoid/allow helices of length 1.">noLonelyPairs</a> from the current global settings within the library</p>
+<p>Use <a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a> for a completely threadsafe variant</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a>, <a class="el" href="fold_8h.html#a4ac63ab3e8d9a80ced28b8052d94e423" title="Compute minimum free energy and an appropriate secondary structure of a circular RNA sequence...">circfold()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sequence</td><td>RNA sequence </td></tr>
+    <tr><td class="paramname">structure</td><td>A pointer to the character array where the secondary structure in dot-bracket notation will be written to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>the minimum free energy (MFE) in kcal/mol </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4ac63ab3e8d9a80ced28b8052d94e423"></a><!-- doxytag: member="fold.h::circfold" ref="a4ac63ab3e8d9a80ced28b8052d94e423" args="(const char *sequence, char *structure)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float circfold </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>sequence</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>structure</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compute minimum free energy and an appropriate secondary structure of a circular RNA sequence. </p>
+<p>This function essentially does the same thing as <a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a>. However, it takes its model details, i.e. <a class="el" href="fold__vars_8h.html#ab4b11c8d9c758430960896bc3fe82ead" title="Rescale energy parameters to a temperature in degC.">temperature</a>, <a class="el" href="fold__vars_8h.html#a72b511ed1201f7e23ec437e468790d74" title="Switch the energy model for dangling end contributions (0, 1, 2, 3)">dangles</a>, <a class="el" href="fold__vars_8h.html#a4f6265bdf0ead7ff4628a360adbfd77e" title="Include special stabilizing energies for some tri-, tetra- and hexa-loops;.">tetra_loop</a>, <a class="el" href="fold__vars_8h.html#abf380d09e4f1ab94fc6af57cf0ad5d32" title="Global switch to forbid/allow GU base pairs at all.">noGU</a>, <a class="el" href="fold__vars_8h.html#aa8d1c7b92489179e1eafa562b7bdd259" title="GU allowed only inside stacks if set to 1.">no_closingGU</a>, <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a>, <a class="el" href="fold__vars_8h.html#a097eccaabd6ae8b4fef83cccff85bb5d" title="Global switch to avoid/allow helices of length 1.">noLonelyPairs</a> from the current global settings within the library</p>
+<p>Use <a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a> for a completely threadsafe variant</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#adb973133c241d57c04b253df35e4d34e" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold_par()</a>, <a class="el" href="fold_8h.html#a4ac63ab3e8d9a80ced28b8052d94e423" title="Compute minimum free energy and an appropriate secondary structure of a circular RNA sequence...">circfold()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">sequence</td><td>RNA sequence </td></tr>
@@ -203,9 +317,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 </div>
 <div class="memdoc">
 
-<p>Calculate the free energy of an already folded RNA. </p>
+<p>Calculate the free energy of an already folded RNA using global model detail settings. </p>
 <p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#aeb14f3664aec67fc03268ac75253f0f8" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_structure()</a>, <a class="el" href="fold_8h.html#a8831445966b761417e713360791299d8" title="Calculate the free energy of an already folded RNA.">energy_of_structure_pt()</a> </dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>OpenMP: This function relies on several global model settings variables and thus is not to be considered threadsafe. See <a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40" title="Calculate the free energy of an already folded RNA.">energy_of_struct_par()</a> for a completely threadsafe implementation.</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40" title="Calculate the free energy of an already folded RNA.">energy_of_struct_par()</a>, <a class="el" href="fold_8h.html#aeb14f3664aec67fc03268ac75253f0f8" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_structure()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
@@ -215,6 +330,159 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the free energy of the input structure given the input sequence in kcal/mol </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab5169ea4f72f250e43811463a33f4e40"></a><!-- doxytag: member="fold.h::energy_of_struct_par" ref="ab5169ea4f72f250e43811463a33f4e40" args="(const char *string, const char *structure, paramT *parameters, int verbosity_level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float energy_of_struct_par </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structparamT.html">paramT</a> *&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Calculate the free energy of an already folded RNA. </p>
+<p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#aeb14f3664aec67fc03268ac75253f0f8" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_structure()</a>, <a class="el" href="fold_8h.html#a8831445966b761417e713360791299d8" title="Calculate the free energy of an already folded RNA.">energy_of_structure_pt()</a>, <a class="el" href="params_8h.html#ac2f3ca440b7eaf4d999fb27da949fe72" title="Get precomputed energy contributions for all the known loop types.">get_scaled_parameters()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>RNA sequence in uppercase letters </td></tr>
+    <tr><td class="paramname">structure</td><td>Secondary structure in dot-bracket notation </td></tr>
+    <tr><td class="paramname">parameters</td><td>A data structure containing the prescaled energy contributions and the model details. </td></tr>
+    <tr><td class="paramname">verbosity_level</td><td>A flag to turn verbose output on/off </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The free energy of the input structure given the input sequence in kcal/mol </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aeb14f3664aec67fc03268ac75253f0f8"></a><!-- doxytag: member="fold.h::energy_of_circ_structure" ref="aeb14f3664aec67fc03268ac75253f0f8" args="(const char *string, const char *structure, int verbosity_level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float energy_of_circ_structure </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Calculate the free energy of an already folded circular RNA. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>OpenMP: This function relies on several global model settings variables and thus is not to be considered threadsafe. See <a class="el" href="fold_8h.html#a75dc765ee4a1177832bc817c94cf88e5" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_struct_par()</a> for a completely threadsafe implementation.</dd></dl>
+<p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#a75dc765ee4a1177832bc817c94cf88e5" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_struct_par()</a>, <a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40" title="Calculate the free energy of an already folded RNA.">energy_of_struct_par()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
+    <tr><td class="paramname">structure</td><td>Secondary structure in dot-bracket notation </td></tr>
+    <tr><td class="paramname">verbosity_level</td><td>A flag to turn verbose output on/off </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The free energy of the input structure given the input sequence in kcal/mol </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a75dc765ee4a1177832bc817c94cf88e5"></a><!-- doxytag: member="fold.h::energy_of_circ_struct_par" ref="a75dc765ee4a1177832bc817c94cf88e5" args="(const char *string, const char *structure, paramT *parameters, int verbosity_level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float energy_of_circ_struct_par </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structparamT.html">paramT</a> *&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Calculate the free energy of an already folded circular RNA. </p>
+<p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40" title="Calculate the free energy of an already folded RNA.">energy_of_struct_par()</a>, <a class="el" href="params_8h.html#ac2f3ca440b7eaf4d999fb27da949fe72" title="Get precomputed energy contributions for all the known loop types.">get_scaled_parameters()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
+    <tr><td class="paramname">structure</td><td>Secondary structure in dot-bracket notation </td></tr>
+    <tr><td class="paramname">parameters</td><td>A data structure containing the prescaled energy contributions and the model details. </td></tr>
+    <tr><td class="paramname">verbosity_level</td><td>A flag to turn verbose output on/off </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The free energy of the input structure given the input sequence in kcal/mol </dd></dl>
 
 </div>
 </div>
@@ -263,7 +531,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 
 <p>Calculate the free energy of an already folded RNA. </p>
 <p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="fold_8h.html#ac2b37fea2145c94d925a3f33378ef87b" title="Calculate the free energy of an already folded RNA.">energy_of_struct()</a> </dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>OpenMP: This function relies on several global model settings variables and thus is not to be considered threadsafe. See <a class="el" href="fold_8h.html#ada4701dd7519b29da75ceac147601f4e" title="Calculate the free energy of an already folded RNA.">energy_of_struct_pt_par()</a> for a completely threadsafe implementation.</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="fold_8h.html#ada4701dd7519b29da75ceac147601f4e" title="Calculate the free energy of an already folded RNA.">energy_of_struct_pt_par()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
@@ -275,6 +544,73 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the free energy of the input structure given the input sequence in 10kcal/mol </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ada4701dd7519b29da75ceac147601f4e"></a><!-- doxytag: member="fold.h::energy_of_struct_pt_par" ref="ada4701dd7519b29da75ceac147601f4e" args="(const char *string, short *ptable, short *s, short *s1, paramT *parameters, int verbosity_level)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int energy_of_struct_pt_par </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>string</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short *&#160;</td>
+          <td class="paramname"><em>ptable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">short *&#160;</td>
+          <td class="paramname"><em>s1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structparamT.html">paramT</a> *&#160;</td>
+          <td class="paramname"><em>parameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>verbosity_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Calculate the free energy of an already folded RNA. </p>
+<p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="fold_8h.html#ab5169ea4f72f250e43811463a33f4e40" title="Calculate the free energy of an already folded RNA.">energy_of_struct_par()</a>, <a class="el" href="params_8h.html#ac2f3ca440b7eaf4d999fb27da949fe72" title="Get precomputed energy contributions for all the known loop types.">get_scaled_parameters()</a></dd></dl>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>RNA sequence in uppercase letters </td></tr>
+    <tr><td class="paramname">ptable</td><td>The pair table of the secondary structure </td></tr>
+    <tr><td class="paramname">s</td><td>Encoded RNA sequence </td></tr>
+    <tr><td class="paramname">s1</td><td>Encoded RNA sequence </td></tr>
+    <tr><td class="paramname">parameters</td><td>A data structure containing the prescaled energy contributions and the model details. </td></tr>
+    <tr><td class="paramname">verbosity_level</td><td>A flag to turn verbose output on/off </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The free energy of the input structure given the input sequence in 10kcal/mol </dd></dl>
 
 </div>
 </div>
@@ -347,90 +683,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 
 <p>Create a dot-backet/parenthesis structure from backtracking stack obtained by zuker suboptimal calculation in cofold.c. </p>
 <dl class="note"><dt><b>Note:</b></dt><dd>This function is threadsafe </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9d9bb005bd2fa8ce8b37f17bcd2b26bb"></a><!-- doxytag: member="fold.h::circfold" ref="a9d9bb005bd2fa8ce8b37f17bcd2b26bb" args="(const char *string, char *structure)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float circfold </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>structure</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Compute minimum free energy and an appropriate secondary structure of an RNA sequence assuming it to be circular instead of linear. </p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#aadafcb0f140795ae62e5ca027e335a9b" title="Compute minimum free energy and an appropriate secondary structure of an RNA sequence.">fold()</a>, <a class="el" href="fold__vars_8h.html#a72b511ed1201f7e23ec437e468790d74" title="Switch the energy model for dangling end contributions (0, 1, 2, 3)">dangles</a>, <a class="el" href="fold__vars_8h.html#a097eccaabd6ae8b4fef83cccff85bb5d" title="Global switch to avoid/allow helices of length 1.">noLonelyPairs</a>, <a class="el" href="fold__vars_8h.html#abf380d09e4f1ab94fc6af57cf0ad5d32" title="Global switch to forbid/allow GU base pairs at all.">noGU</a>, <a class="el" href="fold__vars_8h.html#aa8d1c7b92489179e1eafa562b7bdd259" title="GU allowed only inside stacks if set to 1.">no_closingGU</a>, <a class="el" href="fold__vars_8h.html#a4f6265bdf0ead7ff4628a360adbfd77e" title="Include special stabilizing energies for some tri-, tetra- and hexa-loops;.">tetra_loop</a> </dd></dl>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
-    <tr><td class="paramname">structure</td><td>A pointer to the character array the secondary structure in dot-bracket notation will be written to </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>the minimum free energy (MFE) in kcal/mol </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aeb14f3664aec67fc03268ac75253f0f8"></a><!-- doxytag: member="fold.h::energy_of_circ_structure" ref="aeb14f3664aec67fc03268ac75253f0f8" args="(const char *string, const char *structure, int verbosity_level)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float energy_of_circ_structure </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>string</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>structure</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>verbosity_level</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Calculate the free energy of an already folded circular RNA. </p>
-<p>If verbosity level is set to a value &gt;0, energies of structure elements are printed to stdout </p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#ac2b37fea2145c94d925a3f33378ef87b" title="Calculate the free energy of an already folded RNA.">energy_of_struct()</a>, <a class="el" href="fold_8h.html#a27ce6f68512d43bf1fe14a06c9d76d5c" title="Calculate the free energy of an already folded RNA.">energy_of_struct_pt()</a> </dd></dl>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
-    <tr><td class="paramname">structure</td><td>secondary structure in dot-bracket notation </td></tr>
-    <tr><td class="paramname">verbosity_level</td><td>a flag to turn verbose output on/off </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>the free energy of the input structure given the input sequence in kcal/mol </dd></dl>
 
 </div>
 </div>
@@ -642,7 +894,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 <dl class="note"><dt><b>Note:</b></dt><dd>This function is not entirely threadsafe! Depending on the state of the global variable <a class="el" href="fold_8h.html#a567530678f6260a1a649a5beca5da4c5">eos_debug</a> it prints energy information to stdout or not...<br/>
 </dd></dl>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000005">Deprecated:</a></b></dt><dd>This function is deprecated and should not be used in future programs! Use <a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf">energy_of_structure()</a> instead!</dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf" title="Calculate the free energy of an already folded RNA.">energy_of_structure</a>, <a class="el" href="fold_8h.html#a657222e2758c46bf13b416ef3032e417" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_struct()</a>, <a class="el" href="fold_8h.html#a27ce6f68512d43bf1fe14a06c9d76d5c" title="Calculate the free energy of an already folded RNA.">energy_of_struct_pt()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf" title="Calculate the free energy of an already folded RNA using global model detail settings.">energy_of_structure</a>, <a class="el" href="fold_8h.html#a657222e2758c46bf13b416ef3032e417" title="Calculate the free energy of an already folded circular RNA.">energy_of_circ_struct()</a>, <a class="el" href="fold_8h.html#a27ce6f68512d43bf1fe14a06c9d76d5c" title="Calculate the free energy of an already folded RNA.">energy_of_struct_pt()</a> </dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
@@ -695,7 +947,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
 <dl class="note"><dt><b>Note:</b></dt><dd>This function is not entirely threadsafe! Depending on the state of the global variable <a class="el" href="fold_8h.html#a567530678f6260a1a649a5beca5da4c5">eos_debug</a> it prints energy information to stdout or not...<br/>
 </dd></dl>
 <dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000006">Deprecated:</a></b></dt><dd>This function is deprecated and should not be used in future programs! Use <a class="el" href="fold_8h.html#a8831445966b761417e713360791299d8">energy_of_structure_pt()</a> instead!</dd></dl>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf" title="Calculate the free energy of an already folded RNA.">energy_of_structure()</a> </dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="fold_8h.html#af93986cb3cb29770ec9cca69c9fab8cf" title="Calculate the free energy of an already folded RNA using global model detail settings.">energy_of_structure()</a> </dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">string</td><td>RNA sequence </td></tr>
@@ -755,7 +1007,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fold_
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="fold_8h.html">fold.h</a>      </li>
-      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.3 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

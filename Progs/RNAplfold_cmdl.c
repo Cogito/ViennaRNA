@@ -61,6 +61,8 @@ const char *RNAplfold_args_info_detailed_help[] = {
   "      --nsp=STRING           Allow other pairs in addition to the usual \n                               AU,GC,and GU pairs.\n",
   "  Its argument is a comma separated list of additionally allowed pairs. If the \n  first character is a \"-\" then AB will imply that AB and BA are allowed \n  pairs.\n  e.g. RNAfold -nsp -GA  will allow GA and AG pairs. Nonstandard pairs are \n  given 0 stacking energy.\n  \n",
   "  -e, --energyModel=INT      Rarely used option to fold sequences from the \n                               artificial ABCD... alphabet, where A pairs B, \n                               C-D etc.  Use the energy parameters for GC (-e \n                               1) or AU (-e 2) pairs.\n                               \n",
+  "      --betaScale=DOUBLE     Set the scaling of the Boltzmann factors\n                                 (default=`1.')",
+  "  The argument provided with this option enables to scale the thermodynamic \n  temperature used in the Boltzmann factors independently from the temperature \n  used to scale the individual energy contributions of the loop types. The \n  Boltzmann factors then become exp(-dG/(kT*betaScale)) where k is the \n  Boltzmann constant, dG the free energy contribution of the state and T the \n  absolute temperature.\n  \n",
   "\nIf in doubt our program is right, nature is at fault.\nComments should be sent to rna@tbi.univie.ac.at.\n",
     0
 };
@@ -93,11 +95,12 @@ init_full_help_array(void)
   RNAplfold_args_info_full_help[23] = RNAplfold_args_info_detailed_help[27];
   RNAplfold_args_info_full_help[24] = RNAplfold_args_info_detailed_help[29];
   RNAplfold_args_info_full_help[25] = RNAplfold_args_info_detailed_help[30];
-  RNAplfold_args_info_full_help[26] = 0; 
+  RNAplfold_args_info_full_help[26] = RNAplfold_args_info_detailed_help[32];
+  RNAplfold_args_info_full_help[27] = 0; 
   
 }
 
-const char *RNAplfold_args_info_full_help[27];
+const char *RNAplfold_args_info_full_help[28];
 
 static void
 init_help_array(void)
@@ -124,7 +127,7 @@ init_help_array(void)
   RNAplfold_args_info_help[19] = RNAplfold_args_info_detailed_help[22];
   RNAplfold_args_info_help[20] = RNAplfold_args_info_detailed_help[23];
   RNAplfold_args_info_help[21] = RNAplfold_args_info_detailed_help[25];
-  RNAplfold_args_info_help[22] = RNAplfold_args_info_detailed_help[30];
+  RNAplfold_args_info_help[22] = RNAplfold_args_info_detailed_help[32];
   RNAplfold_args_info_help[23] = 0; 
   
 }
@@ -177,6 +180,7 @@ void clear_given (struct RNAplfold_args_info *args_info)
   args_info->binaries_given = 0 ;
   args_info->nsp_given = 0 ;
   args_info->energyModel_given = 0 ;
+  args_info->betaScale_given = 0 ;
 }
 
 static
@@ -207,6 +211,8 @@ void clear_args (struct RNAplfold_args_info *args_info)
   args_info->nsp_arg = NULL;
   args_info->nsp_orig = NULL;
   args_info->energyModel_orig = NULL;
+  args_info->betaScale_arg = 1.;
+  args_info->betaScale_orig = NULL;
   
 }
 
@@ -237,6 +243,7 @@ void init_args_info(struct RNAplfold_args_info *args_info)
   args_info->binaries_help = RNAplfold_args_info_detailed_help[25] ;
   args_info->nsp_help = RNAplfold_args_info_detailed_help[27] ;
   args_info->energyModel_help = RNAplfold_args_info_detailed_help[29] ;
+  args_info->betaScale_help = RNAplfold_args_info_detailed_help[30] ;
   
 }
 
@@ -346,6 +353,7 @@ RNAplfold_cmdline_parser_release (struct RNAplfold_args_info *args_info)
   free_string_field (&(args_info->nsp_arg));
   free_string_field (&(args_info->nsp_orig));
   free_string_field (&(args_info->energyModel_orig));
+  free_string_field (&(args_info->betaScale_orig));
   
   
 
@@ -420,6 +428,8 @@ RNAplfold_cmdline_parser_dump(FILE *outfile, struct RNAplfold_args_info *args_in
     write_into_file(outfile, "nsp", args_info->nsp_orig, 0);
   if (args_info->energyModel_given)
     write_into_file(outfile, "energyModel", args_info->energyModel_orig, 0);
+  if (args_info->betaScale_given)
+    write_into_file(outfile, "betaScale", args_info->betaScale_orig, 0);
   
 
   i = EXIT_SUCCESS;
@@ -1301,6 +1311,7 @@ RNAplfold_cmdline_parser_internal (
         { "binaries",	0, NULL, 'b' },
         { "nsp",	1, NULL, 0 },
         { "energyModel",	1, NULL, 'e' },
+        { "betaScale",	1, NULL, 0 },
         { 0,  0, 0, 0 }
       };
 
@@ -1550,6 +1561,20 @@ RNAplfold_cmdline_parser_internal (
                 &(local_args_info.nsp_given), optarg, 0, 0, ARG_STRING,
                 check_ambiguity, override, 0, 0,
                 "nsp", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* Set the scaling of the Boltzmann factors\n.  */
+          else if (strcmp (long_options[option_index].name, "betaScale") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->betaScale_arg), 
+                 &(args_info->betaScale_orig), &(args_info->betaScale_given),
+                &(local_args_info.betaScale_given), optarg, 0, "1.", ARG_DOUBLE,
+                check_ambiguity, override, 0, 0,
+                "betaScale", '-',
                 additional_error))
               goto failure;
           

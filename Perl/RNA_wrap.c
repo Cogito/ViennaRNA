@@ -1507,38 +1507,41 @@ SWIG_Perl_SetModule(swig_module_info *module) {
 #define SWIGTYPE_p_Tree swig_types[4]
 #define SWIGTYPE_p_bondT swig_types[5]
 #define SWIGTYPE_p_char swig_types[6]
-#define SWIGTYPE_p_cpair swig_types[7]
-#define SWIGTYPE_p_double swig_types[8]
-#define SWIGTYPE_p_doubleArray swig_types[9]
-#define SWIGTYPE_p_duplexT swig_types[10]
-#define SWIGTYPE_p_float swig_types[11]
-#define SWIGTYPE_p_floatArray swig_types[12]
-#define SWIGTYPE_p_int swig_types[13]
-#define SWIGTYPE_p_intArray swig_types[14]
-#define SWIGTYPE_p_p_char swig_types[15]
-#define SWIGTYPE_p_p_double swig_types[16]
-#define SWIGTYPE_p_p_doubleArray swig_types[17]
-#define SWIGTYPE_p_p_float swig_types[18]
-#define SWIGTYPE_p_p_floatArray swig_types[19]
-#define SWIGTYPE_p_p_int swig_types[20]
-#define SWIGTYPE_p_p_intArray swig_types[21]
-#define SWIGTYPE_p_p_p_char swig_types[22]
-#define SWIGTYPE_p_p_p_short swig_types[23]
-#define SWIGTYPE_p_p_p_unsigned_short swig_types[24]
-#define SWIGTYPE_p_p_plist swig_types[25]
-#define SWIGTYPE_p_p_short swig_types[26]
-#define SWIGTYPE_p_p_void swig_types[27]
-#define SWIGTYPE_p_paramT swig_types[28]
-#define SWIGTYPE_p_path_t swig_types[29]
-#define SWIGTYPE_p_pf_paramT swig_types[30]
-#define SWIGTYPE_p_plist swig_types[31]
-#define SWIGTYPE_p_short swig_types[32]
-#define SWIGTYPE_p_swString swig_types[33]
-#define SWIGTYPE_p_unsigned_int swig_types[34]
-#define SWIGTYPE_p_unsigned_short swig_types[35]
-#define SWIGTYPE_p_void swig_types[36]
-static swig_type_info *swig_types[38];
-static swig_module_info swig_module = {swig_types, 37, 0, 0, 0, 0};
+#define SWIGTYPE_p_cofoldF swig_types[7]
+#define SWIGTYPE_p_cpair swig_types[8]
+#define SWIGTYPE_p_double swig_types[9]
+#define SWIGTYPE_p_doubleArray swig_types[10]
+#define SWIGTYPE_p_duplexT swig_types[11]
+#define SWIGTYPE_p_float swig_types[12]
+#define SWIGTYPE_p_floatArray swig_types[13]
+#define SWIGTYPE_p_int swig_types[14]
+#define SWIGTYPE_p_intArray swig_types[15]
+#define SWIGTYPE_p_model_detailsT swig_types[16]
+#define SWIGTYPE_p_p_char swig_types[17]
+#define SWIGTYPE_p_p_double swig_types[18]
+#define SWIGTYPE_p_p_doubleArray swig_types[19]
+#define SWIGTYPE_p_p_float swig_types[20]
+#define SWIGTYPE_p_p_floatArray swig_types[21]
+#define SWIGTYPE_p_p_int swig_types[22]
+#define SWIGTYPE_p_p_intArray swig_types[23]
+#define SWIGTYPE_p_p_p_char swig_types[24]
+#define SWIGTYPE_p_p_p_short swig_types[25]
+#define SWIGTYPE_p_p_p_unsigned_short swig_types[26]
+#define SWIGTYPE_p_p_paramT swig_types[27]
+#define SWIGTYPE_p_p_plist swig_types[28]
+#define SWIGTYPE_p_p_short swig_types[29]
+#define SWIGTYPE_p_p_void swig_types[30]
+#define SWIGTYPE_p_paramT swig_types[31]
+#define SWIGTYPE_p_path_t swig_types[32]
+#define SWIGTYPE_p_pf_paramT swig_types[33]
+#define SWIGTYPE_p_plist swig_types[34]
+#define SWIGTYPE_p_short swig_types[35]
+#define SWIGTYPE_p_swString swig_types[36]
+#define SWIGTYPE_p_unsigned_int swig_types[37]
+#define SWIGTYPE_p_unsigned_short swig_types[38]
+#define SWIGTYPE_p_void swig_types[39]
+static swig_type_info *swig_types[41];
+static swig_module_info swig_module = {swig_types, 40, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5034,6 +5037,116 @@ XS(_wrap_fold) {
 }
 
 
+XS(_wrap_fold_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    paramT *arg3 = (paramT *) 0 ;
+    int arg4 ;
+    int arg5 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int val5 ;
+    int ecode5 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 5) || (items > 5)) {
+      SWIG_croak("Usage: fold_par(sequence,structure,parameters,is_constrained,is_circular);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fold_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fold_par" "', argument " "3"" of type '" "paramT *""'"); 
+    }
+    arg3 = (paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "fold_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "fold_par" "', argument " "5"" of type '" "int""'");
+    } 
+    arg5 = (int)(val5);
+    result = (float)fold_par((char const *)arg1,arg2,arg3,arg4,arg5);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_circfold) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: circfold(sequence,structure);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "circfold" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "circfold" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    result = (float)circfold((char const *)arg1,arg2);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_energy_of_structure) {
   {
     char *arg1 = (char *) 0 ;
@@ -5078,6 +5191,176 @@ XS(_wrap_energy_of_structure) {
   fail:
     if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
     if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_energy_of_struct_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    paramT *arg3 = (paramT *) 0 ;
+    int arg4 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 4) || (items > 4)) {
+      SWIG_croak("Usage: energy_of_struct_par(string,structure,parameters,verbosity_level);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "energy_of_struct_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "energy_of_struct_par" "', argument " "2"" of type '" "char const *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "energy_of_struct_par" "', argument " "3"" of type '" "paramT *""'"); 
+    }
+    arg3 = (paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "energy_of_struct_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    result = (float)energy_of_struct_par((char const *)arg1,(char const *)arg2,arg3,arg4);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_energy_of_circ_structure) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    int arg3 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    int val3 ;
+    int ecode3 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 3) || (items > 3)) {
+      SWIG_croak("Usage: energy_of_circ_structure(string,structure,verbosity_level);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "energy_of_circ_structure" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "energy_of_circ_structure" "', argument " "2"" of type '" "char const *""'");
+    }
+    arg2 = (char *)(buf2);
+    ecode3 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "energy_of_circ_structure" "', argument " "3"" of type '" "int""'");
+    } 
+    arg3 = (int)(val3);
+    result = (float)energy_of_circ_structure((char const *)arg1,(char const *)arg2,arg3);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_energy_of_circ_struct_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    paramT *arg3 = (paramT *) 0 ;
+    int arg4 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 4) || (items > 4)) {
+      SWIG_croak("Usage: energy_of_circ_struct_par(string,structure,parameters,verbosity_level);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "energy_of_circ_struct_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "energy_of_circ_struct_par" "', argument " "2"" of type '" "char const *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "energy_of_circ_struct_par" "', argument " "3"" of type '" "paramT *""'"); 
+    }
+    arg3 = (paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "energy_of_circ_struct_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    result = (float)energy_of_circ_struct_par((char const *)arg1,(char const *)arg2,arg3,arg4);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
     
     SWIG_croak_null();
   }
@@ -5144,6 +5427,85 @@ XS(_wrap_energy_of_structure_pt) {
     XSRETURN(argvi);
   fail:
     if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_energy_of_struct_pt_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    short *arg2 = (short *) 0 ;
+    short *arg3 = (short *) 0 ;
+    short *arg4 = (short *) 0 ;
+    paramT *arg5 = (paramT *) 0 ;
+    int arg6 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    void *argp4 = 0 ;
+    int res4 = 0 ;
+    void *argp5 = 0 ;
+    int res5 = 0 ;
+    int val6 ;
+    int ecode6 = 0 ;
+    int argvi = 0;
+    int result;
+    dXSARGS;
+    
+    if ((items < 6) || (items > 6)) {
+      SWIG_croak("Usage: energy_of_struct_pt_par(string,ptable,s,s1,parameters,verbosity_level);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "energy_of_struct_pt_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "energy_of_struct_pt_par" "', argument " "2"" of type '" "short *""'"); 
+    }
+    arg2 = (short *)(argp2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "energy_of_struct_pt_par" "', argument " "3"" of type '" "short *""'"); 
+    }
+    arg3 = (short *)(argp3);
+    res4 = SWIG_ConvertPtr(ST(3), &argp4,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "energy_of_struct_pt_par" "', argument " "4"" of type '" "short *""'"); 
+    }
+    arg4 = (short *)(argp4);
+    res5 = SWIG_ConvertPtr(ST(4), &argp5,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "energy_of_struct_pt_par" "', argument " "5"" of type '" "paramT *""'"); 
+    }
+    arg5 = (paramT *)(argp5);
+    ecode6 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(5), &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "energy_of_struct_pt_par" "', argument " "6"" of type '" "int""'");
+    } 
+    arg6 = (int)(val6);
+    result = (int)energy_of_struct_pt_par((char const *)arg1,arg2,arg3,arg4,arg5,arg6);
+    ST(argvi) = SWIG_From_int  SWIG_PERL_CALL_ARGS_1((int)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    
     
     
     
@@ -5326,6 +5688,33 @@ XS(_wrap_update_fold_params) {
     ST(argvi) = sv_newmortal();
     XSRETURN(argvi);
   fail:
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_update_fold_params_par) {
+  {
+    paramT *arg1 = (paramT *) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: update_fold_params_par(parameters);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "update_fold_params_par" "', argument " "1"" of type '" "paramT *""'"); 
+    }
+    arg1 = (paramT *)(argp1);
+    update_fold_params_par(arg1);
+    ST(argvi) = sv_newmortal();
+    
+    XSRETURN(argvi);
+  fail:
+    
     SWIG_croak_null();
   }
 }
@@ -5530,90 +5919,102 @@ XS(_wrap_export_fold_arrays) {
 }
 
 
-XS(_wrap_circfold) {
+XS(_wrap_export_fold_arrays_par) {
   {
-    char *arg1 = (char *) 0 ;
-    char *arg2 = (char *) 0 ;
-    int res1 ;
-    char *buf1 = 0 ;
-    int alloc1 = 0 ;
-    int res2 ;
-    char *buf2 = 0 ;
-    int alloc2 = 0 ;
+    int **arg1 = (int **) 0 ;
+    int **arg2 = (int **) 0 ;
+    int **arg3 = (int **) 0 ;
+    int **arg4 = (int **) 0 ;
+    int **arg5 = (int **) 0 ;
+    char **arg6 = (char **) 0 ;
+    paramT **arg7 = (paramT **) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    void *argp4 = 0 ;
+    int res4 = 0 ;
+    void *argp5 = 0 ;
+    int res5 = 0 ;
+    void *argp7 = 0 ;
+    int res7 = 0 ;
     int argvi = 0;
-    float result;
     dXSARGS;
     
-    if ((items < 2) || (items > 2)) {
-      SWIG_croak("Usage: circfold(string,structure);");
+    if ((items < 7) || (items > 7)) {
+      SWIG_croak("Usage: export_fold_arrays_par(f5_p,c_p,fML_p,fM1_p,indx_p,ptype_p,P_p);");
     }
-    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_p_int, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "circfold" "', argument " "1"" of type '" "char const *""'");
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "export_fold_arrays_par" "', argument " "1"" of type '" "int **""'"); 
     }
-    arg1 = (char *)(buf1);
-    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    arg1 = (int **)(argp1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_p_int, 0 |  0 );
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "circfold" "', argument " "2"" of type '" "char *""'");
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "export_fold_arrays_par" "', argument " "2"" of type '" "int **""'"); 
     }
-    arg2 = (char *)(buf2);
-    result = (float)circfold((char const *)arg1,arg2);
-    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    XSRETURN(argvi);
-  fail:
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    SWIG_croak_null();
-  }
-}
-
-
-XS(_wrap_energy_of_circ_structure) {
-  {
-    char *arg1 = (char *) 0 ;
-    char *arg2 = (char *) 0 ;
-    int arg3 ;
-    int res1 ;
-    char *buf1 = 0 ;
-    int alloc1 = 0 ;
-    int res2 ;
-    char *buf2 = 0 ;
-    int alloc2 = 0 ;
-    int val3 ;
-    int ecode3 = 0 ;
-    int argvi = 0;
-    float result;
-    dXSARGS;
+    arg2 = (int **)(argp2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "export_fold_arrays_par" "', argument " "3"" of type '" "int **""'"); 
+    }
+    arg3 = (int **)(argp3);
+    res4 = SWIG_ConvertPtr(ST(3), &argp4,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "export_fold_arrays_par" "', argument " "4"" of type '" "int **""'"); 
+    }
+    arg4 = (int **)(argp4);
+    res5 = SWIG_ConvertPtr(ST(4), &argp5,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "export_fold_arrays_par" "', argument " "5"" of type '" "int **""'"); 
+    }
+    arg5 = (int **)(argp5);
+    {
+      AV *tempav;
+      I32 len;
+      int i;
+      SV  **tv;
+      if (!SvROK(ST(5)))
+      croak("Argument 6 is not a reference.");
+      if (SvTYPE(SvRV(ST(5))) != SVt_PVAV)
+      croak("Argument 6 is not an array.");
+      tempav = (AV*)SvRV(ST(5));
+      len = av_len(tempav);
+      arg6 = (char **) malloc((len+2)*sizeof(char *));
+      for (i = 0; i <= len; i++) {
+        tv = av_fetch(tempav, i, 0);
+        arg6[i] = (char *) SvPV(*tv,PL_na);
+      }
+      arg6[i] = NULL;
+    }
+    res7 = SWIG_ConvertPtr(ST(6), &argp7,SWIGTYPE_p_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "export_fold_arrays_par" "', argument " "7"" of type '" "paramT **""'"); 
+    }
+    arg7 = (paramT **)(argp7);
+    export_fold_arrays_par(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+    ST(argvi) = sv_newmortal();
     
-    if ((items < 3) || (items > 3)) {
-      SWIG_croak("Usage: energy_of_circ_structure(string,structure,verbosity_level);");
+    
+    
+    
+    
+    {
+      free(arg6);
     }
-    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "energy_of_circ_structure" "', argument " "1"" of type '" "char const *""'");
-    }
-    arg1 = (char *)(buf1);
-    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "energy_of_circ_structure" "', argument " "2"" of type '" "char const *""'");
-    }
-    arg2 = (char *)(buf2);
-    ecode3 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "energy_of_circ_structure" "', argument " "3"" of type '" "int""'");
-    } 
-    arg3 = (int)(val3);
-    result = (float)energy_of_circ_structure((char const *)arg1,(char const *)arg2,arg3);
-    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
     
     XSRETURN(argvi);
   fail:
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    
+    {
+      free(arg6);
+    }
     
     SWIG_croak_null();
   }
@@ -5757,6 +6158,158 @@ XS(_wrap_export_circfold_arrays) {
     {
       free(arg11);
     }
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_export_circfold_arrays_par) {
+  {
+    int *arg1 = (int *) 0 ;
+    int *arg2 = (int *) 0 ;
+    int *arg3 = (int *) 0 ;
+    int *arg4 = (int *) 0 ;
+    int **arg5 = (int **) 0 ;
+    int **arg6 = (int **) 0 ;
+    int **arg7 = (int **) 0 ;
+    int **arg8 = (int **) 0 ;
+    int **arg9 = (int **) 0 ;
+    int **arg10 = (int **) 0 ;
+    char **arg11 = (char **) 0 ;
+    paramT **arg12 = (paramT **) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    void *argp4 = 0 ;
+    int res4 = 0 ;
+    void *argp5 = 0 ;
+    int res5 = 0 ;
+    void *argp6 = 0 ;
+    int res6 = 0 ;
+    void *argp7 = 0 ;
+    int res7 = 0 ;
+    void *argp8 = 0 ;
+    int res8 = 0 ;
+    void *argp9 = 0 ;
+    int res9 = 0 ;
+    void *argp10 = 0 ;
+    int res10 = 0 ;
+    void *argp12 = 0 ;
+    int res12 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 12) || (items > 12)) {
+      SWIG_croak("Usage: export_circfold_arrays_par(Fc_p,FcH_p,FcI_p,FcM_p,fM2_p,f5_p,c_p,fML_p,fM1_p,indx_p,ptype_p,P_p);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "export_circfold_arrays_par" "', argument " "1"" of type '" "int *""'"); 
+    }
+    arg1 = (int *)(argp1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "export_circfold_arrays_par" "', argument " "2"" of type '" "int *""'"); 
+    }
+    arg2 = (int *)(argp2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "export_circfold_arrays_par" "', argument " "3"" of type '" "int *""'"); 
+    }
+    arg3 = (int *)(argp3);
+    res4 = SWIG_ConvertPtr(ST(3), &argp4,SWIGTYPE_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "export_circfold_arrays_par" "', argument " "4"" of type '" "int *""'"); 
+    }
+    arg4 = (int *)(argp4);
+    res5 = SWIG_ConvertPtr(ST(4), &argp5,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res5)) {
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "export_circfold_arrays_par" "', argument " "5"" of type '" "int **""'"); 
+    }
+    arg5 = (int **)(argp5);
+    res6 = SWIG_ConvertPtr(ST(5), &argp6,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "export_circfold_arrays_par" "', argument " "6"" of type '" "int **""'"); 
+    }
+    arg6 = (int **)(argp6);
+    res7 = SWIG_ConvertPtr(ST(6), &argp7,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res7)) {
+      SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "export_circfold_arrays_par" "', argument " "7"" of type '" "int **""'"); 
+    }
+    arg7 = (int **)(argp7);
+    res8 = SWIG_ConvertPtr(ST(7), &argp8,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res8)) {
+      SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "export_circfold_arrays_par" "', argument " "8"" of type '" "int **""'"); 
+    }
+    arg8 = (int **)(argp8);
+    res9 = SWIG_ConvertPtr(ST(8), &argp9,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res9)) {
+      SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "export_circfold_arrays_par" "', argument " "9"" of type '" "int **""'"); 
+    }
+    arg9 = (int **)(argp9);
+    res10 = SWIG_ConvertPtr(ST(9), &argp10,SWIGTYPE_p_p_int, 0 |  0 );
+    if (!SWIG_IsOK(res10)) {
+      SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "export_circfold_arrays_par" "', argument " "10"" of type '" "int **""'"); 
+    }
+    arg10 = (int **)(argp10);
+    {
+      AV *tempav;
+      I32 len;
+      int i;
+      SV  **tv;
+      if (!SvROK(ST(10)))
+      croak("Argument 11 is not a reference.");
+      if (SvTYPE(SvRV(ST(10))) != SVt_PVAV)
+      croak("Argument 11 is not an array.");
+      tempav = (AV*)SvRV(ST(10));
+      len = av_len(tempav);
+      arg11 = (char **) malloc((len+2)*sizeof(char *));
+      for (i = 0; i <= len; i++) {
+        tv = av_fetch(tempav, i, 0);
+        arg11[i] = (char *) SvPV(*tv,PL_na);
+      }
+      arg11[i] = NULL;
+    }
+    res12 = SWIG_ConvertPtr(ST(11), &argp12,SWIGTYPE_p_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res12)) {
+      SWIG_exception_fail(SWIG_ArgError(res12), "in method '" "export_circfold_arrays_par" "', argument " "12"" of type '" "paramT **""'"); 
+    }
+    arg12 = (paramT **)(argp12);
+    export_circfold_arrays_par(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+    ST(argvi) = sv_newmortal();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    {
+      free(arg11);
+    }
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    {
+      free(arg11);
+    }
+    
     SWIG_croak_null();
   }
 }
@@ -6198,6 +6751,66 @@ XS(_wrap_cofold) {
 }
 
 
+XS(_wrap_cofold_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    paramT *arg3 = (paramT *) 0 ;
+    int arg4 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 4) || (items > 4)) {
+      SWIG_croak("Usage: cofold_par(string,structure,parameters,is_constrained);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cofold_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cofold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "cofold_par" "', argument " "3"" of type '" "paramT *""'"); 
+    }
+    arg3 = (paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "cofold_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    result = (float)cofold_par((char const *)arg1,arg2,arg3,arg4);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_free_co_arrays) {
   {
     int argvi = 0;
@@ -6232,6 +6845,33 @@ XS(_wrap_update_cofold_params) {
 }
 
 
+XS(_wrap_update_cofold_params_par) {
+  {
+    paramT *arg1 = (paramT *) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: update_cofold_params_par(parameters);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "update_cofold_params_par" "', argument " "1"" of type '" "paramT *""'"); 
+    }
+    arg1 = (paramT *)(argp1);
+    update_cofold_params_par(arg1);
+    ST(argvi) = sv_newmortal();
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_zukersubopt) {
   {
     char *arg1 = (char *) 0 ;
@@ -6256,6 +6896,45 @@ XS(_wrap_zukersubopt) {
     XSRETURN(argvi);
   fail:
     if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_zukersubopt_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    paramT *arg2 = (paramT *) 0 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    int argvi = 0;
+    SOLUTION *result = 0 ;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: zukersubopt_par(string,parameters);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "zukersubopt_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "zukersubopt_par" "', argument " "2"" of type '" "paramT *""'"); 
+    }
+    arg2 = (paramT *)(argp2);
+    result = (SOLUTION *)zukersubopt_par((char const *)arg1,arg2);
+    ST(argvi) = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_SOLUTION, 0 | SWIG_SHADOW); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    
     SWIG_croak_null();
   }
 }
@@ -6482,6 +7161,86 @@ XS(_wrap_pf_fold) {
 }
 
 
+XS(_wrap_pf_fold_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    pf_paramT *arg3 = (pf_paramT *) 0 ;
+    int arg4 ;
+    int arg5 ;
+    int arg6 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int val5 ;
+    int ecode5 = 0 ;
+    int val6 ;
+    int ecode6 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 6) || (items > 6)) {
+      SWIG_croak("Usage: pf_fold_par(sequence,structure,parameters,calculate_bppm,is_constrained,is_circular);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pf_fold_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "pf_fold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "pf_fold_par" "', argument " "3"" of type '" "pf_paramT *""'"); 
+    }
+    arg3 = (pf_paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "pf_fold_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "pf_fold_par" "', argument " "5"" of type '" "int""'");
+    } 
+    arg5 = (int)(val5);
+    ecode6 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(5), &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "pf_fold_par" "', argument " "6"" of type '" "int""'");
+    } 
+    arg6 = (int)(val6);
+    result = (float)pf_fold_par((char const *)arg1,arg2,arg3,arg4,arg5,arg6);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_pf_circ_fold) {
   {
     char *arg1 = (char *) 0 ;
@@ -6517,76 +7276,6 @@ XS(_wrap_pf_circ_fold) {
   fail:
     if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
     if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    SWIG_croak_null();
-  }
-}
-
-
-XS(_wrap_pf_fold_par) {
-  {
-    char *arg1 = (char *) 0 ;
-    char *arg2 = (char *) 0 ;
-    pf_paramT *arg3 = (pf_paramT *) 0 ;
-    int arg4 ;
-    int arg5 ;
-    int res1 ;
-    char *buf1 = 0 ;
-    int alloc1 = 0 ;
-    int res2 ;
-    char *buf2 = 0 ;
-    int alloc2 = 0 ;
-    void *argp3 = 0 ;
-    int res3 = 0 ;
-    int val4 ;
-    int ecode4 = 0 ;
-    int val5 ;
-    int ecode5 = 0 ;
-    int argvi = 0;
-    float result;
-    dXSARGS;
-    
-    if ((items < 5) || (items > 5)) {
-      SWIG_croak("Usage: pf_fold_par(sequence,structure,parameters,calculate_bppm,is_circular);");
-    }
-    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pf_fold_par" "', argument " "1"" of type '" "char const *""'");
-    }
-    arg1 = (char *)(buf1);
-    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "pf_fold_par" "', argument " "2"" of type '" "char *""'");
-    }
-    arg2 = (char *)(buf2);
-    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_pf_paramT, 0 |  0 );
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "pf_fold_par" "', argument " "3"" of type '" "pf_paramT *""'"); 
-    }
-    arg3 = (pf_paramT *)(argp3);
-    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
-    if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "pf_fold_par" "', argument " "4"" of type '" "int""'");
-    } 
-    arg4 = (int)(val4);
-    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
-    if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "pf_fold_par" "', argument " "5"" of type '" "int""'");
-    } 
-    arg5 = (int)(val5);
-    result = (float)pf_fold_par((char const *)arg1,arg2,arg3,arg4,arg5);
-    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    
-    
-    
-    XSRETURN(argvi);
-  fail:
-    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
-    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    
-    
-    
     SWIG_croak_null();
   }
 }
@@ -7526,6 +8215,76 @@ XS(_wrap_co_pf_fold) {
 }
 
 
+XS(_wrap_co_pf_fold_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    pf_paramT *arg3 = (pf_paramT *) 0 ;
+    int arg4 ;
+    int arg5 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int val5 ;
+    int ecode5 = 0 ;
+    int argvi = 0;
+    cofoldF result;
+    dXSARGS;
+    
+    if ((items < 5) || (items > 5)) {
+      SWIG_croak("Usage: co_pf_fold_par(sequence,structure,parameters,calculate_bppm,is_constrained);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "co_pf_fold_par" "', argument " "1"" of type '" "char *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "co_pf_fold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "co_pf_fold_par" "', argument " "3"" of type '" "pf_paramT *""'"); 
+    }
+    arg3 = (pf_paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "co_pf_fold_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "co_pf_fold_par" "', argument " "5"" of type '" "int""'");
+    } 
+    arg5 = (int)(val5);
+    result = co_pf_fold_par(arg1,arg2,arg3,arg4,arg5);
+    ST(argvi) = SWIG_NewPointerObj((cofoldF *)memcpy((cofoldF *)malloc(sizeof(cofoldF)),&result,sizeof(cofoldF)), SWIGTYPE_p_cofoldF, SWIG_POINTER_OWN | 0); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_export_co_bppm) {
   {
     int argvi = 0;
@@ -7582,6 +8341,43 @@ XS(_wrap_update_co_pf_params) {
     
     XSRETURN(argvi);
   fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_update_co_pf_params_par) {
+  {
+    int arg1 ;
+    pf_paramT *arg2 = (pf_paramT *) 0 ;
+    int val1 ;
+    int ecode1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: update_co_pf_params_par(length,parameters);");
+    }
+    ecode1 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "update_co_pf_params_par" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "update_co_pf_params_par" "', argument " "2"" of type '" "pf_paramT *""'"); 
+    }
+    arg2 = (pf_paramT *)(argp2);
+    update_co_pf_params_par(arg1,arg2);
+    ST(argvi) = sv_newmortal();
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
     
     SWIG_croak_null();
   }
@@ -8110,6 +8906,33 @@ XS(_wrap_option_string) {
 }
 
 
+XS(_wrap_set_model_details) {
+  {
+    model_detailsT *arg1 = (model_detailsT *) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: set_model_details(md);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_model_detailsT, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_model_details" "', argument " "1"" of type '" "model_detailsT *""'"); 
+    }
+    arg1 = (model_detailsT *)(argp1);
+    set_model_details(arg1);
+    ST(argvi) = sv_newmortal();
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_update_alifold_params) {
   {
     int argvi = 0;
@@ -8176,24 +8999,6 @@ XS(_wrap_circalifold) {
       free(arg1);
     }
     if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
-    SWIG_croak_null();
-  }
-}
-
-
-XS(_wrap_alipf_export_bppm) {
-  {
-    int argvi = 0;
-    double *result = 0 ;
-    dXSARGS;
-    
-    if ((items < 0) || (items > 0)) {
-      SWIG_croak("Usage: alipf_export_bppm();");
-    }
-    result = (double *)alipf_export_bppm();
-    ST(argvi) = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_double, 0 | 0); argvi++ ;
-    XSRETURN(argvi);
-  fail:
     SWIG_croak_null();
   }
 }
@@ -8635,6 +9440,110 @@ XS(_wrap_free_sequence_arrays) {
     XSRETURN(argvi);
   fail:
     
+    
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_alipf_fold_par) {
+  {
+    char **arg1 = (char **) 0 ;
+    char *arg2 = (char *) 0 ;
+    plist **arg3 = (plist **) 0 ;
+    pf_paramT *arg4 = (pf_paramT *) 0 ;
+    int arg5 ;
+    int arg6 ;
+    int arg7 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    void *argp4 = 0 ;
+    int res4 = 0 ;
+    int val5 ;
+    int ecode5 = 0 ;
+    int val6 ;
+    int ecode6 = 0 ;
+    int val7 ;
+    int ecode7 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 7) || (items > 7)) {
+      SWIG_croak("Usage: alipf_fold_par(sequences,structure,pl,parameters,calculate_bppm,is_constrained,is_circular);");
+    }
+    {
+      AV *tempav;
+      I32 len;
+      int i;
+      SV  **tv;
+      if (!SvROK(ST(0)))
+      croak("Argument 1 is not a reference.");
+      if (SvTYPE(SvRV(ST(0))) != SVt_PVAV)
+      croak("Argument 1 is not an array.");
+      tempav = (AV*)SvRV(ST(0));
+      len = av_len(tempav);
+      arg1 = (char **) malloc((len+2)*sizeof(char *));
+      for (i = 0; i <= len; i++) {
+        tv = av_fetch(tempav, i, 0);
+        arg1[i] = (char *) SvPV(*tv,PL_na);
+      }
+      arg1[i] = NULL;
+    }
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "alipf_fold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_p_plist, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "alipf_fold_par" "', argument " "3"" of type '" "plist **""'"); 
+    }
+    arg3 = (plist **)(argp3);
+    res4 = SWIG_ConvertPtr(ST(3), &argp4,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "alipf_fold_par" "', argument " "4"" of type '" "pf_paramT *""'"); 
+    }
+    arg4 = (pf_paramT *)(argp4);
+    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "alipf_fold_par" "', argument " "5"" of type '" "int""'");
+    } 
+    arg5 = (int)(val5);
+    ecode6 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(5), &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "alipf_fold_par" "', argument " "6"" of type '" "int""'");
+    } 
+    arg6 = (int)(val6);
+    ecode7 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(6), &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "alipf_fold_par" "', argument " "7"" of type '" "int""'");
+    } 
+    arg7 = (int)(val7);
+    result = (float)alipf_fold_par((char const **)arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    {
+      free(arg1);
+    }
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    {
+      free(arg1);
+    }
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
     
     
     
@@ -13509,6 +14418,7 @@ static swig_type_info _swigt__p_SOLUTION = {"_p_SOLUTION", "SOLUTION *", 0, 0, (
 static swig_type_info _swigt__p_Tree = {"_p_Tree", "Tree *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_bondT = {"_p_bondT", "bondT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_cofoldF = {"_p_cofoldF", "cofoldF *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_cpair = {"_p_cpair", "cpair *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_doubleArray = {"_p_doubleArray", "struct doubleArray *|doubleArray *", 0, 0, (void*)"RNA::doubleArray", 0};
@@ -13517,6 +14427,7 @@ static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 
 static swig_type_info _swigt__p_floatArray = {"_p_floatArray", "struct floatArray *|floatArray *", 0, 0, (void*)"RNA::floatArray", 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_intArray = {"_p_intArray", "struct intArray *|intArray *", 0, 0, (void*)"RNA::intArray", 0};
+static swig_type_info _swigt__p_model_detailsT = {"_p_model_detailsT", "model_detailsT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_char = {"_p_p_char", "char **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_double = {"_p_p_double", "double **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_doubleArray = {"_p_p_doubleArray", 0, 0, 0, 0, 0};
@@ -13527,6 +14438,7 @@ static swig_type_info _swigt__p_p_intArray = {"_p_p_intArray", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_p_p_char = {"_p_p_p_char", "char ***", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_p_short = {"_p_p_p_short", "short ***", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_p_unsigned_short = {"_p_p_p_unsigned_short", "unsigned short ***", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_paramT = {"_p_p_paramT", "paramT **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_plist = {"_p_p_plist", "plist **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_short = {"_p_p_short", "short **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "void **", 0, 0, (void*)0, 0};
@@ -13548,6 +14460,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Tree,
   &_swigt__p_bondT,
   &_swigt__p_char,
+  &_swigt__p_cofoldF,
   &_swigt__p_cpair,
   &_swigt__p_double,
   &_swigt__p_doubleArray,
@@ -13556,6 +14469,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_floatArray,
   &_swigt__p_int,
   &_swigt__p_intArray,
+  &_swigt__p_model_detailsT,
   &_swigt__p_p_char,
   &_swigt__p_p_double,
   &_swigt__p_p_doubleArray,
@@ -13566,6 +14480,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_p_p_char,
   &_swigt__p_p_p_short,
   &_swigt__p_p_p_unsigned_short,
+  &_swigt__p_p_paramT,
   &_swigt__p_p_plist,
   &_swigt__p_p_short,
   &_swigt__p_p_void,
@@ -13587,6 +14502,7 @@ static swig_cast_info _swigc__p_SOLUTION[] = {  {&_swigt__p_SOLUTION, 0, 0, 0},{
 static swig_cast_info _swigc__p_Tree[] = {  {&_swigt__p_Tree, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_bondT[] = {  {&_swigt__p_bondT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_cofoldF[] = {  {&_swigt__p_cofoldF, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_cpair[] = {  {&_swigt__p_cpair, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_doubleArray, _p_doubleArrayTo_p_double, 0, 0},  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_doubleArray[] = {  {&_swigt__p_doubleArray, 0, 0, 0},{0, 0, 0, 0}};
@@ -13595,6 +14511,7 @@ static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},  {&_sw
 static swig_cast_info _swigc__p_floatArray[] = {  {&_swigt__p_floatArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_intArray, _p_intArrayTo_p_int, 0, 0},  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_intArray[] = {  {&_swigt__p_intArray, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_model_detailsT[] = {  {&_swigt__p_model_detailsT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_doubleArray[] = {{&_swigt__p_p_doubleArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_double[] = {  {&_swigt__p_p_doubleArray, _p_p_doubleArrayTo_p_p_double, 0, 0},  {&_swigt__p_p_double, 0, 0, 0},{0, 0, 0, 0}};
@@ -13605,6 +14522,7 @@ static swig_cast_info _swigc__p_p_int[] = {  {&_swigt__p_p_intArray, _p_p_intArr
 static swig_cast_info _swigc__p_p_p_char[] = {  {&_swigt__p_p_p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_p_short[] = {  {&_swigt__p_p_p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_p_unsigned_short[] = {  {&_swigt__p_p_p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_paramT[] = {  {&_swigt__p_p_paramT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_plist[] = {  {&_swigt__p_p_plist, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_short[] = {  {&_swigt__p_p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_void[] = {  {&_swigt__p_p_void, 0, 0, 0},{0, 0, 0, 0}};
@@ -13626,6 +14544,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Tree,
   _swigc__p_bondT,
   _swigc__p_char,
+  _swigc__p_cofoldF,
   _swigc__p_cpair,
   _swigc__p_double,
   _swigc__p_doubleArray,
@@ -13634,6 +14553,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_floatArray,
   _swigc__p_int,
   _swigc__p_intArray,
+  _swigc__p_model_detailsT,
   _swigc__p_p_char,
   _swigc__p_p_double,
   _swigc__p_p_doubleArray,
@@ -13644,6 +14564,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_p_p_char,
   _swigc__p_p_p_short,
   _swigc__p_p_p_unsigned_short,
+  _swigc__p_p_paramT,
   _swigc__p_p_plist,
   _swigc__p_p_short,
   _swigc__p_p_void,
@@ -13758,19 +14679,26 @@ static swig_command_info swig_commands[] = {
 {"RNAc::cdata", _wrap_cdata},
 {"RNAc::memmove", _wrap_memmove},
 {"RNAc::fold", _wrap_fold},
+{"RNAc::fold_par", _wrap_fold_par},
+{"RNAc::circfold", _wrap_circfold},
 {"RNAc::energy_of_structure", _wrap_energy_of_structure},
+{"RNAc::energy_of_struct_par", _wrap_energy_of_struct_par},
+{"RNAc::energy_of_circ_structure", _wrap_energy_of_circ_structure},
+{"RNAc::energy_of_circ_struct_par", _wrap_energy_of_circ_struct_par},
 {"RNAc::energy_of_structure_pt", _wrap_energy_of_structure_pt},
+{"RNAc::energy_of_struct_pt_par", _wrap_energy_of_struct_pt_par},
 {"RNAc::free_arrays", _wrap_free_arrays},
 {"RNAc::parenthesis_structure", _wrap_parenthesis_structure},
 {"RNAc::parenthesis_zuker", _wrap_parenthesis_zuker},
 {"RNAc::letter_structure", _wrap_letter_structure},
 {"RNAc::update_fold_params", _wrap_update_fold_params},
+{"RNAc::update_fold_params_par", _wrap_update_fold_params_par},
 {"RNAc::backtrack_fold_from_pair", _wrap_backtrack_fold_from_pair},
 {"RNAc::loop_energy", _wrap_loop_energy},
 {"RNAc::export_fold_arrays", _wrap_export_fold_arrays},
-{"RNAc::circfold", _wrap_circfold},
-{"RNAc::energy_of_circ_structure", _wrap_energy_of_circ_structure},
+{"RNAc::export_fold_arrays_par", _wrap_export_fold_arrays_par},
 {"RNAc::export_circfold_arrays", _wrap_export_circfold_arrays},
+{"RNAc::export_circfold_arrays_par", _wrap_export_circfold_arrays_par},
 {"RNAc::assign_plist_from_db", _wrap_assign_plist_from_db},
 {"RNAc::LoopEnergy", _wrap_LoopEnergy},
 {"RNAc::HairpinE", _wrap_HairpinE},
@@ -13779,15 +14707,18 @@ static swig_command_info swig_commands[] = {
 {"RNAc::energy_of_struct_pt", _wrap_energy_of_struct_pt},
 {"RNAc::energy_of_circ_struct", _wrap_energy_of_circ_struct},
 {"RNAc::cofold", _wrap_cofold},
+{"RNAc::cofold_par", _wrap_cofold_par},
 {"RNAc::free_co_arrays", _wrap_free_co_arrays},
 {"RNAc::update_cofold_params", _wrap_update_cofold_params},
+{"RNAc::update_cofold_params_par", _wrap_update_cofold_params_par},
 {"RNAc::zukersubopt", _wrap_zukersubopt},
+{"RNAc::zukersubopt_par", _wrap_zukersubopt_par},
 {"RNAc::get_monomere_mfes", _wrap_get_monomere_mfes},
 {"RNAc::export_cofold_arrays", _wrap_export_cofold_arrays},
 {"RNAc::initialize_cofold", _wrap_initialize_cofold},
 {"RNAc::pf_fold", _wrap_pf_fold},
-{"RNAc::pf_circ_fold", _wrap_pf_circ_fold},
 {"RNAc::pf_fold_par", _wrap_pf_fold_par},
+{"RNAc::pf_circ_fold", _wrap_pf_circ_fold},
 {"RNAc::pbacktrack", _wrap_pbacktrack},
 {"RNAc::pbacktrack_circ", _wrap_pbacktrack_circ},
 {"RNAc::free_pf_arrays", _wrap_free_pf_arrays},
@@ -13809,16 +14740,18 @@ static swig_command_info swig_commands[] = {
 {"RNAc::expLoopEnergy", _wrap_expLoopEnergy},
 {"RNAc::expHairpinEnergy", _wrap_expHairpinEnergy},
 {"RNAc::co_pf_fold", _wrap_co_pf_fold},
+{"RNAc::co_pf_fold_par", _wrap_co_pf_fold_par},
 {"RNAc::export_co_bppm", _wrap_export_co_bppm},
 {"RNAc::free_co_pf_arrays", _wrap_free_co_pf_arrays},
 {"RNAc::update_co_pf_params", _wrap_update_co_pf_params},
+{"RNAc::update_co_pf_params_par", _wrap_update_co_pf_params_par},
 {"RNAc::get_concentrations", _wrap_get_concentrations},
 {"RNAc::inverse_fold", _wrap_inverse_fold},
 {"RNAc::inverse_pf_fold", _wrap_inverse_pf_fold},
 {"RNAc::option_string", _wrap_option_string},
+{"RNAc::set_model_details", _wrap_set_model_details},
 {"RNAc::update_alifold_params", _wrap_update_alifold_params},
 {"RNAc::circalifold", _wrap_circalifold},
-{"RNAc::alipf_export_bppm", _wrap_alipf_export_bppm},
 {"RNAc::free_alifold_arrays", _wrap_free_alifold_arrays},
 {"RNAc::get_mpi", _wrap_get_mpi},
 {"RNAc::readribosum", _wrap_readribosum},
@@ -13826,6 +14759,7 @@ static swig_command_info swig_commands[] = {
 {"RNAc::encode_ali_sequence", _wrap_encode_ali_sequence},
 {"RNAc::alloc_sequence_arrays", _wrap_alloc_sequence_arrays},
 {"RNAc::free_sequence_arrays", _wrap_free_sequence_arrays},
+{"RNAc::alipf_fold_par", _wrap_alipf_fold_par},
 {"RNAc::alipf_fold", _wrap_alipf_fold},
 {"RNAc::alipf_circ_fold", _wrap_alipf_circ_fold},
 {"RNAc::export_ali_bppm", _wrap_export_ali_bppm},

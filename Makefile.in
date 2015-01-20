@@ -38,10 +38,10 @@ subdir = .
 DIST_COMMON = README $(am__configure_deps) $(am__dist_doc_DATA_DIST) \
 	$(am__dist_docdir_html_DATA_DIST) $(srcdir)/${DOXYGEN_CONF}.in \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/ViennaRNA.spec.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
-	THANKS compile config.guess config.sub depcomp install-sh \
-	missing
+	$(srcdir)/RNAlib2.pc.in $(srcdir)/ViennaRNA.spec.in \
+	$(srcdir)/config.h.in $(top_srcdir)/configure AUTHORS COPYING \
+	ChangeLog INSTALL NEWS THANKS compile config.guess config.sub \
+	depcomp install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/m4/package.m4 $(top_srcdir)/configure.ac
@@ -51,7 +51,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = ${DOXYGEN_CONF} ViennaRNA.spec
+CONFIG_CLEAN_FILES = ${DOXYGEN_CONF} ViennaRNA.spec RNAlib2.pc
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
@@ -93,10 +93,10 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" \
 	"$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" \
-	"$(DESTDIR)$(pkgdatadir)"
+	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgdatadir)"
 am__dist_docdir_html_DATA_DIST = @DOXYGEN_DOCDIR@/html/*
 DATA = $(dist_doc_DATA) $(dist_docdir_html_DATA) $(doc_DATA) \
-	$(docdir_html_DATA) $(pkgdata_DATA)
+	$(docdir_html_DATA) $(pkgconfig_DATA) $(pkgdata_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
@@ -272,6 +272,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = lib Progs man Utils H @subdirs@
 pkgdata_DATA = rna_turner1999.par rna_turner2004.par rna_andronescu2007.par dna_mathews1999.par dna_mathews2004.par
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = RNAlib2.pc
 @WITH_REFERENCE_MANUAL_HTML_TRUE@@WITH_REFERENCE_MANUAL_TRUE@REFERENCE_MANUAL_FILES_HTML = @DOXYGEN_DOCDIR@/html/*
 @WITH_REFERENCE_MANUAL_HTML_TRUE@@WITH_REFERENCE_MANUAL_TRUE@docdir_htmldir = $(docdir)/html
 @WITH_REFERENCE_MANUAL_HTML_TRUE@@WITH_REFERENCE_MANUAL_TRUE@docdir_html_DATA = $(REFERENCE_MANUAL_FILES_HTML)
@@ -340,6 +342,8 @@ distclean-hdr:
 ${DOXYGEN_CONF}: $(top_builddir)/config.status $(srcdir)/${DOXYGEN_CONF}.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 ViennaRNA.spec: $(top_builddir)/config.status $(srcdir)/ViennaRNA.spec.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+RNAlib2.pc: $(top_builddir)/config.status $(srcdir)/RNAlib2.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-dist_docDATA: $(dist_doc_DATA)
 	@$(NORMAL_INSTALL)
@@ -421,6 +425,26 @@ uninstall-docdir_htmlDATA:
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(docdir_htmldir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(docdir_htmldir)" && rm -f $$files
+install-pkgconfigDATA: $(pkgconfig_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
+	done
+
+uninstall-pkgconfigDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(pkgconfigdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(pkgconfigdir)" && rm -f $$files
 install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
@@ -757,7 +781,7 @@ check: check-recursive
 all-am: Makefile $(DATA) config.h
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" "$(DESTDIR)$(pkgdatadir)"; do \
+	for dir in "$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(docdir_htmldir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgdatadir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -807,7 +831,8 @@ info: info-recursive
 info-am:
 
 install-data-am: install-dist_docDATA install-dist_docdir_htmlDATA \
-	install-docDATA install-docdir_htmlDATA install-pkgdataDATA
+	install-docDATA install-docdir_htmlDATA install-pkgconfigDATA \
+	install-pkgdataDATA
 
 install-dvi: install-dvi-recursive
 
@@ -855,7 +880,7 @@ ps-am:
 
 uninstall-am: uninstall-dist_docDATA uninstall-dist_docdir_htmlDATA \
 	uninstall-docDATA uninstall-docdir_htmlDATA \
-	uninstall-pkgdataDATA
+	uninstall-pkgconfigDATA uninstall-pkgdataDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all \
 	ctags-recursive install-am install-strip tags-recursive
@@ -872,13 +897,14 @@ uninstall-am: uninstall-dist_docDATA uninstall-dist_docdir_htmlDATA \
 	install-docdir_htmlDATA install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
 	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pkgdataDATA install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags \
-	tags-recursive uninstall uninstall-am uninstall-dist_docDATA \
-	uninstall-dist_docdir_htmlDATA uninstall-docDATA \
-	uninstall-docdir_htmlDATA uninstall-pkgdataDATA
+	install-pdf-am install-pkgconfigDATA install-pkgdataDATA \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-dist_docDATA uninstall-dist_docdir_htmlDATA \
+	uninstall-docDATA uninstall-docdir_htmlDATA \
+	uninstall-pkgconfigDATA uninstall-pkgdataDATA
 
 
 @WITH_REFERENCE_MANUAL_BUILD_TRUE@@WITH_REFERENCE_MANUAL_TRUE@$(REFERENCE_MANUAL_FILES_TAG):  @DOXYGEN_CONF@ $(pkginclude_HEADERS)

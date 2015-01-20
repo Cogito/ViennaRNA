@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "RNAlib-2.0.2", "index.html", [
+  [ "RNAlib-2.0.3", "index.html", [
     [ "ViennaRNA Package core - RNAlib", "index.html", null ],
     [ "Related Pages", "pages.html", [
       [ "Folding Routines - Functions for Folding RNA Secondary Structures", "mp_fold.html", null ],
@@ -26,6 +26,7 @@ var NAVTREE =
       [ "INTERVAL", "structINTERVAL.html", null ],
       [ "LIST", "structLIST.html", null ],
       [ "LST_BUCKET", "structLST__BUCKET.html", null ],
+      [ "model_detailsT", "structmodel__detailsT.html", null ],
       [ "move_t", "structmove__t.html", null ],
       [ "PAIR", "structPAIR.html", null ],
       [ "pair_info", "structpair__info.html", null ],

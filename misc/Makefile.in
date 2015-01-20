@@ -53,7 +53,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = misc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/ViennaRNA.spec.in
+	$(srcdir)/PKGBUILD.in $(srcdir)/ViennaRNA.spec.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/m4/package.m4 $(top_srcdir)/configure.ac
@@ -61,7 +61,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = ViennaRNA.spec
+CONFIG_CLEAN_FILES = ViennaRNA.spec PKGBUILD
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
@@ -170,7 +170,9 @@ PATH_SEPARATOR = @PATH_SEPARATOR@
 PERLPREFIX = @PERLPREFIX@
 PERL_INTERFACE = @PERL_INTERFACE@
 POW_LIB = @POW_LIB@
+PYTHON_INTERFACE = @PYTHON_INTERFACE@
 PerlCmd = @PerlCmd@
+PythonCmd = @PythonCmd@
 RANLIB = @RANLIB@
 REFERENCE_MANUAL_PDF_NAME = @REFERENCE_MANUAL_PDF_NAME@
 REFERENCE_MANUAL_TAGFILE = @REFERENCE_MANUAL_TAGFILE@
@@ -237,7 +239,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-pkgdata_DATA = rna_turner1999.par rna_turner2004.par rna_andronescu2007.par dna_mathews1999.par dna_mathews2004.par 2Dlandscape_mfe.gri 2Dlandscape_pf.gri
+pkgdata_DATA = rna_turner1999.par rna_turner2004.par rna_andronescu2007.par \
+                dna_mathews1999.par dna_mathews2004.par \
+                2Dlandscape_mfe.gri 2Dlandscape_pf.gri
+
 EXTRA_DIST = $(pkgdata_DATA)
 all: all-am
 
@@ -273,6 +278,8 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 ViennaRNA.spec: $(top_builddir)/config.status $(srcdir)/ViennaRNA.spec.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+PKGBUILD: $(top_builddir)/config.status $(srcdir)/PKGBUILD.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)

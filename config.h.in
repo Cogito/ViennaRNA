@@ -140,6 +140,9 @@
 /* Create the perl interface to RNAlib */
 #undef WITH_PERL_INTERFACE
 
+/* Create the python interface to RNAlib */
+#undef WITH_PYTHON_INTERFACE
+
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 

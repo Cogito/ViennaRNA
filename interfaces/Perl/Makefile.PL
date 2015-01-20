@@ -24,7 +24,7 @@ $CCFLAGS .= ' ' . $var{CPPFLAGS} if exists $var{CPPFLAGS};
 $CCFLAGS .= ' ' . $var{CXXFLAGS} if exists $var{CXXFLAGS};
 
 # add CXXFLAGS and AM_CXXFLAGS as shell variables
-$CCFLAGS .= ' $(AM_CXXFLAGS) $(CXXFLAGS)';
+$CCFLAGS .= ' $(AM_CXXFLAGS) $(CXXFLAGS) -I../../H';
 
 # we also need to strip some compiler flags from 'optimize'
 # since architecture features of the host system may interfere
@@ -41,11 +41,11 @@ WriteMakefile(
               LIBS        =>  ["-lm"],
               CCFLAGS     =>  $CCFLAGS,
               OPTIMIZE    =>  $OPTIMIZE,
-              MYEXTLIB    =>  "../lib/libRNA.a",
+              MYEXTLIB    =>  "../../lib/libRNA.a",
               LD          =>  '${CXX}',
               PM          =>  {"RNA.pm", '$(INST_LIBDIR)/RNA.pm'},
               OBJECT      =>  "RNA_wrap.o",
               dynamic_lib =>  {OTHERLDFLAGS => '$(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -fopenmp'},
               AUTHOR      =>  'Ivo Hofacker <ivo@tbi.univie.ac.at>',
-              VERSION     =>  '2.1.1'
+              VERSION     =>  '2.1.2'
 );

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>RNAlib-2.1.1: Stochastic backtracking in the Ensemble</title>
+<title>RNAlib-2.1.2: Stochastic backtracking in the Ensemble</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.1.1
+   <div id="projectname">RNAlib-2.1.2
    </div>
   </td>
  </tr>
@@ -57,7 +57,8 @@ $(document).ready(function(){initNavTree('group__subopt__stochbt.html','');});
 <div class="header">
   <div class="summary">
 <a href="#groups">Modules</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">Stochastic backtracking in the Ensemble</div>  </div>
 <div class="ingroups"><a class="el" href="group__subopt__fold.html">Enumerating Suboptimal Structures</a></div></div><!--header-->
@@ -86,6 +87,11 @@ Functions</h2></td></tr>
 .  <a href="#gac03ca6db186bb3bf0a2a326d7fb3ba03"></a><br/></td></tr>
 <tr class="memitem:ga00474051204ac9ad576b3e45174d03ff"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__subopt__stochbt.html#ga00474051204ac9ad576b3e45174d03ff">pbacktrack_circ</a> (char *sequence)</td></tr>
 <tr class="memdesc:ga00474051204ac9ad576b3e45174d03ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a secondary structure of a circular RNA from the Boltzmann ensemble according its probability.  <a href="#ga00474051204ac9ad576b3e45174d03ff"></a><br/></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:gacd79b1a570e6ad9be24cb11fe8cae30a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__subopt__stochbt.html#gacd79b1a570e6ad9be24cb11fe8cae30a">st_back</a></td></tr>
+<tr class="memdesc:gacd79b1a570e6ad9be24cb11fe8cae30a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating that auxilary arrays are needed throughout the computations. This is essential for stochastic backtracking.  <a href="#gacd79b1a570e6ad9be24cb11fe8cae30a"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <hr/><h2>Function Documentation</h2>
@@ -138,12 +144,29 @@ Functions</h2></td></tr>
 \return           A sampled secondary structure in dot-bracket notation</pre> 
 </div>
 </div>
+<hr/><h2>Variable Documentation</h2>
+<a class="anchor" id="gacd79b1a570e6ad9be24cb11fe8cae30a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int st_back</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flag indicating that auxilary arrays are needed throughout the computations. This is essential for stochastic backtracking. </p>
+<p>Set this variable to 1 prior to a call of <a class="el" href="group__pf__fold.html#gadc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a> to ensure that all matrices needed for stochastic backtracking are filled in the forward recursions</p>
+<dl class="section see"><dt>See also:</dt><dd><a class="el" href="group__subopt__stochbt.html#gac03ca6db186bb3bf0a2a326d7fb3ba03" title="Sample a secondary structure from the Boltzmann ensemble according its probability ...">pbacktrack()</a>, <a class="el" href="group__subopt__stochbt.html#ga00474051204ac9ad576b3e45174d03ff" title="Sample a secondary structure of a circular RNA from the Boltzmann ensemble according its probability...">pbacktrack_circ</a> </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jan 31 2013 15:46:23 for RNAlib-2.1.1 by
+    <li class="footer">Generated on Wed Jul 24 2013 13:38:59 for RNAlib-2.1.2 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

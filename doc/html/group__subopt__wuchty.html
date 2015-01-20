@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>RNAlib-2.1.1: Suboptimal structures within an energy band arround the MFE</title>
+<title>RNAlib-2.1.2: Suboptimal structures within an energy band arround the MFE</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.1.1
+   <div id="projectname">RNAlib-2.1.2
    </div>
   </td>
  </tr>
@@ -75,8 +75,8 @@ $(document).ready(function(){initNavTree('group__subopt__wuchty.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gac7f749cb177da547798509ebe021884c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSOLUTION.html">SOLUTION</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__subopt__wuchty.html#gac7f749cb177da547798509ebe021884c">subopt</a> (char *seq, char *sequence, int delta, FILE *fp)</td></tr>
-<tr class="memdesc:gac7f749cb177da547798509ebe021884c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns list of subopt structures or writes to fp.  <a href="#gac7f749cb177da547798509ebe021884c"></a><br/></td></tr>
+<tr class="memitem:ga700f662506a233e42dd7fda74fafd40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSOLUTION.html">SOLUTION</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__subopt__wuchty.html#ga700f662506a233e42dd7fda74fafd40e">subopt</a> (char *seq, char *structure, int delta, FILE *fp)</td></tr>
+<tr class="memdesc:ga700f662506a233e42dd7fda74fafd40e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns list of subopt structures or writes to fp.  <a href="#ga700f662506a233e42dd7fda74fafd40e"></a><br/></td></tr>
 <tr class="memitem:ga554dedfcdb249fdf151caade58666e4d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga554dedfcdb249fdf151caade58666e4d"></a>
 <a class="el" href="structSOLUTION.html">SOLUTION</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__subopt__wuchty.html#ga554dedfcdb249fdf151caade58666e4d">subopt_par</a> (char *seq, char *structure, <a class="el" href="structparamT.html">paramT</a> *parameters, int delta, int is_constrained, int is_circular, FILE *fp)</td></tr>
 <tr class="memdesc:ga554dedfcdb249fdf151caade58666e4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns list of subopt structures or writes to fp. <br/></td></tr>
@@ -94,7 +94,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="gac7f749cb177da547798509ebe021884c"></a>
+<a class="anchor" id="ga700f662506a233e42dd7fda74fafd40e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -108,7 +108,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>sequence</em>, </td>
+          <td class="paramname"><em>structure</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -135,7 +135,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
     <tr><td class="paramname">seq</td><td></td></tr>
-    <tr><td class="paramname">sequence</td><td></td></tr>
+    <tr><td class="paramname">structure</td><td></td></tr>
     <tr><td class="paramname">delta</td><td></td></tr>
     <tr><td class="paramname">fp</td><td></td></tr>
   </table>
@@ -182,7 +182,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 </div><div class="memdoc">
 
 <p>Returns list of circular subopt structures or writes to fp. </p>
-<p>This function is similar to <a class="el" href="group__subopt__wuchty.html#gac7f749cb177da547798509ebe021884c" title="Returns list of subopt structures or writes to fp.">subopt()</a> but calculates secondary structures assuming the RNA sequence to be circular instead of linear</p>
+<p>This function is similar to <a class="el" href="group__subopt__wuchty.html#ga700f662506a233e42dd7fda74fafd40e" title="Returns list of subopt structures or writes to fp.">subopt()</a> but calculates secondary structures assuming the RNA sequence to be circular instead of linear</p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
     <tr><td class="paramname">seq</td><td></td></tr>
@@ -201,7 +201,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gr
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jan 31 2013 15:46:23 for RNAlib-2.1.1 by
+    <li class="footer">Generated on Wed Jul 24 2013 13:38:59 for RNAlib-2.1.2 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

@@ -1446,8 +1446,8 @@
     <member kind="variable">
       <type>int</type>
       <name>st_back</name>
-      <anchorfile>part__func_8h.html</anchorfile>
-      <anchor>acd79b1a570e6ad9be24cb11fe8cae30a</anchor>
+      <anchorfile>group__subopt__stochbt.html</anchorfile>
+      <anchor>gacd79b1a570e6ad9be24cb11fe8cae30a</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -1891,8 +1891,8 @@
       <type>SOLUTION *</type>
       <name>subopt</name>
       <anchorfile>group__subopt__wuchty.html</anchorfile>
-      <anchor>gac7f749cb177da547798509ebe021884c</anchor>
-      <arglist>(char *seq, char *sequence, int delta, FILE *fp)</arglist>
+      <anchor>ga700f662506a233e42dd7fda74fafd40e</anchor>
+      <arglist>(char *seq, char *structure, int delta, FILE *fp)</arglist>
     </member>
     <member kind="function">
       <type>SOLUTION *</type>
@@ -2648,8 +2648,8 @@
       <type>SOLUTION *</type>
       <name>subopt</name>
       <anchorfile>group__subopt__wuchty.html</anchorfile>
-      <anchor>gac7f749cb177da547798509ebe021884c</anchor>
-      <arglist>(char *seq, char *sequence, int delta, FILE *fp)</arglist>
+      <anchor>ga700f662506a233e42dd7fda74fafd40e</anchor>
+      <arglist>(char *seq, char *structure, int delta, FILE *fp)</arglist>
     </member>
     <member kind="function">
       <type>SOLUTION *</type>
@@ -2699,6 +2699,13 @@
       <anchorfile>group__subopt__stochbt.html</anchorfile>
       <anchor>ga00474051204ac9ad576b3e45174d03ff</anchor>
       <arglist>(char *sequence)</arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>st_back</name>
+      <anchorfile>group__subopt__stochbt.html</anchorfile>
+      <anchor>gacd79b1a570e6ad9be24cb11fe8cae30a</anchor>
+      <arglist></arglist>
     </member>
   </compound>
   <compound kind="group">

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>RNAlib-2.1.1: Example - A Small Example Program</title>
+<title>RNAlib-2.1.2: Example - A Small Example Program</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.1.1
+   <div id="projectname">RNAlib-2.1.2
    </div>
   </td>
  </tr>
@@ -128,12 +128,12 @@ $(document).ready(function(){initNavTree('mp_example.html','');});
 <div class="line">   e1 = <a class="code" href="group__pf__fold.html#gadc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold</a>(seq1, struct1);</div>
 <div class="line">   <span class="comment">/* get the base pair probability matrix for the previous run of pf_fold() */</span></div>
 <div class="line">   bppm = <a class="code" href="group__pf__fold.html#ga6d463707d5f64bdc4d21515b7dd9b115" title="Get a pointer to the base pair probability arrayAccessing the base pair probabilities for a pair (i...">export_bppm</a>();</div>
-<div class="line">   pf1 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a>(bppm, strlen(seq1));</div>
+<div class="line">   pf1 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a>(bppm, strlen(seq1));</div>
 <div class="line"></div>
 <div class="line">   e2 = <a class="code" href="group__pf__fold.html#gadc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold</a>(seq2, struct2);</div>
 <div class="line">   <span class="comment">/* get the base pair probability matrix for the previous run of pf_fold() */</span></div>
 <div class="line">   bppm = <a class="code" href="group__pf__fold.html#ga6d463707d5f64bdc4d21515b7dd9b115" title="Get a pointer to the base pair probability arrayAccessing the base pair probabilities for a pair (i...">export_bppm</a>();</div>
-<div class="line">   pf2 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a>(bppm, strlen(seq2));</div>
+<div class="line">   pf2 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a>(bppm, strlen(seq2));</div>
 <div class="line"></div>
 <div class="line">   <a class="code" href="group__pf__fold.html#gae73db3f49a94f0f72e067ecd12681dbd" title="Free arrays for the partition function recursions.">free_pf_arrays</a>();  <span class="comment">/* free space allocated for pf_fold() */</span></div>
 <div class="line"></div>
@@ -154,7 +154,7 @@ $(document).ready(function(){initNavTree('mp_example.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jan 31 2013 15:46:23 for RNAlib-2.1.1 by
+    <li class="footer">Generated on Wed Jul 24 2013 13:38:59 for RNAlib-2.1.2 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>RNAlib-2.1.1: mainpage.h Source File</title>
+<title>RNAlib-2.1.2: mainpage.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.1.1
+   <div id="projectname">RNAlib-2.1.2
    </div>
   </td>
  </tr>
@@ -157,10 +157,10 @@ $(document).ready(function(){initNavTree('mainpage_8h.html','');});
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;condensed into probability profiles which are the compared by alignment.</div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;\verbatim</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;<span class="keywordtype">float</span> *<a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a> ( <span class="keywordtype">double</span> *bppm,</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;<span class="keywordtype">float</span> *<a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a> ( <span class="keywordtype">double</span> *bppm,</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;                              <span class="keywordtype">int</span> length)</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;\endverbatim</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;\copybrief <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a>()</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;\copybrief <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a>()</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;\verbatim</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="keywordtype">float</span> <a class="code" href="profiledist_8h.html#abe75e90e00a1e5dd8862944ed53dad5d" title="Align the 2 probability profiles T1, T2 .">profile_edit_distance</a> ( <span class="keyword">const</span> <span class="keywordtype">float</span> *T1,</div>
@@ -563,12 +563,12 @@ $(document).ready(function(){initNavTree('mainpage_8h.html','');});
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;   e1 = <a class="code" href="group__pf__fold.html#gadc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold</a>(seq1, struct1);</div>
 <div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;   <span class="comment">/* get the base pair probability matrix for the previous run of pf_fold() */</span></div>
 <div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;   bppm = <a class="code" href="group__pf__fold.html#ga6d463707d5f64bdc4d21515b7dd9b115" title="Get a pointer to the base pair probability arrayAccessing the base pair probabilities for a pair (i...">export_bppm</a>();</div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;   pf1 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a>(bppm, strlen(seq1));</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;   pf1 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a>(bppm, strlen(seq1));</div>
 <div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;</div>
 <div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;   e2 = <a class="code" href="group__pf__fold.html#gadc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold</a>(seq2, struct2);</div>
 <div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;   <span class="comment">/* get the base pair probability matrix for the previous run of pf_fold() */</span></div>
 <div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;   bppm = <a class="code" href="group__pf__fold.html#ga6d463707d5f64bdc4d21515b7dd9b115" title="Get a pointer to the base pair probability arrayAccessing the base pair probabilities for a pair (i...">export_bppm</a>();</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;   pf2 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for upstream paired...">Make_bp_profile_bppm</a>(bppm, strlen(seq2));</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;   pf2 = <a class="code" href="profiledist_8h.html#a8822fd5268be115c6e6cdc92009436cc" title="condense pair probability matrix into a vector containing probabilities for unpaired, upstream paired and downstream paired.">Make_bp_profile_bppm</a>(bppm, strlen(seq2));</div>
 <div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;</div>
 <div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;   <a class="code" href="group__pf__fold.html#gae73db3f49a94f0f72e067ecd12681dbd" title="Free arrays for the partition function recursions.">free_pf_arrays</a>();  <span class="comment">/* free space allocated for pf_fold() */</span></div>
 <div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;</div>
@@ -605,7 +605,7 @@ $(document).ready(function(){initNavTree('mainpage_8h.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>mainpage.h</b></li>
-    <li class="footer">Generated on Thu Jan 31 2013 15:46:21 for RNAlib-2.1.1 by
+    <li class="footer">Generated on Wed Jul 24 2013 13:38:55 for RNAlib-2.1.2 by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

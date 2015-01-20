@@ -6,8 +6,8 @@
 #
 
 # pick an ANSI C compiler (the default Sun CC is not ANSI)
-#CC=gcc  # Gnu C Compiler
-CC=cc   # SGI Irix
+CC=gcc  # Gnu C Compiler
+#CC=cc  # SGI Irix
 #CC=vcc # some DEC Ultrix
 
 CFLAGS=
@@ -36,7 +36,7 @@ NLDFLAGS=-I$(INCPATH) -L$(LIBPATH)
 NLIBS=$(LIB1) $(LIB2) $(OTHERLIBS)
 
 
-all: build
+all: build test
 
 build: $(SOURCES)
 	@echo "Compiling readseq..."
@@ -51,21 +51,21 @@ test: $(SOURCES) readseq
 	@echo ""
 	@echo "Test for general read/write of all chars:"
 	./readseq -p alphabet.std -otest.alpha
-	-diff -w test.alpha alphabet.std
+	-diff test.alpha alphabet.std
 
 	@echo ""
 	@echo "Test for valid format conversions:"
-	./readseq -p -f=ig   nucleic.std -otest.ig
-	./readseq -p -f=gb   test.ig     -otest.gb
-	./readseq -p -f=nbrf test.gb     -otest.nbrf
-	./readseq -p -f=embl test.nbrf   -otest.embl
-	./readseq -p -f=gcg  test.embl   -otest.gcg
-	./readseq -p -f=strider test.gcg -otest.strider
-	./readseq -p -f=fitch test.strider -otest.fitch
-	./readseq -p -f=fasta test.fitch -otest.fasta
-	./readseq -p -f=pir  test.fasta  -otest.pir
-	./readseq -p -f=ig   test.pir    -otest.ig-b
-	-diff -w test.ig test.ig-b
+	./readseq -v -p -f=ig   nucleic.std -otest.ig
+	./readseq -v -p -f=gb   test.ig     -otest.gb
+	./readseq -v -p -f=nbrf test.gb     -otest.nbrf
+	./readseq -v -p -f=embl test.nbrf   -otest.embl
+	./readseq -v -p -f=gcg  test.embl   -otest.gcg
+	./readseq -v -p -f=strider test.gcg -otest.strider
+	./readseq -v -p -f=fitch test.strider -otest.fitch
+	./readseq -v -p -f=fasta test.fitch -otest.fasta
+	./readseq -v -p -f=pir  test.fasta  -otest.pir
+	./readseq -v -p -f=ig   test.pir    -otest.ig-b
+	-diff test.ig test.ig-b
 
 	@echo ""
 	@echo "Test for multiple-sequence format conversions:"
@@ -78,7 +78,7 @@ test: $(SOURCES) readseq
 	./readseq -p -f=msf   test.m-pir  -otest.m-msf
 	./readseq -p -f=paup  test.m-msf  -otest.m-paup
 	./readseq -p -f=ig    test.m-paup -otest.m-ig-b
-	-diff -w test.m-ig test.m-ig-b
+	-diff test.m-ig test.m-ig-b
 #
 # if using NCBI, uncomment these lines
 # @echo ""

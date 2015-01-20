@@ -1,5 +1,5 @@
 /*
-  Last changed Time-stamp: <2006-10-03 15:06:51 xtof>
+  Last changed Time-stamp: <2010-06-24 15:55:36 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
@@ -23,7 +23,7 @@ static char UNUSED rcsid[]="$Id: nachbar.c,v 1.8 2008/06/03 21:55:11 ivo Exp $";
 /* arrays */
 static short *neighbor_list=NULL;
 static float *bmf=NULL; /* boltzmann weight of structure */
-
+static const char *costring(const char *str);
 
 /* globals for laplace stuff */
 static double L = 0.0;
@@ -235,9 +235,9 @@ int sel_nb(void) {
     /* graph Laplacian is - Laplace-Beltrami operator */
     sigma = -1.0*sqrt((KK-K*K)/N)/(K/N);
     
-    /* this gose to stdout */
+    /* this goes to stdout */
     if ( !GTV.silent ) {
-      printf("%s %6.2f %10.3f", GAV.currform, GSV.currE, Zeit);
+      printf("%s %6.2f %10.3f", costring(GAV.currform), GSV.currE, Zeit);
 
       /* laplace stuff*/
       if (GTV.phi) printf(" %8.3f %8.3f %3g", zeitInc, L, D); 
@@ -268,14 +268,14 @@ int sel_nb(void) {
       /* laplace stuff */
       if (GTV.phi) fprintf(logFP, " %3g %7.5f", GSV.phi, sigma);      
 
-      fprintf(logFP," %d %s\n", lmin, GAV.currform);
+      fprintf(logFP," %d %s\n", lmin, costring(GAV.currform));
     }
     GAV.subi[0] = xsubi[0];
     GAV.subi[1] = xsubi[1];
     GAV.subi[2] = xsubi[2];
     fprintf(logFP, "(%5hu %5hu %5hu)", GAV.subi[0], GAV.subi[1], GAV.subi[2]);
     fflush(logFP);
-
+    
     Zeit = 0.0;
 
     /* reset laplace stuff for next trajectory */
@@ -288,6 +288,7 @@ int sel_nb(void) {
     
     /*  highestE = OhighestE = -1000.0; */
     reset_nbList();
+    costring(NULL);
     return(1);
   }
   else {
@@ -298,8 +299,8 @@ int sel_nb(void) {
       if (!GTV.lmin || (lmin==1 && strcmp(GAV.prevform, GAV.currform) != 0)) {
 	char format[64];
 	flag = 1;
-	sprintf(format, "%%-%ds %%6.2f %%10.3f", strlen(GAV.farbe_full));
-	printf(format, GAV.currform, GSV.currE, Zeit);
+	sprintf(format, "%%-%ds %%6.2f %%10.3f", strlen(GAV.farbe_full)+1);
+	printf(format, costring(GAV.currform), GSV.currE, Zeit);
       }
 
       /* laplace stuff */
@@ -408,4 +409,34 @@ static void grow_chain(void){
 
     GSV.len = newl;
   }
+}
+
+static const char *costring(const char *str) {
+  static char* buffer=NULL;
+  static int size=0;
+  int n;
+  if ((str==NULL) && (buffer)) {
+    /* make it possible to free buffer */
+    free(buffer);
+    buffer  = NULL;
+    size    = 0;
+    return NULL;
+  }
+  if(str){
+    n=strlen(str);
+    if (n>size) {
+      size = n+2;
+      buffer = realloc(buffer, size);
+    }
+    if ((cut_point>0)&&(cut_point<=n)) {
+      strncpy(buffer, str, cut_point-1);
+      buffer[cut_point-1] = '&';
+      strncpy(buffer+cut_point, str+cut_point-1, n-cut_point+1);
+      buffer[n+1] = '\0';
+    } else {
+      strncpy(buffer, str, n+1);
+    }
+    return buffer;
+  }
+  else return NULL;
 }

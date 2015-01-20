@@ -66,7 +66,7 @@ int Strncasecmp(const char *a, const char *b, long maxn) /* from Nlm_StrNICmp */
 # define Local      static    /* local functions */
 #endif
 
-#define kStartLength  50000
+#define kStartLength  500
 
 const char *aminos      = "ABCDEFGHIKLMNPQRSTVWXYZ*";
 const char *primenuc    = "ACGTU";
@@ -1785,18 +1785,13 @@ short writeSeq(FILE *outf, const char *seq, const long seqlen,
       linesout += 2;
       break;
 
+    default :
     case kZuker: /* don't attempt Zuker's ftn format */
     case kPearson:
       fprintf(outf,">%s, %d bases, %X checksum.\n", seqname, seqlen, checksum);
       linesout += 1;
       break;
-
-    default:
-    case kVienna:   /* Vienna RNA Package Format */
-      fprintf(outf,"> %s [%d bases, %X]\n", seqname, seqlen, checksum);
-      fprintf(outf,"%s\n", seq);
-      return 2;
-   }
+    }
 
   if (*nameform==0) sprintf(nameform, "%%%d.%ds ",namewidth,namewidth);
   if (numline) sprintf(numform, "%%%ds ",numwidth);

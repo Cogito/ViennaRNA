@@ -1,4 +1,5 @@
 
+#include <cstdio>
 #include <deque>
 #include <algorithm>
 #include <cctype>
@@ -6,7 +7,6 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <cstdio>
 
 #ifndef WIN32
 #include "config.h"

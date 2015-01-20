@@ -36,15 +36,13 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = Kinfold$(EXEEXT)
 subdir = .
-DIST_COMMON = README $(am__configure_deps) $(srcdir)/../config.guess \
-	$(srcdir)/../config.sub $(srcdir)/../depcomp \
-	$(srcdir)/../install-sh $(srcdir)/../missing \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/config.h.in $(top_srcdir)/configure AUTHORS COPYING \
-	ChangeLog INSTALL NEWS
+DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
+	config.guess config.sub depcomp install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.in
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -59,8 +57,10 @@ am_Kinfold_OBJECTS = baum.$(OBJEXT) cache.$(OBJEXT) globals.$(OBJEXT) \
 	main.$(OBJEXT) nachbar.$(OBJEXT) cmdline.$(OBJEXT)
 Kinfold_OBJECTS = $(am_Kinfold_OBJECTS)
 Kinfold_LDADD = $(LDADD)
+Kinfold_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(Kinfold_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -153,11 +153,13 @@ LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
+OPENMP_CFLAGS = @OPENMP_CFLAGS@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 SET_MAKE = @SET_MAKE@
@@ -215,6 +217,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = Example
+Kinfold_LDFLAGS = $(OPENMP_CFLAGS)
 Kinfold_SOURCES = baum.c cache.c globals.c main.c nachbar.c \
 		  baum.h cache_util.h globals.h   nachbar.h \
 		  cmdline.c cmdline.h
@@ -322,7 +325,7 @@ clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 Kinfold$(EXEEXT): $(Kinfold_OBJECTS) $(Kinfold_DEPENDENCIES) 
 	@rm -f Kinfold$(EXEEXT)
-	$(LINK) $(Kinfold_OBJECTS) $(Kinfold_LDADD) $(LIBS)
+	$(Kinfold_LINK) $(Kinfold_OBJECTS) $(Kinfold_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

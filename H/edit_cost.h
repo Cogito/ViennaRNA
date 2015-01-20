@@ -1,21 +1,20 @@
-/*   
+/**
+ *  \file edit_cost.h
+ *  \brief global variables for Edit Costs included by treedist.c and stringdist.c
+ */
 
-cost.h   ::  global variables for Edit Costs
-             included by treedist.c and stringdist.c
-
-*/
 #define PRIVATE static
 
 PRIVATE char   sep    = ':';
 PRIVATE char  *coding = "Null:U:P:H:B:I:M:S:E:R";
 
-#define  INF 10000  /* infinity */  
+#define  INF 10000  /* infinity */
 
 typedef int CostMatrix[10][10];
 
 PRIVATE CostMatrix *EditCost;  /* will point to UsualCost or ShapiroCost */
 
-PRIVATE CostMatrix  UsualCost = 
+PRIVATE CostMatrix  UsualCost =
 {
 
 /*  Null,   U,   P,   H,   B,   I,   M,   S,   E,   R     */
@@ -34,7 +33,7 @@ PRIVATE CostMatrix  UsualCost =
 };
 
 
-PRIVATE CostMatrix ShapiroCost = 
+PRIVATE CostMatrix ShapiroCost =
 {
 
 /*  Null,   U,   P,   H,   B,   I,   M,   S,   E,  R     */

@@ -22,7 +22,8 @@ INCDIR = /usr/local/include
 SHELL = /bin/sh
 
 CC           = gcc
-CFLAGS       = -I./src -g -O2  -I/usr/local/include -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DDO_GD=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1
+CFLAGS       = 
+INCLUDES     = -I./src -g -O2  -I/usr/local/include -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DDO_GD=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1
 INSTALL      = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 FIND         = find
@@ -79,7 +80,7 @@ INS =  $(BASE_INS) $(PS_INS) $(FIG_INS) $(X11_INS) $(WIN32_INS) $(GD_INS)
 # major rule
 #
 .c.o:  
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 
 all: libg2.a
@@ -105,6 +106,19 @@ install: libg2.a
 		$(INSTALL_DATA) $$IFILE  $(INCDIR); \
 	done
 
+uninstall:  uninstall-libg2 uninstall-inc
+
+uninstall-libg2:
+	test -n $(LIBDIR)/libg2.a || exit 0; \
+	rm -f $(LIBDIR)/libg2.a
+
+uninstall-inc:
+	test -d $(INCDIR) || exit 0; \
+	for IFILE in $(INS); do \
+		rm -f $(INCDIR)/`printf "%s" $$IFILE | sed 's/.*\///'`; \
+	done
+
+
 release: clean doc
 	cp ./doc/latex/refman.ps  ./doc/g2_refman.ps
 	cp ./doc/latex/refman.pdf ./doc/g2_refman.pdf
@@ -119,7 +133,6 @@ clean:
 	-(cd ./demo ; make clean)
 	-rm -f $(OBJ)
 	-rm -f libg2.a config.cache config.log Makefile.bak config.status
-	-rm -f ./include/*.h
 	-$(FIND) . -name "*~" -exec rm -f {} \;
 	-(cd ./g2_perl ; make clean)
 	-rm -f ./g2_perl/test.ps
@@ -132,16 +145,20 @@ clean:
 	-rm -f a.out
 	-rm -fr doc/html/ doc/latex/ doc/g2_refman.ps doc/g2_refman.pdf
 
+distclean:  clean
+
+maintainer-clean:   clean
+
 demo:	libg2.a
 	(cd ./demo ; make)
 
 depend:
-	$(MAKEDEPEND) -- $(CFLAGS) -- $(SRC)
+	$(MAKEDEPEND) -- $(CFLAGS) $(INCLUDES) -- $(SRC)
 	@echo
 	@echo "Run 'make' to build g2 library."
 	@echo
 
-distdir:
+distdir: clean
 	cp -r * $(distdir)
 
 

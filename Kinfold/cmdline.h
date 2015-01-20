@@ -72,9 +72,9 @@ struct gengetopt_args_info
   const char *met_help; /**< @brief use Metropolis rule for rates (not Kawasaki rule) help description.  */
   int fpt_flag;	/**< @brief compute first passage time (stop when a stop-structure is reached) (default=on).  */
   const char *fpt_help; /**< @brief compute first passage time (stop when a stop-structure is reached) help description.  */
-  float grow_arg;	/**< @brief grow chain every <float> time steps (default='0').  */
-  char * grow_orig;	/**< @brief grow chain every <float> time steps original value given at command line.  */
-  const char *grow_help; /**< @brief grow chain every <float> time steps help description.  */
+  float grow_arg;	/**< @brief grow chain every <float> time units (default='0').  */
+  char * grow_orig;	/**< @brief grow chain every <float> time units original value given at command line.  */
+  const char *grow_help; /**< @brief grow chain every <float> time units help description.  */
   int glen_arg;	/**< @brief initial size of growing chain (default='15').  */
   char * glen_orig;	/**< @brief initial size of growing chain original value given at command line.  */
   const char *glen_help; /**< @brief initial size of growing chain help description.  */
@@ -87,9 +87,6 @@ struct gengetopt_args_info
   char * log_arg;	/**< @brief set basename of log-file (default='kinout').  */
   char * log_orig;	/**< @brief set basename of log-file original value given at command line.  */
   const char *log_help; /**< @brief set basename of log-file help description.  */
-  char * err_arg;	/**< @brief set basename of error-log-file.  */
-  char * err_orig;	/**< @brief set basename of error-log-file original value given at command line.  */
-  const char *err_help; /**< @brief set basename of error-log-file help description.  */
   int silent_flag;	/**< @brief no output to stdout (default=off).  */
   const char *silent_help; /**< @brief no output to stdout help description.  */
   int verbose_flag;	/**< @brief more information to stdout (default=off).  */
@@ -121,7 +118,6 @@ struct gengetopt_args_info
   unsigned int phi_given ;	/**< @brief Whether phi was given.  */
   unsigned int pbounds_given ;	/**< @brief Whether pbounds was given.  */
   unsigned int log_given ;	/**< @brief Whether log was given.  */
-  unsigned int err_given ;	/**< @brief Whether err was given.  */
   unsigned int silent_given ;	/**< @brief Whether silent was given.  */
   unsigned int verbose_given ;	/**< @brief Whether verbose was given.  */
   unsigned int lmin_given ;	/**< @brief Whether lmin was given.  */

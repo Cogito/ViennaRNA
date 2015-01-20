@@ -15,11 +15,13 @@ AC_LANG(C++)
 dnl Checks for libraries.
 dnl AC_CHECK_LIB(g2,g2_open_vd,,AC_MSG_WARN(Compiling without support for graphical output. Install the g2 library that comes with the RNAforester distribution or download the latest version at http://g2.sourceforge.net/))
 
+AC_OPENMP
+
 AC_ARG_WITH(ViennaRNA-lib,
   [--with-ViennaRNA-lib        where to search for libRNA.a],
   [LIBS=["$withval/libRNA.a ${LIBS}"] && AC_DEFINE(HAVE_LIBRNA,1,Define to 1 if you have the `RNA' library (-lRNA).)
   LDFLAGS="-L$withval -R$withval ${LDFLAGS}"],
-  LDFLAGS="-L../../lib ${LDFLAGS}" 
+  LDFLAGS="-L../../lib ${LDFLAGS} ${OPENMP_CXXFLAGS}" 
   if test -r "../lib/fold.c"; then
      AC_DEFINE(HAVE_LIBRNA)
      LIBS=["-lRNA ${LIBS}"]

@@ -50,13 +50,12 @@ const char *gengetopt_args_info_full_help[] = {
   "      --stop            read stop structure(s) from stdin (optherwise use MFE)  \n                          (default=off)",
   "      --met             use Metropolis rule for rates (not Kawasaki rule)  \n                          (default=off)",
   "      --fpt             compute first passage time (stop when a stop-structure \n                          is reached)  (default=on)",
-  "      --grow=FLOAT      grow chain every <float> time steps  (default=`0')",
+  "      --grow=FLOAT      grow chain every <float> time units  (default=`0')",
   "      --glen=INT        initial size of growing chain  (default=`15')",
   "      --phi=DOUBLE      set phi value",
   "      --pbounds=STRING  specify 3 floats for phi_min, phi_inc, phi_max in the \n                          form <d1=d2=d3>",
   "\nOutput:",
   "      --log=filename    set basename of log-file  (default=`kinout')",
-  "      --err=filename    set basename of error-log-file",
   "  -q, --silent          no output to stdout  (default=off)",
   "  -v, --verbose         more information to stdout  (default=off)",
   "      --lmin            output only local minima to stdout  (default=off)",
@@ -96,12 +95,11 @@ init_help_array(void)
   gengetopt_args_info_help[25] = gengetopt_args_info_full_help[27];
   gengetopt_args_info_help[26] = gengetopt_args_info_full_help[28];
   gengetopt_args_info_help[27] = gengetopt_args_info_full_help[29];
-  gengetopt_args_info_help[28] = gengetopt_args_info_full_help[30];
-  gengetopt_args_info_help[29] = 0; 
+  gengetopt_args_info_help[28] = 0; 
   
 }
 
-const char *gengetopt_args_info_help[30];
+const char *gengetopt_args_info_help[29];
 
 typedef enum {ARG_NO
   , ARG_FLAG
@@ -150,7 +148,6 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->phi_given = 0 ;
   args_info->pbounds_given = 0 ;
   args_info->log_given = 0 ;
-  args_info->err_given = 0 ;
   args_info->silent_given = 0 ;
   args_info->verbose_given = 0 ;
   args_info->lmin_given = 0 ;
@@ -189,8 +186,6 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->pbounds_orig = NULL;
   args_info->log_arg = gengetopt_strdup ("kinout");
   args_info->log_orig = NULL;
-  args_info->err_arg = NULL;
-  args_info->err_orig = NULL;
   args_info->silent_flag = 0;
   args_info->verbose_flag = 0;
   args_info->lmin_flag = 0;
@@ -225,11 +220,10 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->phi_help = gengetopt_args_info_full_help[21] ;
   args_info->pbounds_help = gengetopt_args_info_full_help[22] ;
   args_info->log_help = gengetopt_args_info_full_help[24] ;
-  args_info->err_help = gengetopt_args_info_full_help[25] ;
-  args_info->silent_help = gengetopt_args_info_full_help[26] ;
-  args_info->verbose_help = gengetopt_args_info_full_help[27] ;
-  args_info->lmin_help = gengetopt_args_info_full_help[28] ;
-  args_info->cut_help = gengetopt_args_info_full_help[29] ;
+  args_info->silent_help = gengetopt_args_info_full_help[25] ;
+  args_info->verbose_help = gengetopt_args_info_full_help[26] ;
+  args_info->lmin_help = gengetopt_args_info_full_help[27] ;
+  args_info->cut_help = gengetopt_args_info_full_help[28] ;
   
 }
 
@@ -334,8 +328,6 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->pbounds_orig));
   free_string_field (&(args_info->log_arg));
   free_string_field (&(args_info->log_orig));
-  free_string_field (&(args_info->err_arg));
-  free_string_field (&(args_info->err_orig));
   free_string_field (&(args_info->cut_orig));
   
   
@@ -450,8 +442,6 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "pbounds", args_info->pbounds_orig, 0);
   if (args_info->log_given)
     write_into_file(outfile, "log", args_info->log_orig, 0);
-  if (args_info->err_given)
-    write_into_file(outfile, "err", args_info->err_orig, 0);
   if (args_info->silent_given)
     write_into_file(outfile, "silent", 0, 0 );
   if (args_info->verbose_given)
@@ -1351,7 +1341,6 @@ cmdline_parser_internal (
         { "phi",	1, NULL, 0 },
         { "pbounds",	1, NULL, 0 },
         { "log",	1, NULL, 0 },
-        { "err",	1, NULL, 0 },
         { "silent",	0, NULL, 'q' },
         { "verbose",	0, NULL, 'v' },
         { "lmin",	0, NULL, 0 },
@@ -1575,7 +1564,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* grow chain every <float> time steps.  */
+          /* grow chain every <float> time units.  */
           else if (strcmp (long_options[option_index].name, "grow") == 0)
           {
           
@@ -1641,20 +1630,6 @@ cmdline_parser_internal (
                 &(local_args_info.log_given), optarg, 0, "kinout", ARG_STRING,
                 check_ambiguity, override, 0, 0,
                 "log", '-',
-                additional_error))
-              goto failure;
-          
-          }
-          /* set basename of error-log-file.  */
-          else if (strcmp (long_options[option_index].name, "err") == 0)
-          {
-          
-          
-            if (update_arg( (void *)&(args_info->err_arg), 
-                 &(args_info->err_orig), &(args_info->err_given),
-                &(local_args_info.err_given), optarg, 0, 0, ARG_STRING,
-                check_ambiguity, override, 0, 0,
-                "err", '-',
                 additional_error))
               goto failure;
           

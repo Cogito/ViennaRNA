@@ -66,9 +66,8 @@ typedef char  boolean;
 #define kASN1           16
 #define kPAUP           17
 #define kPretty         18
-#define kVienna         19
 
-#define kMaxFormat      19
+#define kMaxFormat      18
 #define kMinFormat      1
 #define kNoformat       -1    /* format not tested */
 #define kUnknown        0     /* format not determinable */

@@ -2,6 +2,7 @@
 //%pragma(perl5)  modulecode="@EXPORT=qw(fold);"
 %pragma(perl5)  include="RNA.pod"
 %{
+#include  "../H/data_structures.h"
 #include  "../H/utils.h"
 #include  "../H/fold_vars.h"
 #undef fold
@@ -9,6 +10,8 @@
 #include  "../H/cofold.h"
 #include  "../H/part_func.h"
 #include  "../H/part_func_co.h"
+#include  "../H/naview.h"
+#include  "../H/plot_layouts.h"
 #include  "../H/PS_dot.h"
 #include  "../H/inverse.h"
 #include  "../H/RNAstruct.h"
@@ -25,11 +28,8 @@
 #include  "../H/aln_util.h"
 #include  "../H/findpath.h"
 #include  "../H/Lfold.h"
-extern char *pbacktrack(char *seq);
-extern void  read_parameter_file(const char fname[]);
-extern void  write_parameter_file(const char fname[]);
-extern int simple_xy_coordinates(short *pair_table, float *X, float *Y);
-extern int naview_xy_coordinates(short *pair_table, float *X, float *Y);
+#include  "../H/read_epars.h"
+
 %}
 //
 %include carrays.i
@@ -42,6 +42,12 @@ extern int naview_xy_coordinates(short *pair_table, float *X, float *Y);
 %array_functions(unsigned short, ushortP);
 %array_functions(short, shortP);
 %include cdata.i
+
+#ifdef LARGE_PF
+#define FLT_OR_DBL  double
+#else
+#define FLT_OR_DBL  float
+#endif
 
 %constant double VERSION = 0.3;
 %include typemaps.i
@@ -125,7 +131,7 @@ char *my_pf_fold(char *string, char *constraints = NULL, float *OUTPUT);
     struc = calloc(strlen(string)+1,sizeof(char));
     if (constraints && fold_constrained)
       strncpy(struc, constraints, strlen(string));
-      temp=co_pf_fold(string, struc);
+    temp=co_pf_fold(string, struc);
     *FAB = temp.FAB;
     *FcAB = temp.FcAB;
     *FA = temp.FA;
@@ -154,9 +160,10 @@ char *my_co_pf_fold(char *string, char *constraints = NULL, float *OUTPUT, float
  void my_get_concentrations(double FcAB, double FcAA, double FcBB, double FEA, double FEB, double A0, double B0, double *AB, double *AA, double *BB, double *A, double *B) {
     ConcEnt *temp;
     double *concis;
-    concis = (double *)calloc(3,sizeof(double));
+    concis = (double *)calloc(4,sizeof(double));
     concis[0]=A0;
     concis[1]=B0;
+    concis[2]=0;
     temp=get_concentrations(FcAB,FcAA,FcBB,FEA,FEB,concis);
     *AB=temp->ABc;
     *AA=temp->AAc;
@@ -171,6 +178,7 @@ char *my_co_pf_fold(char *string, char *constraints = NULL, float *OUTPUT, float
 
 %newobject my_get_concentrations;
 void my_get_concentrations(double FcAB, double FcAA, double FcBB, double FEA,double FEB, double A0, double BO, double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT);
+
 
 %newobject pbacktrack;
 extern char *pbacktrack(char *sequence);
@@ -258,13 +266,12 @@ char *consens_mis(const char **AS);
 /*#######################################*/
 /* Get coordinates for xy plot           */
 /*#######################################*/
+typedef struct {
+  float X; /* X coords */
+  float Y; /* Y coords */
+} COORDINATE;
 
 %{
-  typedef struct {
-    float X; /* X coords */
-    float Y; /* Y coords */
-  } COORDINATE;
-
   COORDINATE *get_xy_coordinates(const char *structure){
     int i;
     short *table = make_pair_table(structure);
@@ -274,14 +281,18 @@ char *consens_mis(const char **AS);
     float *X = (float *) space((length+1)*sizeof(float));
     float *Y = (float *) space((length+1)*sizeof(float));
 
-    if (rna_plot_type == 0)
-      simple_xy_coordinates(table, X, Y);
-    else
-      naview_xy_coordinates(table, X, Y);
+    switch(rna_plot_type){
+      case VRNA_PLOT_TYPE_SIMPLE:   simple_xy_coordinates(table, X, Y);
+                                    break;
+      case VRNA_PLOT_TYPE_CIRCULAR: simple_circplot_coordinates(table, X, Y);
+                                    break;
+      default:                      naview_xy_coordinates(table, X, Y);
+                                    break;
+    }
 
     for(i=0;i<=length;i++){
       coords[i].X = X[i];
-      coords[i].Y = Y[i]; 
+      coords[i].Y = Y[i];
     }
     free(table);
     free(X);
@@ -289,11 +300,6 @@ char *consens_mis(const char **AS);
     return(coords);
   }
 %}
-
-typedef struct {
-  float X; /* X coords */
-  float Y; /* Y coords */
-} COORDINATE;
 
 COORDINATE *get_xy_coordinates(const char *structure);
 
@@ -601,6 +607,8 @@ short *encode_seq(char *sequence) {
 short *encode_seq(char *sequence);
 
 %include "../H/Lfold.h"
+
+%include "../H/plot_layouts.h"
 
 %include "../H/PS_dot.h"
 

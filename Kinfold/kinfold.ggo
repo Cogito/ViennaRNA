@@ -1,5 +1,5 @@
-# Last changed Time-stamp: <2008-06-06 13:35:43 ivo> 
-# $Id: kinfold.ggo,v 1.1 2008/07/02 15:42:20 ivo Exp $
+# Last changed Time-stamp: <2010-06-24 13:37:42 ivo> 
+# $Id kinfold.ggo,v 1.1 2008/07/02 15:42:20 ivo Exp $
 package "Kinfold"
 purpose "Kinetic Folding Program for Nucleic Acids"
 args    "--default-optional --include-getopt"
@@ -20,13 +20,12 @@ option  "start"   -  "read start structure from stdin (otherwise use open chain)
 option  "stop"    -  "read stop structure(s) from stdin (optherwise use MFE)" flag off
 option  "met"     -  "use Metropolis rule for rates (not Kawasaki rule)" flag off
 option  "fpt"     -  "compute first passage time (stop when a stop-structure is reached)" flag on
-option  "grow"    -  "grow chain every <float> time steps" float default="0"
+option  "grow"    -  "grow chain every <float> time units" float default="0"
 option  "glen"    -  "initial size of growing chain" int default="15"
 option  "phi"     -  "set phi value" double hidden
 option  "pbounds" -  "specify 3 floats for phi_min, phi_inc, phi_max in the form <d1=d2=d3>" string hidden
 section "Output"
 option  "log"     -  "set basename of log-file" string typestr="filename" default="kinout"
-option  "err"     -  "set basename of error-log-file" string typestr="filename"
 option  "silent"  q  "no output to stdout" flag off
 option  "verbose" v  "more information to stdout" flag off
 option  "lmin"    -  "output only local minima to stdout" flag off

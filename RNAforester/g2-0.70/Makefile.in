@@ -22,7 +22,8 @@ INCDIR = @prefix@/include
 SHELL = /bin/sh
 
 CC           = @CC@
-CFLAGS       = -I./src @CFLAGS@ @DEFS@
+CFLAGS       = 
+INCLUDES     = -I./src @CFLAGS@ @DEFS@
 INSTALL      = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 FIND         = @FIND@
@@ -79,7 +80,7 @@ INS =  $(BASE_INS) $(PS_INS) $(FIG_INS) $(X11_INS) $(WIN32_INS) $(GD_INS)
 # major rule
 #
 .c.o:  
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 
 all: libg2.a
@@ -105,6 +106,19 @@ install: libg2.a
 		$(INSTALL_DATA) $$IFILE  $(INCDIR); \
 	done
 
+uninstall:  uninstall-libg2 uninstall-inc
+
+uninstall-libg2:
+	test -n $(LIBDIR)/libg2.a || exit 0; \
+	rm -f $(LIBDIR)/libg2.a
+
+uninstall-inc:
+	test -d $(INCDIR) || exit 0; \
+	for IFILE in $(INS); do \
+		rm -f $(INCDIR)/`printf "%s" $$IFILE | sed 's/.*\///'`; \
+	done
+
+
 release: clean doc
 	cp ./doc/latex/refman.ps  ./doc/g2_refman.ps
 	cp ./doc/latex/refman.pdf ./doc/g2_refman.pdf
@@ -119,7 +133,6 @@ clean:
 	-(cd ./demo ; make clean)
 	-rm -f $(OBJ)
 	-rm -f libg2.a config.cache config.log Makefile.bak config.status
-	-rm -f ./include/*.h
 	-$(FIND) . -name "*~" -exec rm -f {} \;
 	-(cd ./g2_perl ; make clean)
 	-rm -f ./g2_perl/test.ps
@@ -132,16 +145,20 @@ clean:
 	-rm -f a.out
 	-rm -fr doc/html/ doc/latex/ doc/g2_refman.ps doc/g2_refman.pdf
 
+distclean:  clean
+
+maintainer-clean:   clean
+
 demo:	libg2.a
 	(cd ./demo ; make)
 
 depend:
-	$(MAKEDEPEND) -- $(CFLAGS) -- $(SRC)
+	$(MAKEDEPEND) -- $(CFLAGS) $(INCLUDES) -- $(SRC)
 	@echo
 	@echo "Run 'make' to build g2 library."
 	@echo
 
-distdir:
+distdir: clean
 	cp -r * $(distdir)
 
 

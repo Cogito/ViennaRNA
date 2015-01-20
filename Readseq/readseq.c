@@ -92,8 +92,6 @@ const char *title
 	      = fix for MSF input to handle symbols in names
 	      = fix bug for possible memory overrun when truncating seqs for
 		Phylip or Paup formats (thanks Anthony Persechini)
-   29 April 93
-              * added a comma free output format for the Vienna RNA Package
 
  */
 
@@ -201,10 +199,9 @@ const char *formats[kMaxFormat+1] = {
     "16. ASN.1",
     "17. PAUP/NEXUS",
     "18. Pretty (out-only)",
-    "19. Vienna (out-only)",
     "" };
 
-#define kFormCount  31
+#define kFormCount  30
 #define kMaxFormName 15
 
 const  struct formatTable {
@@ -241,7 +238,6 @@ const  struct formatTable {
     {"paup", kPAUP},
     {"nexus", kPAUP},
     {"pretty", kPretty},
-    {"vienna", kVienna},
   };
 
 const char *kASN1headline = "Bioseq-set ::= {\nseq-set {\n";

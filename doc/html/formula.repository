@@ -1,0 +1,27 @@
+\form#0:$\Sigma$
+\form#1:$ \Sigma = \{A,U,C,G\} $
+\form#2:$\mathrm{strlen}(\mathrm{sequence})+1$
+\form#3:$exp{((-F/kT)/length)}$
+\form#4:$F$
+\form#5:$-kT \cdot \log(p)$
+\form#6:$p$
+\form#7:$\Delta G$
+\form#8:$10^{-2} * \mathrm{kcal}/\mathrm{mol}$
+\form#9:$e^{-\Delta G/kT} $
+\form#10:$(n+m)$
+\form#11:\[ A(S) = \sum_{(i,j) \in S} 2 \gamma p_{ij} + \sum_{i \notin S} p^u_i \]
+\form#12:$\gamma$
+\form#13:$Q$
+\form#14:$G = -RT \cdot \log(Q) $
+\form#15:$q1k(k) = Q(1, k)$
+\form#16:$qln(l) = Q(l, n)$
+\form#17:$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $
+\form#18:$p_ij>0.5$
+\form#19:$<d> = \sum_{a,b} p_a p_b d(S_a,S_b)$
+\form#20:$p_ij$
+\form#21:$<d> = \sum_{ij} p_{ij}(1-p_{ij})$
+\form#22:$P^t$
+\form#23:$rs$
+\form#24:$[0,1]$
+\form#25:$ P^{t}_x[i] = X[i] * rs$
+\form#26:$P^{t}_y[i] = Y[i] * rs$

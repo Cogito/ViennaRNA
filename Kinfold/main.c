@@ -1,5 +1,5 @@
 /*
-  Last changed Time-stamp: <2008-08-28 11:40:14 ivo>
+  Last changed Time-stamp: <2010-06-24 14:50:01 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
@@ -69,8 +69,8 @@ int main(int argc, char *argv[]) {
 	GSV.len=GSV.glen;
       }
       clean_up_rl();
+      ini_or_reset_rl();
     }
-    ini_or_reset_rl();
 
     /*
       perform simulation
@@ -126,7 +126,7 @@ static void ini_energy_model(void) {
 
 /**/
 static void read_data(void) {
-  char *ctmp, **s;
+  char *ctmp, *c, **s;
   int i, len;
 
   /*
@@ -134,6 +134,10 @@ static void read_data(void) {
   */
   ctmp = get_line(stdin);
   len = strlen(ctmp);
+  if (c=strchr(ctmp, '&')) {
+    cut_point = (int)(c-ctmp)+1;
+    for (; *c; c++) *c = *(c+1); /* splice out the & */
+  }
   GAV.farbe = (char *)calloc(len+1, sizeof(char));
   assert(GAV.farbe != NULL);
   sscanf(ctmp, "%s", GAV.farbe);
@@ -155,6 +159,9 @@ static void read_data(void) {
     ctmp = get_line(stdin);
     len = strlen(ctmp);
     sscanf(ctmp, "%s", GAV.startform);
+    if (c=strchr(GAV.startform, '&')) {
+      for (; *c; c++) *c = *(c+1); /* splice out the & */
+    }
 
     if (strlen(GAV.startform) != GSV.len) {
       fprintf(stderr,
@@ -176,7 +183,10 @@ static void read_data(void) {
     while (( ctmp = get_line(stdin))) {
       *s = (char *)calloc(GSV.len+1, sizeof(char));
       sscanf(ctmp, "%s", *s);
-      
+      if (c=strchr(ctmp, '&')) {
+	for (; *c; c++) *c = *(c+1); /* splice out the & */
+      }
+ 
       if ( (s-GAV.stopform) >= GSV.maxS ) {
 	fprintf(stderr,
 		"WARNING: Can handle a maximum of %d stop structures\n",

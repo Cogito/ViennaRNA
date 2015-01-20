@@ -1,5 +1,5 @@
 /*
-  Last changed Time-stamp: <2008-05-21 12:13:04 ivo>
+  Last changed Time-stamp: <2010-06-24 15:12:09 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
@@ -17,8 +17,8 @@
 #include "nachbar.h"
 #include "globals.h"
 
-
-#define MYTURN 4
+#define MYTURN 1
+#define SAME_STRAND(I,J) (((I)>=cut_point)||((J)<cut_point))
 #define ORDER(x,y) if ((x)->nummer>(y)->nummer) {tempb=x; x=y; y=tempb;}
 
 /* item of structure ringlist */
@@ -42,8 +42,6 @@ static baum *wurzl = NULL;      /* virtualroot of ringlist-tree */
 static char **ptype = NULL;
 
 static int comp_struc(const void *A, const void *B);
-extern int energy_of_struct_pt (char *string,
-				short * ptable, short *s, short *s1);
 /* PUBLIC FUNCTIONES */
 void ini_or_reset_rl (void);
 void move_it (void);
@@ -101,8 +99,8 @@ static void struc2tree(char *struc) {
   }
 
   GSV.currE = GSV.startE =
-    (float )energy_of_struct_pt(GAV.farbe,
-				pairList, typeList, aliasList) / 100.0;
+    (float )energy_of_structure_pt(GAV.farbe,
+				pairList, typeList, aliasList, 0) / 100.0;
   {
     int i;
     for(i = 0; i < GSV.len; i++) {
@@ -191,7 +189,7 @@ void ini_or_reset_rl(void) {
 
     /* start structure */
     struc2tree(GAV.startform);
-    GSV.currE = GSV.startE = energy_of_struct(GAV.farbe, GAV.startform);
+    GSV.currE = GSV.startE = energy_of_structure(GAV.farbe, GAV.startform, 0);
 
 
     /* stop structure(s) */
@@ -200,17 +198,17 @@ void ini_or_reset_rl(void) {
 
       qsort(GAV.stopform, GSV.maxS, sizeof(char *), comp_struc);
       for (i = 0; i< GSV.maxS; i++)
-	GAV.sE[i] = energy_of_struct(GAV.farbe_full, GAV.stopform[i]);
+	GAV.sE[i] = energy_of_structure(GAV.farbe_full, GAV.stopform[i], 0);
     }
     else {
       if(GTV.noLP)
 	noLonelyPairs=1;
-      initialize_fold(GSV.len);
+      initialize_cofold(GSV.len);
       /* fold sequence to get Minimum free energy structure (Mfe) */
-      GAV.sE[0] = fold(GAV.farbe_full, GAV.stopform[0]);
+      GAV.sE[0] = cofold(GAV.farbe_full, GAV.stopform[0]);
       free_arrays();
       /* revaluate energy of Mfe (maye differ if --logML=logarthmic */
-      GAV.sE[0] = energy_of_struct(GAV.farbe_full, GAV.stopform[0]);
+      GAV.sE[0] = energy_of_structure(GAV.farbe_full, GAV.stopform[0], 0);
     }
     GSV.stopE = GAV.sE[0];
     ini_nbList(strlen(GAV.farbe_full)*strlen(GAV.farbe_full));
@@ -437,7 +435,7 @@ static void inb_nolp(baum *root) {
 	  /* ... close the base bair and ... */
 	  close_bp(rli,rlj);
 	  /* ... evaluate energy of the structure */
-	  EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+	  EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
 	  /* open the base pair again... */
 	  open_bp(rli);
 	  /* ... and put the move and the enegy
@@ -453,7 +451,7 @@ static void inb_nolp(baum *root) {
 	  close_bp(rli->next, rlj->prev);
 	  close_bp(rli, rlj);
 	  /* ... evaluate energy of the structure */
-	  EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+	  EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
 	  /* open the two base pair again ... */
 	  open_bp(rli);
 	  open_bp(rli->next);
@@ -521,7 +519,7 @@ static void dnb_nolp(baum *rli) {
     open_bp(rli);
     open_bp(rlin);
     /* ... evaluate energy of the structure ... */
-    EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+    EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
     /* ... and put the move and the enegy
        of the structure into the neighbour list ... */
     update_nbList(-(1+rli->nummer+GSV.len+1),-(1+rlj->nummer+GSV.len+1), EoT);
@@ -535,7 +533,7 @@ static void dnb_nolp(baum *rli) {
 	/* open the base pair ... */
 	open_bp(rli);
 	/* ... evaluate energy of the structure ... */
-	EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+	EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
 	/* ... and put the move and the enegy
 	   of the structure into the neighbour list ... */
 	update_nbList(-(1 + rli->nummer),-(1 + rlj->nummer), EoT);
@@ -567,7 +565,7 @@ static void fnb(baum *rli) {
       /* close shifted version of original basepair */
       close_bp(rli, rlj);
       /* evaluate energy of the structure */
-      EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+      EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
       /* put the move and the enegy of the structure into the neighbour list */
       update_nbList(1+rli->nummer, -(1+rlj->nummer), EoT);
       /* open shifted basepair */
@@ -583,7 +581,7 @@ static void fnb(baum *rli) {
       /* close shifted version of original basepair */
       close_bp(rlj, stop);
       /* evaluate energy of the structure */
-      EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+      EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
       /* put the move and the enegy of the structure into the neighbour list */
       update_nbList(-(1 + rlj->nummer), 1 + stop->nummer, EoT);
       /* open shifted basepair */
@@ -613,7 +611,7 @@ static void fnb(baum *rli) {
       /* close shifted version of original basepair */
       close_bp(help_rli,help_rlj);
       /* evaluate energy of the structure */
-      EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+      EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
       /* put the move and the enegy of the structure into the neighbour list */
       update_nbList(1 + rli->nummer, -(1 + rlj->nummer), EoT);
       /* open shifted base pair */
@@ -638,7 +636,7 @@ static void fnb(baum *rli) {
        /* close shifted version of original basepair */
       close_bp(help_rli, help_rlj);
       /* evaluate energy of the structure */
-      EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+      EoT = energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0);
       /* put the move and the enegy of the structure into the neighbour list */
       update_nbList(-(1 + rlj->nummer), 1 + stop->nummer, EoT);
       /* open shifted basepair */
@@ -655,7 +653,7 @@ void move_it (void) {
   int i;
   
   GSV.currE =
-    energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList)/100.;
+    energy_of_structure_pt(GAV.farbe, pairList, typeList, aliasList, 0)/100.;
   
   if ( GTV.noLP ) { /* canonical neighbours only */
     inb_nolp(wurzl);
@@ -698,8 +696,8 @@ void clean_up_rl(void) {
 /**/
 static int comp_struc(const void *A, const void *B) {
   int aE, bE;
-  aE = (int)(100 * energy_of_struct(GAV.farbe_full, ((char **)A)[0]));
-  bE = (int)(100 * energy_of_struct(GAV.farbe_full, ((char **)B)[0]));
+  aE = (int)(100 * energy_of_structure(GAV.farbe_full, ((char **)A)[0], 0));
+  bE = (int)(100 * energy_of_structure(GAV.farbe_full, ((char **)B)[0], 0));
   return (aE-bE);
 }
 
@@ -724,14 +722,16 @@ static void rl_status(void) {
 }
 #endif
 
-#define TURN (MYTURN-1)
+#define TURN 3
 static void make_ptypes(const short *S) {
   int n,i,j,k,l;
   n=S[0];
-  for (k=1; k<n-TURN; k++)
+  for (k=1; k<n; k++)
     for (l=1; l<=2; l++) {
       int type,ntype=0,otype=0;
-      i=k; j = i+TURN+l; if (j>n) continue;
+      i=k; j = i+l+TURN;
+      if (!SAME_STRAND(i,j)) j=cut_point;
+      if (j>n) continue;
       type = pair[S[i]][S[j]];
       while ((i>=1)&&(j<=n)) {
 	if ((i>1)&&(j<n)) ntype = pair[S[i-1]][S[j+1]];

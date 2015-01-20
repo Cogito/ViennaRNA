@@ -1,5 +1,5 @@
 /*
-  Last changed Time-stamp: <2008-10-07 09:56:05 ivo>
+  Last changed Time-stamp: <2010-06-24 17:15:16 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <getopt.h>
 #include "utils.h"
+#include "fold_vars.h"
 #include "globals.h"
 #include "cmdline.h"
 
@@ -27,6 +28,8 @@ static void display_fileformat(void);
 static char *verbose(int optval, const char *which);
 static int process_options (int argc, char *argv[]);
 static void process_options_gg (int argc, char *argv[]);
+
+static const char *costring(const char *str);
 
 static char UNUSED rcsid[] ="$Id: globals.c,v 1.8 2008/10/07 09:03:14 ivo Exp $";
 #define MAXMSG 8
@@ -79,7 +82,6 @@ void decode_switches(int argc, char *argv[]) {
 void clean_up_globals(void) {
   int i;
   free(GAV.ProgramName);
-  free(GAV.ParamFile);
   free(GAV.BaseName);
   free(GAV.farbe);
   free(GAV.farbe_full);
@@ -174,11 +176,13 @@ void log_prog_params(FILE *FP) {
 /**/
 void log_start_stop(FILE *FP) {
   int i;
-  fprintf(FP, "#%s\n#%s (%6.2f)\n", GAV.farbe, GAV.startform, GSV.startE);
+  fprintf(FP, "#%s\n#%s (%6.2f)\n", costring(GAV.farbe),
+	  costring(GAV.startform), GSV.startE);
   for (i = 0; i < GSV.maxS; i++) {
-    fprintf(FP, "#%s (%6.2f) X%02d\n", GAV.stopform[i], GAV.sE[i], i+1);
+    fprintf(FP, "#%s (%6.2f) X%02d\n", costring(GAV.stopform[i]), GAV.sE[i], i+1);
   }
   fprintf(FP, "(%-5hu %5hu %5hu)", GAV.subi[0], GAV.subi[1], GAV.subi[2]);
+  costring(NULL);
   fflush(FP);
 }
 
@@ -291,8 +295,18 @@ static void process_options_gg (int argc, char *argv[]) {
 
   GTV.dangle = args_info.dangle_arg;
   GSV.Temp = args_info.Temp_arg;
-  GAV.ParamFile = args_info.Par_arg;
+  strncpy(GAV.ParamFile,255,args_info.Par_arg);
   GTV.Par = args_info.Par_given;
+  GTV.logML = args_info.logML_flag;
+
+  GTV.noShift = args_info.noShift_flag;
+  GTV.noLP = args_info.noLP_flag;
+
+  GTV.start= args_info.start_flag;
+  GTV.stop = args_info.stop_flag;
+  GTV.mc   = args_info.met_flag;
+  GTV.lmin = args_info.lmin_flag;
+
   GTV.verbose = args_info.verbose_flag;
   GTV.silent = (GTV.verbose==0)?
     args_info.silent_flag : 0;
@@ -338,6 +352,9 @@ static void process_options_gg (int argc, char *argv[]) {
   GSV.cut = args_info.cut_arg;
   GSV.grow = args_info.grow_arg;
   GSV.glen = args_info.glen_arg;
+  GTV.lmin = args_info.lmin_flag;
+  GTV.fpt  = args_info.fpt_flag;
+  cmdline_parser_free(&args_info);
 }
 /**/
 static int process_options (int argc, char *argv[]) {
@@ -540,4 +557,28 @@ static void ini_garrays(void) {
   GAV.phi_bounds[2] = 2.0;
 }
 
+static const char *costring(const char *str) {
+  static char* buffer=NULL;
+  static int size=0;
+  int n;
+  if ((str==NULL) && (buffer)) {
+    /* make it possible to free buffer */
+    free(buffer);
+    return NULL;
+  }
+  n=strlen(str);
+  if (n>size) {
+    size = n+2;
+    buffer = realloc(buffer, size);
+  }
+  if ((cut_point>0)&&(cut_point<=n)) {
+    strncpy(buffer, str, cut_point-1);
+    buffer[cut_point-1] = '&';
+    strncpy(buffer+cut_point, str+cut_point-1, n-cut_point+1);
+    buffer[n+1] = '\0';
+  } else {
+    strncpy(buffer, str, n+1);
+  }
+  return buffer;
+}
 /* End of file */

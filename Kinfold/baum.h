@@ -3,7 +3,7 @@
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: baum.h,v 1.1.1.1 2001/08/02 16:48:58 xtof Exp $
+  $Id: baum.h,v 1.1 2001/08/02 16:48:58 xtof Exp $
 */
 
 #ifndef BAUM_H

@@ -110,6 +110,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PERLPREFIX = @PERLPREFIX@
 PerlCmd = @PerlCmd@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
@@ -171,7 +172,7 @@ pscript = b2mt.pl ct2b.pl dpzoom.pl mountain.pl relplot.pl rotate_ss.pl cmount.p
 pkgbin_SCRIPTS = $(pscript) Fold
 EXTRA_DIST = $(pscript) Fold
 LDADD = -L../lib -lRNA -lm
-INCLUDES = -I../H
+INCLUDES = -I$(srcdir)/../H
 all: all-am
 
 .SUFFIXES:

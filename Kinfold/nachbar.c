@@ -3,15 +3,12 @@
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: nachbar.c,v 1.7 2006/10/04 12:45:13 xtof Exp $
+  $Id: nachbar.c,v 1.8 2008/06/03 21:55:11 ivo Exp $
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
-#include <sys/types.h>
-#include <time.h>
 #include <math.h>
 #include "globals.h"
 #include "assert.h"
@@ -21,7 +18,7 @@
 #include "cache_util.h"
 #include "baum.h"
 
-static char UNUSED rcsid[]="$Id: nachbar.c,v 1.7 2006/10/04 12:45:13 xtof Exp $";
+static char UNUSED rcsid[]="$Id: nachbar.c,v 1.8 2008/06/03 21:55:11 ivo Exp $";
 
 /* arrays */
 static short *neighbor_list=NULL;

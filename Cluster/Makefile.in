@@ -116,6 +116,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PERLPREFIX = @PERLPREFIX@
 PerlCmd = @PerlCmd@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
@@ -511,7 +512,7 @@ uninstall-man: uninstall-man1
 
 
 utils.o:
-	$(COMPILE) -c ../lib/utils.c
+	$(COMPILE) -c $(srcdir)/../lib/utils.c
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

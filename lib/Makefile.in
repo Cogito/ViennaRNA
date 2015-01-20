@@ -126,6 +126,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PERLPREFIX = @PERLPREFIX@
 PerlCmd = @PerlCmd@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
@@ -192,7 +193,7 @@ libRNA_a_SOURCES = dist_vars.c fold_vars.c part_func.c read_epars.c\
 libRNA_a_CFLAGS = $(AM_CFLAGS) @FPIC@
 noinst_HEADERS = intloops.h list.h
 EXTRA_DIST = circfold.inc alicircfold.inc
-INCLUDES = -I../H
+INCLUDES = -I$(srcdir)/../H
 all: all-am
 
 .SUFFIXES:

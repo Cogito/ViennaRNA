@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2007-07-03 15:21:16 ivo>
+  Last changed Time-stamp: <2008-05-21 12:13:04 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: baum.c,v 1.8 2007/07/03 14:29:41 ivo Exp $
+  $Id: baum.c,v 1.9 2008/05/21 10:15:45 ivo Exp $
 */
 
 #include <stdio.h>
@@ -33,7 +33,7 @@ typedef struct _baum {
   struct _baum *down;
 } baum;
 
-static char UNUSED rcsid[]="$Id: baum.c,v 1.8 2007/07/03 14:29:41 ivo Exp $";
+static char UNUSED rcsid[]="$Id: baum.c,v 1.9 2008/05/21 10:15:45 ivo Exp $";
 static short *pairList = NULL;
 static short *typeList = NULL;
 static short *aliasList = NULL;
@@ -724,7 +724,7 @@ static void rl_status(void) {
 }
 #endif
 
-#define TURN MYTURN-1
+#define TURN (MYTURN-1)
 static void make_ptypes(const short *S) {
   int n,i,j,k,l;
   n=S[0];

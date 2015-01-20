@@ -1,0 +1,11 @@
+This directory contains sources to the readseq program by d.g.gilbert.
+It is not part of this package.
+We have taken the liberty to add the comma free form used by our package
+as 19th output format. The new output format is selected by using the 
+-f=19 or -f=vienna  option.
+
+Example:
+readseq -f=19 -a file_in_some_strange_format | RNAfold | RNAdistance -Xm -Dh | AnalyseDists -Xn
+
+will convert all sequences in the file, fold them, calculate all pair distances between the resulting secondary structures and construct a phylogentic tree of the structures using the neighbour joining algorithm.
+

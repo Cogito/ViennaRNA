@@ -1,0 +1,25 @@
+Some Changes relative to ViennaRNA-1.03
+
+New energy parameters used in the folding routines.
+Prediction of minimum free energy structures now includes contributions
+from terminal unpaired nucleotides (so called dangling ends).
+The partition function treats these contributions approximately.
+
+Energies for GU pairs in are now taken from
+L. He et al., Biochemistry 1991, 30, p 11124
+
+Bulges of length 1 now get an additional stacking energy.
+
+The folding routines accept  a list of nonstandard basepairs that should be
+allowed to occur. Also, when doing constrained folding, forced pairs will
+be honoured even if the pair is usally not allowed (not AU, GC, or GU).
+RNAeval should be useful now for structures containing nonstandard pairs.
+
+Some support for constrained folding using partition function: A constraint
+of the form i-j must pair or i must not pair will be honoured by disallowing 
+all pairs conflicting with the constraint.
+
+Both folding algorthms use less memory and should be a bit faster for long
+sequences.
+
+Several smaller bug fixes.

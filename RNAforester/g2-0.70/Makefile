@@ -99,23 +99,23 @@ libg2.so.0.$(G2_VERSION): $(OBJ)
 	ld -shared -soname libg2.so.0 -o $@ $(OBJ) 
 
 install: libg2.a
-	test -d $(LIBDIR) || mkdir -p $(LIBDIR)
-	test -d $(INCDIR) || mkdir -p $(INCDIR)
-	$(INSTALL_DATA) libg2.a $(LIBDIR)
+	test -d $(DESTDIR)/$(LIBDIR) || mkdir -p $(DESTDIR)/$(LIBDIR)
+	test -d $(DESTDIR)/$(INCDIR) || mkdir -p $(DESTDIR)/$(INCDIR)
+	$(INSTALL_DATA) libg2.a $(DESTDIR)/$(LIBDIR)
 	for IFILE in $(INS); do \
-		$(INSTALL_DATA) $$IFILE  $(INCDIR); \
+		$(INSTALL_DATA) $$IFILE  $(DESTDIR)/$(INCDIR); \
 	done
 
 uninstall:  uninstall-libg2 uninstall-inc
 
 uninstall-libg2:
-	test -n $(LIBDIR)/libg2.a || exit 0; \
-	rm -f $(LIBDIR)/libg2.a
+	test -n $(DESTDIR)/$(LIBDIR)/libg2.a || exit 0; \
+	rm -f $(DESTDIR)/$(LIBDIR)/libg2.a
 
 uninstall-inc:
-	test -d $(INCDIR) || exit 0; \
+	test -d $(DESTDIR)/$(INCDIR) || exit 0; \
 	for IFILE in $(INS); do \
-		rm -f $(INCDIR)/`printf "%s" $$IFILE | sed 's/.*\///'`; \
+		rm -f $(DESTDIR)/$(INCDIR)/`printf "%s" $$IFILE | sed 's/.*\///'`; \
 	done
 
 
@@ -160,6 +160,8 @@ depend:
 
 distdir: clean
 	cp -r * $(distdir)
+
+check:
 
 
 # DO NOT DELETE THIS LINE -- make  depend  depends  on it.

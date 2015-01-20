@@ -31,7 +31,7 @@ class RNAFuncs
 	  double scale;
   };
 
-  typedef struct AddXmlInfos {
+  typedef struct {
     map<int,string> idmapping;
     map<int,string> comments;
     map<int,string> descriptions;
@@ -39,7 +39,7 @@ class RNAFuncs
     map<int,string> synonyms;
     Uint xbasepos,ybasepos;
     bool xmlInput;
-  };
+  } AddXmlInfos;
 
   static bool isRNAString(const string &str);
   static bool isViennaString(const string &str, Ulong &basePairCount, Ulong &maxDepth);

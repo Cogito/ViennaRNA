@@ -25,10 +25,10 @@ extension = Extension("_RNA",
                       )
  
 setup(name="RNA",
-      version="2.1.7",
+      version="2.1.8",
       description="ViennaRNA",
       author="Ivo Hofacker, Institute for Theoretical Chemistry, University of Vienna",
-      url="http://www.tbi.univie.ac.a/~ivo/RNA",
+      url="http://www.tbi.univie.ac.at/RNA",
       package_dir = {'RNA':'.'},
       packages = ['RNA'],
       ext_modules=[extension],

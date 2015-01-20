@@ -1,5 +1,6 @@
 var part__func__co_8h =
 [
+    [ "DEPRECATED", "part__func__co_8h.html#aaf225a2b96038de3a42d61a1fa63654b", null ],
     [ "co_pf_fold", "part__func__co_8h.html#gaa86a5f998789ed71813d23d7307a791b", null ],
     [ "co_pf_fold_par", "part__func__co_8h.html#gabd873b450832ab5f21101fc5ab354d21", null ],
     [ "export_co_bppm", "part__func__co_8h.html#ga11f0252c1d2c4697253ff4b5bd392d3c", null ],

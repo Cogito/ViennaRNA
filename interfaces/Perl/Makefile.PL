@@ -47,5 +47,5 @@ WriteMakefile(
               OBJECT      =>  "RNA_wrap.o",
               dynamic_lib =>  {OTHERLDFLAGS => '$(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -fopenmp'},
               AUTHOR      =>  'Ivo Hofacker <ivo@tbi.univie.ac.at>',
-              VERSION     =>  '2.1.7'
+              VERSION     =>  '2.1.8'
 );

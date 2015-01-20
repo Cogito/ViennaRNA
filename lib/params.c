@@ -368,6 +368,7 @@ PUBLIC pf_paramT *get_boltzmann_factors_ali(unsigned int n_seq,
   pf->alpha         = betaScale;
   pf->temperature   = temperature;
   pf->kT = kTn      = ((double)n_seq)*betaScale*(temperature+K0)*GASCONST;   /* kT in cal/mol  */
+  pf->pf_scale      = pf_scale;
   TT                = (temperature+K0)/(Tmeasure);
 
    /* loop energies: hairpins, bulges, interior, mulit-loops */

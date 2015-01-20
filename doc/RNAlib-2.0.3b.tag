@@ -1242,6 +1242,13 @@
       <arglist>(short **S_p, short **S1_p, char **ptype_p, FLT_OR_DBL **qb_p, FLT_OR_DBL **qm_p, FLT_OR_DBL **q1k_p, FLT_OR_DBL **qln_p)</arglist>
     </member>
     <member kind="function">
+      <type>double</type>
+      <name>get_subseq_F</name>
+      <anchorfile>part__func_8h.html</anchorfile>
+      <anchor>a189e2a1ec6cc32c53ea72f7543b0441e</anchor>
+      <arglist>(int i, int j)</arglist>
+    </member>
+    <member kind="function">
       <type>char *</type>
       <name>get_centroid_struct_pl</name>
       <anchorfile>part__func_8h.html</anchorfile>

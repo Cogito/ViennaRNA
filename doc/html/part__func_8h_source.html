@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.3: H/part_func.h Source File</title>
+<title>RNAlib-2.0.3b: H/part_func.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.3</div>
+   <div id="projectname">RNAlib-2.0.3b</div>
   </td>
  </tr>
  </tbody>
@@ -124,63 +124,65 @@ $(document).ready(initResizable);
 <a name="l00234"></a>00234                   FLT_OR_DBL **q1k_p,
 <a name="l00235"></a>00235                   FLT_OR_DBL **qln_p);
 <a name="l00236"></a>00236 
-<a name="l00252"></a>00252 <span class="keywordtype">char</span>  *<a class="code" href="part__func_8h.html#a9aba0ba1433a6d259331e0fe9fc4a9a6" title="Get the centroid structure of the ensemble.">get_centroid_struct_pl</a>(<span class="keywordtype">int</span> length,
-<a name="l00253"></a>00253                               <span class="keywordtype">double</span> *dist,
-<a name="l00254"></a>00254                               <a class="code" href="structplist.html" title="this datastructure is used as input parameter in functions of PS_dot.h and others">plist</a> *pl);
-<a name="l00255"></a>00255 
-<a name="l00271"></a>00271 <span class="keywordtype">char</span>  *<a class="code" href="part__func_8h.html#ac92486ce514677256f4a832dc518759c" title="Get the centroid structure of the ensemble.">get_centroid_struct_pr</a>(<span class="keywordtype">int</span> length,
-<a name="l00272"></a>00272                               <span class="keywordtype">double</span> *dist,
-<a name="l00273"></a>00273                               FLT_OR_DBL *pr);
-<a name="l00274"></a>00274 
-<a name="l00285"></a>00285 <span class="keywordtype">double</span>  <a class="code" href="part__func_8h.html#a79cbc375af65f11609feb6b055269e7d" title="Get the mean base pair distance of the last partition function computation.">mean_bp_distance</a>(<span class="keywordtype">int</span> length);
-<a name="l00286"></a>00286 
-<a name="l00302"></a>00302 <span class="keywordtype">double</span>  <a class="code" href="part__func_8h.html#ad5ba36cef8d01cf4244cc09b9bf1ce1d" title="Get the mean base pair distance in the thermodynamic ensemble.">mean_bp_distance_pr</a>(<span class="keywordtype">int</span> length,
-<a name="l00303"></a>00303                             FLT_OR_DBL *pr);
-<a name="l00304"></a>00304 
-<a name="l00308"></a>00308 <span class="keywordtype">void</span>  <a class="code" href="part__func_8h.html#a129d81c4a1ead793c5b2311333e03dfa" title="Create a dot-bracket like structure string from base pair probability matrix.">bppm_to_structure</a>(<span class="keywordtype">char</span> *structure,
-<a name="l00309"></a>00309                         FLT_OR_DBL *pr,
-<a name="l00310"></a>00310                         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> length);
-<a name="l00311"></a>00311 
-<a name="l00312"></a>00312 <a class="code" href="structplist.html" title="this datastructure is used as input parameter in functions of PS_dot.h and others">plist</a> *stackProb(<span class="keywordtype">double</span> cutoff);
-<a name="l00313"></a>00313 
-<a name="l00317"></a>00317 <span class="keywordtype">char</span>    <a class="code" href="part__func_8h.html#a49962ad6242b8c628de6ca16bb831c1d" title="Get a pseudo dot bracket notation for a given probability information.">bppm_symbol</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> *x);
+<a name="l00240"></a>00240 <span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#a189e2a1ec6cc32c53ea72f7543b0441e" title="Get the free energy of a subsequence from the q[] array.">get_subseq_F</a>(<span class="keywordtype">int</span> i, <span class="keywordtype">int</span> j);
+<a name="l00241"></a>00241 
+<a name="l00257"></a>00257 <span class="keywordtype">char</span>  *<a class="code" href="part__func_8h.html#a9aba0ba1433a6d259331e0fe9fc4a9a6" title="Get the centroid structure of the ensemble.">get_centroid_struct_pl</a>(<span class="keywordtype">int</span> length,
+<a name="l00258"></a>00258                               <span class="keywordtype">double</span> *dist,
+<a name="l00259"></a>00259                               <a class="code" href="structplist.html" title="this datastructure is used as input parameter in functions of PS_dot.h and others">plist</a> *pl);
+<a name="l00260"></a>00260 
+<a name="l00276"></a>00276 <span class="keywordtype">char</span>  *<a class="code" href="part__func_8h.html#ac92486ce514677256f4a832dc518759c" title="Get the centroid structure of the ensemble.">get_centroid_struct_pr</a>(<span class="keywordtype">int</span> length,
+<a name="l00277"></a>00277                               <span class="keywordtype">double</span> *dist,
+<a name="l00278"></a>00278                               FLT_OR_DBL *pr);
+<a name="l00279"></a>00279 
+<a name="l00290"></a>00290 <span class="keywordtype">double</span>  <a class="code" href="part__func_8h.html#a79cbc375af65f11609feb6b055269e7d" title="Get the mean base pair distance of the last partition function computation.">mean_bp_distance</a>(<span class="keywordtype">int</span> length);
+<a name="l00291"></a>00291 
+<a name="l00307"></a>00307 <span class="keywordtype">double</span>  <a class="code" href="part__func_8h.html#ad5ba36cef8d01cf4244cc09b9bf1ce1d" title="Get the mean base pair distance in the thermodynamic ensemble.">mean_bp_distance_pr</a>(<span class="keywordtype">int</span> length,
+<a name="l00308"></a>00308                             FLT_OR_DBL *pr);
+<a name="l00309"></a>00309 
+<a name="l00313"></a>00313 <span class="keywordtype">void</span>  <a class="code" href="part__func_8h.html#a129d81c4a1ead793c5b2311333e03dfa" title="Create a dot-bracket like structure string from base pair probability matrix.">bppm_to_structure</a>(<span class="keywordtype">char</span> *structure,
+<a name="l00314"></a>00314                         FLT_OR_DBL *pr,
+<a name="l00315"></a>00315                         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> length);
+<a name="l00316"></a>00316 
+<a name="l00317"></a>00317 <a class="code" href="structplist.html" title="this datastructure is used as input parameter in functions of PS_dot.h and others">plist</a> *stackProb(<span class="keywordtype">double</span> cutoff);
 <a name="l00318"></a>00318 
-<a name="l00319"></a>00319 
-<a name="l00320"></a>00320 <span class="comment">/*</span>
-<a name="l00321"></a>00321 <span class="comment">#################################################</span>
-<a name="l00322"></a>00322 <span class="comment"># DEPRECATED FUNCTIONS                          #</span>
-<a name="l00323"></a>00323 <span class="comment">#################################################</span>
-<a name="l00324"></a>00324 <span class="comment">*/</span>
-<a name="l00325"></a>00325 
-<a name="l00331"></a>00331 DEPRECATED(<span class="keywordtype">void</span> <a class="code" href="part__func_8h.html#a15176e23eceeff8c7d14eabcfec8a2af" title="Allocate space for pf_fold()">init_pf_fold</a>(<span class="keywordtype">int</span> length));
-<a name="l00332"></a>00332 
-<a name="l00337"></a>00337 DEPRECATED(<span class="keywordtype">char</span> *<a class="code" href="part__func_8h.html#ae89a63bd83e75a80b2ba36d20b31ce81">centroid</a>(<span class="keywordtype">int</span> length,
-<a name="l00338"></a>00338                           <span class="keywordtype">double</span> *dist));     <span class="comment">/* mean pair distance of ensemble */</span>
-<a name="l00339"></a>00339 
-<a name="l00345"></a>00345 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#ae9556ba7ded44fe2321b6f67c3fc02a3" title="get the mean pair distance of ensemble">mean_bp_dist</a>(<span class="keywordtype">int</span> length));
-<a name="l00346"></a>00346 
-<a name="l00350"></a>00350 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#a68ba6f3a48e08ca131ab54621ce3a2d7">expLoopEnergy</a>(<span class="keywordtype">int</span> u1,
-<a name="l00351"></a>00351                                 <span class="keywordtype">int</span> u2,
-<a name="l00352"></a>00352                                 <span class="keywordtype">int</span> type,
-<a name="l00353"></a>00353                                 <span class="keywordtype">int</span> type2,
-<a name="l00354"></a>00354                                 <span class="keywordtype">short</span> si1,
-<a name="l00355"></a>00355                                 <span class="keywordtype">short</span> sj1,
-<a name="l00356"></a>00356                                 <span class="keywordtype">short</span> sp1,
-<a name="l00357"></a>00357                                 <span class="keywordtype">short</span> sq1));
-<a name="l00358"></a>00358 
-<a name="l00362"></a>00362 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#a7b6ab474cc80accc48010ccfcc59f96b">expHairpinEnergy</a>( <span class="keywordtype">int</span> u,
-<a name="l00363"></a>00363                                     <span class="keywordtype">int</span> type,
-<a name="l00364"></a>00364                                     <span class="keywordtype">short</span> si1,
-<a name="l00365"></a>00365                                     <span class="keywordtype">short</span> sj1,
-<a name="l00366"></a>00366                                     <span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>));
-<a name="l00367"></a>00367 
-<a name="l00368"></a>00368 <span class="preprocessor">#endif</span>
+<a name="l00322"></a>00322 <span class="keywordtype">char</span>    <a class="code" href="part__func_8h.html#a49962ad6242b8c628de6ca16bb831c1d" title="Get a pseudo dot bracket notation for a given probability information.">bppm_symbol</a>(<span class="keyword">const</span> <span class="keywordtype">float</span> *x);
+<a name="l00323"></a>00323 
+<a name="l00324"></a>00324 
+<a name="l00325"></a>00325 <span class="comment">/*</span>
+<a name="l00326"></a>00326 <span class="comment">#################################################</span>
+<a name="l00327"></a>00327 <span class="comment"># DEPRECATED FUNCTIONS                          #</span>
+<a name="l00328"></a>00328 <span class="comment">#################################################</span>
+<a name="l00329"></a>00329 <span class="comment">*/</span>
+<a name="l00330"></a>00330 
+<a name="l00336"></a>00336 DEPRECATED(<span class="keywordtype">void</span> <a class="code" href="part__func_8h.html#a15176e23eceeff8c7d14eabcfec8a2af" title="Allocate space for pf_fold()">init_pf_fold</a>(<span class="keywordtype">int</span> length));
+<a name="l00337"></a>00337 
+<a name="l00342"></a>00342 DEPRECATED(<span class="keywordtype">char</span> *<a class="code" href="part__func_8h.html#ae89a63bd83e75a80b2ba36d20b31ce81">centroid</a>(<span class="keywordtype">int</span> length,
+<a name="l00343"></a>00343                           <span class="keywordtype">double</span> *dist));     <span class="comment">/* mean pair distance of ensemble */</span>
+<a name="l00344"></a>00344 
+<a name="l00350"></a>00350 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#ae9556ba7ded44fe2321b6f67c3fc02a3" title="get the mean pair distance of ensemble">mean_bp_dist</a>(<span class="keywordtype">int</span> length));
+<a name="l00351"></a>00351 
+<a name="l00355"></a>00355 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#a68ba6f3a48e08ca131ab54621ce3a2d7">expLoopEnergy</a>(<span class="keywordtype">int</span> u1,
+<a name="l00356"></a>00356                                 <span class="keywordtype">int</span> u2,
+<a name="l00357"></a>00357                                 <span class="keywordtype">int</span> type,
+<a name="l00358"></a>00358                                 <span class="keywordtype">int</span> type2,
+<a name="l00359"></a>00359                                 <span class="keywordtype">short</span> si1,
+<a name="l00360"></a>00360                                 <span class="keywordtype">short</span> sj1,
+<a name="l00361"></a>00361                                 <span class="keywordtype">short</span> sp1,
+<a name="l00362"></a>00362                                 <span class="keywordtype">short</span> sq1));
+<a name="l00363"></a>00363 
+<a name="l00367"></a>00367 DEPRECATED(<span class="keywordtype">double</span> <a class="code" href="part__func_8h.html#a7b6ab474cc80accc48010ccfcc59f96b">expHairpinEnergy</a>( <span class="keywordtype">int</span> u,
+<a name="l00368"></a>00368                                     <span class="keywordtype">int</span> type,
+<a name="l00369"></a>00369                                     <span class="keywordtype">short</span> si1,
+<a name="l00370"></a>00370                                     <span class="keywordtype">short</span> sj1,
+<a name="l00371"></a>00371                                     <span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>));
+<a name="l00372"></a>00372 
+<a name="l00373"></a>00373 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="part__func_8h.html">part_func.h</a>      </li>
-      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.3 by&#160;
+      <li class="footer">Generated on Tue Mar 6 2012 for RNAlib-2.0.3b by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

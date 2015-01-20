@@ -131,8 +131,14 @@
 /* Version number of package */
 #undef VERSION
 
+/* Analyse{Dists,Seqs} */
+#undef WITH_CLUSTER
+
 /* Define if using the dmalloc debugging malloc package */
 #undef WITH_DMALLOC
+
+/* Create the perl interface to RNAlib */
+#undef WITH_PERL_INTERFACE
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const

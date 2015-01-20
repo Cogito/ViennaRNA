@@ -149,6 +149,8 @@ distclean:  clean
 
 maintainer-clean:   clean
 
+check:	
+
 demo:	libg2.a
 	(cd ./demo ; make)
 

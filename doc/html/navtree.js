@@ -1,189 +1,141 @@
 var NAVTREE =
 [
-  [ "RNAlib-2.0.7", "index.html", [
+  [ "RNAlib-2.1.0", "index.html", [
     [ "ViennaRNA Package core - RNAlib", "index.html", null ],
-    [ "Related Pages", "pages.html", [
-      [ "Folding Routines - Functions for Folding RNA Secondary Structures", "mp_fold.html", null ],
-      [ "Parsing and Comparing - Functions to Manipulate Structures", "mp_parse.html", null ],
-      [ "Utilities - Odds and Ends", "mp_utils.html", null ],
-      [ "Example - A Small Example Program", "mp_example.html", null ],
-      [ "References", "mp_ref.html", null ],
-      [ "Deprecated List", "deprecated.html", null ]
+    [ "Parsing and Comparing - Functions to Manipulate Structures", "mp_parse.html", null ],
+    [ "Utilities - Odds and Ends", "mp_utils.html", [
+      [ "Producing secondary structure graphs", "mp_utils.html#utils_ss", null ],
+      [ "Producing (colored) dot plots for base pair probabilities", "mp_utils.html#utils_dot", null ],
+      [ "Producing (colored) alignments", "mp_utils.html#utils_aln", null ],
+      [ "RNA sequence related utilities", "mp_utils.html#utils_seq", null ],
+      [ "RNA secondary structure related utilities", "mp_utils.html#utils_struc", null ],
+      [ "Miscellaneous Utilities", "mp_utils.html#utils_misc", null ]
     ] ],
-    [ "Data Structures", "annotated.html", [
-      [ "bondT", "structbondT.html", null ],
-      [ "bondTEn", "structbondTEn.html", null ],
-      [ "cofoldF", "structcofoldF.html", null ],
-      [ "ConcEnt", "structConcEnt.html", null ],
-      [ "constrain", "structconstrain.html", null ],
-      [ "COORDINATE", "structCOORDINATE.html", null ],
-      [ "cpair", "structcpair.html", null ],
-      [ "duplexT", "structduplexT.html", null ],
-      [ "dupVar", "structdupVar.html", null ],
-      [ "folden", "structfolden.html", null ],
-      [ "interact", "structinteract.html", null ],
-      [ "intermediate_t", "structintermediate__t.html", null ],
-      [ "INTERVAL", "structINTERVAL.html", null ],
-      [ "LIST", "structLIST.html", null ],
-      [ "LST_BUCKET", "structLST__BUCKET.html", null ],
-      [ "model_detailsT", "structmodel__detailsT.html", null ],
-      [ "move_t", "structmove__t.html", null ],
-      [ "PAIR", "structPAIR.html", null ],
-      [ "pair_info", "structpair__info.html", null ],
-      [ "pairpro", "structpairpro.html", null ],
-      [ "paramT", "structparamT.html", null ],
-      [ "path_t", "structpath__t.html", null ],
-      [ "pf_paramT", "structpf__paramT.html", null ],
-      [ "plist", "structplist.html", null ],
-      [ "Postorder_list", "structPostorder__list.html", null ],
-      [ "pu_contrib", "structpu__contrib.html", null ],
-      [ "pu_out", "structpu__out.html", null ],
-      [ "sect", "structsect.html", null ],
-      [ "snoopT", "structsnoopT.html", null ],
-      [ "SOLUTION", "structSOLUTION.html", null ],
-      [ "svm_model", "structsvm__model.html", null ],
-      [ "swString", "structswString.html", null ],
-      [ "Tree", "structTree.html", null ],
-      [ "TwoDfold_solution", "structTwoDfold__solution.html", null ],
-      [ "TwoDfold_vars", "structTwoDfold__vars.html", null ],
-      [ "TwoDpfold_solution", "structTwoDpfold__solution.html", null ],
-      [ "TwoDpfold_vars", "structTwoDpfold__vars.html", null ]
+    [ "Example - A Small Example Program", "mp_example.html", null ],
+    [ "Deprecated List", "deprecated.html", null ],
+    [ "Bibliographic References", "citelist.html", null ],
+    [ "Modules", "modules.html", "modules" ],
+    [ "Data Structures", null, [
+      [ "Data Structures", "annotated.html", "annotated" ],
+      [ "Data Structure Index", "classes.html", null ],
+      [ "Data Fields", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Variables", "functions_vars.html", null ]
+      ] ]
     ] ],
-    [ "Data Structure Index", "classes.html", null ],
-    [ "File List", "files.html", [
-      [ "mainpage.h", null, null ],
-      [ "H/2Dfold.h", "2Dfold_8h.html", null ],
-      [ "H/2Dpfold.h", "2Dpfold_8h.html", null ],
-      [ "H/ali_plex.h", null, null ],
-      [ "H/alifold.h", "alifold_8h.html", null ],
-      [ "H/aln_util.h", null, null ],
-      [ "H/cofold.h", "cofold_8h.html", null ],
-      [ "H/convert_epars.h", "convert__epars_8h.html", null ],
-      [ "H/data_structures.h", "data__structures_8h.html", null ],
-      [ "H/dist_vars.h", "dist__vars_8h.html", null ],
-      [ "H/duplex.h", "duplex_8h.html", null ],
-      [ "H/edit_cost.h", "edit__cost_8h.html", null ],
-      [ "H/energy_const.h", "energy__const_8h.html", null ],
-      [ "H/energy_par.h", null, null ],
-      [ "H/findpath.h", "findpath_8h.html", null ],
-      [ "H/fold.h", "fold_8h.html", null ],
-      [ "H/fold_vars.h", "fold__vars_8h.html", null ],
-      [ "H/inverse.h", "inverse_8h.html", null ],
-      [ "H/Lfold.h", "Lfold_8h.html", null ],
-      [ "H/loop_energies.h", "loop__energies_8h.html", null ],
-      [ "H/LPfold.h", "LPfold_8h.html", null ],
-      [ "H/MEA.h", "MEA_8h.html", null ],
-      [ "H/mm.h", "mm_8h.html", null ],
-      [ "H/naview.h", "naview_8h.html", null ],
-      [ "H/pair_mat.h", null, null ],
-      [ "H/params.h", "params_8h.html", null ],
-      [ "H/part_func.h", "part__func_8h.html", null ],
-      [ "H/part_func_co.h", "part__func__co_8h.html", null ],
-      [ "H/part_func_up.h", "part__func__up_8h.html", null ],
-      [ "H/PKplex.h", null, null ],
-      [ "H/plex.h", null, null ],
-      [ "H/plot_layouts.h", "plot__layouts_8h.html", null ],
-      [ "H/ProfileAln.h", null, null ],
-      [ "H/profiledist.h", "profiledist_8h.html", null ],
-      [ "H/PS_dot.h", "PS__dot_8h.html", null ],
-      [ "H/read_epars.h", "read__epars_8h.html", null ],
-      [ "H/ribo.h", null, null ],
-      [ "H/RNAstruct.h", "RNAstruct_8h.html", null ],
-      [ "H/snofold.h", null, null ],
-      [ "H/snoop.h", null, null ],
-      [ "H/stringdist.h", "stringdist_8h.html", null ],
-      [ "H/subopt.h", "subopt_8h.html", null ],
-      [ "H/svm_utils.h", null, null ],
-      [ "H/treedist.h", "treedist_8h.html", null ],
-      [ "H/utils.h", "utils_8h.html", null ],
-      [ "lib/1.8.4_epars.h", "1_88_84__epars_8h.html", null ],
-      [ "lib/1.8.4_intloops.h", "1_88_84__intloops_8h.html", null ],
-      [ "lib/intl11.h", null, null ],
-      [ "lib/intl11dH.h", null, null ],
-      [ "lib/intl21.h", null, null ],
-      [ "lib/intl21dH.h", null, null ],
-      [ "lib/intl22.h", null, null ],
-      [ "lib/intl22dH.h", null, null ],
-      [ "lib/list.h", null, null ]
-    ] ],
-    [ "Globals", "globals.html", null ]
+    [ "Files", null, [
+      [ "File List", "files.html", "files" ],
+      [ "Globals", "globals.html", [
+        [ "All", "globals.html", "globals_dup" ],
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
+    ] ]
   ] ]
 ];
 
+var NAVTREEINDEX =
+[
+"1_88_84__epars_8h.html",
+"fold_8h.html#ga8831445966b761417e713360791299d8",
+"group__mfe__fold.html#gadb973133c241d57c04b253df35e4d34e",
+"structLST__BUCKET.html#a6ac6d76720492283a0f42385aac823ac",
+"structinteract.html#a54f8183542fff4c32ab7ace49a16c02c",
+"utils_8h.html#ade238ede0090a5ca07f9b4dc0eea8a42",
+];
+
+var navTreeSubIndices = new Array();
+
+function getData(varName)
+{
+  var i = varName.lastIndexOf('/');
+  var n = i>=0 ? varName.substring(i+1) : varName;
+  return eval(n.replace(/\-/g,'_'));
+}
+
+function stripPath(uri)
+{
+  return uri.substring(uri.lastIndexOf('/')+1);
+}
+
+function stripPath2(uri)
+{
+  var i = uri.lastIndexOf('/');
+  var s = uri.substring(i+1);
+  var m = uri.substring(0,i+1).match(/\/d\w\/d\w\w\/$/);
+  return m ? uri.substring(i-6) : s;
+}
+
+function getScript(scriptName,func,show)
+{
+  var head = document.getElementsByTagName("head")[0]; 
+  var script = document.createElement('script');
+  script.id = scriptName;
+  script.type = 'text/javascript';
+  script.onload = func; 
+  script.src = scriptName+'.js'; 
+  if ($.browser.msie && $.browser.version<=8) { 
+    // script.onload does work with older versions of IE
+    script.onreadystatechange = function() {
+      if (script.readyState=='complete' || script.readyState=='loaded') { 
+        func(); if (show) showRoot(); 
+      }
+    }
+  }
+  head.appendChild(script); 
+}
+
 function createIndent(o,domNode,node,level)
 {
-  if (node.parentNode && node.parentNode.parentNode)
-  {
+  if (node.parentNode && node.parentNode.parentNode) {
     createIndent(o,domNode,node.parentNode,level+1);
   }
   var imgNode = document.createElement("img");
-  if (level==0 && node.childrenData)
-  {
+  imgNode.width = 16;
+  imgNode.height = 22;
+  if (level==0 && node.childrenData) {
     node.plus_img = imgNode;
     node.expandToggle = document.createElement("a");
     node.expandToggle.href = "javascript:void(0)";
-    node.expandToggle.onclick = function() 
-    {
-      if (node.expanded) 
-      {
+    node.expandToggle.onclick = function() {
+      if (node.expanded) {
         $(node.getChildrenUL()).slideUp("fast");
-        if (node.isLast)
-        {
+        if (node.isLast) {
           node.plus_img.src = node.relpath+"ftv2plastnode.png";
-        }
-        else
-        {
+        } else {
           node.plus_img.src = node.relpath+"ftv2pnode.png";
         }
         node.expanded = false;
-      } 
-      else 
-      {
-        expandNode(o, node, false);
+      } else {
+        expandNode(o, node, false, false);
       }
     }
     node.expandToggle.appendChild(imgNode);
     domNode.appendChild(node.expandToggle);
-  }
-  else
-  {
+  } else {
     domNode.appendChild(imgNode);
   }
-  if (level==0)
-  {
-    if (node.isLast)
-    {
-      if (node.childrenData)
-      {
+  if (level==0) {
+    if (node.isLast) {
+      if (node.childrenData) {
         imgNode.src = node.relpath+"ftv2plastnode.png";
-      }
-      else
-      {
+      } else {
         imgNode.src = node.relpath+"ftv2lastnode.png";
         domNode.appendChild(imgNode);
       }
-    }
-    else
-    {
-      if (node.childrenData)
-      {
+    } else {
+      if (node.childrenData) {
         imgNode.src = node.relpath+"ftv2pnode.png";
-      }
-      else
-      {
+      } else {
         imgNode.src = node.relpath+"ftv2node.png";
         domNode.appendChild(imgNode);
       }
     }
-  }
-  else
-  {
-    if (node.isLast)
-    {
+  } else {
+    if (node.isLast) {
       imgNode.src = node.relpath+"ftv2blank.png";
-    }
-    else
-    {
+    } else {
       imgNode.src = node.relpath+"ftv2vertline.png";
     }
   }
@@ -216,27 +168,63 @@ function newNode(o, po, text, link, childrenData, lastNode)
   var a = document.createElement("a");
   node.labelSpan.appendChild(a);
   node.label = document.createTextNode(text);
+  node.expanded = false;
   a.appendChild(node.label);
-  if (link) 
-  {
-    a.href = node.relpath+link;
-  } 
-  else 
-  {
+  if (link) {
+    var url;
+    if (link.substring(0,1)=='^') {
+      url = link.substring(1);
+      link = url;
+    } else {
+      url = node.relpath+link;
+    }
+    a.className = stripPath(link.replace('#',':'));
+    if (link.indexOf('#')!=-1) {
+      var aname = '#'+link.split('#')[1];
+      var srcPage = stripPath($(location).attr('pathname'));
+      var targetPage = stripPath(link.split('#')[0]);
+      a.href = srcPage!=targetPage ? url : '#';
+      a.onclick = function(){
+        if (!$(a).parent().parent().hasClass('selected'))
+        {
+          $('.item').removeClass('selected');
+          $('.item').removeAttr('id');
+          $(a).parent().parent().addClass('selected');
+          $(a).parent().parent().attr('id','selected');
+        }
+        var pos, anchor = $(aname), docContent = $('#doc-content');
+        if (anchor.parent().attr('class')=='memItemLeft') {
+          pos = anchor.parent().position().top;
+        } else if (anchor.position()) {
+          pos = anchor.position().top;
+        }
+        if (pos) {
+          var dist = Math.abs(Math.min(
+                     pos-docContent.offset().top,
+                     docContent[0].scrollHeight-
+                     docContent.height()-docContent.scrollTop()));
+          docContent.animate({
+            scrollTop: pos + docContent.scrollTop() - docContent.offset().top
+          },Math.max(50,Math.min(500,dist)),function(){
+            window.location.replace(aname);
+          });
+        }
+      };
+    } else {
+      a.href = url;
+    }
+  } else {
     if (childrenData != null) 
     {
       a.className = "nolink";
       a.href = "javascript:void(0)";
       a.onclick = node.expandToggle.onclick;
-      node.expanded = false;
     }
   }
 
   node.childrenUL = null;
-  node.getChildrenUL = function() 
-  {
-    if (!node.childrenUL) 
-    {
+  node.getChildrenUL = function() {
+    if (!node.childrenUL) {
       node.childrenUL = document.createElement("ul");
       node.childrenUL.className = "children_ul";
       node.childrenUL.style.display = "none";
@@ -253,34 +241,128 @@ function showRoot()
   var headerHeight = $("#top").height();
   var footerHeight = $("#nav-path").height();
   var windowHeight = $(window).height() - headerHeight - footerHeight;
-  navtree.scrollTo('#selected',0,{offset:-windowHeight/2});
+  (function (){ // retry until we can scroll to the selected item
+    try {
+      var navtree=$('#nav-tree');
+      navtree.scrollTo('#selected',0,{offset:-windowHeight/2});
+    } catch (err) {
+      setTimeout(arguments.callee, 0);
+    }
+  })();
 }
 
-function expandNode(o, node, imm)
+function expandNode(o, node, imm, showRoot)
 {
-  if (node.childrenData && !node.expanded) 
-  {
-    if (!node.childrenVisited) 
-    {
-      getNode(o, node);
+  if (node.childrenData && !node.expanded) {
+    if (typeof(node.childrenData)==='string') {
+      var varName    = node.childrenData;
+      getScript(node.relpath+varName,function(){
+        node.childrenData = getData(varName);
+        expandNode(o, node, imm, showRoot);
+      }, showRoot);
+    } else {
+      if (!node.childrenVisited) {
+        getNode(o, node);
+      } if (imm || ($.browser.msie && $.browser.version>8)) { 
+        // somehow slideDown jumps to the start of tree for IE9 :-(
+        $(node.getChildrenUL()).show();
+      } else {
+        $(node.getChildrenUL()).slideDown("fast");
+      }
+      if (node.isLast) {
+        node.plus_img.src = node.relpath+"ftv2mlastnode.png";
+      } else {
+        node.plus_img.src = node.relpath+"ftv2mnode.png";
+      }
+      node.expanded = true;
     }
-    if (imm)
-    {
+  }
+}
+
+function glowEffect(n,duration)
+{
+  n.addClass('glow').delay(duration).queue(function(next){
+    $(this).removeClass('glow');next();
+  });
+}
+
+function highlightAnchor()
+{
+  var anchor = $($(location).attr('hash'));
+  if (anchor.parent().attr('class')=='memItemLeft'){
+    var rows = $('.memberdecls tr[class$="'+
+               window.location.hash.substring(1)+'"]');
+    glowEffect(rows.children(),300); // member without details
+  } else if (anchor.parents().slice(2).prop('tagName')=='TR') {
+    glowEffect(anchor.parents('div.memitem'),1000); // enum value
+  } else if (anchor.parent().is(":header")) {
+    glowEffect(anchor.parent(),1000); // section header
+  } else {
+    glowEffect(anchor.next(),1000); // normal member
+  }
+}
+
+function selectAndHighlight(n)
+{
+  var a;
+  if ($(location).attr('hash')) {
+    var link=stripPath($(location).attr('pathname'))+':'+
+      $(location).attr('hash').substring(1);
+    a=$('.item a[class$="'+link+'"]');
+  }
+  if (a && a.length) {
+    a.parent().parent().addClass('selected');
+    a.parent().parent().attr('id','selected');
+    highlightAnchor();
+  } else if (n) {
+    $(n.itemDiv).addClass('selected');
+    $(n.itemDiv).attr('id','selected');
+  }
+  showRoot();
+}
+
+function showNode(o, node, index)
+{
+  if (node && node.childrenData) {
+    if (typeof(node.childrenData)==='string') {
+      var varName    = node.childrenData;
+      getScript(node.relpath+varName,function(){
+        node.childrenData = getData(varName);
+        showNode(o,node,index);
+      },true);
+    } else {
+      if (!node.childrenVisited) {
+        getNode(o, node);
+      }
       $(node.getChildrenUL()).show();
-    } 
-    else 
-    {
-      $(node.getChildrenUL()).slideDown("fast",showRoot);
+      if (node.isLast) {
+        node.plus_img.src = node.relpath+"ftv2mlastnode.png";
+      } else {
+        node.plus_img.src = node.relpath+"ftv2mnode.png";
+      }
+      node.expanded = true;
+      var n = node.children[o.breadcrumbs[index]];
+      if (index+1<o.breadcrumbs.length) {
+        showNode(o,n,index+1);
+      } else {
+        if (typeof(n.childrenData)==='string') {
+          var varName = n.childrenData;
+          getScript(n.relpath+varName,function(){
+            n.childrenData = getData(varName);
+            node.expanded=false;
+            showNode(o,node,index); // retry with child node expanded
+          },true);
+        } else {
+          var rootBase = o.toroot.replace(/\..+$/, '');
+          if (rootBase=="index" || rootBase=="pages") {
+            expandNode(o, n, true, true);
+          }
+          selectAndHighlight(n);
+        }
+      }
     }
-    if (node.isLast)
-    {
-      node.plus_img.src = node.relpath+"ftv2mlastnode.png";
-    }
-    else
-    {
-      node.plus_img.src = node.relpath+"ftv2mnode.png";
-    }
-    node.expanded = true;
+  } else {
+    selectAndHighlight();
   }
 }
 
@@ -288,35 +370,48 @@ function getNode(o, po)
 {
   po.childrenVisited = true;
   var l = po.childrenData.length-1;
-  for (var i in po.childrenData) 
-  {
+  for (var i in po.childrenData) {
     var nodeData = po.childrenData[i];
     po.children[i] = newNode(o, po, nodeData[0], nodeData[1], nodeData[2],
-        i==l);
+      i==l);
   }
 }
 
-function findNavTreePage(url, data)
+function gotoNode(o,subIndex,root,hash,relpath)
 {
-  var nodes = data;
-  var result = null;
-  for (var i in nodes) 
-  {
-    var d = nodes[i];
-    if (d[1] == url) 
-    {
-      return new Array(i);
-    }
-    else if (d[2] != null) // array of children
-    {
-      result = findNavTreePage(url, d[2]);
-      if (result != null) 
-      {
-        return (new Array(i).concat(result));
-      }
-    }
+  var nti = navTreeSubIndices[subIndex][root+hash];
+  o.breadcrumbs = nti ? nti : navTreeSubIndices[subIndex][root];
+  if (!o.breadcrumbs && root!=NAVTREE[0][1]) { // fallback: show index
+    navTo(o,NAVTREE[0][1],"",relpath);
+    $('.item').removeClass('selected');
+    $('.item').removeAttr('id');
   }
-  return null;
+  if (o.breadcrumbs) {
+    o.breadcrumbs.unshift(0); // add 0 for root node
+    showNode(o, o.node, 0);
+  }
+}
+
+function navTo(o,root,hash,relpath)
+{
+  if (hash.match(/^#l\d+$/)) {
+    var anchor=$('a[name='+hash.substring(1)+']');
+    glowEffect(anchor.parent(),1000); // line number
+    hash=''; // strip line number anchors
+  }
+  var url=root+hash;
+  var i=-1;
+  while (NAVTREEINDEX[i+1]<=url) i++;
+  if (navTreeSubIndices[i]) {
+    gotoNode(o,i,root,hash,relpath)
+  } else {
+    getScript(relpath+'navtreeindex'+i,function(){
+      navTreeSubIndices[i] = eval('NAVTREEINDEX'+i);
+      if (navTreeSubIndices[i]) {
+        gotoNode(o,i,root,hash,relpath);
+      }
+    },true);
+  }
 }
 
 function initNavTree(toroot,relpath)
@@ -332,26 +427,32 @@ function initNavTree(toroot,relpath)
   o.node.li.appendChild(o.node.childrenUL);
   o.node.depth = 0;
   o.node.relpath = relpath;
+  o.node.expanded = false;
+  o.node.isLast = true;
+  o.node.plus_img = document.createElement("img");
+  o.node.plus_img.src = relpath+"ftv2pnode.png";
+  o.node.plus_img.width = 16;
+  o.node.plus_img.height = 22;
 
-  getNode(o, o.node);
+  navTo(o,toroot,window.location.hash,relpath);
 
-  o.breadcrumbs = findNavTreePage(toroot, NAVTREE);
-  if (o.breadcrumbs == null)
-  {
-    o.breadcrumbs = findNavTreePage("index.html",NAVTREE);
-  }
-  if (o.breadcrumbs != null && o.breadcrumbs.length>0)
-  {
-    var p = o.node;
-    for (var i in o.breadcrumbs) 
-    {
-      var j = o.breadcrumbs[i];
-      p = p.children[j];
-      expandNode(o,p,true);
-    }
-    p.itemDiv.className = p.itemDiv.className + " selected";
-    p.itemDiv.id = "selected";
-    $(window).load(showRoot);
-  }
+  $(window).bind('hashchange', function(){
+     if (window.location.hash && window.location.hash.length>1){
+       var a;
+       if ($(location).attr('hash')){
+         var clslink=stripPath($(location).attr('pathname'))+':'+
+                               $(location).attr('hash').substring(1);
+         a=$('.item a[class$="'+clslink+'"]');
+       }
+       if (a==null || !$(a).parent().parent().hasClass('selected')){
+         $('.item').removeClass('selected');
+         $('.item').removeAttr('id');
+       }
+       var link=stripPath2($(location).attr('pathname'));
+       navTo(o,link,$(location).attr('hash'),relpath);
+     }
+  })
+
+  $(window).load(showRoot);
 }
 

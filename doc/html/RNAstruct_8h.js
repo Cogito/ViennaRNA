@@ -1,6 +1,5 @@
 var RNAstruct_8h =
 [
-    [ "STRUC", "RNAstruct_8h.html#aa100f7d3ce0ad4f527a61c5764ebf277", null ],
     [ "b2HIT", "RNAstruct_8h.html#a07b7e90e712559a1992fba3ac6d21bbd", null ],
     [ "b2C", "RNAstruct_8h.html#a9c80d92391f2833549a8b6dac92233f0", null ],
     [ "b2Shapiro", "RNAstruct_8h.html#a5cd2feb367feeacad0c03cb7ddba5f10", null ],

@@ -1,8 +1,5 @@
 var fold__vars_8h =
 [
-    [ "PUBLIC", "fold__vars_8h.html#ad17d551e31d1828c68acf40684849b7e", null ],
-    [ "PRIVATE", "fold__vars_8h.html#a5e151c615eda34903514212f05a5ccf8", null ],
-    [ "option_string", "fold__vars_8h.html#a0ca65d37c515d6d36b06d3db1abb69d3", null ],
     [ "set_model_details", "fold__vars_8h.html#a4c3257186a796182462f18a5480ac8b3", null ],
     [ "fold_constrained", "fold__vars_8h.html#a0afc287c2464866d94858c39175154af", null ],
     [ "noLonelyPairs", "fold__vars_8h.html#a097eccaabd6ae8b4fef83cccff85bb5d", null ],

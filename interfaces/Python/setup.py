@@ -9,7 +9,7 @@ new_filename = "__init__.py"
 if os.path.exists(old_filename):
     os.rename(old_filename, new_filename)
  
-extra_link_args = ['-fopenmp', '-shared', '-lstdc++']
+extra_link_args = ['-fopenmp', '-lstdc++']
 extra_compile_args=['-fopenmp']
 
 if sys.platform != 'darwin':
@@ -25,7 +25,7 @@ extension = Extension("_RNA",
                       )
  
 setup(name="RNA",
-      version="2.1.6",
+      version="2.1.7",
       description="ViennaRNA",
       author="Ivo Hofacker, Institute for Theoretical Chemistry, University of Vienna",
       url="http://www.tbi.univie.ac.a/~ivo/RNA",

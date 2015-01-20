@@ -307,7 +307,7 @@ m4trace:configure.in:77: -2- m4_pattern_allow([^DO_X11$])
 m4trace:configure.in:82: -2- AC_DEFINE_TRACE_LITERAL([DO_GD])
 m4trace:configure.in:82: -2- m4_pattern_allow([^DO_GD$])
 m4trace:configure.in:88: -1- _m4_warn([obsolete], [The macro `AC_CYGWIN' is obsolete.
-You should run autoupdate.], [../../lib/autoconf/specific.m4:317: AC_CYGWIN is expanded from...
+You should run autoupdate.], [../../lib/autoconf/specific.m4:321: AC_CYGWIN is expanded from...
 configure.in:88: the top level])
 m4trace:configure.in:88: -1- AC_CANONICAL_HOST
 m4trace:configure.in:92: -2- AC_DEFINE_TRACE_LITERAL([DO_WIN32])

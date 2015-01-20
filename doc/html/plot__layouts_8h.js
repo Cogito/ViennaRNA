@@ -1,7 +1,5 @@
 var plot__layouts_8h =
 [
-    [ "PI", "plot__layouts_8h.html#a598a3330b3c21701223ee0ca14316eca", null ],
-    [ "PIHALF", "plot__layouts_8h.html#a4ffe7c60ebdd6907b33ed6e1808ac465", null ],
     [ "VRNA_PLOT_TYPE_SIMPLE", "plot__layouts_8h.html#ae6d17b9f0a53cf5205a9181e0f8422e9", null ],
     [ "VRNA_PLOT_TYPE_NAVIEW", "plot__layouts_8h.html#a94d4c863ecac2f220f76658afb92f964", null ],
     [ "VRNA_PLOT_TYPE_CIRCULAR", "plot__layouts_8h.html#a8c9eac631348da92136c8363ecdd9fb9", null ],

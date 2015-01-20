@@ -1300,16 +1300,16 @@ extern int do_backtrack;
 extern int noLonelyPairs;
 extern char backtrack_type;
 static SOLUTION *SOLUTION_get(SOLUTION *self,int i){
-	   static int size=-1;
-	   if (size<0) {
-	     SOLUTION *s;
-	     for (s=self; s->structure; s++);
-	     size= (int) (s-self);
-	   }
-	   if (i>=size) {
-	     warn("value out of range");
-	     return NULL;
-	   }
+//	   static int size=-1;
+//	   if (size<0) {
+//	     SOLUTION *s;
+//	     for (s=self; s->structure; s++);
+//	     size= (int) (s-self);
+//	   }
+//	   if (i>=size) {
+//	     warn("value out of range");
+//	     return NULL;
+//	   }
 	   return self+i;
 	}
 static int SOLUTION_size(SOLUTION *self){

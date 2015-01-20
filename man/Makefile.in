@@ -42,7 +42,8 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/RNAduplex.1.in $(srcdir)/RNAeval.1.in \
 	$(srcdir)/RNAfold.1.in $(srcdir)/RNAheat.1.in \
 	$(srcdir)/RNAinverse.1.in $(srcdir)/RNApdist.1.in \
-	$(srcdir)/RNAplot.1.in $(srcdir)/RNAsubopt.1.in texinfo.tex
+	$(srcdir)/RNAplfold.1.in $(srcdir)/RNAplot.1.in \
+	$(srcdir)/RNAsubopt.1.in texinfo.tex
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -51,7 +52,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = RNAheat.1 RNAsubopt.1 RNAdistance.1 RNAinverse.1 \
 	RNAeval.1 RNAfold.1 RNApdist.1 RNAplot.1 RNALfold.1 \
-	RNAalifold.1 RNAduplex.1 RNAcofold.1
+	RNAalifold.1 RNAduplex.1 RNAcofold.1 RNAplfold.1
 SOURCES =
 DIST_SOURCES =
 INFO_DEPS = $(srcdir)/RNAlib.info
@@ -166,7 +167,7 @@ target_alias = @target_alias@
 info_TEXINFOS = RNAlib.texinfo
 man_MANS = RNAheat.1 RNAsubopt.1 RNAdistance.1 RNAinverse.1 RNAcofold.1 \
 	   RNAeval.1 RNAfold.1 RNApdist.1 RNAplot.1 RNAalifold.1 \
-	   RNALfold.1 RNAduplex.1
+	   RNALfold.1 RNAduplex.1 RNAplfold.1
 
 EXTRA_DIST = $(man_MANS)
 all: all-am
@@ -225,6 +226,8 @@ RNAalifold.1: $(top_builddir)/config.status $(srcdir)/RNAalifold.1.in
 RNAduplex.1: $(top_builddir)/config.status $(srcdir)/RNAduplex.1.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 RNAcofold.1: $(top_builddir)/config.status $(srcdir)/RNAcofold.1.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+RNAplfold.1: $(top_builddir)/config.status $(srcdir)/RNAplfold.1.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 .texinfo.info:

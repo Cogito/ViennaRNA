@@ -3002,8 +3002,8 @@ echo $ECHO_N "checking for ViennaRNA package... $ECHO_C" >&6
 if test -z "$ac_VRNA_includes"; then
   for ac_dir in               \
     ../H                      \
+    /usr/local/include/ViennaRNA \
     /usr/local/include        \
-    /usr/local/include/ViennaRNA  \
     /usr/include/ViennaRNA    \
     /usr/local/ViennaRNA/H    \
     /usr/local/share/ViennaRNA/include \
@@ -3018,6 +3018,10 @@ if test -z "$ac_VRNA_includes"; then
 fi
 if test $ac_VRNA_includes; then
   CPPFLAGS="$CPPFLAGS -I$ac_VRNA_includes"
+fi
+
+if [ -d ../lib ] && [ "$ac_VRNA_includes" = "../H" ]; then
+  ac_VRNA_lib=../lib
 fi
 
 if test -z "$ac_VRNA_lib"; then

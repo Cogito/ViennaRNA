@@ -5,8 +5,8 @@ AC_DEFUN([AC_PATH_VRNA],
 if test -z "$ac_VRNA_includes"; then
   for ac_dir in               \
     ../H                      \
+    /usr/local/include/ViennaRNA \
     /usr/local/include        \
-    /usr/local/include/ViennaRNA  \
     /usr/include/ViennaRNA    \
     /usr/local/ViennaRNA/H    \
     /usr/local/share/ViennaRNA/include \
@@ -21,6 +21,10 @@ if test -z "$ac_VRNA_includes"; then
 fi
 if test $ac_VRNA_includes; then
   CPPFLAGS="$CPPFLAGS -I$ac_VRNA_includes"
+fi
+
+if [[ -d ../lib ] && [ "$ac_VRNA_includes" = "../H" ]]; then
+  ac_VRNA_lib=../lib
 fi
 
 if test -z "$ac_VRNA_lib"; then
@@ -42,7 +46,7 @@ fi
 AC_MSG_RESULT([ headers in "$ac_VRNA_includes" and library... "$ac_VRNA_lib"])
 
 dnl So far we've only set up paths, we could also check for
-dnl usability of headers and library like so 
+dnl usability of headers and library like so
 dnl AC_CHECK_HEADER(part_func.h, [],
 dnl		[AC_MSG_ERROR([Cannot find ViennaRNA headers])])
 dnl AC_CHECK_LIB(RNA, fold)

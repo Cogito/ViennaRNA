@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2005-05-02 17:02:57 ivo>
+  Last changed Time-stamp: <2006-01-16 11:28:43 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: nachbar.c,v 1.5 2005/05/02 15:14:47 ivo Exp $
+  $Id: nachbar.c,v 1.6 2006/01/16 10:38:11 ivo Exp $
 */
 
 #include <stdio.h>
@@ -19,8 +19,9 @@
 #include "energy_const.h"
 #include "utils.h"
 #include "cache_util.h"
+#include "baum.h"
 
-static char UNUSED rcsid[]="$Id: nachbar.c,v 1.5 2005/05/02 15:14:47 ivo Exp $";
+static char UNUSED rcsid[]="$Id: nachbar.c,v 1.6 2006/01/16 10:38:11 ivo Exp $";
 
 /* arrays */
 static short *neighbor_list=NULL;
@@ -54,7 +55,7 @@ static FILE *logFP=NULL;
 /**/
 void ini_nbList(int chords) {
   char logFN[256];
-  
+
   _RT = (((temperature + K0) * GASCONST) / 1000.0);
   if (neighbor_list!=NULL) return;
   /*
@@ -82,7 +83,7 @@ void ini_nbList(int chords) {
 /**/
 void update_nbList(int i, int j, int iE) {
   double E, dE, p;
-  
+
   E = (double)iE/100.;
   neighbor_list[2*top] = (short )i;
   neighbor_list[2*top+1] = (short )j;
@@ -96,12 +97,12 @@ void update_nbList(int i, int j, int iE) {
     else p = exp(-(dE / _RT));
   }
   else  /* kawasaki rule */
-    p = exp(-0.5 * (dE / _RT)); 
-  
+    p = exp(-0.5 * (dE / _RT));
+
   totalflux += p;
-  bmf[top++] = (float )p;  
-  if (dE < 0) lmin = 0; 
-  if ((dE == 0) && (lmin==1)) lmin = 2; 
+  bmf[top++] = (float )p;
+  if (dE < 0) lmin = 0;
+  if ((dE == 0) && (lmin==1)) lmin = 2;
 }
 
 /**/
@@ -124,7 +125,7 @@ void put_in_cache(void) {
   }
 /*    c->structure = strdup(GAV.currform); */
   c->structure = (char *) calloc(GSV.len+1, sizeof(char));
-  strcpy(c->structure, GAV.currform); 
+  strcpy(c->structure, GAV.currform);
   c->neighbors = (short *) malloc(top*2*sizeof(short));
   memcpy(c->neighbors,neighbor_list,top*2*sizeof(short));
   c->rates = (float *) malloc(top*sizeof(float));
@@ -135,16 +136,16 @@ void put_in_cache(void) {
   c->energy = GSV.currE;
   write_cache(c);
 }
-   
+
 /*============*/
 
 int sel_nb(void) {
-  
+
   char trans, **s;
   int next;
   double pegel = 0.0, schwelle = 0.0, zufall = 0.0;
   int found_stop=0;
-  
+
   /* before we select a move, store current conformation in cache */
   /* ... unless it just came from there */
   if ( !is_from_cache ) put_in_cache();
@@ -153,7 +154,7 @@ int sel_nb(void) {
   /* draw 2 different a random number */
   schwelle = urn();
   while ( zufall==0 ) zufall = urn();
-  
+
   /* advance internal clock */
   if (totalflux>0)
     zeitInc = (log(1. / zufall) / totalflux);
@@ -161,23 +162,23 @@ int sel_nb(void) {
     if (GSV.grow>0) zeitInc=GSV.grow;
     else zeitInc = GSV.time;
   }
-  
+
   Zeit += zeitInc;
   if (GSV.grow>0 && GSV.len < strlen(GAV.farbe_full)) grow_chain();
 
   /* meanE /= (double)top; */
-  
+
   /* normalize boltzmann weights */
   schwelle *=totalflux;
-  
+
   /* and choose a neighbour structure next */
-  for (next = 0; next < top; next++) { 
+  for (next = 0; next < top; next++) {
     pegel += bmf[next];
     if (pegel > schwelle) break;
   }
-  
+
   /* in case of rounding errors */
-  if (next==top) next=top-1; 
+  if (next==top) next=top-1;
 
   /*
     process termination contitiones
@@ -189,14 +190,14 @@ int sel_nb(void) {
       break;
     }
   }
-  
+
   if ( ((found_stop > 0) && (GTV.fpt == 1)) || (Zeit > GSV.time) ) {
     /* met condition to stop simulation */
 
     /* this gose to stdout */
     if ( !GTV.silent ) {
       printf("%s %6.2f %10.3f", GAV.currform, GSV.currE, Zeit);
-      if ( GTV.verbose ) printf("%4d _ %d", top, lmin);  
+      if ( GTV.verbose ) printf("%4d _ %d", top, lmin);
       if (found_stop) printf(" X%d\n", found_stop);/* found a stop structure */
       else printf(" O\n"); /* time for simulation is exceeded */
       fflush(stdout);
@@ -211,7 +212,7 @@ int sel_nb(void) {
     GAV.subi[2] = xsubi[2];
     fprintf(logFP, "(%5hu %5hu %5hu)", GAV.subi[0], GAV.subi[1], GAV.subi[2]);
     fflush(logFP);
-    
+
     Zeit = 0.0;
     /*  highestE = OhighestE = -1000.0; */
     reset_nbList();
@@ -257,7 +258,7 @@ int sel_nb(void) {
 #if 0
   if (lmin==1) {
     /* went back to previous lmin */
-    if (strcmp(GAV.prevform, GAV.currform) == 0) { 
+    if (strcmp(GAV.prevform, GAV.currform) == 0) {
       if (OhighestE < highestE) {
 	highestE = OhighestE;  /* delete loop */
 	strcpy(highestS, OhighestS);
@@ -272,7 +273,7 @@ int sel_nb(void) {
     OhighestE = highestE = -1000.;
     highestS[0] = 0;
   }
-  
+
   /* log highes energy */
   if (GSV.currE > highestE) {
     OhighestE = highestE;
@@ -281,7 +282,7 @@ int sel_nb(void) {
     strcpy(highestS, GAV.currform);
   }
 #endif
-  
+
   if (next>=0) update_tree(neighbor_list[2*next], neighbor_list[2*next+1]);
   else {
     clean_up_rl(); ini_or_reset_rl();
@@ -293,7 +294,7 @@ int sel_nb(void) {
 
 /*==========================*/
 static void reset_nbList(void) {
-  
+
   top = 0;
   totalflux = 0.0;
   /*    meanE = 0.0; */
@@ -302,7 +303,7 @@ static void reset_nbList(void) {
 
 /*======================*/
 void clean_up_nbList(void){
-  
+
   free(neighbor_list);
   free(bmf);
   fprintf(logFP,"\n");
@@ -311,11 +312,11 @@ void clean_up_nbList(void){
 
 /*======================*/
 static void grow_chain(void){
-  int newl, i;
+  int newl;
   /* note Zeit=0 corresponds to chain length GSV.glen */
   if (Zeit<(GSV.len+1-GSV.glen) * GSV.grow) return;
   newl = GSV.len+1;
-  Zeit = (newl-GSV.glen) * GSV.grow;  
+  Zeit = (newl-GSV.glen) * GSV.grow;
   top=0; /* prevent structure move in sel_nb */
 
   if (GSV.len<newl) {
@@ -325,7 +326,5 @@ static void grow_chain(void){
     strcat(GAV.startform, ".");
 
     GSV.len = newl;
-    /* clean_up_rl();
-       ini_or_reset_rl(); */
   }
 }

@@ -1,10 +1,10 @@
-This is RNAlib.info, produced by makeinfo version 4.7 from
+This is RNAlib.info, produced by makeinfo version 4.8 from
 RNAlib.texinfo.
 
 
 File: RNAlib.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This file documents the Vienna RNA Package Version 1.5
+   This file documents the Vienna RNA Package Version 1.6
 
    Copyright (C)1994-2002 Ivo Hofacker and Peter Stadler
 
@@ -29,15 +29,16 @@ The core of the Vienna RNA Package is formed by a collection of routines
 for the prediction and comparison of RNA secondary structures. These
 routines can be accessed through stand-alone programs, such as RNAfold,
 RNAdistance etc., which should be sufficient for most users. For those
-who wish to develop their own programs we provide a library which can
-be linked to your own code.
+who wish to develop their own programs we provide a library which can be
+linked to your own code.
 
-   This document only describes the library and will be primarily
-useful to programmers. The stand-alone programs are described in
-separate man pages. The latest version of the package including source
-code and html versions of the documentation can be found at
-`http://www.tbi.univie.ac.at/~ivo/RNA/'.  This manual documents version
-1.5.
+   This document describes the library and will be primarily useful to
+programmers. However, it also contains details about the implementation
+that may be of interest to advanced users. The stand-alone programs are
+described in separate man pages.  The latest version of the package
+including source code and html versions of the documentation can be
+found at `http://www.tbi.univie.ac.at/~ivo/RNA/'.  This manual
+documents version 1.6.
 
    Please send comments and bug reports to <ivo@tbi.univie.ac.at>.
 
@@ -54,6 +55,7 @@ File: RNAlib.info,  Node: Folding Routines,  Next: Parsing and Comparing,  Prev:
 * Inverse Fold::                Searching for Predefined Structures
 * Suboptimal folding::          Enumerating Suboptimal Structures
 * Cofolding::                   Folding of 2 RNA molecules
+* Local Fold::                  Predicting local structures of large sequences
 * Alignment Fold::              Predicting Consensus Structures from Alignment
 * Fold Vars::                   Global Variables for the Folding Routines
 * Param Files::                 Reading Energy Parameters from File
@@ -212,90 +214,91 @@ File: RNAlib.info,  Node: Suboptimal folding,  Next: Cofolding,  Prev: Inverse F
    Prototypes for these functions are declared in `subopt.h'.
 
 
-File: RNAlib.info,  Node: Cofolding,  Next: Alignment Fold,  Prev: Suboptimal folding,  Up: Folding Routines
+File: RNAlib.info,  Node: Cofolding,  Next: Local Fold,  Prev: Suboptimal folding,  Up: Folding Routines
 
-2.5 Predictiong hybridization structures of two molecules
-=========================================================
+2.5 Predicting hybridization structures of two molecules
+========================================================
 
-Folding of two RNA molecules. The molecules have to be separated by a
-'&' character in the input (file or stdin). If there is no '&', will
-return the same result as folding. The same rules as for using folding
-functions apply, if not stated otherwise. After reading in, it is vital
-to set the CUT_POINT global variable and cut the '&' out of the
-sequence string, e.g. using the `tokenize()' function. If this is not
-done, the '&' will be considered to be a non-standard base and the
-result will be a fold of one molecule.
+The function of an RNA molecule often depends on its interaction with
+other RNAs. The following routines therefore allow to predict structures
+formed by two RNA molecules upon hybridization.  One approach to
+co-folding two RNAs consists of concatenating the two sequences and
+keeping track of the concatenation point in all energy evaluations.
+Correspondingly, many of the `cofold()' and `co_pf_fold()' routines
+below take one sequence string as argument and use the the global
+variable CUT_POINT to mark the concatenation point. Note that while the
+`RNAcofold' program uses the '&' character to mark the chain break in
+its input, you should not use an '&' when using the library routines
+(set CUT_POINT instead).
 
- -- data type: plist struct {int i; int j; float energy;}
+ -- Variable: int cut_point
+     `cut_point' marks the position (starting from 1) of the first
+     nucleotide of the second molecule within the concatenated sequence.
+     The default value of -1 stands for single molecule folding. The
+     `cut_point' variable is also used by `PS_rna_plot()' and
+     `PS_dot_plot()' to mark the chain break in postscript plots.
 
- -- data type: ConcEnt struct {double A0; double B0;double ABc;double
-          AAc; double BBc; double Ac; double Bc;}
-
- -- Function: float cofold (char *SEQUENCE, char *STRUCTURE);
+ -- Function: float cofold (char *SEQUENCE, char *STRUCTURE)
      The analog to the  `fold()' function. Computes the minimum free
-     energy of two RNA molecules interacting.
+     energy of two RNA molecules interacting. If `cut_point==-1' results
+     should be the same as with `fold()'.
 
- -- Function: void free_co_arrays (void);
+ -- Function: void free_co_arrays (void)
      Frees arrays allocated by `cofold()'.
 
- -- Function: char *tokenize (char *LINE);
-     Takes the sequence as it is taken from stdin or a file, sets the
-     CUT_POINT global variable to the position of the '&' character and
-     cuts out the '&' character to return the sequence as it will be
-     used by all cofold functions.
+ -- Function: void initialize_cofold (int LENGTH)
+     Allocates memory for mfe cofolding sequences not longer than
+     LENGTH, and sets up pairing matrix and energy parameters.
+     Explicitely calling  `initialize_cofold()' is normally not
+     necessary, as it will be called automagically before folding.
 
- -- Function: void initialize_cofold (int LENGTH);
-     Obsolete function kept for backward compatibility.  Allocates
-     memory for mfe cofolding sequences not longer than LENGTH, and
-     sets up pairing matrix and energy parameters.
-
- -- Function: float *get_monomereminimumfreeenergies ();
-     Exports the minimum free energies of the two monomeres folded
-     "alone" (after using `cofold()'.
-
- -- Function: extern struct plist *get_mfe_plist (struct plist *PL);
-     This writes the global *PR array into the new structure PLIST,
-     creating an array of the base pairs of the minimum free energy
-     structure (and nothing else). Default probability is 0.95.  Used
-     when *PR is going to be freed or overwritten by other functions
-     (e.g. ` co_pf_fold()',`cofold()', etc).
-
-   Prototypes for these functions are declared in `cofold.h' or
-`co_part_func.h'.
+   Prototypes for these functions are declared in `cofold.h'.
 
 2.6 Partition Function Cofolding
 ================================
 
 As for folding one RNA molecule, this computes the partition function
 of all possible structures and the base pair probabilities. Uses the
-same global PF_SCALE variable to inhibit overflow.
+same global PF_SCALE variable to avoid overflows.
 
- -- Function: float co_pf_fold (char* SEQUENCE, char* STRUCTURE)
-     produces a partition function folding of two RNA molecules,
-     including the penalty for duplex initialization. To use this, the
-     CUT_POINT global variable has to be set. It will return the free
-     energy of the ensemble, as well as the pair probabilities in a
-     global array.
+   To simplify the implementation the partition function computation is
+done internally in a null model that does not include the duplex
+initiation energy, i.e. the entropic penalty for producing a dimer from
+two monomers). The resulting free energies and pair probabilities are
+initally relative to that null model. In a second step the free
+energies can be corrected to include the dimerization penalty, and the
+pair probabilities can be divided into the conditional pair
+probabilities given that a re dimer is formed or not formed.
 
+ -- data type: cofoldF struct {double F0AB, FAB, FcAB, FA, FB;}
 
- -- Function: void free_co_pf_arrays (void);
+ -- Function: cofoldF co_pf_fold (char* SEQUENCE, char* STRUCTURE)
+     The analog to the `pf_fold()' function, it computes the partition
+     function of two interacting RNA molecules as well as base pair
+     probabilities.  It returns a struct including free energies
+     computed for different models. F0AB is the free energy in the null
+     model; FAB is corrected to include the initiation penalty, FcAB
+     only includes real dimers. FA and FB are the free energies of the
+     2 molecules, resp. As with `cofold()' the CUT_POINT global
+     variable has to be set to mark the chain break between the
+     molecules.
+
+ -- Function: void free_co_pf_arrays (void)
      frees partition function cofold arrays allocated in `
      co_pf_fold()'.
 
- -- Function: void init_co_pf_fold (int LENGTH);
+ -- Function: void init_co_pf_fold (int LENGTH)
      Obsolete function kept for backward compatibility.  Allocates
      memory for partition function cofolding sequences not longer than
      LENGTH, and sets up pairing matrix and energy parameters.
 
- -- Function: float *get_monomerefreeenergies ();
-     Export free energies of monomere ensembles (after using `
-     co_pf_fold()')
+ -- data type: plist struct {int i; int j; float energy;}
 
  -- Function: extern struct plist *get_plist (struct plist *PL, int
-          LENGTH, double CUT_OFF);
-     Makes a list of base pairs out of the global *PR array,
-     remembering all base pairs with a probability higher than CUT_OFF.
-     Must be used in the functions of the next section.
+          LENGTH, double CUT_OFF)
+     Makes a list of base pairs out of the global *PR array, ignoring
+     all base pairs with a probability less than CUT_OFF.  This is
+     useful since the PR array gets overwritten by subsequent foldings.
 
    Prototypes for these functions are declared in `co_part_func.h'.
 
@@ -306,36 +309,73 @@ After computing the partition functions of all possible dimeres one can
 compute the probabilities of base pairs, the concentrations out of
 start concentrations and sofar and soaway.
 
- -- Function: void compute_probabilities (double *FEAB,double *FEAA,
-          double *FEBB,double *FEA, double *FEB, struct plist *PRAB,
-          struct plist *PRAA, struct plist *PRBB, struct plist *PRA,
-          struct plist *PRB, int ALENGTH,int BLENGTH);
-     Computes the probabilities of being paired for the different
-     monomeres end dimeres possible for two RNA molecules (called A and
-     B). Takes the minimum free energies of the ensembles of every
-     dimere (as computed by `co_part_cfunc()' and their base pairing
-     probabilities (taken from `get_plist()' as well as the length of
-     the two molecules ALENGTH and BLENGTH.
+ -- Function: void compute_probabilities (double FAB, double FEA,
+          double FEB, struct plist *PRAB, struct plist *PRA, struct
+          plist *PRB, int ALENGTH)
+     Given the pair probabilities and free energies (in the null model)
+     for a dimer AB and the two constituent monomers A and B, compute
+     the conditional pair probabilities given that a dimer AB actually
+     forms.  Null model pair probabilities are given as a list as
+     produced by `get_plist()'), the dimer probabilities PRAB are
+     modified in place.
+
+   Dimer formation is inherently concentration dependent. Given the free
+energies of the monomers A and B and dimers AB, AA, and BB one can
+compute the equilibrium concentrations, given input concentrations of A
+and B, see e.g.~`Dimitrov & Zuker (2004)'
+
+ -- data type: ConcEnt struct {double A0; double B0;double ABc;double
+          AAc; double BBc; double Ac; double Bc;}
 
  -- Function: extern struct ConcEnt *get_concentrations(double FEAB,
           double FEAA, double FEBB, double FEA, double FEB, double *
-          STARTCONC);
-     Takes an array  STARTCONC with alternating entries for the initial
-     concentrations of molecules A and B (one and two), then computes
-     the equilibrium concentrations `Dimitrov & Zuker (2004)' for the
-     free energies put in.
-
- -- Function: int make_probsum (int LENGTH, char *NAME);
-     Computes the probability of any base to be paired to a base wtih a
-     number lower than LENGTH (used for e.g. compute probability to be
-     paired within one molecule).
+          STARTCONC)
+     Takes an array  STARTCONC of input concentrations with alternating
+     entries for the initial concentrations of molecules A and B
+     (terminated by two zeroes), then computes the resulting
+     equilibrium concentrations from the free energies for the dimers.
+     Dimer free energies should be the dimer-only free energies, i.e.
+     the FcAB entries from the `cofoldF' struct.
 
    Prototypes for these functions are declared in `co_part_func.h'.
 
 
-File: RNAlib.info,  Node: Alignment Fold,  Next: Fold Vars,  Prev: Cofolding,  Up: Folding Routines
+File: RNAlib.info,  Node: Local Fold,  Next: Alignment Fold,  Prev: Cofolding,  Up: Folding Routines
 
-2.8 Predicting Consensus Structures from an Alignment
+2.8 Searching for local mfe structures in large molecules
+=========================================================
+
+Local structures can be predicted by a modified version of the `fold()'
+algorithm that restricts the span of all base pairs.
+
+ -- Function: float Lfold (char *STRING, char *STRUCTURE, int MAXDIST)
+     The local analog to `fold()'. Computes the minimum free energy
+     structure including only base pairs with a span smaller than
+
+   MAXDIST.
+
+ -- Function: int pfl_fold (char *SEQUENCE, int WINSIZE, float CUTOFF,
+          struct plist **PL)
+     pfl_fold computes partition functions for every window of size
+     WINSIZE possible in a RNA molecule, and returns the mean base pair
+     probabilities in PL. Note that in contrast to `Lfold()', bases
+     outside of the window do not influence the structure at all. Only
+     probabilities higher than CUTOFF are kept.
+
+ -- Function: void init_pf_foldLP (int LENGTH)
+     Analog to `init_pf_fold()'. LENGTH is the length  of the sequence.
+
+ -- Function: void free_pf_arraysLP (void)
+     frees the arrays used by `pfl_fold()'
+
+ -- Function: void update_pf_paramsLP (int LENGTH)
+     Analog to `update_pf_params()'. LENGTH is the length  of the
+     sequence.
+
+
+File: RNAlib.info,  Node: Alignment Fold,  Next: Fold Vars,  Prev: Local Fold,  Up: Folding Routines
+
+2.9 Predicting Consensus Structures from an Alignment
 =====================================================
 
 Consensus structures can be predicted by a modified version of the
@@ -386,8 +426,8 @@ cannot be formed by all structures. For details see `Hofacker (2002)'.
 
 File: RNAlib.info,  Node: Fold Vars,  Next: Param Files,  Prev: Alignment Fold,  Up: Folding Routines
 
-2.9 Global Variables for the Folding Routines
-=============================================
+2.10 Global Variables for the Folding Routines
+==============================================
 
 The following global variables change the behavior the folding
 algorithms or contain additional information after folding.
@@ -493,7 +533,7 @@ from their defaults.
 
 File: RNAlib.info,  Node: Param Files,  Prev: Fold Vars,  Up: Folding Routines
 
-2.10 Energy Parameter Files
+2.11 Energy Parameter Files
 ===========================
 
 A default set of parameters, identical to the one described in `Mathews
@@ -527,8 +567,8 @@ determine the type of a pair consider the base at the (local) 5' end of
 each strand first, i.e. use the pairs (i,j) and (q,p) for an interior
 loop with i<p<q<j. This is probably better explained by an example.
 Consider the symmetric size 4 interior loop
-                           5'-GAUA-3'
-                           3'-CGCU-5'
+     		      5'-GAUA-3'
+     		      3'-CGCU-5'
    the first pair is GC, the second UA (not AU!) the unpaired bases are
 (in 5' to 3' direction, starting at the first pair) A U C G. Thus we
 need entry [2,6,1,4,2,3] of the corresponding table. Because the loop is
@@ -548,8 +588,8 @@ by token. The following tokens are recognized:
 The list of free energies for stacked pairs, indexed by the two closing
 pairs. The list should be formated as symmetric an 7*7 matrix,conforming
 to the order explained above. As an example the stacked pair
-                           5'-GU-3'        5'-AC-3'
-                           3'-CA-5'        3'-UG-5'
+     		      5'-GU-3'        5'-AC-3'
+     		      3'-CA-5'        3'-UG-5'
    corresponds to the entry [2,5], which should be identical to [5,2].
 Note that the format has changed from previous releases, to make it
 consistent with other loop parameters.
@@ -580,8 +620,8 @@ above) and the two unpaired bases. Since we distinguish 5 bases the
 list contains 7*5*5 entries and should be formated either as an 7*25
 matrix or 7 5*5 matrices. The order is such that for example the
 mismatch
-                                    5'-CU-3'
-                                    3'-GC-5'
+     			       5'-CU-3'
+     			       3'-GC-5'
    corresponds to entry [1,4,2] (CG=1, U=4, C=2), (in this notation the
 first index runs from 1 to 7, second and third from 0 to 4)
 
@@ -594,8 +634,8 @@ Corresponding enthalpies for rescaling to temperatures other than 37C.
 # int11_energies
 Free energies for symmetric size 2 interior loops. 7*7*5*5 entries
 formated as 49 5*5 matrices, or seven 7*25 matrices. Example:
-                                    5'-CUU-3'
-                                    3'-GCA-5'
+     			       5'-CUU-3'
+     			       3'-GCA-5'
    corresponds to entry [1,5,4,2], which should be identical to
 [5,1,2,4].
 
@@ -603,8 +643,8 @@ formated as 49 5*5 matrices, or seven 7*25 matrices. Example:
 Free energies for size 3 (2+1) interior loops. 7*7*5*5*5 entries
 formated in 5*5 or 5*25 matrices. The strand with a single unpaired
 base is listed first, example:
-                                    5'-CU U-3'
-                                    3'-GCCA-5'
+     			       5'-CU U-3'
+     			       3'-GCCA-5'
    corresponds to entry [1,5,4,2,2].
 
 # int22_energies
@@ -618,14 +658,14 @@ adjacent to a helix in multiloops and free ends (the equivalent of
 mismatch energies in interior and hairpin loops). The array is indexed
 by the type of pair closing the helix and the unpaired base and,
 therefore, forms a 8*5 matrix. For example the dangling base in
-                                    5'-GC-3'
-                                    3'- G-5'
+     			       5'-GC-3'
+     			       3'- G-5'
    corresponds to entry [1,2] (CG=1, C=2);
 
 # dangle3
 Same as above for bases on the 3' side of a helix.
-                                    5'- A-3'
-                                    3'-AU-5'
+     			       5'- A-3'
+     			       3'-AU-5'
    corresponds to entry [5,1] (AU=5, A=1);
 
 # ML_params
@@ -1090,7 +1130,7 @@ distance of the resulting structures and base pairing probabilities.
      void main()
      {
         char *seq1="CGCAGGGAUACCCGCG", *seq2="GCGCCCAUAGGGACGC",
-             *struct1,* struct2,* xstruc;
+     	*struct1,* struct2,* xstruc;
         float e1, e2, tree_dist, string_dist, profile_dist, kT;
         Tree *T1, *T2;
         swString *S1, *S2;
@@ -1132,7 +1172,7 @@ distance of the resulting structures and base pairing probabilities.
         string_dist = string_edit_distance(S1, S2);
         free(S1); free(S2);
         printf("%s  mfe=%5.2f\n%s  mfe=%5.2f  dist=%3.2f\n",
-             aligned_line[0], e1, aligned_line[1], e2, string_dist);
+     	aligned_line[0], e1, aligned_line[1], e2, string_dist);
 
         /* for longer sequences one should also set a scaling factor for
            partition function folding, e.g: */
@@ -1151,7 +1191,7 @@ distance of the resulting structures and base pairing probabilities.
 
         profile_dist = profile_edit_distance(pf1, pf2);
         printf("%s  free energy=%5.2f\n%s  free energy=%5.2f  dist=%3.2f\n",
-             aligned_line[0], e1, aligned_line[1], e2, profile_dist);
+     	aligned_line[0], e1, aligned_line[1], e2, profile_dist);
 
         free_profile(pf1); free_profile(pf2);
      }
@@ -1249,72 +1289,73 @@ Function Index
  [index ]
 * Menu:
 
-* *get_monomerefreeenergies:             Cofolding.           (line  77)
-* *get_monomereminimumfreeenergies:      Cofolding.           (line  39)
-* *tokenize:                             Cofolding.           (line  28)
-* add_root:                              Parsing.             (line  31)
-* alifold:                               Alignment Fold.      (line  14)
-* alipf_fold:                            Alignment Fold.      (line  29)
-* b2C:                                   Parsing.             (line  18)
-* b2HIT:                                 Parsing.             (line  14)
-* b2Shapiro:                             Parsing.             (line  22)
-* bp_distance:                           Distances.           (line  20)
-* co_pf_fold:                            Cofolding.           (line  60)
-* cofold:                                Cofolding.           (line  21)
-* compute_probabilities:                 Cofolding.           (line  99)
-* energy_of_struct:                      mfe Fold.            (line  25)
-* expand_Full:                           Parsing.             (line  10)
-* expand_Shapiro:                        Parsing.             (line  27)
-* fold:                                  mfe Fold.            (line  11)
-* free_alifold_arrays:                   Alignment Fold.      (line  20)
-* free_arrays:                           mfe Fold.            (line  33)
-* free_co_arrays:                        Cofolding.           (line  25)
-* free_co_pf_arrays:                     Cofolding.           (line  68)
-* free_pf_arrays:                        PF Fold.             (line  38)
-* free_profile:                          Profile Distances.   (line  20)
-* free_tree:                             Tree Distances.      (line  15)
-* get_line:                              Utilities.           (line  98)
-* gmlRNA:                                Utilities.           (line  39)
-* hamming:                               Utilities.           (line  56)
-* init_co_pf_fold:                       Cofolding.           (line  72)
-* init_pf_fold:                          PF Fold.             (line  33)
-* initialize_cofold:                     Cofolding.           (line  34)
-* initialize_fold:                       mfe Fold.            (line  28)
-* int_urn:                               Utilities.           (line  91)
-* inverse_fold:                          Inverse Fold.        (line  10)
-* inverse_pf_fold:                       Inverse Fold.        (line  21)
-* Make_bp_profile:                       Profile Distances.   (line  10)
-* make_pair_table:                       Utilities.           (line  71)
-* make_probsum:                          Cofolding.           (line 115)
-* Make_swString:                         String Distances.    (line   7)
-* make_tree:                             Tree Distances.      (line   7)
-* mean_bp_dist:                          PF Fold.             (line  46)
-* nrerror:                               Utilities.           (line  80)
-* pack_structure:                        Utilities.           (line  60)
-* parse_structure:                       Parsing.             (line  48)
-* pf_fold:                               PF Fold.             (line  13)
-* profile_edit_distance:                 Profile Distances.   (line  17)
-* PS_dot_plot:                           Utilities.           (line   9)
-* PS_rna_plot:                           Utilities.           (line  19)
-* PS_rna_plot_a:                         Utilities.           (line  27)
-* random_string:                         Utilities.           (line  52)
-* read_parameter_file:                   Param Files.         (line  11)
-* space:                                 Utilities.           (line  94)
-* string_edit_distance:                  String Distances.    (line  11)
-* struct:                                Cofolding.           (line  43)
-* subopt:                                Suboptimal folding.  (line  10)
-* svg_RNA_plot:                          Utilities.           (line  34)
-* time_stamp:                            Utilities.           (line  76)
-* tree_edit_distance:                    Tree Distances.      (line  12)
-* unexpand_aligned_F:                    Parsing.             (line  43)
-* unexpand_Full:                         Parsing.             (line  34)
-* unpack_structure:                      Utilities.           (line  67)
-* unweight:                              Parsing.             (line  38)
-* update_alifold_params:                 Alignment Fold.      (line  23)
-* update_fold_params:                    mfe Fold.            (line  36)
-* update_pf_params:                      PF Fold.             (line  41)
-* urn:                                   Utilities.           (line  83)
-* write_parameter_file:                  Param Files.         (line  15)
+* add_root:                              Parsing.              (line 31)
+* alifold:                               Alignment Fold.       (line 14)
+* alipf_fold:                            Alignment Fold.       (line 29)
+* b2C:                                   Parsing.              (line 18)
+* b2HIT:                                 Parsing.              (line 14)
+* b2Shapiro:                             Parsing.              (line 22)
+* bp_distance:                           Distances.            (line 20)
+* co_pf_fold:                            Cofolding.            (line 60)
+* cofold:                                Cofolding.            (line 26)
+* compute_probabilities:                 Cofolding.            (line 99)
+* energy_of_struct:                      mfe Fold.             (line 25)
+* expand_Full:                           Parsing.              (line 10)
+* expand_Shapiro:                        Parsing.              (line 27)
+* fold:                                  mfe Fold.             (line 11)
+* free_alifold_arrays:                   Alignment Fold.       (line 20)
+* free_arrays:                           mfe Fold.             (line 33)
+* free_co_arrays:                        Cofolding.            (line 31)
+* free_co_pf_arrays:                     Cofolding.            (line 71)
+* free_pf_arrays:                        PF Fold.              (line 38)
+* free_pf_arraysLP:                      Local Fold.           (line 27)
+* free_profile:                          Profile Distances.    (line 20)
+* free_tree:                             Tree Distances.       (line 15)
+* get_line:                              Utilities.            (line 98)
+* gmlRNA:                                Utilities.            (line 39)
+* hamming:                               Utilities.            (line 56)
+* init_co_pf_fold:                       Cofolding.            (line 75)
+* init_pf_fold:                          PF Fold.              (line 33)
+* init_pf_foldLP:                        Local Fold.           (line 24)
+* initialize_cofold:                     Cofolding.            (line 34)
+* initialize_fold:                       mfe Fold.             (line 28)
+* int_urn:                               Utilities.            (line 91)
+* inverse_fold:                          Inverse Fold.         (line 10)
+* inverse_pf_fold:                       Inverse Fold.         (line 21)
+* Lfold:                                 Local Fold.           (line 10)
+* Make_bp_profile:                       Profile Distances.    (line 10)
+* make_pair_table:                       Utilities.            (line 71)
+* Make_swString:                         String Distances.     (line  7)
+* make_tree:                             Tree Distances.       (line  7)
+* mean_bp_dist:                          PF Fold.              (line 46)
+* nrerror:                               Utilities.            (line 80)
+* pack_structure:                        Utilities.            (line 60)
+* parse_structure:                       Parsing.              (line 48)
+* pf_fold:                               PF Fold.              (line 13)
+* pfl_fold:                              Local Fold.           (line 17)
+* profile_edit_distance:                 Profile Distances.    (line 17)
+* PS_dot_plot:                           Utilities.            (line  9)
+* PS_rna_plot:                           Utilities.            (line 19)
+* PS_rna_plot_a:                         Utilities.            (line 27)
+* random_string:                         Utilities.            (line 52)
+* read_parameter_file:                   Param Files.          (line 11)
+* space:                                 Utilities.            (line 94)
+* string_edit_distance:                  String Distances.     (line 11)
+* struct:                                Cofolding.            (line 83)
+* subopt:                                Suboptimal folding.   (line 10)
+* svg_RNA_plot:                          Utilities.            (line 34)
+* time_stamp:                            Utilities.            (line 76)
+* tree_edit_distance:                    Tree Distances.       (line 12)
+* unexpand_aligned_F:                    Parsing.              (line 43)
+* unexpand_Full:                         Parsing.              (line 34)
+* unpack_structure:                      Utilities.            (line 67)
+* unweight:                              Parsing.              (line 38)
+* update_alifold_params:                 Alignment Fold.       (line 23)
+* update_fold_params:                    mfe Fold.             (line 36)
+* update_pf_params:                      PF Fold.              (line 41)
+* update_pf_paramsLP:                    Local Fold.           (line 30)
+* urn:                                   Utilities.            (line 83)
+* write_parameter_file:                  Param Files.          (line 15)
 
 
 File: RNAlib.info,  Node: Variable Index,  Prev: Function Index,  Up: Top
@@ -1330,7 +1371,8 @@ Variable Index
 * backtrack_type:                        Fold Vars.           (line 100)
 * base_pair:                             Fold Vars.           (line  69)
 * cost_matrix:                           Distances.           (line  68)
-* cut_point:                             Fold Vars.           (line  62)
+* cut_point <1>:                         Fold Vars.           (line  62)
+* cut_point:                             Cofolding.           (line  19)
 * cv_fact:                               Alignment Fold.      (line  44)
 * dangles:                               Fold Vars.           (line  36)
 * do_backtrack:                          Fold Vars.           (line  96)
@@ -1362,26 +1404,27 @@ Variable Index
 Tag Table:
 Node: Top76
 Node: Introduction601
-Node: Folding Routines1513
-Node: mfe Fold2245
-Node: PF Fold4115
-Node: Inverse Fold7045
-Node: Suboptimal folding8682
-Node: Cofolding9361
-Node: Alignment Fold14834
-Node: Fold Vars17158
-Node: Param Files21775
-Node: Parsing and Comparing29354
-Node: notations29764
-Node: Parsing33287
-Node: Distances35928
-Node: Tree Distances39791
-Node: String Distances40569
-Node: Profile Distances41099
-Node: Utilities42178
-Node: Example46814
-Node: References50334
-Node: Function Index53380
-Node: Variable Index58347
+Node: Folding Routines1611
+Node: mfe Fold2422
+Node: PF Fold4292
+Node: Inverse Fold7222
+Node: Suboptimal folding8859
+Node: Cofolding9538
+Node: Local Fold15647
+Node: Alignment Fold16981
+Node: Fold Vars19306
+Node: Param Files23925
+Node: Parsing and Comparing31238
+Node: notations31648
+Node: Parsing35171
+Node: Distances37812
+Node: Tree Distances41675
+Node: String Distances42453
+Node: Profile Distances42983
+Node: Utilities44062
+Node: Example48698
+Node: References52197
+Node: Function Index55243
+Node: Variable Index60283
 
 End Tag Table

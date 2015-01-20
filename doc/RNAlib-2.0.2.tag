@@ -478,20 +478,6 @@
       <anchor>a5ec740b80afb4906ba4311dbd8ddbd89</anchor>
       <arglist></arglist>
     </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>FILENAME_MAX_LENGTH</name>
-      <anchorfile>data__structures_8h.html</anchorfile>
-      <anchor>afb228174279df9486a5cb56ac0bc79a3</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>FILENAME_ID_LENGTH</name>
-      <anchorfile>data__structures_8h.html</anchorfile>
-      <anchor>a33c3b1826b8e2739f09f111ec719ded5</anchor>
-      <arglist></arglist>
-    </member>
   </compound>
   <compound kind="file">
     <name>dist_vars.h</name>
@@ -1101,6 +1087,13 @@
       <anchorfile>params_8h.html</anchorfile>
       <anchor>ab85f6b6da051f380371deb0d8921bdba</anchor>
       <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>pf_paramT *</type>
+      <name>get_boltzmann_factors</name>
+      <anchorfile>params_8h.html</anchorfile>
+      <anchor>aac0b8167e3824b5c64cdf2aa04c92df5</anchor>
+      <arglist>(int dangle_model, double temperature, double alpha, double pf_scale)</arglist>
     </member>
   </compound>
   <compound kind="file">
@@ -1917,6 +1910,34 @@
       <anchorfile>utils_8h.html</anchorfile>
       <anchor>a8d577123d2e66d2b7d0bf9af6e172b93</anchor>
       <arglist>(A, B, C)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>XSTR</name>
+      <anchorfile>utils_8h.html</anchorfile>
+      <anchor>a03943706e48069237cd57f2d35ca987e</anchor>
+      <arglist>(s)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>STR</name>
+      <anchorfile>utils_8h.html</anchorfile>
+      <anchor>a6388870e639eee9c0a69446876f1f8cc</anchor>
+      <arglist>(s)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FILENAME_MAX_LENGTH</name>
+      <anchorfile>utils_8h.html</anchorfile>
+      <anchor>afb228174279df9486a5cb56ac0bc79a3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FILENAME_ID_LENGTH</name>
+      <anchorfile>utils_8h.html</anchorfile>
+      <anchor>a33c3b1826b8e2739f09f111ec719ded5</anchor>
+      <arglist></arglist>
     </member>
     <member kind="function">
       <type>void *</type>

@@ -813,10 +813,12 @@ package RNA;
 *initialize_cofold = *RNAc::initialize_cofold;
 *pf_fold = *RNAc::pf_fold;
 *pf_circ_fold = *RNAc::pf_circ_fold;
+*pf_fold_par = *RNAc::pf_fold_par;
 *pbacktrack = *RNAc::pbacktrack;
 *pbacktrack_circ = *RNAc::pbacktrack_circ;
 *free_pf_arrays = *RNAc::free_pf_arrays;
 *update_pf_params = *RNAc::update_pf_params;
+*update_pf_params_par = *RNAc::update_pf_params_par;
 *export_bppm = *RNAc::export_bppm;
 *assign_plist_from_pr = *RNAc::assign_plist_from_pr;
 *get_pf_arrays = *RNAc::get_pf_arrays;
@@ -951,6 +953,7 @@ package RNA;
 *PS_dot_plot = *RNAc::PS_dot_plot;
 *find_saddle = *RNAc::find_saddle;
 *get_path = *RNAc::get_path;
+*free_path = *RNAc::free_path;
 
 ############# Class : RNA::intArray ##############
 
@@ -1275,6 +1278,8 @@ package RNA;
 *VRNA_CONSTRAINT_MULTILINE = *RNAc::VRNA_CONSTRAINT_MULTILINE;
 *VRNA_CONSTRAINT_NO_HEADER = *RNAc::VRNA_CONSTRAINT_NO_HEADER;
 *VRNA_CONSTRAINT_ALL = *RNAc::VRNA_CONSTRAINT_ALL;
+*FILENAME_MAX_LENGTH = *RNAc::FILENAME_MAX_LENGTH;
+*FILENAME_ID_LENGTH = *RNAc::FILENAME_ID_LENGTH;
 *xsubi = *RNAc::xsubi;
 *PI = *RNAc::PI;
 *PIHALF = *RNAc::PIHALF;

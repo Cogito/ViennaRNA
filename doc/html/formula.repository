@@ -11,17 +11,18 @@
 \form#10:$(n+m)$
 \form#11:\[ A(S) = \sum_{(i,j) \in S} 2 \gamma p_{ij} + \sum_{i \notin S} p^u_i \]
 \form#12:$\gamma$
-\form#13:$Q$
-\form#14:$G = -RT \cdot \log(Q) $
-\form#15:$q1k(k) = Q(1, k)$
-\form#16:$qln(l) = Q(l, n)$
-\form#17:$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $
-\form#18:$p_ij>0.5$
-\form#19:$<d> = \sum_{a,b} p_a p_b d(S_a,S_b)$
-\form#20:$p_ij$
-\form#21:$<d> = \sum_{ij} p_{ij}(1-p_{ij})$
-\form#22:$P^t$
-\form#23:$rs$
-\form#24:$[0,1]$
-\form#25:$ P^{t}_x[i] = X[i] * rs$
-\form#26:$P^{t}_y[i] = Y[i] * rs$
+\form#13:$ exp(-\Delta G / kT) $
+\form#14:$Q$
+\form#15:$G = -RT \cdot \log(Q) $
+\form#16:$q1k(k) = Q(1, k)$
+\form#17:$qln(l) = Q(l, n)$
+\form#18:$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $
+\form#19:$p_ij>0.5$
+\form#20:$<d> = \sum_{a,b} p_a p_b d(S_a,S_b)$
+\form#21:$p_ij$
+\form#22:$<d> = \sum_{ij} p_{ij}(1-p_{ij})$
+\form#23:$P^t$
+\form#24:$rs$
+\form#25:$[0,1]$
+\form#26:$ P^{t}_x[i] = X[i] * rs$
+\form#27:$P^{t}_y[i] = Y[i] * rs$

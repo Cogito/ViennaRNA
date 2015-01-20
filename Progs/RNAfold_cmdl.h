@@ -86,6 +86,9 @@ struct RNAfold_args_info
   int energyModel_arg;	/**< @brief Rarely used option to fold sequences from the artificial ABCD... alphabet, where A pairs B, C-D etc.  Use the energy parameters for GC (-e 1) or AU (-e 2) pairs.\n\n.  */
   char * energyModel_orig;	/**< @brief Rarely used option to fold sequences from the artificial ABCD... alphabet, where A pairs B, C-D etc.  Use the energy parameters for GC (-e 1) or AU (-e 2) pairs.\n\n original value given at command line.  */
   const char *energyModel_help; /**< @brief Rarely used option to fold sequences from the artificial ABCD... alphabet, where A pairs B, C-D etc.  Use the energy parameters for GC (-e 1) or AU (-e 2) pairs.\n\n help description.  */
+  double betaScale_arg;	/**< @brief Set the scaling of the boltzmann factors\n (default='1.').  */
+  char * betaScale_orig;	/**< @brief Set the scaling of the boltzmann factors\n original value given at command line.  */
+  const char *betaScale_help; /**< @brief Set the scaling of the boltzmann factors\n help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int detailed_help_given ;	/**< @brief Whether detailed-help was given.  */
@@ -109,6 +112,7 @@ struct RNAfold_args_info
   unsigned int paramFile_given ;	/**< @brief Whether paramFile was given.  */
   unsigned int nsp_given ;	/**< @brief Whether nsp was given.  */
   unsigned int energyModel_given ;	/**< @brief Whether energyModel was given.  */
+  unsigned int betaScale_given ;	/**< @brief Whether betaScale was given.  */
 
 } ;
 

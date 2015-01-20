@@ -1530,14 +1530,15 @@ SWIG_Perl_SetModule(swig_module_info *module) {
 #define SWIGTYPE_p_p_void swig_types[27]
 #define SWIGTYPE_p_paramT swig_types[28]
 #define SWIGTYPE_p_path_t swig_types[29]
-#define SWIGTYPE_p_plist swig_types[30]
-#define SWIGTYPE_p_short swig_types[31]
-#define SWIGTYPE_p_swString swig_types[32]
-#define SWIGTYPE_p_unsigned_int swig_types[33]
-#define SWIGTYPE_p_unsigned_short swig_types[34]
-#define SWIGTYPE_p_void swig_types[35]
-static swig_type_info *swig_types[37];
-static swig_module_info swig_module = {swig_types, 36, 0, 0, 0, 0};
+#define SWIGTYPE_p_pf_paramT swig_types[30]
+#define SWIGTYPE_p_plist swig_types[31]
+#define SWIGTYPE_p_short swig_types[32]
+#define SWIGTYPE_p_swString swig_types[33]
+#define SWIGTYPE_p_unsigned_int swig_types[34]
+#define SWIGTYPE_p_unsigned_short swig_types[35]
+#define SWIGTYPE_p_void swig_types[36]
+static swig_type_info *swig_types[38];
+static swig_module_info swig_module = {swig_types, 37, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6521,6 +6522,76 @@ XS(_wrap_pf_circ_fold) {
 }
 
 
+XS(_wrap_pf_fold_par) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    pf_paramT *arg3 = (pf_paramT *) 0 ;
+    int arg4 ;
+    int arg5 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    void *argp3 = 0 ;
+    int res3 = 0 ;
+    int val4 ;
+    int ecode4 = 0 ;
+    int val5 ;
+    int ecode5 = 0 ;
+    int argvi = 0;
+    float result;
+    dXSARGS;
+    
+    if ((items < 5) || (items > 5)) {
+      SWIG_croak("Usage: pf_fold_par(sequence,structure,parameters,calculate_bppm,is_circular);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "pf_fold_par" "', argument " "1"" of type '" "char const *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "pf_fold_par" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    res3 = SWIG_ConvertPtr(ST(2), &argp3,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "pf_fold_par" "', argument " "3"" of type '" "pf_paramT *""'"); 
+    }
+    arg3 = (pf_paramT *)(argp3);
+    ecode4 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "pf_fold_par" "', argument " "4"" of type '" "int""'");
+    } 
+    arg4 = (int)(val4);
+    ecode5 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "pf_fold_par" "', argument " "5"" of type '" "int""'");
+    } 
+    arg5 = (int)(val5);
+    result = (float)pf_fold_par((char const *)arg1,arg2,arg3,arg4,arg5);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_pbacktrack) {
   {
     char *arg1 = (char *) 0 ;
@@ -6617,6 +6688,43 @@ XS(_wrap_update_pf_params) {
     
     XSRETURN(argvi);
   fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_update_pf_params_par) {
+  {
+    int arg1 ;
+    pf_paramT *arg2 = (pf_paramT *) 0 ;
+    int val1 ;
+    int ecode1 = 0 ;
+    void *argp2 = 0 ;
+    int res2 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: update_pf_params_par(length,parameters);");
+    }
+    ecode1 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "update_pf_params_par" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+    res2 = SWIG_ConvertPtr(ST(1), &argp2,SWIGTYPE_p_pf_paramT, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "update_pf_params_par" "', argument " "2"" of type '" "pf_paramT *""'"); 
+    }
+    arg2 = (pf_paramT *)(argp2);
+    update_pf_params_par(arg1,arg2);
+    ST(argvi) = sv_newmortal();
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
     
     SWIG_croak_null();
   }
@@ -13346,6 +13454,33 @@ XS(_wrap_get_path) {
 }
 
 
+XS(_wrap_free_path) {
+  {
+    path_t *arg1 = (path_t *) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: free_path(path);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_path_t, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "free_path" "', argument " "1"" of type '" "path_t *""'"); 
+    }
+    arg1 = (path_t *)(argp1);
+    free_path(arg1);
+    ST(argvi) = sv_newmortal();
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
@@ -13397,6 +13532,7 @@ static swig_type_info _swigt__p_p_short = {"_p_p_short", "short **", 0, 0, (void
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "void **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_paramT = {"_p_paramT", "paramT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_path_t = {"_p_path_t", "path_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pf_paramT = {"_p_pf_paramT", "pf_paramT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_plist = {"_p_plist", "plist *|struct plist *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_short = {"_p_short", "short *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swString = {"_p_swString", "swString *", 0, 0, (void*)0, 0};
@@ -13435,6 +13571,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_p_void,
   &_swigt__p_paramT,
   &_swigt__p_path_t,
+  &_swigt__p_pf_paramT,
   &_swigt__p_plist,
   &_swigt__p_short,
   &_swigt__p_swString,
@@ -13473,6 +13610,7 @@ static swig_cast_info _swigc__p_p_short[] = {  {&_swigt__p_p_short, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_p_void[] = {  {&_swigt__p_p_void, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_paramT[] = {  {&_swigt__p_paramT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_path_t[] = {  {&_swigt__p_path_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pf_paramT[] = {  {&_swigt__p_pf_paramT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_plist[] = {  {&_swigt__p_plist, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_swString[] = {  {&_swigt__p_swString, 0, 0, 0},{0, 0, 0, 0}};
@@ -13511,6 +13649,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_p_void,
   _swigc__p_paramT,
   _swigc__p_path_t,
+  _swigc__p_pf_paramT,
   _swigc__p_plist,
   _swigc__p_short,
   _swigc__p_swString,
@@ -13648,10 +13787,12 @@ static swig_command_info swig_commands[] = {
 {"RNAc::initialize_cofold", _wrap_initialize_cofold},
 {"RNAc::pf_fold", _wrap_pf_fold},
 {"RNAc::pf_circ_fold", _wrap_pf_circ_fold},
+{"RNAc::pf_fold_par", _wrap_pf_fold_par},
 {"RNAc::pbacktrack", _wrap_pbacktrack},
 {"RNAc::pbacktrack_circ", _wrap_pbacktrack_circ},
 {"RNAc::free_pf_arrays", _wrap_free_pf_arrays},
 {"RNAc::update_pf_params", _wrap_update_pf_params},
+{"RNAc::update_pf_params_par", _wrap_update_pf_params_par},
 {"RNAc::export_bppm", _wrap_export_bppm},
 {"RNAc::assign_plist_from_pr", _wrap_assign_plist_from_pr},
 {"RNAc::get_pf_arrays", _wrap_get_pf_arrays},
@@ -13811,6 +13952,7 @@ static swig_command_info swig_commands[] = {
 {"RNAc::PS_dot_plot", _wrap_PS_dot_plot},
 {"RNAc::find_saddle", _wrap_find_saddle},
 {"RNAc::get_path", _wrap_get_path},
+{"RNAc::free_path", _wrap_free_path},
 {0,0}
 };
 /* -----------------------------------------------------------------------------
@@ -14218,6 +14360,16 @@ XS(SWIG_init) {
   /*@SWIG:/usr/share/swig/2.0.4/perl5/perltypemaps.swg,65,%set_constant@*/ do {
     SV *sv = get_sv((char*) SWIG_prefix "VRNA_CONSTRAINT_ALL", TRUE | 0x2 | GV_ADDMULTI);
     sv_setsv(sv, SWIG_From_unsigned_SS_int  SWIG_PERL_CALL_ARGS_1((unsigned int)(128U)));
+    SvREADONLY_on(sv);
+  } while(0) /*@SWIG@*/;
+  /*@SWIG:/usr/share/swig/2.0.4/perl5/perltypemaps.swg,65,%set_constant@*/ do {
+    SV *sv = get_sv((char*) SWIG_prefix "FILENAME_MAX_LENGTH", TRUE | 0x2 | GV_ADDMULTI);
+    sv_setsv(sv, SWIG_From_int  SWIG_PERL_CALL_ARGS_1((int)(80)));
+    SvREADONLY_on(sv);
+  } while(0) /*@SWIG@*/;
+  /*@SWIG:/usr/share/swig/2.0.4/perl5/perltypemaps.swg,65,%set_constant@*/ do {
+    SV *sv = get_sv((char*) SWIG_prefix "FILENAME_ID_LENGTH", TRUE | 0x2 | GV_ADDMULTI);
+    sv_setsv(sv, SWIG_From_int  SWIG_PERL_CALL_ARGS_1((int)(42)));
     SvREADONLY_on(sv);
   } while(0) /*@SWIG@*/;
   

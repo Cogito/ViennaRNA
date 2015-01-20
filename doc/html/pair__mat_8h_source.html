@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.1: H/pair_mat.h Source File</title>
+<title>RNAlib-2.0.2: H/pair_mat.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.1</div>
+   <div id="projectname">RNAlib-2.0.2</div>
   </td>
  </tr>
  </tbody>
@@ -95,7 +95,7 @@ $(document).ready(initResizable);
 <a name="l00033"></a>00033   <span class="keywordtype">int</span> code;
 <a name="l00034"></a>00034   <span class="keywordflow">if</span> (energy_set&gt;0) code = (int) (c-<span class="charliteral">&#39;A&#39;</span>)+1;
 <a name="l00035"></a>00035   <span class="keywordflow">else</span> {
-<a name="l00036"></a>00036     <span class="keywordtype">char</span> *pos;
+<a name="l00036"></a>00036     <span class="keyword">const</span> <span class="keywordtype">char</span> *pos;
 <a name="l00037"></a>00037     pos = strchr(Law_and_Order, c);
 <a name="l00038"></a>00038     <span class="keywordflow">if</span> (pos==NULL) code=0;
 <a name="l00039"></a>00039     <span class="keywordflow">else</span> code = (int) (pos-Law_and_Order);
@@ -210,7 +210,7 @@ $(document).ready(initResizable);
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><b>pair_mat.h</b>      </li>
-      <li class="footer">Generated on Sun Jan 15 2012 for RNAlib-2.0.1 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

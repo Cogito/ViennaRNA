@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.1: H/part_func.h File Reference</title>
+<title>RNAlib-2.0.2: H/part_func.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.1</div>
+   <div id="projectname">RNAlib-2.0.2</div>
   </td>
  </tr>
  </tbody>
@@ -79,7 +79,7 @@ Include dependency graph for part_func.h:</div>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2">pf_fold</a> (const char *sequence, char *structure)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the partition function <img class="formulaInl" alt="$Q$" src="form_13.png"/> of an RNA sequence.  <a href="#adc3db3d98742427e7001a7fd36ef28c2"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> of an RNA sequence.  <a href="#adc3db3d98742427e7001a7fd36ef28c2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735">pf_circ_fold</a> (const char *sequence, char *structure)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the partition function of a circular RNA sequence.  <a href="#a819ce5fca8984004ac81c4a3b04cb735"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#ac03ca6db186bb3bf0a2a326d7fb3ba03">pbacktrack</a> (char *sequence)</td></tr>
@@ -87,9 +87,8 @@ Functions</h2></td></tr>
 .  <a href="#ac03ca6db186bb3bf0a2a326d7fb3ba03"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#a00474051204ac9ad576b3e45174d03ff">pbacktrack_circ</a> (char *sequence)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a secondary structure of a circular RNA from the Boltzmann ensemble according its probability.  <a href="#a00474051204ac9ad576b3e45174d03ff"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae73db3f49a94f0f72e067ecd12681dbd"></a><!-- doxytag: member="part_func.h::free_pf_arrays" ref="ae73db3f49a94f0f72e067ecd12681dbd" args="(void)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#ae73db3f49a94f0f72e067ecd12681dbd">free_pf_arrays</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free arrays from <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a> <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#ae73db3f49a94f0f72e067ecd12681dbd">free_pf_arrays</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free arrays for the partition function recursions.  <a href="#ae73db3f49a94f0f72e067ecd12681dbd"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#a384e927890f9c034ff09fa66da102d28">update_pf_params</a> (int length)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Recalculate energy parameters.  <a href="#a384e927890f9c034ff09fa66da102d28"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">FLT_OR_DBL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073">export_bppm</a> (void)</td></tr>
@@ -127,7 +126,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Partition function of single RNA sequences. </p>
-<p>This file includes (almost) all function declarations within the <b>RNAlib</b> that are related to Partion function folding... </p>
+<p>This file includes (almost) all function declarations within the <b>RNAlib</b> that are related to Partion function folding...</p>
+<dl class="note"><dt><b>Note:</b></dt><dd>If you plan on using the functions provided from this section of the RNAlib concurrently via <b>OpenMP</b> you have to place a <em>COPYIN</em> clause right before your <em>PARALLEL</em> directive! Otherwise, some functions may not behave as expected. A complete list of variables that have to be passed to the <em>COPYIN</em> clause can be found in the detailed description of each function below. </dd></dl>
 </div><hr/><h2>Function Documentation</h2>
 <a class="anchor" id="adc3db3d98742427e7001a7fd36ef28c2"></a><!-- doxytag: member="part_func.h::pf_fold" ref="adc3db3d98742427e7001a7fd36ef28c2" args="(const char *sequence, char *structure)" -->
 <div class="memitem">
@@ -154,18 +154,22 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 </div>
 <div class="memdoc">
 
-<p>Compute the partition function <img class="formulaInl" alt="$Q$" src="form_13.png"/> of an RNA sequence. </p>
+<p>Compute the partition function <img class="formulaInl" alt="$Q$" src="form_14.png"/> of an RNA sequence. </p>
 <p>If <em>structure</em> is not a NULL pointer on input, it contains on return a string consisting of the letters " . , | { } ( ) " denoting bases that are essentially unpaired, weakly paired, strongly paired without preference, weakly upstream (downstream) paired, or strongly up- (down-)stream paired bases, respectively. If <a class="el" href="fold__vars_8h.html#a0afc287c2464866d94858c39175154af" title="Global switch to activate/deactivate folding with structure constraints.">fold_constrained</a> is not 0, the <em>structure</em> string is interpreted on input as a list of constraints for the folding. The character "x" marks bases that must be unpaired, matching brackets " ( ) " denote base pairs, all other characters are ignored. Any pairs conflicting with the constraint will be forbidden. This is usually sufficient to ensure the constraints are honored. If <a class="el" href="fold__vars_8h.html#ad512b5dd4dbec60faccfe137bb474489" title="do backtracking, i.e.">do_backtrack</a> has been set to 0 base pairing probabilities will not be computed (saving CPU time), otherwise <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> will contain the probability that bases <em>i</em> and <em>j</em> pair. </p>
-<dl class="note"><dt><b>Note:</b></dt><dd>The global array <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> is deprecated and the user who wants the computed base pair probabilities for further computations is advised to use the function <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>The global array <a class="el" href="fold__vars_8h.html#ac98ec419070aee6831b44e5c700f090f" title="A pointer to the base pair probability matrix.">pr</a> is deprecated and the user who wants the calculated base pair probabilities for further computations is advised to use the function <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd>
+<dd>
+<b>OpenMP notice:</b><br/>
+This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause:<br/>
+ q, qb, qm, qm1, qqm, qqm1, qq, qq1, prml, prm_l, prm_l1, q1k, qln, probs, scale, expMLbase, jindx, init_length, circular, ptype, pf_params, S, S1, bt</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a>, <a class="el" href="part__func_8h.html#a129d81c4a1ead793c5b2311333e03dfa" title="Create a dot-bracket like structure string from base pair probability matrix.">bppm_to_structure()</a>, <a class="el" href="part__func_8h.html#ac5ac7ee281aae1c5cc5898a841178073" title="Get a pointer to the base pair probability array.">export_bppm()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">sequence</td><td>The RNA sequence to be computed </td></tr>
-    <tr><td class="paramname">structure</td><td>A pointer to a char array where a base pair probability information might be stored in a pseudo-dot-bracket notation (might be NULL, too) </td></tr>
+    <tr><td class="paramname">sequence</td><td>The RNA sequence input </td></tr>
+    <tr><td class="paramname">structure</td><td>A pointer to a char array where a base pair probability information can be stored in a pseudo-dot-bracket notation (may be NULL, too) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The Gibbs free energy of the ensemble ( <img class="formulaInl" alt="$G = -RT \cdot \log(Q) $" src="form_14.png"/>) in kcal/mol </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The Gibbs free energy of the ensemble ( <img class="formulaInl" alt="$G = -RT \cdot \log(Q) $" src="form_15.png"/>) in kcal/mol </dd></dl>
 
 </div>
 </div>
@@ -195,15 +199,18 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <div class="memdoc">
 
 <p>Compute the partition function of a circular RNA sequence. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd><b>OpenMP notice:</b><br/>
+This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause:<br/>
+ q, qb, qm, qm1, qqm, qqm1, qq, qq1, qo, qho, qio, qmo, qm2, prml, prm_l, prm_l1, q1k, qln, probs, scale, expMLbase, jindx, init_length, circular, ptype, pf_params, S, S1, bt</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">sequence</td><td>The RNA sequence to be computed </td></tr>
-    <tr><td class="paramname">structure</td><td>A pointer to a char array where a base pair probability information might be stored in a pseudo-dot-bracket notation (might be NULL, too) </td></tr>
+    <tr><td class="paramname">sequence</td><td>The RNA sequence input </td></tr>
+    <tr><td class="paramname">structure</td><td>A pointer to a char array where a base pair probability information can be stored in a pseudo-dot-bracket notation (may be NULL, too) </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>The Gibbs free energy of the ensemble ( <img class="formulaInl" alt="$G = -RT \cdot \log(Q) $" src="form_14.png"/>) in kcal/mol </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The Gibbs free energy of the ensemble ( <img class="formulaInl" alt="$G = -RT \cdot \log(Q) $" src="form_15.png"/>) in kcal/mol </dd></dl>
 
 </div>
 </div>
@@ -224,6 +231,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 
 <p>Sample a secondary structure from the Boltzmann ensemble according its probability<br/>
 . </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>You have to call <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a> first in order to fill the partition function matrices</dd>
+<dd>
+<b>OpenMP notice:</b><br/>
+This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause <em>(additionally to the ones needed by <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>)</em>:<br/>
+ pstruc, sequence</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">sequence</td><td>The RNA sequence </td></tr>
@@ -250,7 +262,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <div class="memdoc">
 
 <p>Sample a secondary structure of a circular RNA from the Boltzmann ensemble according its probability. </p>
-<p>This function does the same as <a class="el" href="part__func_8h.html#ac03ca6db186bb3bf0a2a326d7fb3ba03">pbacktrack()</a> but assumes the RNA molecule to be circular </p>
+<p>This function does the same as <a class="el" href="part__func_8h.html#ac03ca6db186bb3bf0a2a326d7fb3ba03">pbacktrack()</a> but assumes the RNA molecule to be circular</p>
+<dl class="note"><dt><b>Note:</b></dt><dd><b>OpenMP notice:</b><br/>
+This function relies on passing the following variables to the appropriate <em>COPYIN</em> clause <em>(additionally to the ones needed by <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>)</em>:<br/>
+ pstruc, sequence</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">sequence</td><td>The RNA sequence </td></tr>
@@ -258,6 +273,31 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A sampled secondary structure in dot-bracket notation </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae73db3f49a94f0f72e067ecd12681dbd"></a><!-- doxytag: member="part_func.h::free_pf_arrays" ref="ae73db3f49a94f0f72e067ecd12681dbd" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void free_pf_arrays </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Free arrays for the partition function recursions. </p>
+<p>Call this function if you want to free all allocated memory associated with the partition function forward recursion. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>Successive calls of <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>, <a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a> already check if they should free any memory from a previous run. </dd>
+<dd>
+<b>OpenMP notice:</b><br/>
+ This function should be called before leaving a thread in order to avoid leaking memory</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>, <a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a> </dd></dl>
 
 </div>
 </div>
@@ -298,7 +338,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 
 <p>Get a pointer to the base pair probability array. </p>
 <p>Accessing the base pair probabilities for a pair (i,j) is achieved by </p>
-<div class="fragment"><pre class="fragment">FLT_OR_DBL *pr = export_bppm(); pr_ij = pr[iindx[i]-j]; </pre></div><dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a55c0f6b3b07b6adf2ee235ba901fe397" title="Get an index mapper array (iindx) for accessing the energy matrices, e.g.">get_iindx()</a> </dd></dl>
+<div class="fragment"><pre class="fragment">FLT_OR_DBL *pr = export_bppm(); pr_ij = pr[iindx[i]-j]; </pre></div><dl class="note"><dt><b>Note:</b></dt><dd>Call <a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a> before using this function!</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>, <a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a>, <a class="el" href="utils_8h.html#a55c0f6b3b07b6adf2ee235ba901fe397" title="Get an index mapper array (iindx) for accessing the energy matrices, e.g.">get_iindx()</a></dd></dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A pointer to the base pair probability array </dd></dl>
 
 </div>
@@ -412,6 +453,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <div class="memdoc">
 
 <p>Get the pointers to (almost) all relavant computation arrays used in partition function computation. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>In order to assign meaningful pointers, you have to call pf_fold first!</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#adc3db3d98742427e7001a7fd36ef28c2" title="Compute the partition function  of an RNA sequence.">pf_fold()</a>, <a class="el" href="part__func_8h.html#a819ce5fca8984004ac81c4a3b04cb735" title="Compute the partition function of a circular RNA sequence.">pf_circ_fold()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">S_p</td><td>A pointer to the 'S' array (integer representation of nucleotides) </td></tr>
@@ -419,8 +462,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
     <tr><td class="paramname">ptype_p</td><td>A pointer to the pair type matrix </td></tr>
     <tr><td class="paramname">qb_p</td><td>A pointer to the Q<sup>B</sup> matrix </td></tr>
     <tr><td class="paramname">qm_p</td><td>A pointer to the Q<sup>M</sup> matrix </td></tr>
-    <tr><td class="paramname">q1k_p</td><td>A pointer to the 5' slice of the Q matrix ( <img class="formulaInl" alt="$q1k(k) = Q(1, k)$" src="form_15.png"/>) </td></tr>
-    <tr><td class="paramname">qln_p</td><td>A pointer to the 3' slice of the Q matrix ( <img class="formulaInl" alt="$qln(l) = Q(l, n)$" src="form_16.png"/>) </td></tr>
+    <tr><td class="paramname">q1k_p</td><td>A pointer to the 5' slice of the Q matrix ( <img class="formulaInl" alt="$q1k(k) = Q(1, k)$" src="form_16.png"/>) </td></tr>
+    <tr><td class="paramname">qln_p</td><td>A pointer to the 3' slice of the Q matrix ( <img class="formulaInl" alt="$qln(l) = Q(l, n)$" src="form_17.png"/>) </td></tr>
   </table>
   </dd>
 </dl>
@@ -462,8 +505,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <p>Get the centroid structure of the ensemble. </p>
 <p>This function is a threadsafe replacement for <a class="el" href="part__func_8h.html#ae89a63bd83e75a80b2ba36d20b31ce81">centroid()</a> with a 'plist' input</p>
 <p>The centroid is the structure with the minimal average distance to all other structures <br/>
- <img class="formulaInl" alt="$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $" src="form_17.png"/> <br/>
- Thus, the centroid is simply the structure containing all pairs with <img class="formulaInl" alt="$p_ij>0.5$" src="form_18.png"/> The distance of the centroid to the ensemble is written to the memory adressed by <em>dist</em>.</p>
+ <img class="formulaInl" alt="$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $" src="form_18.png"/> <br/>
+ Thus, the centroid is simply the structure containing all pairs with <img class="formulaInl" alt="$p_ij>0.5$" src="form_19.png"/> The distance of the centroid to the ensemble is written to the memory adressed by <em>dist</em>.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">length</td><td>The length of the sequence </td></tr>
@@ -510,8 +553,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <p>Get the centroid structure of the ensemble. </p>
 <p>This function is a threadsafe replacement for <a class="el" href="part__func_8h.html#ae89a63bd83e75a80b2ba36d20b31ce81">centroid()</a> with a probability array input</p>
 <p>The centroid is the structure with the minimal average distance to all other structures <br/>
- <img class="formulaInl" alt="$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $" src="form_17.png"/> <br/>
- Thus, the centroid is simply the structure containing all pairs with <img class="formulaInl" alt="$p_ij>0.5$" src="form_18.png"/> The distance of the centroid to the ensemble is written to the memory adressed by <em>dist</em>.</p>
+ <img class="formulaInl" alt="$ <d(S)> = \sum_{(i,j) \in S} (1-p_{ij}) + \sum_{(i,j) \notin S} p_{ij} $" src="form_18.png"/> <br/>
+ Thus, the centroid is simply the structure containing all pairs with <img class="formulaInl" alt="$p_ij>0.5$" src="form_19.png"/> The distance of the centroid to the ensemble is written to the memory adressed by <em>dist</em>.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">length</td><td>The length of the sequence </td></tr>
@@ -540,6 +583,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 <div class="memdoc">
 
 <p>Get the mean base pair distance of the last partition function computation. </p>
+<dl class="note"><dt><b>Note:</b></dt><dd>To ensure thread-safety, use the function <a class="el" href="part__func_8h.html#ad5ba36cef8d01cf4244cc09b9bf1ce1d" title="Get the mean base pair distance in the thermodynamic ensemble.">mean_bp_distance_pr()</a> instead!</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="part__func_8h.html#ad5ba36cef8d01cf4244cc09b9bf1ce1d" title="Get the mean base pair distance in the thermodynamic ensemble.">mean_bp_distance_pr()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -578,9 +622,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
 
 <p>Get the mean base pair distance in the thermodynamic ensemble. </p>
 <p>This is a threadsafe implementation of <a class="el" href="part__func_8h.html#ae9556ba7ded44fe2321b6f67c3fc02a3">mean_bp_dist()</a> !</p>
-<p><img class="formulaInl" alt="$<d> = \sum_{a,b} p_a p_b d(S_a,S_b)$" src="form_19.png"/><br/>
- this can be computed from the pair probs <img class="formulaInl" alt="$p_ij$" src="form_20.png"/> as<br/>
- <img class="formulaInl" alt="$<d> = \sum_{ij} p_{ij}(1-p_{ij})$" src="form_21.png"/></p>
+<p><img class="formulaInl" alt="$<d> = \sum_{a,b} p_a p_b d(S_a,S_b)$" src="form_20.png"/><br/>
+ this can be computed from the pair probs <img class="formulaInl" alt="$p_ij$" src="form_21.png"/> as<br/>
+ <img class="formulaInl" alt="$<d> = \sum_{ij} p_{ij}(1-p_{ij})$" src="form_22.png"/></p>
 <dl class="note"><dt><b>Note:</b></dt><dd>This function is threadsafe</dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -777,7 +821,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="part_
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="part__func_8h.html">part_func.h</a>      </li>
-      <li class="footer">Generated on Sun Jan 15 2012 for RNAlib-2.0.1 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

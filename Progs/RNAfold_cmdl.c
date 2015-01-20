@@ -68,6 +68,8 @@ const char *RNAfold_args_info_detailed_help[] = {
   "      --nsp=STRING              Allow other pairs in addition to the usual \n                                  AU,GC,and GU pairs.\n",
   "  Its argument is a comma separated list of additionally allowed pairs. If the \n  first character is a \"-\" then AB will imply that AB and BA are allowed \n  pairs.\n  e.g. RNAfold -nsp -GA  will allow GA and AG pairs. Nonstandard pairs are \n  given 0 stacking energy.\n  \n",
   "  -e, --energyModel=INT         Rarely used option to fold sequences from the \n                                  artificial ABCD... alphabet, where A pairs B, \n                                  C-D etc.  Use the energy parameters for GC \n                                  (-e 1) or AU (-e 2) pairs.\n                                  \n",
+  "      --betaScale=DOUBLE        Set the scaling of the boltzmann factors\n                                    (default=`1.')",
+  "  The argument provided with this option enables to scale the thermodynamic \n  temperature used in the boltzmann factors independently from the temperature \n  used to scale the individual energy contributions of the loop types. The \n  boltzmann factors then become exp(-dG/kT*betaScale) where k is the Boltzmann \n  constant, dG the free energy contribution of the state and T the absolute \n  temperature.\n  \n",
   "\nIf in doubt our program is right, nature is at fault.\nComments should be sent to rna@tbi.univie.ac.at.\n\n",
     0
 };
@@ -102,11 +104,12 @@ init_full_help_array(void)
   RNAfold_args_info_full_help[25] = RNAfold_args_info_detailed_help[34];
   RNAfold_args_info_full_help[26] = RNAfold_args_info_detailed_help[36];
   RNAfold_args_info_full_help[27] = RNAfold_args_info_detailed_help[37];
-  RNAfold_args_info_full_help[28] = 0; 
+  RNAfold_args_info_full_help[28] = RNAfold_args_info_detailed_help[39];
+  RNAfold_args_info_full_help[29] = 0; 
   
 }
 
-const char *RNAfold_args_info_full_help[29];
+const char *RNAfold_args_info_full_help[30];
 
 static void
 init_help_array(void)
@@ -133,7 +136,7 @@ init_help_array(void)
   RNAfold_args_info_help[19] = RNAfold_args_info_detailed_help[30];
   RNAfold_args_info_help[20] = RNAfold_args_info_detailed_help[31];
   RNAfold_args_info_help[21] = RNAfold_args_info_detailed_help[32];
-  RNAfold_args_info_help[22] = RNAfold_args_info_detailed_help[37];
+  RNAfold_args_info_help[22] = RNAfold_args_info_detailed_help[39];
   RNAfold_args_info_help[23] = 0; 
   
 }
@@ -157,6 +160,8 @@ static int
 RNAfold_cmdline_parser_internal (int argc, char **argv, struct RNAfold_args_info *args_info,
                         struct RNAfold_cmdline_parser_params *params, const char *additional_error);
 
+static int
+RNAfold_cmdline_parser_required2 (struct RNAfold_args_info *args_info, const char *prog_name, const char *additional_error);
 
 static char *
 gengetopt_strdup (const char *s);
@@ -186,6 +191,7 @@ void clear_given (struct RNAfold_args_info *args_info)
   args_info->paramFile_given = 0 ;
   args_info->nsp_given = 0 ;
   args_info->energyModel_given = 0 ;
+  args_info->betaScale_given = 0 ;
 }
 
 static
@@ -216,6 +222,8 @@ void clear_args (struct RNAfold_args_info *args_info)
   args_info->nsp_arg = NULL;
   args_info->nsp_orig = NULL;
   args_info->energyModel_orig = NULL;
+  args_info->betaScale_arg = 1.;
+  args_info->betaScale_orig = NULL;
   
 }
 
@@ -246,6 +254,7 @@ void init_args_info(struct RNAfold_args_info *args_info)
   args_info->paramFile_help = RNAfold_args_info_detailed_help[32] ;
   args_info->nsp_help = RNAfold_args_info_detailed_help[34] ;
   args_info->energyModel_help = RNAfold_args_info_detailed_help[36] ;
+  args_info->betaScale_help = RNAfold_args_info_detailed_help[37] ;
   
 }
 
@@ -355,6 +364,7 @@ RNAfold_cmdline_parser_release (struct RNAfold_args_info *args_info)
   free_string_field (&(args_info->nsp_arg));
   free_string_field (&(args_info->nsp_orig));
   free_string_field (&(args_info->energyModel_orig));
+  free_string_field (&(args_info->betaScale_orig));
   
   
 
@@ -429,6 +439,8 @@ RNAfold_cmdline_parser_dump(FILE *outfile, struct RNAfold_args_info *args_info)
     write_into_file(outfile, "nsp", args_info->nsp_orig, 0);
   if (args_info->energyModel_given)
     write_into_file(outfile, "energyModel", args_info->energyModel_orig, 0);
+  if (args_info->betaScale_given)
+    write_into_file(outfile, "betaScale", args_info->betaScale_orig, 0);
   
 
   i = EXIT_SUCCESS;
@@ -524,9 +536,36 @@ RNAfold_cmdline_parser2 (int argc, char **argv, struct RNAfold_args_info *args_i
 int
 RNAfold_cmdline_parser_required (struct RNAfold_args_info *args_info, const char *prog_name)
 {
-  FIX_UNUSED (args_info);
-  FIX_UNUSED (prog_name);
-  return EXIT_SUCCESS;
+  int result = EXIT_SUCCESS;
+
+  if (RNAfold_cmdline_parser_required2(args_info, prog_name, 0) > 0)
+    result = EXIT_FAILURE;
+
+  if (result == EXIT_FAILURE)
+    {
+      RNAfold_cmdline_parser_free (args_info);
+      exit (EXIT_FAILURE);
+    }
+  
+  return result;
+}
+
+int
+RNAfold_cmdline_parser_required2 (struct RNAfold_args_info *args_info, const char *prog_name, const char *additional_error)
+{
+  int error = 0;
+  FIX_UNUSED (additional_error);
+
+  /* checks for required options */
+  
+  /* checks for dependences among options */
+  if (args_info->betaScale_given && ! args_info->partfunc_given)
+    {
+      fprintf (stderr, "%s: '--betaScale' option depends on option 'partfunc'%s\n", prog_name, (additional_error ? additional_error : ""));
+      error = 1;
+    }
+
+  return error;
 }
 
 /*
@@ -1310,6 +1349,7 @@ RNAfold_cmdline_parser_internal (
         { "paramFile",	1, NULL, 'P' },
         { "nsp",	1, NULL, 0 },
         { "energyModel",	1, NULL, 'e' },
+        { "betaScale",	1, NULL, 0 },
         { 0,  0, 0, 0 }
       };
 
@@ -1569,6 +1609,20 @@ RNAfold_cmdline_parser_internal (
               goto failure;
           
           }
+          /* Set the scaling of the boltzmann factors\n.  */
+          else if (strcmp (long_options[option_index].name, "betaScale") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->betaScale_arg), 
+                 &(args_info->betaScale_orig), &(args_info->betaScale_given),
+                &(local_args_info.betaScale_given), optarg, 0, "1.", ARG_DOUBLE,
+                check_ambiguity, override, 0, 0,
+                "betaScale", '-',
+                additional_error))
+              goto failure;
+          
+          }
           
           break;
         case '?':	/* Invalid option.  */
@@ -1583,6 +1637,10 @@ RNAfold_cmdline_parser_internal (
 
 
 
+  if (check_required)
+    {
+      error += RNAfold_cmdline_parser_required2 (args_info, argv[0], additional_error);
+    }
 
   RNAfold_cmdline_parser_release (&local_args_info);
 

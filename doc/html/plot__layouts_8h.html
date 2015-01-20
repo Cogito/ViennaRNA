@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>RNAlib-2.0.1: H/plot_layouts.h File Reference</title>
+<title>RNAlib-2.0.2: H/plot_layouts.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -21,7 +21,7 @@ $(document).ready(initResizable);
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">RNAlib-2.0.1</div>
+   <div id="projectname">RNAlib-2.0.2</div>
   </td>
  </tr>
  </tbody>
@@ -237,7 +237,7 @@ Variables</h2></td></tr>
 
 <p>Calculate nucleotide coordinates for <em>Circular Plot</em> </p>
 <p>This function calculates the coordinates of nucleotides mapped in equal distancies onto a unit circle.</p>
-<dl class="note"><dt><b>Note:</b></dt><dd>In order to draw nice arcs using quadratic bezier curves that connect base pairs one may calculate a second tangential point <img class="formulaInl" alt="$P^t$" src="form_22.png"/> in addition to the actual R<sup>2</sup> coordinates. the simplest way to do so may be to compute a radius scaling factor <img class="formulaInl" alt="$rs$" src="form_23.png"/> in the interval <img class="formulaInl" alt="$[0,1]$" src="form_24.png"/> that weights the proportion of base pair span to the actual length of the sequence. This scaling factor can then be used to calculate the coordinates for <img class="formulaInl" alt="$P^t$" src="form_22.png"/>, i.e. <img class="formulaInl" alt="$ P^{t}_x[i] = X[i] * rs$" src="form_25.png"/> and <img class="formulaInl" alt="$P^{t}_y[i] = Y[i] * rs$" src="form_26.png"/>.</dd></dl>
+<dl class="note"><dt><b>Note:</b></dt><dd>In order to draw nice arcs using quadratic bezier curves that connect base pairs one may calculate a second tangential point <img class="formulaInl" alt="$P^t$" src="form_23.png"/> in addition to the actual R<sup>2</sup> coordinates. the simplest way to do so may be to compute a radius scaling factor <img class="formulaInl" alt="$rs$" src="form_24.png"/> in the interval <img class="formulaInl" alt="$[0,1]$" src="form_25.png"/> that weights the proportion of base pair span to the actual length of the sequence. This scaling factor can then be used to calculate the coordinates for <img class="formulaInl" alt="$P^t$" src="form_23.png"/>, i.e. <img class="formulaInl" alt="$ P^{t}_x[i] = X[i] * rs$" src="form_26.png"/> and <img class="formulaInl" alt="$P^{t}_y[i] = Y[i] * rs$" src="form_27.png"/>.</dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="utils_8h.html#a89c32307ee50a0026f4a3131fac0845a" title="Create a pair table of a secondary structure.">make_pair_table()</a>, <a class="el" href="plot__layouts_8h.html#a5964c4581431b098b80027d6e14dcdd4" title="Switch for changing the secondary structure layout algorithm.">rna_plot_type</a>, <a class="el" href="plot__layouts_8h.html#af4b9173e7d3fd361c3c85e6def194123" title="Calculate nucleotide coordinates for secondary structure plot the Simple way">simple_xy_coordinates()</a>, naview_xy_coordinates(), <a class="el" href="PS__dot_8h.html#a47856b2504b566588785597b6ebb8271" title="Produce a secondary structure graph in PostScript including additional annotation macros and write it...">PS_rna_plot_a()</a>, <a class="el" href="PS__dot_8h.html#a0873c7cc4cd7a11c9a2cea19dde7e9c9" title="Produce a secondary structure graph in PostScript and write it to &#39;filename&#39;.">PS_rna_plot</a>, <a class="el" href="PS__dot_8h.html#ae7853539b5df98f294b4af434e979304" title="Produce a secondary structure plot in SVG format and write it to a file.">svg_rna_plot()</a></dd></dl>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
@@ -275,7 +275,7 @@ Variables</h2></td></tr>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="plot__layouts_8h.html">plot_layouts.h</a>      </li>
-      <li class="footer">Generated on Sun Jan 15 2012 for RNAlib-2.0.1 by&#160;
+      <li class="footer">Generated on Thu Feb 23 2012 for RNAlib-2.0.2 by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
     </ul>

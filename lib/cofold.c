@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2006-10-03 15:28:38 ivo> */
+/* Last changed Time-stamp: <2007-09-27 17:08:43 ivo> */
 /*
 		  minimum free energy
 		  RNA secondary structure prediction
@@ -125,6 +125,7 @@ PRIVATE void get_arrays(unsigned int size)
   DMLi  = (int *) space(sizeof(int)*(size+1));
   DMLi1 = (int *) space(sizeof(int)*(size+1));
   DMLi2 = (int *) space(sizeof(int)*(size+1));
+  if (base_pair) free(base_pair);
   base_pair = (struct bond *) space(sizeof(struct bond)*(1+size/2));
 }
 
@@ -137,7 +138,7 @@ PUBLIC void free_arrays(void)
   free(ptype);
   if (uniq_ML) free(fM1);
 
-  free(base_pair); free(Fmi);
+  free(base_pair); base_pair=NULL; free(Fmi);
   free(DMLi); free(DMLi1);free(DMLi2);
   init_length=0;
 }
@@ -992,9 +993,9 @@ PRIVATE void free_end(int *array, int i, int start) {
 
      if (dangles%2==1) {
        if (inc>0) {
-         if (j>left)  energy += array[j-2] + d5;
+	 if (j>left)  energy += array[j-2] + d5;
        } else
-         if (j<right)  energy += d3 + array[j+2];
+	 if (j<right)  energy += d3 + array[j+2];
        array[i] = MIN2(array[i], energy);
      }
    }

@@ -158,7 +158,7 @@ provided:
      * (1-p_ij). Uses the global `pr' array filled by a previous call
      to `pf_fold()'.
 
- -- Function: char *centroid(int LENGTH, double *DIST)
+ -- Function: char *centroid (int LENGTH, double *DIST)
      Computes the centroid structure, i.e. the structure having the
      lowest average base pair distance to all structures in the
      Boltzmann ensemble. This can be computed trivially from the pair
@@ -243,12 +243,11 @@ probability of an unpaired region is calculated and in a second step
 this probability of an unpaired region is  multiplied with the
 probability of an interaction between the two RNAs.  This approach is
 implemented for the interaction between a long target sequence and a
-short ligand RNA. The structure of the short RNA is not considered. The
-function `pf_unstru()', which calculates the partition function over
-all unpaired regions, needs only the longer sequence as an input.
-Function `pf_interact()', which calculates the partition function over
-all possible interactions between the two sequences, needs both
-sequence as separate strings as input.
+short ligand RNA. Function `pf_unstru()' calculates the partition
+function over all unpaired regions in the input sequence. Function
+`pf_interact()', which calculates the partition function over all
+possible interactions between two sequences, needs both sequence as
+separate strings as input.
 
  -- Variable: int cut_point
      `cut_point' marks the position (starting from 1) of the first
@@ -311,7 +310,7 @@ probabilities given that a re dimer is formed or not formed.
      memory for partition function cofolding sequences not longer than
      LENGTH, and sets up pairing matrix and energy parameters.
 
- -- data type: plist struct {int i; int j; float energy;}
+ -- data type: plist struct {int i; int j; float p;}
 
  -- Function: extern struct plist *get_plist (struct plist *PL, int
           LENGTH, double CUT_OFF)
@@ -375,55 +374,65 @@ site.
  -- data type: pu_contrib struct {double **H; double **I; double **M;
           double **E; int length;}
 
- -- Function: `pu_contrib' *pf_unstru(char *SEQUENCE, char *STRUCTURE,
-          int W)
+ -- Function: `pu_contrib' *pf_unstru (char *SEQUENCE, int U)
      This function calculates the partition function over all unpaired
-     regions in *SEQUENCE of a maximal length W. Its returns a
-     `pu_contrib' struct containing four arrays of dimension [i = 1 to
-     length of *SEQUENCE][j = 1 to W-1] containing all possible
-     contributions to the probabilities of unpaired regions of maximum
-     length W.  Each array in `pu_contrib' contains one of the
-     contributions to the total probability of being unpaired: The
-     probability of being unpaired within an exterior loop is in array
-     `pu_contrib->E', the probability of being unpaired within a
-     hairpin loop is in array `pu_contrib->H', the probability of being
-     unpaired within an interior loop is in array `pu_contrib->I' and
-     probability of being unpaired within a multi-loop is in array
-     `pu_contrib->M'. The total probability of being unpaired is the
-     sum of the four arrays of `pu_contrib'.  Use functions
-     `free_unpaired' and `free_pf_two' to free everything allocated for
-     function `pf_unstru()'.
+     regions in *SEQUENCE of a maximal length U. You have to call
+     function `pf_fold()' for *SEQUENCE befor calling `pf_unstru()'. If
+     you want to calculate unpaired regions for a constrained
+     structure, set variable STRUCTURE in function `pf_fold()' to the
+     constrain string.  Function `pf_unstru' returns a `pu_contrib'
+     struct containing four arrays of dimension [i = 1 to length of
+     *SEQUENCE][j = 0 to U-1] containing all possible contributions to
+     the probabilities of unpaired regions of maximum length U.  Each
+     array in `pu_contrib' contains one of the contributions to the
+     total probability of being unpaired: The probability of being
+     unpaired within an exterior loop is in array `pu_contrib->E', the
+     probability of being unpaired within a hairpin loop is in array
+     `pu_contrib->H', the probability of being unpaired within an
+     interior loop is in array `pu_contrib->I' and probability of being
+     unpaired within a multi-loop is in array `pu_contrib->M'. The
+     total probability of being unpaired is the sum of the four arrays
+     of `pu_contrib'.  Function `pf_unstru' frees everything allocated
+     automatically. To free the output structure call `free_pu_contrib'.
 
- -- Function: void free_unpaired(void)
-     Frees the arrays need for the calculation of the probability of
-     being unpaired by function `pf_unstru()'.
+ -- Function: void free_pu_contrib (`pu_contrib' *P_CON)
+     frees the output of function `pf_unstru'.
 
- -- Function: void free_pf_two(`pu_contrib' *P_CON, FLT_OR_DBL **PIN)
-     If non of the input parameters is set to NULL, frees everything
-     returned by `pf_unstru()' and `pf_interact()'.  If **PIN is set to
-     NULL, frees only the `pu_contrib' struct returned by function
-     `pf_unstru()'.  If *P_CON is set to NULL, frees the two arrays of
-     length of *SEQUENCE which are returned by function `pf_interact()'.
+ -- data type: interact struct {double *Pi; double *I; double Gikjl;
+          double Gikjl_wo; int i, int k, int j, int l, int length;}
 
- -- Function: double **pf_interact(const char *S1, const char *S2,
-          `pu_contrib' *P_C, int W, int INCR3, int INCR5)
+ -- Function: interact *pf_interact (const char *S1, const char *S2,
+          `pu_contrib' *P_C, `pu_contrib' *P_C2,int W, char *CSTRUC,
+          int INCR3, int INCR5)
      Calculates the probability of a local interaction between sequence
      *S1 and sequence *S2, considering the probability that the region
-     of interaction is unpaired within *S1. The longer sequence has to
-     be given as *S1. Function `pf_unstru()' has to be called for *S1,
-     where the probabilities of  being unpaired for *S1 are stored in
-     *P_C. The shorter sequence has to be given as *S2.  The parameter
-     W gives the maximal length of a sub sequences of *S1 considered
-     for the interaction. The command line parameters INCR5 and INCR3
-     allows inclusion of unpaired residues left (INCR5) and right
-     (INCR3) of the region of interaction in *S1. If the INCR options
-     are used, function `pf_unstru()' has to be called with
-     W=W+INCR5+INCR3.  Function `pf_interact()' returns two arrays of
-     the length of *SEQUENCE, which contain the probability of a local
-     interaction (index[0][i]) and the minimum free energy of a local
-     interaction (index[1][i]), where i is the position in sequence
-     *S1. Use `free_pf_two)' to free the returned arrays. Notice that
-     function `pf_interact' calls function `free_unpaired'!
+     of interaction is unpaired within *S1 and  *S2. The longer
+     sequence has to be given as *S1. The shorter sequence has to be
+     given as *S2. Function `pf_unstru()' has to be called for *S1 and
+     *S2, where the probabilities of  being unpaired have to be given
+     in *P_C and *P_C2, respectively. If you do not want to include the
+     probabilities of  being unpaired for *S2 set *P_C2 to NULL. If
+     variable char *CSTRUC is not NULL, constrained folding is done:
+     The available constrains for intermolecular interaction are: '.'
+     (no constrain), 'x' (the base has no intermolecular interaction)
+     and '|' (the corresponding base has to be paired
+     intermolecularily).  The parameter W determines the maximal length
+     of the interaction. The parameters INCR5 and INCR3 allows
+     inclusion of unpaired residues left (INCR5) and right (INCR3) of
+     the region of interaction in *S1. If the INCR options are used,
+     function `pf_unstru()' has to be called with W=W+INCR5+INCR3 for
+     the longer sequence *S1.  Function `pf_interact()' returns a
+     structure of type `interact' which contains the probability of the
+     best local interaction including residue i in Pi and the minimum
+     free energy in Gi, where i is the position in sequence *S1. The
+     member Gikjl of structure `interact' is the best interaction
+     between region [k,i] k<i in longer sequence *S1 and region [j,l]
+     j<l in *S2. Gikjl_wo is Gikjl without the probability of beeing
+     unpaired.  Use `free_interact)' to free the returned structure, all
+     other stuff is freed inside `pf_interact()'.
+
+ -- Function: void free_interact (`interact' *PIN)
+     frees the output of function `pf_interact'.
 
    Prototypes for these functions are declared in `part_func_up.h'.
 
@@ -1389,9 +1398,9 @@ Function Index
  [index ]
 * Menu:
 
-* **pf_interact:                         Cofolding.           (line 186)
 * *centroid:                             PF Fold.             (line  57)
-* *pf_unstru:                            Cofolding.           (line 156)
+* *pf_interact:                          Cofolding.           (line 183)
+* *pf_unstru:                            Cofolding.           (line 154)
 * add_root:                              Parsing.             (line  31)
 * alifold:                               Alignment Fold.      (line  14)
 * alipf_fold:                            Alignment Fold.      (line  29)
@@ -1399,30 +1408,30 @@ Function Index
 * b2HIT:                                 Parsing.             (line  14)
 * b2Shapiro:                             Parsing.             (line  22)
 * bp_distance:                           Distances.           (line  20)
-* co_pf_fold:                            Cofolding.           (line  71)
-* cofold:                                Cofolding.           (line  37)
-* compute_probabilities:                 Cofolding.           (line 110)
+* co_pf_fold:                            Cofolding.           (line  70)
+* cofold:                                Cofolding.           (line  36)
+* compute_probabilities:                 Cofolding.           (line 109)
 * energy_of_struct:                      mfe Fold.            (line  25)
 * expand_Full:                           Parsing.             (line  10)
 * expand_Shapiro:                        Parsing.             (line  27)
 * fold:                                  mfe Fold.            (line  11)
 * free_alifold_arrays:                   Alignment Fold.      (line  20)
 * free_arrays:                           mfe Fold.            (line  33)
-* free_co_arrays:                        Cofolding.           (line  42)
-* free_co_pf_arrays:                     Cofolding.           (line  82)
+* free_co_arrays:                        Cofolding.           (line  41)
+* free_co_pf_arrays:                     Cofolding.           (line  81)
+* free_interact:                         Cofolding.           (line 211)
 * free_pf_arrays:                        PF Fold.             (line  38)
 * free_pf_arraysLP:                      Local Fold.          (line  38)
-* free_pf_two:                           Cofolding.           (line 178)
 * free_profile:                          Profile Distances.   (line  20)
+* free_pu_contrib:                       Cofolding.           (line 175)
 * free_tree:                             Tree Distances.      (line  15)
-* free_unpaired:                         Cofolding.           (line 174)
 * get_line:                              Utilities.           (line  98)
 * gmlRNA:                                Utilities.           (line  39)
 * hamming:                               Utilities.           (line  56)
-* init_co_pf_fold:                       Cofolding.           (line  86)
+* init_co_pf_fold:                       Cofolding.           (line  85)
 * init_pf_fold:                          PF Fold.             (line  33)
 * init_pf_foldLP:                        Local Fold.          (line  35)
-* initialize_cofold:                     Cofolding.           (line  45)
+* initialize_cofold:                     Cofolding.           (line  44)
 * initialize_fold:                       mfe Fold.            (line  28)
 * int_urn:                               Utilities.           (line  91)
 * inverse_fold:                          Inverse Fold.        (line  10)
@@ -1446,7 +1455,7 @@ Function Index
 * read_parameter_file:                   Param Files.         (line  11)
 * space:                                 Utilities.           (line  94)
 * string_edit_distance:                  String Distances.    (line  11)
-* struct:                                Cofolding.           (line  94)
+* struct:                                Cofolding.           (line  93)
 * subopt:                                Suboptimal folding.  (line  10)
 * svg_RNA_plot:                          Utilities.           (line  34)
 * time_stamp:                            Utilities.           (line  76)
@@ -1477,7 +1486,7 @@ Variable Index
 * base_pair:                             Fold Vars.           (line  69)
 * cost_matrix:                           Distances.           (line  68)
 * cut_point <1>:                         Fold Vars.           (line  62)
-* cut_point:                             Cofolding.           (line  30)
+* cut_point:                             Cofolding.           (line  29)
 * cv_fact:                               Alignment Fold.      (line  44)
 * dangles:                               Fold Vars.           (line  36)
 * do_backtrack:                          Fold Vars.           (line  96)
@@ -1512,24 +1521,24 @@ Node: Introduction601
 Node: Folding Routines1611
 Node: mfe Fold2422
 Node: PF Fold4292
-Node: Inverse Fold7637
-Node: Suboptimal folding9274
-Node: Cofolding9955
-Node: Local Fold20754
-Node: Alignment Fold22732
-Node: Fold Vars25059
-Node: Param Files29678
-Node: Parsing and Comparing36995
-Node: notations37405
-Node: Parsing40928
-Node: Distances43569
-Node: Tree Distances47432
-Node: String Distances48210
-Node: Profile Distances48740
-Node: Utilities49819
-Node: Example54455
-Node: References57954
-Node: Function Index60999
-Node: Variable Index66404
+Node: Inverse Fold7638
+Node: Suboptimal folding9275
+Node: Cofolding9956
+Node: Local Fold21314
+Node: Alignment Fold23292
+Node: Fold Vars25619
+Node: Param Files30238
+Node: Parsing and Comparing37555
+Node: notations37965
+Node: Parsing41488
+Node: Distances44129
+Node: Tree Distances47992
+Node: String Distances48770
+Node: Profile Distances49300
+Node: Utilities50379
+Node: Example55015
+Node: References58514
+Node: Function Index61559
+Node: Variable Index66964
 
 End Tag Table

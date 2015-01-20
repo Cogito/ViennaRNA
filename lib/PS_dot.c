@@ -15,7 +15,7 @@
 #include "fold_vars.h"
 #include "PS_dot.h"
 
-static char UNUSED rcsid[] = "$Id: PS_dot.c,v 1.34 2006/01/18 12:58:42 ivo Exp $";
+static char UNUSED rcsid[] = "$Id: PS_dot.c,v 1.36 2006/08/17 12:21:00 ivo Exp $";
 
 #define PUBLIC
 #define  PRIVATE   static
@@ -481,7 +481,7 @@ int svg_rna_plot(char *string, char *structure, char *ssfile)
     int j;
     if ((j=pair_table[i])>i)
       fprintf(xyplot,
-	      "      \"<line id=\"%d,%d\" x1=\"%6.3f\" y1=\"%6.3f\" x2=\"%6.3f\" y2=\"%6.3f\" />\n",
+	      "      <line id=\"%d,%d\" x1=\"%6.3f\" y1=\"%6.3f\" x2=\"%6.3f\" y2=\"%6.3f\" />\n",
 	      i,j, X[i-1], Y[i-1], X[j-1], Y[j-1]);
   }
   fprintf(xyplot, "    </g>\n");
@@ -731,7 +731,7 @@ int PS_dot_plot(char *string, char *wastlfile) {
   for (k=0; k<mf_num; k++) {
     mf[k].i = base_pair[k+1].i;
     mf[k].j = base_pair[k+1].j;
-    mf[k].p = 0.95;
+    mf[k].p = 0.95*0.95;
   }
   mf[k].i=0;
   mf[k].j=0;
@@ -911,8 +911,8 @@ PUBLIC int PS_dot_plot_list(char *seq, char *wastlfile,
 
   /* print boxes in lower left half (mfe) */
   for (pl1=mf; pl1->i>0; pl1++) {
-    tmp=pl1->p;
-    fprintf(wastl,"%d %d %1.9f lbox\n", pl1->i, pl1->j, tmp);
+    tmp = sqrt(pl1->p);
+    fprintf(wastl,"%d %d %1.7f lbox\n", pl1->i, pl1->j, tmp);
   }
 
   fprintf(wastl,"showpage\n"

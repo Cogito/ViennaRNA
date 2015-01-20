@@ -22,7 +22,7 @@
 #include "params.h"
 
 /*@unused@*/
-static char rcsid[] UNUSED = "$Id: Lfold.c,v 1.6 2006/05/08 08:29:51 ivo Exp $";
+static char rcsid[] UNUSED = "$Id: Lfold.c,v 1.8 2006/06/17 21:49:31 ivo Exp $";
 
 
 #define PAREN
@@ -387,7 +387,7 @@ PRIVATE int fill_arrays(char *string, int maxdist) {
 	  energy = c[i][j-i];
 	  if (type>2) energy += P->TerminalAU;
 	  if (dangles==2) {
-	    energy += P->dangle5[type][S1[i-1]];
+	    if (i>1) energy += P->dangle5[type][S1[i-1]];
 	  }
 	  f3[i] = MIN2(f3[i], energy);
 	}
@@ -432,6 +432,7 @@ PRIVATE int fill_arrays(char *string, int maxdist) {
 	    printf("%s (%6.2f) %4d\n", ss, (f3[1]-f3[1+strlen(ss)])/100., 1);
 	  free(ss);
 	}
+	do_backtrack=0; 
       }
     }
     {

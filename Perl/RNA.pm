@@ -832,6 +832,7 @@ package RNA;
 *export_bppm = *RNAc::export_bppm;
 *assign_plist_from_pr = *RNAc::assign_plist_from_pr;
 *get_pf_arrays = *RNAc::get_pf_arrays;
+*get_subseq_F = *RNAc::get_subseq_F;
 *get_centroid_struct_pl = *RNAc::get_centroid_struct_pl;
 *get_centroid_struct_pr = *RNAc::get_centroid_struct_pr;
 *mean_bp_distance = *RNAc::mean_bp_distance;

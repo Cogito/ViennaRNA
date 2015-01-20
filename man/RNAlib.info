@@ -86,6 +86,9 @@ Associated functions are:
  -- Function: float energy_of_struct (char* SEQUENCE, char* STRUCTURE)
      calculates the energy of SEQUENCE on the STRUCTURE
 
+   The `circ_fold()' and `energy_of_circ_struct()' provide analogous
+functions for folding and evaluating cricular RNA molecules.
+
  -- Function: void initialize_fold (int LENGTH)
      Obsolete function kept for backward compatibility.  Allocates
      memory for mfe folding sequences not longer than LENGTH, and sets
@@ -149,11 +152,11 @@ provided:
  -- Function: double mean_bp_dist (int LENGTH)
      computes the mean base pair distance in the equilibrium ensemble
      as a measure of the structural diversity.  It is given by <d> =
-     sum_a,b p_a * p_b * d(a,b), where the sum goes over all pairs of
+     \sum_a,b p_a * p_b * d(a,b), where the sum goes over all pairs of
      possible structure a,b, p_a is the Boltzmann weight of structure
      a, and d(a,b) is the base pair distance (see `bp_distance()' in
      *Note Distances::.). The mean base pair distances can be computed
-     efficiently from the pair probabilities p_ij as <d> = sum_ij p_ij
+     efficiently from the pair probabilities p_ij as <d> = \sum_ij p_ij
      * (1-p_ij). Uses the global `pr' array filled by a previous call
      to `pf_fold()'.
 
@@ -166,6 +169,17 @@ provided:
      returned in DIST.
 
    Prototypes for these functions are declared in `part_func.h'.
+
+ -- Function: float *MEA (plist *PL, char *STRUCTURE, double GAMMA)
+     Computes a MEA (maximum expected accuracy) structure, such that
+     expected accuracy  A(S) = \sum_(i,j) \in S 2 \gamma p_ij + \sum_i
+     \notin S p^u_i is maximised. Higher values of \gamma result in
+     more base pairs of lower probability and thus higher sensitivity.
+     Low values of gamm result in structures containing only highly
+     likely pairs (high specificity).  The code of the MEA function
+     also demonstrates the use of sparse dynamic programming scheme to
+     reduce the time and memory complexity of folding.
+   The corresponding protoype is declared in `MEA.h'.
 
 
 File: RNAlib.info,  Node: Inverse Fold,  Next: Suboptimal folding,  Prev: PF Fold,  Up: Folding Routines
@@ -451,7 +465,8 @@ algorithm that restricts the span of all base pairs.
    MAXDIST.
 
  -- Function: struct plist *pfl_fold (char *SEQUENCE, int WINSIZE,int
-          PAIRSIZE, float CUTOFF, float *PUP)
+          PAIRSIZE, float CUTOFFB, double **PU,struct plist **DPP2,
+          FILE *PUFP, FILE *SPUP))
      pfl_fold computes partition functions for every window of size
      WINSIZE possible in a RNA molecule, allowing only pairs with a span
      smaller than PAIRSIZE. It returns the mean pair probabilities
@@ -460,14 +475,24 @@ algorithm that restricts the span of all base pairs.
      outside of the window do not influence the structure at all. Only
      probabilities higher than CUTOFF are kept.
 
-     If PUP is supplied (i.e is not the NULL pointer), `pfl_fold()'
-     will also compute the mean probability that regions of length `u'
-     are unpaired. The parameter `u' is supplied in PUP[0]. On return
-     the PUP array will contain these probabilities, with the entry on
-     PUP[X] containing the mean probability that x and the `u-1'
-     preceding bases are unpaired. The PUP array needs to be large
-     enough to hold `n+1' float entries, where `n' is the sequence
-     length.
+     The remaining arguments are optional in the sense that they can be
+     set to NULL unless the corresponding functionality is wanted.  If
+     PU is supplied (i.e is not the NULL pointer), `pfl_fold()' will
+     also compute local _accessibilities_, as the mean probability that
+     regions of length `u' or smaller are unpaired. The parameter
+     `ulength' is supplied in `pU[0][0]'. On return the PU array will
+     contain these probabilities, with the entry on `pU[x][y]'
+     containing the mean probability that x and the y following bases
+     are unpaired.  If DPP2 is supplied (i.e is not the NULL pointer),
+     `pfl_fold()' will also compute the probability of stacked pairs,
+     more precisely the conditional probabilities of base pairs (i,j)
+     given that the enclosing pair (i-1,j+1) is formed.  The file
+     pointers PUFP and SPUP file pointer is provided, the unpaired
+     probabilities will direcly be printed and not saved, which can be
+     useful when memory is an issue).  If the  file pointer is
+     provided, the base pair probabilities will direcly be printed and
+     not saved, which can be useful when memory is an issue).
+
 
  -- Function: void init_pf_foldLP (int LENGTH)
      Analog to `init_pf_fold()'. LENGTH is the length  of the sequence.
@@ -1104,7 +1129,7 @@ condensed into probability profiles which are the compared by alignment.
      frees the memory allocated for the profile T.  Backward
      compatibility only. You can just use plain `free()'
 
-   Prototypes for the above functions can be found in `ProfileDist.h'.
+   Prototypes for the above functions can be found in `profiledist.h'.
 
 
 File: RNAlib.info,  Node: Utilities,  Next: Example,  Prev: Parsing and Comparing,  Up: Top
@@ -1233,7 +1258,7 @@ distance of the resulting structures and base pairing probabilities.
      #include  "RNAstruct.h"
      #include  "treedist.h"
      #include  "stringdist.h"
-     #include  "ProfileDist.h"
+     #include  "profiledist.h"
 
      void main()
      {
@@ -1305,9 +1330,9 @@ distance of the resulting structures and base pairing probabilities.
      }
 
    In a typical Unix environment you would compile this program using:
-`cc -c example.c -IHPATH' and link using `cc -o example -LLPATH -lRNA
--lm' where HPATH and LPATH point to the location of the header files
-and library, respectively.
+`cc -c example.c -IHPATH' and link using `cc -o example example.o
+-LLPATH -lRNA -lm' where HPATH and LPATH point to the location of the
+header files and library, respectively.
 
 
 File: RNAlib.info,  Node: References,  Next: Function Index,  Prev: Example,  Up: Top
@@ -1385,6 +1410,31 @@ File: RNAlib.info,  Node: References,  Next: Function Index,  Prev: Example,  Up
      Structure Prediction for Aligned RNA Sequences.     J. Mol. Biol.
      319:1059-1066
 
+   - S.H. Bernhart, I.L. Hofacker, S. Will, A. Gruber, P.F. Stadler
+     (2008).
+     RNAalifold: improved consensus structure prediction for RNA
+     alignments. BMC Bioinformatics, 9:474, 2008.
+
+   - I.L. Hofacker and Peter F. Stadler (2006).
+     Memory efficient folding algorithms for circular RNA secondary
+     structures. Bioinformatics, 22:1172–1176.
+
+   - S.H. Bernhart, H. Tafer, U. Mückstein, Ch. Flamm, P.F. Stadler,
+     I.L. Hofacker (2006). Partition function and base pairing
+     probabilities    of RNA heterodimers. Algorithms Mol. Biol., 1:3.
+
+   - S.H. Bernhart, I.L. Hofacker, P.F. Stadler (2006).
+     Local RNA base pairing probabilities in large sequences.
+     Bioinformatics, 22:614–615.
+
+   - U. Mückstein, H. Tafer, J. Hackermüller, S.H. Bernhart,    P.F.
+     Stadler, I.L Hofacker (2006).     Thermodynamics of RNA-RNA
+     binding. Bioinformatics, 22:1177–1182.
+
+   - I.L. Hofacker, B. Priwitzer, P.F. Stadler (2004).
+     Prediction of locally stable RNA secondary structures for
+     genome-wide    surveys. Bioinformatics, 20:186–190.
+
    - D. Adams (1979)
      The hitchhiker's guide to the galaxy, Pan Books, London
 
@@ -1398,6 +1448,7 @@ Function Index
 * Menu:
 
 * *centroid:                             PF Fold.             (line  57)
+* *MEA:                                  PF Fold.             (line  67)
 * *pf_interact:                          Cofolding.           (line 183)
 * *pf_unstru:                            Cofolding.           (line 154)
 * add_root:                              Parsing.             (line  31)
@@ -1415,12 +1466,12 @@ Function Index
 * expand_Shapiro:                        Parsing.             (line  27)
 * fold:                                  mfe Fold.            (line  11)
 * free_alifold_arrays:                   Alignment Fold.      (line  20)
-* free_arrays:                           mfe Fold.            (line  33)
+* free_arrays:                           mfe Fold.            (line  36)
 * free_co_arrays:                        Cofolding.           (line  41)
 * free_co_pf_arrays:                     Cofolding.           (line  81)
 * free_interact:                         Cofolding.           (line 211)
 * free_pf_arrays:                        PF Fold.             (line  38)
-* free_pf_arraysLP:                      Local Fold.          (line  38)
+* free_pf_arraysLP:                      Local Fold.          (line  49)
 * free_profile:                          Profile Distances.   (line  20)
 * free_pu_contrib:                       Cofolding.           (line 175)
 * free_tree:                             Tree Distances.      (line  15)
@@ -1429,9 +1480,9 @@ Function Index
 * hamming:                               Utilities.           (line  56)
 * init_co_pf_fold:                       Cofolding.           (line  85)
 * init_pf_fold:                          PF Fold.             (line  33)
-* init_pf_foldLP:                        Local Fold.          (line  35)
+* init_pf_foldLP:                        Local Fold.          (line  46)
 * initialize_cofold:                     Cofolding.           (line  44)
-* initialize_fold:                       mfe Fold.            (line  28)
+* initialize_fold:                       mfe Fold.            (line  31)
 * int_urn:                               Utilities.           (line  91)
 * inverse_fold:                          Inverse Fold.        (line  10)
 * inverse_pf_fold:                       Inverse Fold.        (line  21)
@@ -1445,7 +1496,7 @@ Function Index
 * pack_structure:                        Utilities.           (line  60)
 * parse_structure:                       Parsing.             (line  48)
 * pf_fold:                               PF Fold.             (line  13)
-* plist:                                 Local Fold.          (line  17)
+* plist:                                 Local Fold.          (line  18)
 * profile_edit_distance:                 Profile Distances.   (line  17)
 * PS_dot_plot:                           Utilities.           (line   9)
 * PS_rna_plot:                           Utilities.           (line  19)
@@ -1464,9 +1515,9 @@ Function Index
 * unpack_structure:                      Utilities.           (line  67)
 * unweight:                              Parsing.             (line  38)
 * update_alifold_params:                 Alignment Fold.      (line  23)
-* update_fold_params:                    mfe Fold.            (line  36)
+* update_fold_params:                    mfe Fold.            (line  39)
 * update_pf_params:                      PF Fold.             (line  41)
-* update_pf_paramsLP:                    Local Fold.          (line  41)
+* update_pf_paramsLP:                    Local Fold.          (line  52)
 * urn:                                   Utilities.           (line  83)
 * write_parameter_file:                  Param Files.         (line  15)
 
@@ -1519,25 +1570,25 @@ Node: Top0
 Node: Introduction602
 Node: Folding Routines1612
 Node: mfe Fold2423
-Node: PF Fold4293
-Node: Inverse Fold7639
-Node: Suboptimal folding9276
-Node: Cofolding9957
-Node: Local Fold21315
-Node: Alignment Fold23293
-Node: Fold Vars25620
-Node: Param Files30239
-Node: Parsing and Comparing37556
-Node: notations37966
-Node: Parsing41489
-Node: Distances44130
-Node: Tree Distances47993
-Node: String Distances48771
-Node: Profile Distances49301
-Node: Utilities50380
-Node: Example55016
-Node: References58515
-Node: Function Index61560
-Node: Variable Index66965
+Node: PF Fold4424
+Node: Inverse Fold8436
+Node: Suboptimal folding10073
+Node: Cofolding10754
+Node: Local Fold22112
+Node: Alignment Fold24820
+Node: Fold Vars27147
+Node: Param Files31766
+Node: Parsing and Comparing39083
+Node: notations39493
+Node: Parsing43016
+Node: Distances45657
+Node: Tree Distances49520
+Node: String Distances50298
+Node: Profile Distances50828
+Node: Utilities51907
+Node: Example56543
+Node: References60052
+Node: Function Index64180
+Node: Variable Index69658
 
 End Tag Table

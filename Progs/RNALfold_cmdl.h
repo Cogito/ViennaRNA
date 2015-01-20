@@ -46,12 +46,9 @@ struct RNALfold_args_info
   const char *span_help; /**< @brief Set the maximum allowed separation of a base pair to span. I.e. no pairs (i,j) with j-i>span will be allowed.\n\n help description.  */
   int noconv_flag;	/**< @brief Do not automatically substitude nucleotide \"T\" with \"U\"\n\n (default=off).  */
   const char *noconv_help; /**< @brief Do not automatically substitude nucleotide \"T\" with \"U\"\n\n help description.  */
-  double zscore_arg;	/**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the
-   commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n (default='-2').  */
-  char * zscore_orig;	/**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the
-   commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n original value given at command line.  */
-  const char *zscore_help; /**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the
-   commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n help description.  */
+  double zscore_arg;	/**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n (default='-2').  */
+  char * zscore_orig;	/**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n original value given at command line.  */
+  const char *zscore_help; /**< @brief Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n help description.  */
   double temp_arg;	/**< @brief Rescale energy parameters to a temperature of temp C. Default is 37C.\n\n.  */
   char * temp_orig;	/**< @brief Rescale energy parameters to a temperature of temp C. Default is 37C.\n\n original value given at command line.  */
   const char *temp_help; /**< @brief Rescale energy parameters to a temperature of temp C. Default is 37C.\n\n help description.  */

@@ -125,6 +125,9 @@
 /* only for gcc */
 #undef UNUSED
 
+/* Compute z-scores for RNALfold */
+#undef USE_SVM
+
 /* Version number of package */
 #undef VERSION
 

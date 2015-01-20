@@ -7598,6 +7598,44 @@ XS(_wrap_get_pf_arrays) {
 }
 
 
+XS(_wrap_get_subseq_F) {
+  {
+    int arg1 ;
+    int arg2 ;
+    int val1 ;
+    int ecode1 = 0 ;
+    int val2 ;
+    int ecode2 = 0 ;
+    int argvi = 0;
+    double result;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: get_subseq_F(i,j);");
+    }
+    ecode1 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "get_subseq_F" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+    ecode2 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "get_subseq_F" "', argument " "2"" of type '" "int""'");
+    } 
+    arg2 = (int)(val2);
+    result = (double)get_subseq_F(arg1,arg2);
+    ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((double)(result)); argvi++ ;
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_get_centroid_struct_pl) {
   {
     int arg1 ;
@@ -14727,6 +14765,7 @@ static swig_command_info swig_commands[] = {
 {"RNAc::export_bppm", _wrap_export_bppm},
 {"RNAc::assign_plist_from_pr", _wrap_assign_plist_from_pr},
 {"RNAc::get_pf_arrays", _wrap_get_pf_arrays},
+{"RNAc::get_subseq_F", _wrap_get_subseq_F},
 {"RNAc::get_centroid_struct_pl", _wrap_get_centroid_struct_pl},
 {"RNAc::get_centroid_struct_pr", _wrap_get_centroid_struct_pr},
 {"RNAc::mean_bp_distance", _wrap_mean_bp_distance},

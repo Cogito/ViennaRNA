@@ -41,7 +41,7 @@ const char *RNALfold_args_info_detailed_help[] = {
   "      --noconv               Do not automatically substitude nucleotide \"T\" \n                               with \"U\"\n                               \n                                 (default=off)",
   "\nAlgorithms:",
   "  Select additional algorithms which should be included in the calculations.\n  The Minimum free energy (MFE) and a structure representative are calculated \n  in any case.\n  \n",
-  "  -z, --zscore[=DOUBLE]      Activate z-score computation. An optional argument \n                               may be supplied to set the threshold\n                               Due to parsing the\n                                commandline parameters a negative value should \n                               be given immediately after \"z\" without spaces \n                               e.g. -z-4.9\n                               \n                                 (default=`-2')",
+  "  -z, --zscore[=DOUBLE]      Activate z-score computation. An optional argument \n                               may be supplied to set the threshold\n                               Due to parsing the commandline parameters a \n                               negative value should be given immediately after \n                               \"z\" without spaces e.g. -z-4.9\n                               \n                                 (default=`-2')",
   "\nModel Details:",
   "  -T, --temp=DOUBLE          Rescale energy parameters to a temperature of temp \n                               C. Default is 37C.\n                               \n",
   "  -4, --noTetra              Do not include special tabulated stabilizing \n                               energies for tri-, tetra- and hexaloop hairpins. \n                               Mostly for testing.\n                               \n                                 (default=off)",
@@ -1286,8 +1286,7 @@ RNALfold_cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'z':	/* Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the
-         commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n.  */
+        case 'z':	/* Activate z-score computation. An optional argument may be supplied to set the threshold\nDue to parsing the commandline parameters a negative value should be given immediately after \"z\" without spaces e.g. -z-4.9\n\n.  */
         
         
           if (update_arg( (void *)&(args_info->zscore_arg), 

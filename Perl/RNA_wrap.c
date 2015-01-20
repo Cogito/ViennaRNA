@@ -1426,39 +1426,40 @@ SWIG_Perl_SetModule(swig_module_info *module) {
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define SWIGTYPE_p_COORDINATE swig_types[0]
-#define SWIGTYPE_p_FILE swig_types[1]
-#define SWIGTYPE_p_SOLUTION swig_types[2]
-#define SWIGTYPE_p_Tree swig_types[3]
-#define SWIGTYPE_p_bond swig_types[4]
-#define SWIGTYPE_p_char swig_types[5]
-#define SWIGTYPE_p_cpair swig_types[6]
-#define SWIGTYPE_p_double swig_types[7]
-#define SWIGTYPE_p_doubleArray swig_types[8]
-#define SWIGTYPE_p_duplexT swig_types[9]
-#define SWIGTYPE_p_float swig_types[10]
-#define SWIGTYPE_p_floatArray swig_types[11]
-#define SWIGTYPE_p_int swig_types[12]
-#define SWIGTYPE_p_intArray swig_types[13]
-#define SWIGTYPE_p_p_char swig_types[14]
-#define SWIGTYPE_p_p_double swig_types[15]
-#define SWIGTYPE_p_p_doubleArray swig_types[16]
-#define SWIGTYPE_p_p_float swig_types[17]
-#define SWIGTYPE_p_p_floatArray swig_types[18]
-#define SWIGTYPE_p_p_int swig_types[19]
-#define SWIGTYPE_p_p_intArray swig_types[20]
-#define SWIGTYPE_p_p_plist swig_types[21]
-#define SWIGTYPE_p_p_short swig_types[22]
-#define SWIGTYPE_p_p_void swig_types[23]
-#define SWIGTYPE_p_pair_info swig_types[24]
-#define SWIGTYPE_p_paramT swig_types[25]
-#define SWIGTYPE_p_path swig_types[26]
-#define SWIGTYPE_p_plist swig_types[27]
-#define SWIGTYPE_p_short swig_types[28]
-#define SWIGTYPE_p_swString swig_types[29]
-#define SWIGTYPE_p_unsigned_short swig_types[30]
-#define SWIGTYPE_p_void swig_types[31]
-static swig_type_info *swig_types[33];
-static swig_module_info swig_module = {swig_types, 32, 0, 0, 0, 0};
+#define SWIGTYPE_p_ConcEnt swig_types[1]
+#define SWIGTYPE_p_FILE swig_types[2]
+#define SWIGTYPE_p_SOLUTION swig_types[3]
+#define SWIGTYPE_p_Tree swig_types[4]
+#define SWIGTYPE_p_bond swig_types[5]
+#define SWIGTYPE_p_char swig_types[6]
+#define SWIGTYPE_p_cpair swig_types[7]
+#define SWIGTYPE_p_double swig_types[8]
+#define SWIGTYPE_p_doubleArray swig_types[9]
+#define SWIGTYPE_p_duplexT swig_types[10]
+#define SWIGTYPE_p_float swig_types[11]
+#define SWIGTYPE_p_floatArray swig_types[12]
+#define SWIGTYPE_p_int swig_types[13]
+#define SWIGTYPE_p_intArray swig_types[14]
+#define SWIGTYPE_p_p_char swig_types[15]
+#define SWIGTYPE_p_p_double swig_types[16]
+#define SWIGTYPE_p_p_doubleArray swig_types[17]
+#define SWIGTYPE_p_p_float swig_types[18]
+#define SWIGTYPE_p_p_floatArray swig_types[19]
+#define SWIGTYPE_p_p_int swig_types[20]
+#define SWIGTYPE_p_p_intArray swig_types[21]
+#define SWIGTYPE_p_p_plist swig_types[22]
+#define SWIGTYPE_p_p_short swig_types[23]
+#define SWIGTYPE_p_p_void swig_types[24]
+#define SWIGTYPE_p_pair_info swig_types[25]
+#define SWIGTYPE_p_paramT swig_types[26]
+#define SWIGTYPE_p_path swig_types[27]
+#define SWIGTYPE_p_plist swig_types[28]
+#define SWIGTYPE_p_short swig_types[29]
+#define SWIGTYPE_p_swString swig_types[30]
+#define SWIGTYPE_p_unsigned_short swig_types[31]
+#define SWIGTYPE_p_void swig_types[32]
+static swig_type_info *swig_types[34];
+static swig_module_info swig_module = {swig_types, 33, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1513,6 +1514,7 @@ SWIGEXPORT void SWIG_init (CV *cv, CPerlObj *);
 #include  "../H/alifold.h"
 #include  "../H/aln_util.h"
 #include  "../H/findpath.h"
+#include  "../H/Lfold.h"
 extern char *pbacktrack(char *seq);
 extern void  read_parameter_file(const char fname[]);
 extern void  write_parameter_file(const char fname[]);
@@ -1862,18 +1864,18 @@ SWIGINTERN doubleArray *doubleArray_frompointer(double *t){
     return (doubleArray *)(t);
   }
 
-  static unsigned short *new_shortP(size_t nelements) { 
+  static unsigned short *new_ushortP(size_t nelements) { 
     return (unsigned short *)malloc((nelements)*sizeof(unsigned short));
   }
 
-  static void delete_shortP(unsigned short *ary) {
+  static void delete_ushortP(unsigned short *ary) {
     free((char*)ary);
   }
 
-  static unsigned short shortP_getitem(unsigned short *ary, size_t index) {
+  static unsigned short ushortP_getitem(unsigned short *ary, size_t index) {
     return ary[index];
   }
-  static void shortP_setitem(unsigned short *ary, size_t index, unsigned short value) {
+  static void ushortP_setitem(unsigned short *ary, size_t index, unsigned short value) {
     ary[index] = value;
   }
 
@@ -1904,6 +1906,45 @@ SWIG_AsVal_unsigned_SS_short SWIG_PERL_DECL_ARGS_2(SV * obj, unsigned short *val
       return SWIG_OverflowError;
     } else {
       if (val) *val = (unsigned short)(v);
+    }
+  }  
+  return res;
+}
+
+
+  static short *new_shortP(size_t nelements) { 
+    return (short *)malloc((nelements)*sizeof(short));
+  }
+
+  static void delete_shortP(short *ary) {
+    free((char*)ary);
+  }
+
+  static short shortP_getitem(short *ary, size_t index) {
+    return ary[index];
+  }
+  static void shortP_setitem(short *ary, size_t index, short value) {
+    ary[index] = value;
+  }
+
+
+SWIGINTERNINLINE SV *
+SWIG_From_short  SWIG_PERL_DECL_ARGS_1(short value)
+{    
+  return SWIG_From_long  SWIG_PERL_CALL_ARGS_1(value);
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_short SWIG_PERL_DECL_ARGS_2(SV * obj, short *val)
+{
+  long v;
+  int res = SWIG_AsVal_long SWIG_PERL_CALL_ARGS_2(obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v < SHRT_MIN || v > SHRT_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = (short)(v);
     }
   }  
   return res;
@@ -2053,6 +2094,42 @@ SWIG_From_char  SWIG_PERL_DECL_ARGS_1(char c)
 }
 
 
+  char *my_co_pf_fold(char *string, char *constraints, float *FA, float *FB, float *FcAB, float *FAB) {
+    char *struc;
+    float en;
+    cofoldF temp;
+    struc = calloc(strlen(string)+1,sizeof(char));
+    if (constraints && fold_constrained)
+      strncpy(struc, constraints, strlen(string));
+      temp=co_pf_fold(string, struc);
+    *FAB = temp.FAB;
+    *FcAB = temp.FcAB;
+    *FA = temp.FA;
+    *FB = temp.FB;
+    if (constraints)
+      strncpy(constraints, struc, strlen(constraints));
+    return(struc);
+  }
+
+
+ void my_get_concentrations(double FcAB, double FcAA, double FcBB, double FEA, double FEB, double A0, double B0, double *AB, double *AA, double *BB, double *A, double *B) {
+    ConcEnt *temp;
+    double *concis;
+    concis = (double *)calloc(3,sizeof(double));
+    concis[0]=A0;
+    concis[1]=B0;
+    temp=get_concentrations(FcAB,FcAA,FcBB,FEA,FEB,concis);
+    *AB=temp->ABc;
+    *AA=temp->AAc;
+    *BB=temp->BBc;
+    *A=temp->Ac;
+    *B=temp->Bc;
+    free(concis);
+    free(temp);
+    return;
+  }
+
+
   char *my_inverse_fold(char *start, const char *target, float *cost) {
     char *seq;
     int n;
@@ -2125,29 +2202,6 @@ SWIG_AsVal_char SWIG_PERL_DECL_ARGS_2(SV * obj, char *val)
     }
   }
   return res;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_short SWIG_PERL_DECL_ARGS_2(SV * obj, short *val)
-{
-  long v;
-  int res = SWIG_AsVal_long SWIG_PERL_CALL_ARGS_2(obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v < SHRT_MIN || v > SHRT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = (short)(v);
-    }
-  }  
-  return res;
-}
-
-
-SWIGINTERNINLINE SV *
-SWIG_From_short  SWIG_PERL_DECL_ARGS_1(short value)
-{    
-  return SWIG_From_long  SWIG_PERL_CALL_ARGS_1(value);
 }
 
 
@@ -2405,6 +2459,28 @@ SWIGCLASS_STATIC int swig_magic_readonly(pTHX_ SV *SWIGUNUSEDPARM(sv), MAGIC *SW
     croak("Value is read-only.");
     return 0;
 }
+SWIGCLASS_STATIC int _wrap_mirnatog_set(pTHX_ SV* sv, MAGIC * SWIGUNUSEDPARM(mg)) {
+  MAGIC_PPERL
+  {
+    int val;
+    int res = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(sv, &val);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""mirnatog""' of type '""int""'");
+    }
+    mirnatog = (int)(val);
+  }
+fail:
+  return 1;
+}
+
+
+SWIGCLASS_STATIC int _wrap_mirnatog_get(pTHX_ SV *sv, MAGIC *SWIGUNUSEDPARM(mg)) {
+  MAGIC_PPERL
+  sv_setsv(sv,SWIG_From_int  SWIG_PERL_CALL_ARGS_1((int)(mirnatog)))  ;
+  return 1;
+}
+
+
 SWIGCLASS_STATIC int _wrap_symbolset_set(pTHX_ SV* sv, MAGIC * SWIGUNUSEDPARM(mg)) {
   MAGIC_PPERL
   {
@@ -4300,7 +4376,7 @@ XS(_wrap_doubleArray_frompointer) {
 }
 
 
-XS(_wrap_new_shortP) {
+XS(_wrap_new_ushortP) {
   {
     size_t arg1 ;
     unsigned short *result = 0 ;
@@ -4310,14 +4386,14 @@ XS(_wrap_new_shortP) {
     dXSARGS;
     
     if ((items < 1) || (items > 1)) {
-      SWIG_croak("Usage: new_shortP(nelements);");
+      SWIG_croak("Usage: new_ushortP(nelements);");
     }
     ecode1 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
     if (!SWIG_IsOK(ecode1)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_shortP" "', argument " "1"" of type '" "size_t""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_ushortP" "', argument " "1"" of type '" "size_t""'");
     } 
     arg1 = (size_t)(val1);
-    result = (unsigned short *)new_shortP(arg1);
+    result = (unsigned short *)new_ushortP(arg1);
     ST(argvi) = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_short, 0 | 0); argvi++ ;
     
     XSRETURN(argvi);
@@ -4328,7 +4404,7 @@ XS(_wrap_new_shortP) {
 }
 
 
-XS(_wrap_delete_shortP) {
+XS(_wrap_delete_ushortP) {
   {
     unsigned short *arg1 = (unsigned short *) 0 ;
     void *argp1 = 0 ;
@@ -4337,14 +4413,14 @@ XS(_wrap_delete_shortP) {
     dXSARGS;
     
     if ((items < 1) || (items > 1)) {
-      SWIG_croak("Usage: delete_shortP(ary);");
+      SWIG_croak("Usage: delete_ushortP(ary);");
     }
     res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_shortP" "', argument " "1"" of type '" "unsigned short *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_ushortP" "', argument " "1"" of type '" "unsigned short *""'"); 
     }
     arg1 = (unsigned short *)(argp1);
-    delete_shortP(arg1);
+    delete_ushortP(arg1);
     
     
     XSRETURN(argvi);
@@ -4355,7 +4431,7 @@ XS(_wrap_delete_shortP) {
 }
 
 
-XS(_wrap_shortP_getitem) {
+XS(_wrap_ushortP_getitem) {
   {
     unsigned short *arg1 = (unsigned short *) 0 ;
     size_t arg2 ;
@@ -4368,19 +4444,19 @@ XS(_wrap_shortP_getitem) {
     dXSARGS;
     
     if ((items < 2) || (items > 2)) {
-      SWIG_croak("Usage: shortP_getitem(ary,index);");
+      SWIG_croak("Usage: ushortP_getitem(ary,index);");
     }
     res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "shortP_getitem" "', argument " "1"" of type '" "unsigned short *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ushortP_getitem" "', argument " "1"" of type '" "unsigned short *""'"); 
     }
     arg1 = (unsigned short *)(argp1);
     ecode2 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
     if (!SWIG_IsOK(ecode2)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "shortP_getitem" "', argument " "2"" of type '" "size_t""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ushortP_getitem" "', argument " "2"" of type '" "size_t""'");
     } 
     arg2 = (size_t)(val2);
-    result = (unsigned short)shortP_getitem(arg1,arg2);
+    result = (unsigned short)ushortP_getitem(arg1,arg2);
     ST(argvi) = SWIG_From_unsigned_SS_short  SWIG_PERL_CALL_ARGS_1((unsigned short)(result)); argvi++ ;
     
     
@@ -4393,7 +4469,7 @@ XS(_wrap_shortP_getitem) {
 }
 
 
-XS(_wrap_shortP_setitem) {
+XS(_wrap_ushortP_setitem) {
   {
     unsigned short *arg1 = (unsigned short *) 0 ;
     size_t arg2 ;
@@ -4408,23 +4484,163 @@ XS(_wrap_shortP_setitem) {
     dXSARGS;
     
     if ((items < 3) || (items > 3)) {
-      SWIG_croak("Usage: shortP_setitem(ary,index,value);");
+      SWIG_croak("Usage: ushortP_setitem(ary,index,value);");
     }
     res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_unsigned_short, 0 |  0 );
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "shortP_setitem" "', argument " "1"" of type '" "unsigned short *""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ushortP_setitem" "', argument " "1"" of type '" "unsigned short *""'"); 
     }
     arg1 = (unsigned short *)(argp1);
+    ecode2 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ushortP_setitem" "', argument " "2"" of type '" "size_t""'");
+    } 
+    arg2 = (size_t)(val2);
+    ecode3 = SWIG_AsVal_unsigned_SS_short SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ushortP_setitem" "', argument " "3"" of type '" "unsigned short""'");
+    } 
+    arg3 = (unsigned short)(val3);
+    ushortP_setitem(arg1,arg2,arg3);
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_new_shortP) {
+  {
+    size_t arg1 ;
+    short *result = 0 ;
+    size_t val1 ;
+    int ecode1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: new_shortP(nelements);");
+    }
+    ecode1 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_shortP" "', argument " "1"" of type '" "size_t""'");
+    } 
+    arg1 = (size_t)(val1);
+    result = (short *)new_shortP(arg1);
+    ST(argvi) = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_short, 0 | 0); argvi++ ;
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_delete_shortP) {
+  {
+    short *arg1 = (short *) 0 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: delete_shortP(ary);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_shortP" "', argument " "1"" of type '" "short *""'"); 
+    }
+    arg1 = (short *)(argp1);
+    delete_shortP(arg1);
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_shortP_getitem) {
+  {
+    short *arg1 = (short *) 0 ;
+    size_t arg2 ;
+    short result;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    size_t val2 ;
+    int ecode2 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 2) || (items > 2)) {
+      SWIG_croak("Usage: shortP_getitem(ary,index);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "shortP_getitem" "', argument " "1"" of type '" "short *""'"); 
+    }
+    arg1 = (short *)(argp1);
+    ecode2 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "shortP_getitem" "', argument " "2"" of type '" "size_t""'");
+    } 
+    arg2 = (size_t)(val2);
+    result = (short)shortP_getitem(arg1,arg2);
+    ST(argvi) = SWIG_From_short  SWIG_PERL_CALL_ARGS_1((short)(result)); argvi++ ;
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_shortP_setitem) {
+  {
+    short *arg1 = (short *) 0 ;
+    size_t arg2 ;
+    short arg3 ;
+    void *argp1 = 0 ;
+    int res1 = 0 ;
+    size_t val2 ;
+    int ecode2 = 0 ;
+    short val3 ;
+    int ecode3 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 3) || (items > 3)) {
+      SWIG_croak("Usage: shortP_setitem(ary,index,value);");
+    }
+    res1 = SWIG_ConvertPtr(ST(0), &argp1,SWIGTYPE_p_short, 0 |  0 );
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "shortP_setitem" "', argument " "1"" of type '" "short *""'"); 
+    }
+    arg1 = (short *)(argp1);
     ecode2 = SWIG_AsVal_size_t SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
     if (!SWIG_IsOK(ecode2)) {
       SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "shortP_setitem" "', argument " "2"" of type '" "size_t""'");
     } 
     arg2 = (size_t)(val2);
-    ecode3 = SWIG_AsVal_unsigned_SS_short SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    ecode3 = SWIG_AsVal_short SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
     if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "shortP_setitem" "', argument " "3"" of type '" "unsigned short""'");
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "shortP_setitem" "', argument " "3"" of type '" "short""'");
     } 
-    arg3 = (unsigned short)(val3);
+    arg3 = (short)(val3);
     shortP_setitem(arg1,arg2,arg3);
     
     
@@ -5664,6 +5880,539 @@ XS(_wrap_pbacktrack_circ) {
 }
 
 
+XS(_wrap_co_pf_fold) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) NULL ;
+    float *arg3 = (float *) 0 ;
+    float *arg4 = (float *) 0 ;
+    float *arg5 = (float *) 0 ;
+    float *arg6 = (float *) 0 ;
+    char *result = 0 ;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    float temp3 ;
+    int res3 = SWIG_TMPOBJ ;
+    float temp4 ;
+    int res4 = SWIG_TMPOBJ ;
+    float temp5 ;
+    int res5 = SWIG_TMPOBJ ;
+    float temp6 ;
+    int res6 = SWIG_TMPOBJ ;
+    int argvi = 0;
+    dXSARGS;
+    
+    arg3 = &temp3;
+    arg4 = &temp4;
+    arg5 = &temp5;
+    arg6 = &temp6;
+    if ((items < 1) || (items > 2)) {
+      SWIG_croak("Usage: co_pf_fold(string,constraints);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "co_pf_fold" "', argument " "1"" of type '" "char *""'");
+    }
+    arg1 = (char *)(buf1);
+    if (items > 1) {
+      res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+      if (!SWIG_IsOK(res2)) {
+        SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "co_pf_fold" "', argument " "2"" of type '" "char *""'");
+      }
+      arg2 = (char *)(buf2);
+    }
+    result = (char *)my_co_pf_fold(arg1,arg2,arg3,arg4,arg5,arg6);
+    ST(argvi) = SWIG_FromCharPtr((const char *)result); argvi++ ;
+    if (SWIG_IsTmpObj(res3)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((*arg3)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_float, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res4)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((*arg4)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_float, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res5)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((*arg5)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_float, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res6)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((*arg6)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res6) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg6), SWIGTYPE_p_float, new_flags); argvi++  ;
+    }
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    free((char*)result);
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_free_co_pf_arrays) {
+  {
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 0) || (items > 0)) {
+      SWIG_croak("Usage: free_co_pf_arrays();");
+    }
+    free_co_pf_arrays();
+    
+    XSRETURN(argvi);
+  fail:
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_update_co_pf_params) {
+  {
+    int arg1 ;
+    int val1 ;
+    int ecode1 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 1) || (items > 1)) {
+      SWIG_croak("Usage: update_co_pf_params(length);");
+    }
+    ecode1 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "update_co_pf_params" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+    update_co_pf_params(arg1);
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_get_concentrations__SWIG_0) {
+  {
+    double arg1 ;
+    double arg2 ;
+    double arg3 ;
+    double arg4 ;
+    double arg5 ;
+    double *arg6 = (double *) 0 ;
+    struct ConcEnt *result = 0 ;
+    double val1 ;
+    int ecode1 = 0 ;
+    double val2 ;
+    int ecode2 = 0 ;
+    double val3 ;
+    int ecode3 = 0 ;
+    double val4 ;
+    int ecode4 = 0 ;
+    double val5 ;
+    int ecode5 = 0 ;
+    void *argp6 = 0 ;
+    int res6 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 6) || (items > 6)) {
+      SWIG_croak("Usage: get_concentrations(FEAB,FEAA,FEBB,FEA,FEB,startconc);");
+    }
+    ecode1 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "get_concentrations" "', argument " "1"" of type '" "double""'");
+    } 
+    arg1 = (double)(val1);
+    ecode2 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "get_concentrations" "', argument " "2"" of type '" "double""'");
+    } 
+    arg2 = (double)(val2);
+    ecode3 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "get_concentrations" "', argument " "3"" of type '" "double""'");
+    } 
+    arg3 = (double)(val3);
+    ecode4 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "get_concentrations" "', argument " "4"" of type '" "double""'");
+    } 
+    arg4 = (double)(val4);
+    ecode5 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "get_concentrations" "', argument " "5"" of type '" "double""'");
+    } 
+    arg5 = (double)(val5);
+    res6 = SWIG_ConvertPtr(ST(5), &argp6,SWIGTYPE_p_double, 0 |  0 );
+    if (!SWIG_IsOK(res6)) {
+      SWIG_exception_fail(SWIG_ArgError(res6), "in method '" "get_concentrations" "', argument " "6"" of type '" "double *""'"); 
+    }
+    arg6 = (double *)(argp6);
+    result = (struct ConcEnt *)get_concentrations(arg1,arg2,arg3,arg4,arg5,arg6);
+    ST(argvi) = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ConcEnt, 0 | 0); argvi++ ;
+    
+    
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_get_concentrations__SWIG_1) {
+  {
+    double arg1 ;
+    double arg2 ;
+    double arg3 ;
+    double arg4 ;
+    double arg5 ;
+    double arg6 ;
+    double arg7 ;
+    double *arg8 = (double *) 0 ;
+    double *arg9 = (double *) 0 ;
+    double *arg10 = (double *) 0 ;
+    double *arg11 = (double *) 0 ;
+    double *arg12 = (double *) 0 ;
+    double val1 ;
+    int ecode1 = 0 ;
+    double val2 ;
+    int ecode2 = 0 ;
+    double val3 ;
+    int ecode3 = 0 ;
+    double val4 ;
+    int ecode4 = 0 ;
+    double val5 ;
+    int ecode5 = 0 ;
+    double val6 ;
+    int ecode6 = 0 ;
+    double val7 ;
+    int ecode7 = 0 ;
+    double temp8 ;
+    int res8 = SWIG_TMPOBJ ;
+    double temp9 ;
+    int res9 = SWIG_TMPOBJ ;
+    double temp10 ;
+    int res10 = SWIG_TMPOBJ ;
+    double temp11 ;
+    int res11 = SWIG_TMPOBJ ;
+    double temp12 ;
+    int res12 = SWIG_TMPOBJ ;
+    int argvi = 0;
+    dXSARGS;
+    
+    arg8 = &temp8;
+    arg9 = &temp9;
+    arg10 = &temp10;
+    arg11 = &temp11;
+    arg12 = &temp12;
+    if ((items < 7) || (items > 7)) {
+      SWIG_croak("Usage: get_concentrations(FcAB,FcAA,FcBB,FEA,FEB,A0,BO);");
+    }
+    ecode1 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(0), &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "get_concentrations" "', argument " "1"" of type '" "double""'");
+    } 
+    arg1 = (double)(val1);
+    ecode2 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(1), &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "get_concentrations" "', argument " "2"" of type '" "double""'");
+    } 
+    arg2 = (double)(val2);
+    ecode3 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "get_concentrations" "', argument " "3"" of type '" "double""'");
+    } 
+    arg3 = (double)(val3);
+    ecode4 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(3), &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "get_concentrations" "', argument " "4"" of type '" "double""'");
+    } 
+    arg4 = (double)(val4);
+    ecode5 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(4), &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "get_concentrations" "', argument " "5"" of type '" "double""'");
+    } 
+    arg5 = (double)(val5);
+    ecode6 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(5), &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "get_concentrations" "', argument " "6"" of type '" "double""'");
+    } 
+    arg6 = (double)(val6);
+    ecode7 = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(6), &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "get_concentrations" "', argument " "7"" of type '" "double""'");
+    } 
+    arg7 = (double)(val7);
+    my_get_concentrations(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12);
+    
+    if (SWIG_IsTmpObj(res8)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((*arg8)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res8) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg8), SWIGTYPE_p_double, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res9)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((*arg9)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res9) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg9), SWIGTYPE_p_double, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res10)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((*arg10)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res10) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg10), SWIGTYPE_p_double, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res11)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((*arg11)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res11) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg11), SWIGTYPE_p_double, new_flags); argvi++  ;
+    }
+    if (SWIG_IsTmpObj(res12)) {
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_From_double  SWIG_PERL_CALL_ARGS_1((*arg12)); argvi++  ;
+    } else {
+      int new_flags = SWIG_IsNewObj(res12) ? (SWIG_POINTER_OWN | 0) : 0;
+      if (argvi >= items) EXTEND(sp,1);  ST(argvi) = SWIG_NewPointerObj((void*)(arg12), SWIGTYPE_p_double, new_flags); argvi++  ;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    XSRETURN(argvi);
+  fail:
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    SWIG_croak_null();
+  }
+}
+
+
+XS(_wrap_get_concentrations) {
+  dXSARGS;
+  
+  {
+    unsigned long _index = 0;
+    SWIG_TypeRank _rank = 0; 
+    if (items == 6) {
+      SWIG_TypeRank _ranki = 0;
+      SWIG_TypeRank _rankm = 0;
+      SWIG_TypeRank _pi = 1;
+      int _v = 0;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(0), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(1), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(2), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(3), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(4), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(ST(5), &vptr, SWIGTYPE_p_double, 0);
+        _v = SWIG_CheckState(res);
+      }
+      if (!_v) goto check_1;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      if (!_index || (_ranki < _rank)) {
+        _rank = _ranki; _index = 1;
+        if (_rank == _rankm) goto dispatch;
+      }
+    }
+  check_1:
+    
+    if (items == 7) {
+      SWIG_TypeRank _ranki = 0;
+      SWIG_TypeRank _rankm = 0;
+      SWIG_TypeRank _pi = 1;
+      int _v = 0;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(0), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(1), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(2), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(3), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(4), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(5), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      {
+        {
+          int res = SWIG_AsVal_double SWIG_PERL_CALL_ARGS_2(ST(6), NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_2;
+      _ranki += _v*_pi;
+      _rankm += _pi;
+      _pi *= SWIG_MAXCASTRANK;
+      if (!_index || (_ranki < _rank)) {
+        _rank = _ranki; _index = 2;
+        if (_rank == _rankm) goto dispatch;
+      }
+    }
+  check_2:
+    
+  dispatch:
+    switch(_index) {
+    case 1:
+      ++PL_markstack_ptr; SWIG_CALLXS(_wrap_get_concentrations__SWIG_0); return;
+    case 2:
+      ++PL_markstack_ptr; SWIG_CALLXS(_wrap_get_concentrations__SWIG_1); return;
+    }
+  }
+  
+  croak("No matching function for overloaded 'get_concentrations'");
+  XSRETURN(0);
+}
+
+
 XS(_wrap_inverse_fold) {
   {
     char *arg1 = (char *) 0 ;
@@ -6661,6 +7410,7 @@ XS(_wrap_energy_of_alistruct) {
     char *arg2 = (char *) 0 ;
     int arg3 ;
     float *arg4 = (float *) 0 ;
+    float result;
     int res2 ;
     char *buf2 = 0 ;
     int alloc2 = 0 ;
@@ -6672,7 +7422,7 @@ XS(_wrap_energy_of_alistruct) {
     dXSARGS;
     
     if ((items < 4) || (items > 4)) {
-      SWIG_croak("Usage: energy_of_alistruct(sequences,structure,n_seq,energy);");
+      SWIG_croak("Usage: energy_of_alistruct(sequences,structure,n_seq,CVenergy);");
     }
     {
       AV *tempav;
@@ -6707,8 +7457,8 @@ XS(_wrap_energy_of_alistruct) {
       SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "energy_of_alistruct" "', argument " "4"" of type '" "float *""'"); 
     }
     arg4 = (float *)(argp4);
-    energy_of_alistruct(arg1,(char const *)arg2,arg3,arg4);
-    
+    result = (float)energy_of_alistruct(arg1,(char const *)arg2,arg3,arg4);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
     {
       free(arg1);
     }
@@ -9379,6 +10129,56 @@ XS(_wrap_encode_seq) {
 }
 
 
+XS(_wrap_Lfold) {
+  {
+    char *arg1 = (char *) 0 ;
+    char *arg2 = (char *) 0 ;
+    int arg3 ;
+    float result;
+    int res1 ;
+    char *buf1 = 0 ;
+    int alloc1 = 0 ;
+    int res2 ;
+    char *buf2 = 0 ;
+    int alloc2 = 0 ;
+    int val3 ;
+    int ecode3 = 0 ;
+    int argvi = 0;
+    dXSARGS;
+    
+    if ((items < 3) || (items > 3)) {
+      SWIG_croak("Usage: Lfold(string,structure,maxdist);");
+    }
+    res1 = SWIG_AsCharPtrAndSize(ST(0), &buf1, NULL, &alloc1);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Lfold" "', argument " "1"" of type '" "char *""'");
+    }
+    arg1 = (char *)(buf1);
+    res2 = SWIG_AsCharPtrAndSize(ST(1), &buf2, NULL, &alloc2);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Lfold" "', argument " "2"" of type '" "char *""'");
+    }
+    arg2 = (char *)(buf2);
+    ecode3 = SWIG_AsVal_int SWIG_PERL_CALL_ARGS_2(ST(2), &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Lfold" "', argument " "3"" of type '" "int""'");
+    } 
+    arg3 = (int)(val3);
+    result = (float)Lfold(arg1,arg2,arg3);
+    ST(argvi) = SWIG_From_float  SWIG_PERL_CALL_ARGS_1((float)(result)); argvi++ ;
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    XSRETURN(argvi);
+  fail:
+    if (alloc1 == SWIG_NEWOBJ) free((char*)buf1);
+    if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+    
+    SWIG_croak_null();
+  }
+}
+
+
 XS(_wrap_PS_rna_plot) {
   {
     char *arg1 = (char *) 0 ;
@@ -11072,6 +11872,7 @@ static void *_p_p_intArrayTo_p_p_int(void *x, int *newmemory) {
     return (void *)((int **)  ((intArray **) x));
 }
 static swig_type_info _swigt__p_COORDINATE = {"_p_COORDINATE", "COORDINATE *", 0, 0, (void*)"RNA::COORDINATE", 0};
+static swig_type_info _swigt__p_ConcEnt = {"_p_ConcEnt", "struct ConcEnt *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_FILE = {"_p_FILE", "FILE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SOLUTION = {"_p_SOLUTION", "SOLUTION *", 0, 0, (void*)"RNA::SOLUTION", 0};
 static swig_type_info _swigt__p_Tree = {"_p_Tree", "Tree *", 0, 0, (void*)0, 0};
@@ -11106,6 +11907,7 @@ static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_COORDINATE,
+  &_swigt__p_ConcEnt,
   &_swigt__p_FILE,
   &_swigt__p_SOLUTION,
   &_swigt__p_Tree,
@@ -11140,6 +11942,7 @@ static swig_type_info *swig_type_initial[] = {
 };
 
 static swig_cast_info _swigc__p_COORDINATE[] = {  {&_swigt__p_COORDINATE, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ConcEnt[] = {  {&_swigt__p_ConcEnt, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FILE[] = {  {&_swigt__p_FILE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SOLUTION[] = {  {&_swigt__p_SOLUTION, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Tree[] = {  {&_swigt__p_Tree, 0, 0, 0},{0, 0, 0, 0}};
@@ -11174,6 +11977,7 @@ static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0,
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_COORDINATE,
+  _swigc__p_ConcEnt,
   _swigc__p_FILE,
   _swigc__p_SOLUTION,
   _swigc__p_Tree,
@@ -11217,6 +12021,7 @@ static swig_constant_info swig_constants[] = {
 }
 #endif
 static swig_variable_info swig_variables[] = {
+    { "RNAc::mirnatog", MAGIC_CLASS _wrap_mirnatog_set, MAGIC_CLASS _wrap_mirnatog_get,0 },
     { "RNAc::symbolset", MAGIC_CLASS _wrap_symbolset_set, MAGIC_CLASS _wrap_symbolset_get,0 },
     { "RNAc::final_cost", MAGIC_CLASS _wrap_final_cost_set, MAGIC_CLASS _wrap_final_cost_get,0 },
     { "RNAc::give_up", MAGIC_CLASS _wrap_give_up_set, MAGIC_CLASS _wrap_give_up_get,0 },
@@ -11288,6 +12093,10 @@ static swig_command_info swig_commands[] = {
 {"RNAc::doubleArray_setitem", _wrap_doubleArray_setitem},
 {"RNAc::doubleArray_cast", _wrap_doubleArray_cast},
 {"RNAc::doubleArray_frompointer", _wrap_doubleArray_frompointer},
+{"RNAc::new_ushortP", _wrap_new_ushortP},
+{"RNAc::delete_ushortP", _wrap_delete_ushortP},
+{"RNAc::ushortP_getitem", _wrap_ushortP_getitem},
+{"RNAc::ushortP_setitem", _wrap_ushortP_setitem},
 {"RNAc::new_shortP", _wrap_new_shortP},
 {"RNAc::delete_shortP", _wrap_delete_shortP},
 {"RNAc::shortP_getitem", _wrap_shortP_getitem},
@@ -11321,6 +12130,10 @@ static swig_command_info swig_commands[] = {
 {"RNAc::pbacktrack", _wrap_pbacktrack},
 {"RNAc::pf_circ_fold", _wrap_pf_circ_fold},
 {"RNAc::pbacktrack_circ", _wrap_pbacktrack_circ},
+{"RNAc::co_pf_fold", _wrap_co_pf_fold},
+{"RNAc::free_co_pf_arrays", _wrap_free_co_pf_arrays},
+{"RNAc::update_co_pf_params", _wrap_update_co_pf_params},
+{"RNAc::get_concentrations", _wrap_get_concentrations},
 {"RNAc::inverse_fold", _wrap_inverse_fold},
 {"RNAc::inverse_pf_fold", _wrap_inverse_pf_fold},
 {"RNAc::bondT_i_set", _wrap_bondT_i_set},
@@ -11432,6 +12245,7 @@ static swig_command_info swig_commands[] = {
 {"RNAc::duplexfold", _wrap_duplexfold},
 {"RNAc::aliduplexfold", _wrap_aliduplexfold},
 {"RNAc::encode_seq", _wrap_encode_seq},
+{"RNAc::Lfold", _wrap_Lfold},
 {"RNAc::PS_rna_plot", _wrap_PS_rna_plot},
 {"RNAc::PS_rna_plot_a", _wrap_PS_rna_plot_a},
 {"RNAc::gmlRNA", _wrap_gmlRNA},

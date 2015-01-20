@@ -149,11 +149,11 @@ provided:
  -- Function: double mean_bp_dist (int LENGTH)
      computes the mean base pair distance in the equilibrium ensemble
      as a measure of the structural diversity.  It is given by <d> =
-     sum_a,b p_a * p_b * d(a,b), where the sum goes over all pairs of
+     \sum_a,b p_a * p_b * d(a,b), where the sum goes over all pairs of
      possible structure a,b, p_a is the Boltzmann weight of structure
      a, and d(a,b) is the base pair distance (see `bp_distance()' in
      *Note Distances::.). The mean base pair distances can be computed
-     efficiently from the pair probabilities p_ij as <d> = sum_ij p_ij
+     efficiently from the pair probabilities p_ij as <d> = \sum_ij p_ij
      * (1-p_ij). Uses the global `pr' array filled by a previous call
      to `pf_fold()'.
 
@@ -166,6 +166,17 @@ provided:
      returned in DIST.
 
    Prototypes for these functions are declared in `part_func.h'.
+
+ -- Function: float *MEA (plist *PL, char *STRUCTURE, double GAMMA)
+     Computes a MEA (maximum expected accuracy) structure, such that
+     expected accuracy  A(S) = \sum_(i,j) \in S 2 \gamma p_ij + \sum_i
+     \notin S p^u_i is maximised. Higher values of \gamma result in
+     more base pairs of lower probability and thus higher sensitivity.
+     Low values of gamm result in structures containing only highly
+     likely pairs (high specificity).  The code of the MEA function
+     also demonstrates the use of sparse dynamic programming scheme to
+     reduce the time and memory complexity of folding.
+   The corresponding protoype is declared in `MEA.h'.
 
 
 File: RNAlib.info,  Node: Inverse Fold,  Next: Suboptimal folding,  Prev: PF Fold,  Up: Folding Routines
@@ -462,9 +473,9 @@ algorithm that restricts the span of all base pairs.
 
      If PUP is supplied (i.e is not the NULL pointer), `pfl_fold()'
      will also compute the mean probability that regions of length `u'
-     are unpaired. The parameter `u' is supplied in PUP[0]. On return
+     are unpaired. The parameter `u' is supplied in `pup[0]'. On return
      the PUP array will contain these probabilities, with the entry on
-     PUP[X] containing the mean probability that x and the `u-1'
+     `pup[x]' containing the mean probability that x and the `u-1'
      preceding bases are unpaired. The PUP array needs to be large
      enough to hold `n+1' float entries, where `n' is the sequence
      length.
@@ -1398,6 +1409,7 @@ Function Index
 * Menu:
 
 * *centroid:                             PF Fold.             (line  57)
+* *MEA:                                  PF Fold.             (line  67)
 * *pf_interact:                          Cofolding.           (line 183)
 * *pf_unstru:                            Cofolding.           (line 154)
 * add_root:                              Parsing.             (line  31)
@@ -1520,24 +1532,24 @@ Node: Introduction602
 Node: Folding Routines1612
 Node: mfe Fold2423
 Node: PF Fold4293
-Node: Inverse Fold7639
-Node: Suboptimal folding9276
-Node: Cofolding9957
-Node: Local Fold21315
-Node: Alignment Fold23293
-Node: Fold Vars25620
-Node: Param Files30239
-Node: Parsing and Comparing37556
-Node: notations37966
-Node: Parsing41489
-Node: Distances44130
-Node: Tree Distances47993
-Node: String Distances48771
-Node: Profile Distances49301
-Node: Utilities50380
-Node: Example55016
-Node: References58515
-Node: Function Index61560
-Node: Variable Index66965
+Node: Inverse Fold8305
+Node: Suboptimal folding9942
+Node: Cofolding10623
+Node: Local Fold21981
+Node: Alignment Fold23963
+Node: Fold Vars26290
+Node: Param Files30909
+Node: Parsing and Comparing38226
+Node: notations38636
+Node: Parsing42159
+Node: Distances44800
+Node: Tree Distances48663
+Node: String Distances49441
+Node: Profile Distances49971
+Node: Utilities51050
+Node: Example55686
+Node: References59185
+Node: Function Index62230
+Node: Variable Index67708
 
 End Tag Table

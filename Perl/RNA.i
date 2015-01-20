@@ -24,6 +24,7 @@
 #include  "../H/alifold.h"
 #include  "../H/aln_util.h"
 #include  "../H/findpath.h"
+#include  "../H/Lfold.h"
 extern char *pbacktrack(char *seq);
 extern void  read_parameter_file(const char fname[]);
 extern void  write_parameter_file(const char fname[]);
@@ -38,7 +39,8 @@ extern int naview_xy_coordinates(short *pair_table, float *X, float *Y);
 %array_class(float, floatArray);
 %array_functions(double, doubleP);
 %array_class(double, doubleArray);
-%array_functions(unsigned short, shortP);
+%array_functions(unsigned short, ushortP);
+%array_functions(short, shortP);
 %include cdata.i
 
 %constant double VERSION = 0.3;
@@ -110,6 +112,62 @@ char *my_pf_fold(char *string, char *constraints = NULL, float *OUTPUT);
 
 %ignore pf_fold;
 %include  "../H/part_func.h"
+
+%rename (co_pf_fold) my_co_pf_fold;
+%{
+  char *my_co_pf_fold(char *string, char *constraints, float *FA, float *FB, float *FcAB, float *FAB) {
+    char *struc;
+    float en;
+    cofoldF temp;
+    struc = calloc(strlen(string)+1,sizeof(char));
+    if (constraints && fold_constrained)
+      strncpy(struc, constraints, strlen(string));
+      temp=co_pf_fold(string, struc);
+    *FAB = temp.FAB;
+    *FcAB = temp.FcAB;
+    *FA = temp.FA;
+    *FB = temp.FB;
+    if (constraints)
+      strncpy(constraints, struc, strlen(constraints));
+    return(struc);
+  }
+%}
+
+%newobject my_co_pf_fold;
+char *my_co_pf_fold(char *string, char *constraints = NULL, float *OUTPUT, float *OUTPUT, float *OUTPUT, float *OUTPUT);
+
+%ignore co_pf_fold;
+%ignore compute_probabilities;
+%ignore co_bppm_symbol;
+%ignore init_co_pf_fold;
+%ignore get_plist;
+%ignore ConcEnt;
+%ignore pairpro;
+%ignore cofoldF;
+%include  "../H/part_func_co.h"
+
+%rename (get_concentrations) my_get_concentrations;
+%{
+ void my_get_concentrations(double FcAB, double FcAA, double FcBB, double FEA, double FEB, double A0, double B0, double *AB, double *AA, double *BB, double *A, double *B) {
+    ConcEnt *temp;
+    double *concis;
+    concis = (double *)calloc(3,sizeof(double));
+    concis[0]=A0;
+    concis[1]=B0;
+    temp=get_concentrations(FcAB,FcAA,FcBB,FEA,FEB,concis);
+    *AB=temp->ABc;
+    *AA=temp->AAc;
+    *BB=temp->BBc;
+    *A=temp->Ac;
+    *B=temp->Bc;
+    free(concis);
+    free(temp);
+    return;
+  }
+%}
+
+%newobject my_get_concentrations;
+void my_get_concentrations(double FcAB, double FcAA, double FcBB, double FEA,double FEB, double A0, double BO, double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT, double *OUTPUT);
 
 %newobject pbacktrack;
 extern char *pbacktrack(char *sequence);
@@ -539,7 +597,8 @@ short *encode_seq(char *sequence) {
 %}
 short *encode_seq(char *sequence);
 
+%include "../H/Lfold.h"
 
-%include  "../H/PS_dot.h"
+%include "../H/PS_dot.h"
 
 %include "../H/findpath.h"

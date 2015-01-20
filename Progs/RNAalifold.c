@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2009-02-24 14:49:24 ivo> */
+/* Last changed Time-stamp: <2009-06-18 14:20:02 ivo> */
 /*
 		  Access to alifold Routines
 
@@ -20,6 +20,7 @@
 #include "pair_mat.h"
 #include "alifold.h"
 #include "aln_util.h"
+#include "MEA.h"
 extern void  read_parameter_file(const char fname[]);
 extern float energy_of_circ_struct(const char *seq, const char *structure);
 
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
   int   n_seq, i, length, sym, r;
   int   endgaps=0, mis=0;
   double min_en, real_en, sfact=1.07;
-  int   pf=0, istty;
+  int   pf=0, noPS=0, istty;
   char     *AS[MAX_NUM_NAMES];          /* aligned sequences */
   char     *names[MAX_NUM_NAMES];       /* sequence names */
   FILE     *clust_file = stdin;
@@ -59,6 +60,10 @@ int main(int argc, char *argv[])
   int doColor=0;
   int n_back=0;
   int eval_energy = 0;
+  int doMEA=0;
+  double MEAgamma = 1.;
+
+
   do_backtrack = 1;
   string=NULL;
   dangles=2;
@@ -124,6 +129,14 @@ int main(int argc, char *argv[])
 	case 'P':
 	  if (i==argc-1) usage();
 	  ParamFile = argv[++i];
+	  break;
+	case 'M':
+	  if (strcmp(argv[i], "-MEA")==0) pf=doMEA=1;
+	  if (i<argc-1)
+	    if (isdigit(argv[i+1][0]) || argv[i+1][0]=='.') {
+	      r=sscanf(argv[++i], "%lf", &MEAgamma);
+	      if (r!=1) usage();
+	    }
 	  break;
 	case 'c':
 	  if ( strcmp(argv[i], "-cv")==0) {
@@ -254,11 +267,8 @@ int main(int argc, char *argv[])
       s +=energy_of_circ_struct(AS[i], structure);
     real_en = s/i;
   } else {
-    float *ens;
-    ens=(float *)space(2*sizeof(float));
-    energy_of_alistruct(AS, structure, n_seq, ens);
-    real_en=ens[0];
-    free(ens);
+    float CVen;
+    real_en = energy_of_alistruct(AS, structure, n_seq, &CVen);
   }
 
   string = (mis) ?
@@ -279,7 +289,7 @@ int main(int argc, char *argv[])
     strcpy(ffname, "alirna.ps");
     strcpy(gfname, "alirna.g");
   }
-  if (length<=2500) {
+  if (!noPS) {
     char **A;
     A = annote(structure, (const char**) AS);
     if (doColor)
@@ -287,8 +297,7 @@ int main(int argc, char *argv[])
     else
       (void) PS_rna_plot_a(string, structure, ffname, NULL, A[1]);
     free(A[0]); free(A[1]); free(A);
-  } else
-    fprintf(stderr,"INFO: structure too long, not doing xy_plot\n");
+  }
   if (doAlnPS)
     PS_color_aln(structure, "aln.ps", (const char const **) AS, (const char const **) names);
 
@@ -318,16 +327,15 @@ int main(int argc, char *argv[])
 
     if (n_back>0) {
       /*stochastic sampling*/
-    for (i=0; i<n_back; i++) {
-	 char *s;
-	 double prob=1.;
-	 s =alipbacktrack(&prob);
-	 printf("%s ", s);
-	 if (eval_energy ) printf("%6g %.2f ",prob, -1*(kT*log(prob)-energy));
+      for (i=0; i<n_back; i++) {
+	char *s;
+	double prob=1.;
+	s =alipbacktrack(&prob);
+	printf("%s ", s);
+	if (eval_energy ) printf("%6g %.2f ",prob, -1*(kT*log(prob)-energy));
 	printf("\n");
-	 free(s);
+	free(s);
       }
-
     }
     if (do_backtrack) {
       printf("%s", structure);
@@ -344,15 +352,19 @@ int main(int argc, char *argv[])
       cpair *cp;
       char *cent;
       double dist;
-      if (!circ){
-      float *ens;
-      cent = centroid_ali(length, &dist,pl);
-      ens=(float *)space(2*sizeof(float));
-      energy_of_alistruct(AS, cent, n_seq, ens);
-      /*cent_en = energy_of_struct(string, cent);*//*ali*/
-      printf("%s %6.2f {%6.2f + %6.2f}\n",cent,ens[0]-ens[1],ens[0],(-1)*ens[1]);
+      float en, CVen;
+      cent = centroid_ali(length, &dist, pl);
+
+      en = energy_of_alistruct(AS, cent, n_seq, &CVen);
+      printf("%s %6.2f {%6.2f + %6.2f}\n",cent,en-CVen,en,-CVen);
       free(cent);
-      free(ens);
+
+      if  (doMEA) {
+	float mea, mea_en, CVen;
+	mea = MEA(pl, structure, MEAgamma);
+	mea_en = (circ) ? energy_of_alistruct(AS, structure, n_seq, &CVen) :
+	  energy_of_struct(string, structure);
+	printf("%s {%6.2f MEA=%.2f}\n", structure, mea_en, mea);
       }
 
       if (fname[0]!='\0') {
@@ -501,7 +513,7 @@ PRIVATE int compare_pair_info(const void *pi1, const void *pi2) {
   /* sort mostly by probability, add
      epsilon * comp_mutations/(non-compatible+1) to break ties */
   return (p1->p + 0.01*nc1/(p1->bp[0]+1.)) <
-         (p2->p + 0.01*nc2/(p2->bp[0]+1.)) ? 1 : -1;
+	 (p2->p + 0.01*nc2/(p2->bp[0]+1.)) ? 1 : -1;
 }
 
 PRIVATE void print_aliout(char **AS, plist *pl, int n_seq, char * mfe, FILE *aliout) {
@@ -512,7 +524,7 @@ PRIVATE void print_aliout(char **AS, plist *pl, int n_seq, char * mfe, FILE *ali
   for (n=0; pl[n].i>0; n++);
 
   max_p = 64; pi = space(max_p*sizeof(pair_info));
-  duck =  (double *) space((n+1)*sizeof(double));
+  duck =  (double *) space((strlen(mfe)+1)*sizeof(double));
   ptable = make_pair_table(mfe);
 
   for (k=0; k<n; k++) {
@@ -552,7 +564,7 @@ PRIVATE void print_aliout(char **AS, plist *pl, int n_seq, char * mfe, FILE *ali
   fprintf(aliout, "%d sequence; length of alignment %d\n",
 	  n_seq, (int) strlen(AS[0]));
   fprintf(aliout, "alifold output\n");
-  
+
   for (k=0; pi[k].i>0; k++) {
     pi[k].comp = (ptable[pi[k].i] == pi[k].j) ? 1:0;
     print_pi(pi[k], aliout);
@@ -620,9 +632,9 @@ PRIVATE cpair *make_color_pinfo(char **sequences, plist *pl, int n_seq, bondT *m
 PRIVATE void usage(void)
 {
   nrerror("usage:\n"
-	  "RNAalifold [-cv float] [-nc float] [-E] [-mis] [-circ] [-a]\n"
+	  "RNAalifold [-cv float] [-nc float] [-E] [-old] [-r] [-R ribosum]\n"
+	  "        [-mis] [-aln] [-color] [-circ] [-s num] [-se num]\n"
 	  "        [-p[0]] [-C] [-T temp] [-4] [-d] [-noGU] [-noCloseGU]\n"
-	  "        [-noLP] [-e e_set] [-P paramfile] [-nsp pairs] [-S scale]\n"
-	  "        [-gc]  [-O] [-s num] [-se num] [-R ribosumfile] [-r] [-old]"
+	  "        [-noLP] [-e e_set] [-P paramfile] [-nsp pairs] [-S scale]"
 	  );
 }

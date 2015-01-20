@@ -10,14 +10,18 @@ var gquad_8h =
     [ "get_gquad_pf_matrix", "gquad_8h.html#a895368bdf6ca74d4f96e494d8b3536e3", null ],
     [ "get_gquad_L_matrix", "gquad_8h.html#aa745463353c6727277d838e8e0fe1a2b", null ],
     [ "get_gquad_pattern_mfe", "gquad_8h.html#abbbf17292a3db1e84cee24b35e2e240b", null ],
+    [ "get_gquad_pattern_exhaustive", "gquad_8h.html#ae98282309611a867e48211da7c124523", null ],
     [ "get_gquad_pattern_pf", "gquad_8h.html#aca93ab0df3aefccc81353677ca601c12", null ],
     [ "get_plist_gquad_from_pr", "gquad_8h.html#a770cc285a74b5f05fe81c7f2d3ab9f95", null ],
     [ "get_plist_gquad_from_pr_max", "gquad_8h.html#ad96cf62b759b2434923585b5e014015f", null ],
     [ "get_plist_gquad_from_db", "gquad_8h.html#a0fc4f48d749837ca7d5495d34a280c32", null ],
+    [ "get_gquad_count", "gquad_8h.html#a7042e25be580f7d6e5a300ccec7e8e70", null ],
+    [ "get_gquad_layer_count", "gquad_8h.html#ad6b113887b9aca729f7c9a35a954b0f6", null ],
     [ "parse_gquad", "gquad_8h.html#ae41763215b9c64d2a7b67f0df8a28078", null ],
     [ "backtrack_GQuad_IntLoop", "gquad_8h.html#a54475a8eb898fa1e8af8ab5f5375f3be", null ],
     [ "backtrack_GQuad_IntLoop_L", "gquad_8h.html#a118ec7289f1936bd810be7fe50b98212", null ],
     [ "E_GQuad_IntLoop", "gquad_8h.html#acd8e932ede207d5f3791085afc91396d", null ],
+    [ "E_GQuad_IntLoop_exhaustive", "gquad_8h.html#a99b74c44b293d152ec6ffb3b9d1e4073", null ],
     [ "E_GQuad_IntLoop_L", "gquad_8h.html#a18451d96dddb368ef5943754c87a28fb", null ],
     [ "exp_E_GQuad_IntLoop", "gquad_8h.html#a85554f76bd1bbe3ce0b54a607b4c1f1d", null ]
 ];

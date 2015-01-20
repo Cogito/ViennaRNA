@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "RNAlib-2.1.2", "index.html", [
+  [ "RNAlib-2.1.3", "index.html", [
     [ "ViennaRNA Package core - RNAlib", "index.html", null ],
     [ "Parsing and Comparing - Functions to Manipulate Structures", "mp_parse.html", null ],
     [ "Utilities - Odds and Ends", "mp_utils.html", [
@@ -38,11 +38,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "1_88_84__epars_8h.html",
-"fold_8h.html#ga567530678f6260a1a649a5beca5da4c5",
-"group__mfe__fold.html#ga4ac63ab3e8d9a80ced28b8052d94e423",
-"structLIST.html#aa8ef0c815c847631884b650f6c7247aa",
-"structinteract.html#a030ab45056342e12cb3955e4defd3904",
-"utils_8h.html#ad7e1e137b3bf1f7108933d302a7f0177",
+"fold_8h.html#ga4ac63ab3e8d9a80ced28b8052d94e423",
+"group__mfe__cofold.html#gafe430060533f14b11fc611f60b3f1f6f",
+"structINTERVAL.html#a09319eb79af01cd6d567d828ab2dcb4a",
+"structfolden.html",
+"utils_8h.html#ac08a9df45b9721b97a47dbfe7a6e5f85",
 ];
 
 var navTreeSubIndices = new Array();

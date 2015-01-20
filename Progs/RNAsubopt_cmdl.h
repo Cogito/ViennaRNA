@@ -101,6 +101,12 @@ struct RNAsubopt_args_info
   const char *zuker_help; /**< @brief Compute Zuker suboptimals instead of all suboptimal structures within an engery band arround the MFE.
   
  help description.  */
+  int gquad_flag;	/**< @brief Incoorporate G-Quadruplex formation into the structure prediction algorithm
+  (no support of G-quadruplex prediction for stochastic backtracking and Zuker-style suboptimals yet)
+ (default=off).  */
+  const char *gquad_help; /**< @brief Incoorporate G-Quadruplex formation into the structure prediction algorithm
+  (no support of G-quadruplex prediction for stochastic backtracking and Zuker-style suboptimals yet)
+ help description.  */
   double temp_arg;	/**< @brief Rescale energy parameters to a temperature of temp C. Default is 37C.
   
 .  */
@@ -173,6 +179,7 @@ struct RNAsubopt_args_info
   unsigned int circ_given ;	/**< @brief Whether circ was given.  */
   unsigned int dos_given ;	/**< @brief Whether dos was given.  */
   unsigned int zuker_given ;	/**< @brief Whether zuker was given.  */
+  unsigned int gquad_given ;	/**< @brief Whether gquad was given.  */
   unsigned int temp_given ;	/**< @brief Whether temp was given.  */
   unsigned int noTetra_given ;	/**< @brief Whether noTetra was given.  */
   unsigned int dangles_given ;	/**< @brief Whether dangles was given.  */

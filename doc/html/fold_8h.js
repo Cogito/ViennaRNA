@@ -9,6 +9,7 @@ var fold_8h =
     [ "energy_of_circ_structure", "fold_8h.html#gaeb14f3664aec67fc03268ac75253f0f8", null ],
     [ "energy_of_circ_struct_par", "fold_8h.html#ga75dc765ee4a1177832bc817c94cf88e5", null ],
     [ "energy_of_gquad_structure", "fold_8h.html#a30687ad32835b9894875940958e3eb9a", null ],
+    [ "energy_of_gquad_struct_par", "fold_8h.html#adc71dcdc8a9e2c45f25c54f62e3e3b41", null ],
     [ "energy_of_structure_pt", "fold_8h.html#ga8831445966b761417e713360791299d8", null ],
     [ "energy_of_struct_pt_par", "fold_8h.html#gada4701dd7519b29da75ceac147601f4e", null ],
     [ "free_arrays", "fold_8h.html#ga107fdfe5fd641868156bfd849f6866c7", null ],

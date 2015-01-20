@@ -54,6 +54,7 @@ const char *RNAsubopt_args_info_detailed_help[] = {
   "  -D, --dos                     Compute density of states instead of secondary \n                                  structures\n                                    (default=off)",
   "  This option enables the evaluation of the number of secondary structures in \n  certain energy bands arround the MFE.\n",
   "  -z, --zuker                   Compute Zuker suboptimals instead of all \n                                  suboptimal structures within an engery band \n                                  arround the MFE.\n\n                                    (default=off)",
+  "  -g, --gquad                   Incoorporate G-Quadruplex formation into the \n                                  structure prediction algorithm\n                                  (no support of G-quadruplex prediction for \n                                  stochastic backtracking and Zuker-style \n                                  suboptimals yet)\n                                    (default=off)",
   "\nModel Details:",
   "  -T, --temp=DOUBLE             Rescale energy parameters to a temperature of \n                                  temp C. Default is 37C.\n\n",
   "  -4, --noTetra                 Do not include special tabulated stabilizing \n                                  energies for tri-, tetra- and hexaloop \n                                  hairpins. Mostly for testing.\n\n                                    (default=off)",
@@ -99,19 +100,20 @@ init_full_help_array(void)
   RNAsubopt_args_info_full_help[19] = RNAsubopt_args_info_detailed_help[24];
   RNAsubopt_args_info_full_help[20] = RNAsubopt_args_info_detailed_help[25];
   RNAsubopt_args_info_full_help[21] = RNAsubopt_args_info_detailed_help[26];
-  RNAsubopt_args_info_full_help[22] = RNAsubopt_args_info_detailed_help[28];
-  RNAsubopt_args_info_full_help[23] = RNAsubopt_args_info_detailed_help[30];
+  RNAsubopt_args_info_full_help[22] = RNAsubopt_args_info_detailed_help[27];
+  RNAsubopt_args_info_full_help[23] = RNAsubopt_args_info_detailed_help[29];
   RNAsubopt_args_info_full_help[24] = RNAsubopt_args_info_detailed_help[31];
   RNAsubopt_args_info_full_help[25] = RNAsubopt_args_info_detailed_help[32];
-  RNAsubopt_args_info_full_help[26] = RNAsubopt_args_info_detailed_help[34];
-  RNAsubopt_args_info_full_help[27] = RNAsubopt_args_info_detailed_help[36];
-  RNAsubopt_args_info_full_help[28] = RNAsubopt_args_info_detailed_help[38];
-  RNAsubopt_args_info_full_help[29] = RNAsubopt_args_info_detailed_help[40];
-  RNAsubopt_args_info_full_help[30] = 0; 
+  RNAsubopt_args_info_full_help[26] = RNAsubopt_args_info_detailed_help[33];
+  RNAsubopt_args_info_full_help[27] = RNAsubopt_args_info_detailed_help[35];
+  RNAsubopt_args_info_full_help[28] = RNAsubopt_args_info_detailed_help[37];
+  RNAsubopt_args_info_full_help[29] = RNAsubopt_args_info_detailed_help[39];
+  RNAsubopt_args_info_full_help[30] = RNAsubopt_args_info_detailed_help[41];
+  RNAsubopt_args_info_full_help[31] = 0; 
   
 }
 
-const char *RNAsubopt_args_info_full_help[31];
+const char *RNAsubopt_args_info_full_help[32];
 
 static void
 init_help_array(void)
@@ -137,17 +139,18 @@ init_help_array(void)
   RNAsubopt_args_info_help[18] = RNAsubopt_args_info_detailed_help[24];
   RNAsubopt_args_info_help[19] = RNAsubopt_args_info_detailed_help[25];
   RNAsubopt_args_info_help[20] = RNAsubopt_args_info_detailed_help[26];
-  RNAsubopt_args_info_help[21] = RNAsubopt_args_info_detailed_help[28];
-  RNAsubopt_args_info_help[22] = RNAsubopt_args_info_detailed_help[30];
+  RNAsubopt_args_info_help[21] = RNAsubopt_args_info_detailed_help[27];
+  RNAsubopt_args_info_help[22] = RNAsubopt_args_info_detailed_help[29];
   RNAsubopt_args_info_help[23] = RNAsubopt_args_info_detailed_help[31];
   RNAsubopt_args_info_help[24] = RNAsubopt_args_info_detailed_help[32];
-  RNAsubopt_args_info_help[25] = RNAsubopt_args_info_detailed_help[36];
-  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[40];
-  RNAsubopt_args_info_help[27] = 0; 
+  RNAsubopt_args_info_help[25] = RNAsubopt_args_info_detailed_help[33];
+  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[37];
+  RNAsubopt_args_info_help[27] = RNAsubopt_args_info_detailed_help[41];
+  RNAsubopt_args_info_help[28] = 0; 
   
 }
 
-const char *RNAsubopt_args_info_help[28];
+const char *RNAsubopt_args_info_help[29];
 
 typedef enum {ARG_NO
   , ARG_FLAG
@@ -189,6 +192,7 @@ void clear_given (struct RNAsubopt_args_info *args_info)
   args_info->circ_given = 0 ;
   args_info->dos_given = 0 ;
   args_info->zuker_given = 0 ;
+  args_info->gquad_given = 0 ;
   args_info->temp_given = 0 ;
   args_info->noTetra_given = 0 ;
   args_info->dangles_given = 0 ;
@@ -215,6 +219,7 @@ void clear_args (struct RNAsubopt_args_info *args_info)
   args_info->circ_flag = 0;
   args_info->dos_flag = 0;
   args_info->zuker_flag = 0;
+  args_info->gquad_flag = 0;
   args_info->temp_orig = NULL;
   args_info->noTetra_flag = 0;
   args_info->dangles_arg = 2;
@@ -251,16 +256,17 @@ void init_args_info(struct RNAsubopt_args_info *args_info)
   args_info->circ_help = RNAsubopt_args_info_detailed_help[19] ;
   args_info->dos_help = RNAsubopt_args_info_detailed_help[20] ;
   args_info->zuker_help = RNAsubopt_args_info_detailed_help[22] ;
-  args_info->temp_help = RNAsubopt_args_info_detailed_help[24] ;
-  args_info->noTetra_help = RNAsubopt_args_info_detailed_help[25] ;
-  args_info->dangles_help = RNAsubopt_args_info_detailed_help[26] ;
-  args_info->noLP_help = RNAsubopt_args_info_detailed_help[28] ;
-  args_info->noGU_help = RNAsubopt_args_info_detailed_help[30] ;
-  args_info->noClosingGU_help = RNAsubopt_args_info_detailed_help[31] ;
-  args_info->logML_help = RNAsubopt_args_info_detailed_help[32] ;
-  args_info->betaScale_help = RNAsubopt_args_info_detailed_help[34] ;
-  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[36] ;
-  args_info->nsp_help = RNAsubopt_args_info_detailed_help[38] ;
+  args_info->gquad_help = RNAsubopt_args_info_detailed_help[23] ;
+  args_info->temp_help = RNAsubopt_args_info_detailed_help[25] ;
+  args_info->noTetra_help = RNAsubopt_args_info_detailed_help[26] ;
+  args_info->dangles_help = RNAsubopt_args_info_detailed_help[27] ;
+  args_info->noLP_help = RNAsubopt_args_info_detailed_help[29] ;
+  args_info->noGU_help = RNAsubopt_args_info_detailed_help[31] ;
+  args_info->noClosingGU_help = RNAsubopt_args_info_detailed_help[32] ;
+  args_info->logML_help = RNAsubopt_args_info_detailed_help[33] ;
+  args_info->betaScale_help = RNAsubopt_args_info_detailed_help[35] ;
+  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[37] ;
+  args_info->nsp_help = RNAsubopt_args_info_detailed_help[39] ;
   
 }
 
@@ -428,6 +434,8 @@ RNAsubopt_cmdline_parser_dump(FILE *outfile, struct RNAsubopt_args_info *args_in
     write_into_file(outfile, "dos", 0, 0 );
   if (args_info->zuker_given)
     write_into_file(outfile, "zuker", 0, 0 );
+  if (args_info->gquad_given)
+    write_into_file(outfile, "gquad", 0, 0 );
   if (args_info->temp_given)
     write_into_file(outfile, "temp", args_info->temp_orig, 0);
   if (args_info->noTetra_given)
@@ -1348,6 +1356,7 @@ RNAsubopt_cmdline_parser_internal (
         { "circ",	0, NULL, 'c' },
         { "dos",	0, NULL, 'D' },
         { "zuker",	0, NULL, 'z' },
+        { "gquad",	0, NULL, 'g' },
         { "temp",	1, NULL, 'T' },
         { "noTetra",	0, NULL, '4' },
         { "dangles",	1, NULL, 'd' },
@@ -1366,7 +1375,7 @@ RNAsubopt_cmdline_parser_internal (
       custom_opterr = opterr;
       custom_optopt = optopt;
 
-      c = custom_getopt_long (argc, argv, "hVCe:sp:S:cDzT:4d:P:", long_options, &option_index);
+      c = custom_getopt_long (argc, argv, "hVCe:sp:S:cDzgT:4d:P:", long_options, &option_index);
 
       optarg = custom_optarg;
       optind = custom_optind;
@@ -1481,6 +1490,18 @@ RNAsubopt_cmdline_parser_internal (
           if (update_arg((void *)&(args_info->zuker_flag), 0, &(args_info->zuker_given),
               &(local_args_info.zuker_given), optarg, 0, 0, ARG_FLAG,
               check_ambiguity, override, 1, 0, "zuker", 'z',
+              additional_error))
+            goto failure;
+        
+          break;
+        case 'g':	/* Incoorporate G-Quadruplex formation into the structure prediction algorithm
+        (no support of G-quadruplex prediction for stochastic backtracking and Zuker-style suboptimals yet)
+.  */
+        
+        
+          if (update_arg((void *)&(args_info->gquad_flag), 0, &(args_info->gquad_given),
+              &(local_args_info.gquad_given), optarg, 0, 0, ARG_FLAG,
+              check_ambiguity, override, 1, 0, "gquad", 'g',
               additional_error))
             goto failure;
         

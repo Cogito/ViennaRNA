@@ -1,5 +1,10 @@
 var NAVTREEINDEX2 =
 {
+"group__mfe__cofold.html#gafe430060533f14b11fc611f60b3f1f6f":[6,0,0,0,2],
+"group__mfe__cofold.html#gafe430060533f14b11fc611f60b3f1f6f":[6,0,3,0,2],
+"group__mfe__fold.html":[6,0,0],
+"group__mfe__fold.html#ga107fdfe5fd641868156bfd849f6866c7":[6,0,0,7],
+"group__mfe__fold.html#ga41bf8f6fa15b94471f7095cad9f0ccf3":[6,0,0,8],
 "group__mfe__fold.html#ga4ac63ab3e8d9a80ced28b8052d94e423":[6,0,0,6],
 "group__mfe__fold.html#gaadafcb0f140795ae62e5ca027e335a9b":[6,0,0,5],
 "group__mfe__fold.html#gadb973133c241d57c04b253df35e4d34e":[6,0,0,4],
@@ -245,9 +250,4 @@ var NAVTREEINDEX2 =
 "structConcEnt.html#afdfab6d71e077828c528f4e8857adbb2":[7,0,3,3],
 "structINTERVAL.html":[7,0,12],
 "structINTERVAL.html#a00b0d965c88837ac2154aa03cb9d88d1":[7,0,12,1],
-"structINTERVAL.html#a09319eb79af01cd6d567d828ab2dcb4a":[7,0,12,0],
-"structINTERVAL.html#aca2c87b8a7d08294fe2f7a0e6233fc82":[7,0,12,2],
-"structLIST.html":[7,0,13],
-"structLIST.html#a54660f4a9fc315d60a38499a4c631ec7":[7,0,13,0],
-"structLIST.html#a8089f45a8d25f65d8f9abe3ca7377210":[7,0,13,3],
 };

@@ -1,6 +1,6 @@
 /*
   Copyright by Matthias Hoechsmann (C) 2002-2004
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
   - do not change the file,
   - leave this copyright notice in the file,
@@ -24,7 +24,7 @@ using namespace std;
 
 /** PPForestBase is the base class of the template class PPForest<L>.
  *  To reduce the size of compiled programs functions and variables that are
- *  independent of the labelling are implemented in this class. 
+ *  independent of the labelling are implemented in this class.
  */
 class PPForestBase
 {
@@ -35,7 +35,7 @@ class PPForestBase
   typedef Uint size_type;
 
  private:
-  bool m_isSumUpCSFValid; 
+  bool m_isSumUpCSFValid;
   bool m_isRMBValid;
 
   size_type getNumRightBrothers(size_type i) const;
@@ -54,7 +54,7 @@ protected:
   void calcRMB();
 
   /** @name Alignment construction functions for backtrack routine of class Alignment */
-  //@{ 
+  //@{
 
   /** Allocate memory and initialize variables */
   void initialize(size_type size);
@@ -73,13 +73,13 @@ protected:
   /** Copy constructor */
   PPForestBase(const PPForestBase &ppfBase);
   /** Frees allocated memory */
-  ~PPForestBase();	
-  
+  ~PPForestBase();
+
   inline size_type size() const {return m_size;};               /**< Returns m_size */
   inline size_type noc(size_type i) const {return m_noc[i];};   /**< Returns m_noc[i] */
   inline size_type rb(size_type i) const {return m_rb[i];};     /**< Returns m_rb[i] */
   size_type rb(size_type i, size_type k) const;                 /**< Returns the kth brother of i */
-  
+
 
   inline bool isLeave(size_type i) const
     {
@@ -95,20 +95,20 @@ protected:
    *  len(i)=sumUpCSF[i+1]-sumUpCSF[i], if i<size(F) and 1 otherwise.
    *  Requires that function calcSumUpCSF() was already called.
    */
-  inline size_type PPForestBase::getMaxLength(size_type i) const
+  inline size_type getMaxLength(size_type i) const
     {
       assert(m_isSumUpCSFValid);
 
       if(m_size==1)
-	return 1;         
-      else            
+	return 1;
+      else
 	return m_sumUpCSF[i+1]-m_sumUpCSF[i]; /* len(i)=sumUpCSF[i+1]-sumUpCSF[i], if i<nodes(F)*/
     }
 
   /** Returns the number of all non empty closed subforests in a forest
    *  Requires that function calcSumUpCSF() was already called.
    */
-  inline size_type getNumCSFs() const 
+  inline size_type getNumCSFs() const
     {
       assert(m_isSumUpCSFValid);
       return m_sumUpCSF[m_size];  // max node is m_size-1, hence m_sumUpCSF[m_size] stores the number of all csfs
@@ -117,7 +117,7 @@ protected:
   /** Returns the index if the rightmost brother node of i in constant time.
    *  Requires that function calcRMB() was already called.
    */
-  inline size_type getRightmostBrotherIndex(size_type i) const 
+  inline size_type getRightmostBrotherIndex(size_type i) const
     {
       assert(m_isRMBValid);
       assert(i<m_size);
@@ -127,12 +127,12 @@ protected:
   /** Returns the index if the rightmost brother node of i.
    *  Does not require that function calcRMB() was already called and runs linear in the number of brother nodes.
    */
-  inline size_type getRightmostBrotherIndex2(size_type i) const 
+  inline size_type getRightmostBrotherIndex2(size_type i) const
     {
-      size_type h=i;	    
-      while(m_rb[h])			
+      size_type h=i;
+      while(m_rb[h])
 	h=m_rb[h];
-      
+
       return h;
     };
 
@@ -146,19 +146,19 @@ protected:
   size_type countLeaves(size_type i) const;
 
   /** @name Index transition functions */
-  //@{ 
+  //@{
 
   /** Calculates one dimensional index for a closed subforest (i,j) */
-  inline size_type PPForestBase::indexpos(size_type i,size_type j) const
+  inline size_type indexpos(size_type i,size_type j) const
     {
       assert(m_isSumUpCSFValid);
 
       if(j==0)
 	return 0;
       else
-	return m_sumUpCSF[i]+j-1;		 
+	return m_sumUpCSF[i]+j-1;
     }
-  
+
   /** Returns indexpos(i+1,noc(i)) for a csf (i,j) */
   inline size_type down(size_type i) const {return indexpos(i+1,m_noc[i]);};
   /** Returns indexpos(rb(i),j-1) for a csf (i,j) */
@@ -167,20 +167,20 @@ protected:
   inline size_type over(size_type i) const {return indexpos(m_rb[i],getMaxLength(i)-1);}
 
   /** Returns the mapped index of csf (i2,..,in-1) where i1,...,in are the children of i.
-    * This transition is important for the extended alignment model for RNA structures where 
+    * This transition is important for the extended alignment model for RNA structures where
     * a P-node and the pairing bases can be replaced by a single edit operation
     */
-  inline size_type mdown(size_type i) const 
+  inline size_type mdown(size_type i) const
     {
       if(m_noc[i]<=2)
 	return 0;
       else
-	return indexpos(i+1+1,m_noc[i]-2); 
-    };  
+	return indexpos(i+1+1,m_noc[i]-2);
+    };
 
   //@}
-	
- 
+
+
   /** Tests if (i,j) and (i2,j2) are disjoint.
    *  Intuitively, (i,j) and (i2,j2) are disjoint if they do not include
    *  each other and dont intersect.
@@ -188,39 +188,37 @@ protected:
   inline bool isDisjoint(size_type i, size_type j, size_type i2, size_type j2) const
     {
       size_type max_node;
-      
+
       // the empty forest is included in any forest
       if(j==0 || j2==0)
-	return false; 
-      
+	return false;
+
       // (i2,j2) included in (i,j)
-      
+
       max_node=getRightmostBrotherIndex(i);
       if(noc(max_node))
 	max_node=getRightmostBrotherIndex(max_node+1);
-      
+
       if(i2>=i && i2<=max_node)
 	return false;
-      
+
       if(rb(i2,j2-1)>=i && rb(i2,j2-1)<=max_node)
 	return false;
-      
+
       // (i,j) included in (i2,j2)
       max_node=getRightmostBrotherIndex(i2);
 	if(noc(max_node))
 	  max_node=getRightmostBrotherIndex(max_node+1);
-	
-	
+
+
 	if(i>=i2 && i<=max_node)
 	  return false;
-	
+
 	if(rb(i,j-1)>=i2 && rb(i,j-1)<=max_node)
 	  return false;
-	
+
 	return true;
     }
 };
 
 #endif
-
-

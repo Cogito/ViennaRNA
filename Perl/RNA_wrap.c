@@ -996,15 +996,16 @@ static void _swig_create_magic(CPerlObj *pPerl, SV *sv, const char *name, int (C
 #define  SWIGTYPE_p_floatArray swig_types[9] 
 #define  SWIGTYPE_p_doubleArray swig_types[10] 
 #define  SWIGTYPE_p_p_void swig_types[11] 
-#define  SWIGTYPE_p_short swig_types[12] 
-#define  SWIGTYPE_p_p_char swig_types[13] 
-#define  SWIGTYPE_p_char swig_types[14] 
-#define  SWIGTYPE_p_unsigned_short swig_types[15] 
-#define  SWIGTYPE_p_paramT swig_types[16] 
-#define  SWIGTYPE_p_Tree swig_types[17] 
-#define  SWIGTYPE_p_FILE swig_types[18] 
-#define  SWIGTYPE_p_int swig_types[19] 
-static swig_type_info *swig_types[21];
+#define  SWIGTYPE_p_duplexT swig_types[12] 
+#define  SWIGTYPE_p_short swig_types[13] 
+#define  SWIGTYPE_p_p_char swig_types[14] 
+#define  SWIGTYPE_p_char swig_types[15] 
+#define  SWIGTYPE_p_unsigned_short swig_types[16] 
+#define  SWIGTYPE_p_paramT swig_types[17] 
+#define  SWIGTYPE_p_Tree swig_types[18] 
+#define  SWIGTYPE_p_FILE swig_types[19] 
+#define  SWIGTYPE_p_int swig_types[20] 
+static swig_type_info *swig_types[22];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1033,6 +1034,7 @@ SWIGEXPORT(void) SWIG_init (CV *cv, CPerlObj *);
 #include  "../H/fold.h"
 #include  "../H/cofold.h"
 #include  "../H/part_func.h"
+#include  "../H/part_func_co.h"
 #include  "../H/PS_dot.h"
 #include  "../H/inverse.h"
 #include  "../H/RNAstruct.h"
@@ -1044,6 +1046,9 @@ SWIGEXPORT(void) SWIG_init (CV *cv, CPerlObj *);
 #include  "../H/subopt.h"
 #include  "../H/energy_const.h"
 #include  "../H/params.h"
+#include  "../H/duplex.h"
+#include  "../H/alifold.h"
+#include  "../H/aln_util.h"
 
 
 static int *new_intP(int nelements) { 
@@ -1197,7 +1202,6 @@ static SWIGCDATA cdata_void(void *ptr, int nelements) {
 
   char *my_fold(char *string, char *constraints, float *energy) {
     char *struc;
-    float en;
     struc = calloc(strlen(string)+1,sizeof(char));
     if (constraints && fold_constrained)
       strncpy(struc, constraints, strlen(string));
@@ -1211,10 +1215,11 @@ float energy_of_struct(char const *,char const *);
 void free_arrays(void);
 void initialize_fold(int);
 void update_fold_params(void);
+char *backtrack_fold_from_pair(char *,int,int);
+float energy_of_circ_struct(char const *,char const *);
 
   char *my_cofold(char *string, char *constraints, float *energy) {
     char *struc;
-    float en;
     struc = calloc(strlen(string)+1,sizeof(char));
     if (constraints && fold_constrained)
       strncpy(struc, constraints, strlen(string));
@@ -1230,7 +1235,6 @@ void update_cofold_params(void);
 
   char *my_pf_fold(char *string, char *constraints, float *energy) {
     char *struc;
-    float en;
     struc = calloc(strlen(string)+1,sizeof(char));
     if (constraints && fold_constrained)
       strncpy(struc, constraints, strlen(string));
@@ -1299,6 +1303,18 @@ extern int fold_constrained;
 extern int do_backtrack;
 extern int noLonelyPairs;
 extern char backtrack_type;
+
+  char *my_alifold(char **strings, char *constraints, float *energy) {
+    char *struc;
+    struc = calloc(strlen(strings[0])+1,sizeof(char));
+    if (constraints && fold_constrained)
+      strncpy(struc, constraints, strlen(strings[0]));
+    *energy = alifold(strings, struc);
+    if (constraints)
+      strncpy(constraints, struc, strlen(constraints));
+    return(struc);
+  }
+
 static SOLUTION *SOLUTION_get(SOLUTION *self,int i){
 //	   static int size=-1;
 //	   if (size<0) {
@@ -1377,7 +1393,7 @@ char *get_aligned_line(int i) {
 
   short *make_loop_index(const char *structure) {
   /* number each position by which loop it belongs to (positions start at 0) */
-    int i,j,hx,l,nl;
+    int i,hx,l,nl;
     int length;
     short *stack;
     short *loop;
@@ -1414,7 +1430,7 @@ float energy_of_move(const char *string, char *structure, int mi, int mj) {
   int i,j,hx,l,nl;
   int length;
   short *stack, *table, *loop;
-  short *S, *S1;
+  short *S;
   int energy;
 
   if (mj<0) {
@@ -1492,6 +1508,7 @@ float energy_of_move(const char *string, char *structure, int mi, int mj) {
   return (float) energy/100.;
 }
 
+duplexT duplexfold(char const *,char const *);
 int PS_rna_plot(char *,char *,char *);
 int PS_rna_plot_a(char *,char *,char *,char *,char *);
 int gmlRNA(char *,char *,char *,char);
@@ -1502,6 +1519,7 @@ int PS_dot_plot(char *,char *);
 extern int rna_plot_type;
 int PS_color_dot_plot(char *,cpair *,char *);
 int PS_dot_plot_list(char *,char *,struct plist *,struct plist *,char *);
+int PS_dot_plot_turn(char *,struct plist *,char *,int);
 #ifdef PERL_OBJECT
 #define MAGIC_CLASS _wrap_RNA_var::
 class _wrap_RNA_var : public CPerlObj {
@@ -3236,6 +3254,65 @@ XS(_wrap_update_fold_params) {
 }
 
 
+XS(_wrap_backtrack_fold_from_pair) {
+    {
+        char *arg1 = (char *) 0 ;
+        int arg2 ;
+        int arg3 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 3) || (items > 3)) {
+            SWIG_croak("Usage: backtrack_fold_from_pair(sequence,i,j);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        arg2 = (int) SvIV(ST(1));
+        arg3 = (int) SvIV(ST(2));
+        result = (char *)backtrack_fold_from_pair(arg1,arg2,arg3);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        } else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_energy_of_circ_struct) {
+    {
+        char *arg1 = (char *) 0 ;
+        char *arg2 = (char *) 0 ;
+        float result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: energy_of_circ_struct(string,structure);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        result = (float)energy_of_circ_struct((char const *)arg1,(char const *)arg2);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setnv(ST(argvi++), (double) result);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
 XS(_wrap_cofold) {
     {
         char *arg1 = (char *) 0 ;
@@ -3813,6 +3890,174 @@ XS(_wrap_option_string) {
         }
         XSRETURN(argvi);
         fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_alifold) {
+    {
+        char **arg1 = (char **) 0 ;
+        char *arg2 = (char *) NULL ;
+        float *arg3 = (float *) 0 ;
+        char *result;
+        float temp3 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        arg3 = &temp3;
+        if ((items < 1) || (items > 2)) {
+            SWIG_croak("Usage: alifold(strings,constraints);");
+        }
+        {
+            AV *tempav;
+            I32 len;
+            int i;
+            SV  **tv;
+            if (!SvROK(ST(0)))
+            croak("Argument 1 is not a reference.");
+            if (SvTYPE(SvRV(ST(0))) != SVt_PVAV)
+            croak("Argument 1 is not an array.");
+            tempav = (AV*)SvRV(ST(0));
+            len = av_len(tempav);
+            arg1 = (char **) malloc((len+2)*sizeof(char *));
+            for (i = 0; i <= len; i++) {
+                tv = av_fetch(tempav, i, 0);
+                arg1[i] = (char *) SvPV(*tv,PL_na);
+            }
+            arg1[i] = NULL;
+        }
+        if (items > 1) {
+            if (!SvOK((SV*) ST(1))) arg2 = 0;
+            else arg2 = (char *) SvPV(ST(1), PL_na);
+        }
+        result = (char *)my_alifold(arg1,arg2,arg3);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        } else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        {
+            if (argvi >= items) {
+                EXTEND(sp,1);
+            }
+            ST(argvi) = sv_newmortal();
+            sv_setnv(ST(argvi),(double) *(arg3));
+            argvi++;
+        }
+        {
+            free(arg1);
+        }
+        free(result);
+        XSRETURN(argvi);
+        fail:
+        {
+            free(arg1);
+        }
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_consensus) {
+    {
+        char **arg1 = (char **) 0 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: consensus(AS);");
+        }
+        {
+            AV *tempav;
+            I32 len;
+            int i;
+            SV  **tv;
+            if (!SvROK(ST(0)))
+            croak("Argument 1 is not a reference.");
+            if (SvTYPE(SvRV(ST(0))) != SVt_PVAV)
+            croak("Argument 1 is not an array.");
+            tempav = (AV*)SvRV(ST(0));
+            len = av_len(tempav);
+            arg1 = (char **) malloc((len+2)*sizeof(char *));
+            for (i = 0; i <= len; i++) {
+                tv = av_fetch(tempav, i, 0);
+                arg1[i] = (char *) SvPV(*tv,PL_na);
+            }
+            arg1[i] = NULL;
+        }
+        result = (char *)consensus((char const **)arg1);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        } else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        {
+            free(arg1);
+        }
+        free(result);
+        XSRETURN(argvi);
+        fail:
+        {
+            free(arg1);
+        }
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_consens_mis) {
+    {
+        char **arg1 = (char **) 0 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: consens_mis(AS);");
+        }
+        {
+            AV *tempav;
+            I32 len;
+            int i;
+            SV  **tv;
+            if (!SvROK(ST(0)))
+            croak("Argument 1 is not a reference.");
+            if (SvTYPE(SvRV(ST(0))) != SVt_PVAV)
+            croak("Argument 1 is not an array.");
+            tempav = (AV*)SvRV(ST(0));
+            len = av_len(tempav);
+            arg1 = (char **) malloc((len+2)*sizeof(char *));
+            for (i = 0; i <= len; i++) {
+                tv = av_fetch(tempav, i, 0);
+                arg1[i] = (char *) SvPV(*tv,PL_na);
+            }
+            arg1[i] = NULL;
+        }
+        result = (char *)consens_mis((char const **)arg1);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        } else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        {
+            free(arg1);
+        }
+        XSRETURN(argvi);
+        fail:
+        {
+            free(arg1);
+        }
         ;
     }
     croak(Nullch);
@@ -5272,6 +5517,312 @@ XS(_wrap_energy_of_move) {
 }
 
 
+XS(_wrap_duplexT_i_set) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        int arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: duplexT_i_set(self,i);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_i_set. Expected _p_duplexT");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        if (arg1) (arg1)->i = arg2;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_i_get) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: duplexT_i_get(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_i_get. Expected _p_duplexT");
+            }
+        }
+        result = (int) ((arg1)->i);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_j_set) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        int arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: duplexT_j_set(self,j);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_j_set. Expected _p_duplexT");
+            }
+        }
+        arg2 = (int) SvIV(ST(1));
+        if (arg1) (arg1)->j = arg2;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_j_get) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: duplexT_j_get(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_j_get. Expected _p_duplexT");
+            }
+        }
+        result = (int) ((arg1)->j);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_structure_set) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        char *arg2 = (char *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: duplexT_structure_set(self,structure);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_structure_set. Expected _p_duplexT");
+            }
+        }
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        {
+            if (arg1->structure) free((char*)arg1->structure);
+            if (arg2) {
+                arg1->structure = (char *) malloc(strlen(arg2)+1);
+                strcpy((char*)arg1->structure,arg2);
+            } else {
+                arg1->structure = 0;
+            }
+        }
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_structure_get) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        char *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: duplexT_structure_get(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_structure_get. Expected _p_duplexT");
+            }
+        }
+        result = (char *) ((arg1)->structure);
+        
+        ST(argvi) = sv_newmortal();
+        if (result) {
+            sv_setpv((SV*)ST(argvi++), (char *) result);
+        } else {
+            sv_setsv((SV*)ST(argvi++), &PL_sv_undef);
+        }
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_energy_set) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        float arg2 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: duplexT_energy_set(self,energy);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_energy_set. Expected _p_duplexT");
+            }
+        }
+        arg2 = (float) SvNV(ST(1));
+        
+        if (arg1) (arg1)->energy = arg2;
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexT_energy_get) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        float result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: duplexT_energy_get(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of duplexT_energy_get. Expected _p_duplexT");
+            }
+        }
+        result = (float) ((arg1)->energy);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setnv(ST(argvi++), (double) result);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_new_duplexT) {
+    {
+        duplexT *result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 0) || (items > 0)) {
+            SWIG_croak("Usage: new_duplexT();");
+        }
+        result = (duplexT *)(duplexT *) calloc(1, sizeof(duplexT));
+        
+        ST(argvi) = sv_newmortal();
+        SWIG_MakePtr(ST(argvi++), (void *) result, SWIGTYPE_p_duplexT, SWIG_SHADOW|SWIG_OWNER);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_delete_duplexT) {
+    {
+        duplexT *arg1 = (duplexT *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: delete_duplexT(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_duplexT,0) < 0) {
+                SWIG_croak("Type error in argument 1 of delete_duplexT. Expected _p_duplexT");
+            }
+        }
+        free((char *) arg1);
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_duplexfold) {
+    {
+        char *arg1 = (char *) 0 ;
+        char *arg2 = (char *) 0 ;
+        duplexT result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 2) || (items > 2)) {
+            SWIG_croak("Usage: duplexfold(s1,s2);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        if (!SvOK((SV*) ST(1))) arg2 = 0;
+        else arg2 = (char *) SvPV(ST(1), PL_na);
+        result = duplexfold((char const *)arg1,(char const *)arg2);
+        
+        {
+            duplexT * resultobj = (duplexT *) malloc(sizeof(duplexT));
+            memmove(resultobj, &result, sizeof(duplexT));
+            ST(argvi) = sv_newmortal();
+            SWIG_MakePtr(ST(argvi++), (void *) resultobj, SWIGTYPE_p_duplexT, SWIG_SHADOW|SWIG_OWNER);
+        }
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
 XS(_wrap_PS_rna_plot) {
     {
         char *arg1 = (char *) 0 ;
@@ -6114,7 +6665,7 @@ XS(_wrap_PS_dot_plot_list) {
         dXSARGS;
         
         if ((items < 5) || (items > 5)) {
-            SWIG_croak("Usage: PS_dot_plot_list(string,filename,pl,mf,comment);");
+            SWIG_croak("Usage: PS_dot_plot_list(seq,filename,pl,mf,comment);");
         }
         if (!SvOK((SV*) ST(0))) arg1 = 0;
         else arg1 = (char *) SvPV(ST(0), PL_na);
@@ -6133,6 +6684,41 @@ XS(_wrap_PS_dot_plot_list) {
         if (!SvOK((SV*) ST(4))) arg5 = 0;
         else arg5 = (char *) SvPV(ST(4), PL_na);
         result = (int)PS_dot_plot_list(arg1,arg2,arg3,arg4,arg5);
+        
+        ST(argvi) = sv_newmortal();
+        sv_setiv(ST(argvi++), (IV) result);
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
+XS(_wrap_PS_dot_plot_turn) {
+    {
+        char *arg1 = (char *) 0 ;
+        struct plist *arg2 = (struct plist *) 0 ;
+        char *arg3 = (char *) 0 ;
+        int arg4 ;
+        int result;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 4) || (items > 4)) {
+            SWIG_croak("Usage: PS_dot_plot_turn(seq,pl,filename,winSize);");
+        }
+        if (!SvOK((SV*) ST(0))) arg1 = 0;
+        else arg1 = (char *) SvPV(ST(0), PL_na);
+        {
+            if (SWIG_ConvertPtr(ST(1), (void **) &arg2, SWIGTYPE_p_plist,0) < 0) {
+                SWIG_croak("Type error in argument 2 of PS_dot_plot_turn. Expected _p_plist");
+            }
+        }
+        if (!SvOK((SV*) ST(2))) arg3 = 0;
+        else arg3 = (char *) SvPV(ST(2), PL_na);
+        arg4 = (int) SvIV(ST(3));
+        result = (int)PS_dot_plot_turn(arg1,arg2,arg3,arg4);
         
         ST(argvi) = sv_newmortal();
         sv_setiv(ST(argvi++), (IV) result);
@@ -6168,6 +6754,7 @@ static swig_type_info _swigt__p_void[] = {{"_p_void", 0, "void *", 0, 0, 0, 0},{
 static swig_type_info _swigt__p_floatArray[] = {{"RNA::floatArray", 0, "struct floatArray *|floatArray *", 0, 0, 0, 0},{"RNA::floatArray", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_doubleArray[] = {{"RNA::doubleArray", 0, "struct doubleArray *|doubleArray *", 0, 0, 0, 0},{"RNA::doubleArray", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_p_void[] = {{"_p_p_void", 0, "void **", 0, 0, 0, 0},{"_p_p_void", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_duplexT[] = {{"RNA::duplexT", 0, "duplexT *", 0, 0, 0, 0},{"RNA::duplexT", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_short[] = {{"_p_short", 0, "short *", 0, 0, 0, 0},{"_p_short", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_p_char[] = {{"_p_p_char", 0, "char **", 0, 0, 0, 0},{"_p_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -6190,6 +6777,7 @@ _swigt__p_void,
 _swigt__p_floatArray, 
 _swigt__p_doubleArray, 
 _swigt__p_p_void, 
+_swigt__p_duplexT, 
 _swigt__p_short, 
 _swigt__p_p_char, 
 _swigt__p_char, 
@@ -6289,6 +6877,8 @@ static swig_command_info swig_commands[] = {
 {"RNAc::free_arrays", _wrap_free_arrays},
 {"RNAc::initialize_fold", _wrap_initialize_fold},
 {"RNAc::update_fold_params", _wrap_update_fold_params},
+{"RNAc::backtrack_fold_from_pair", _wrap_backtrack_fold_from_pair},
+{"RNAc::energy_of_circ_struct", _wrap_energy_of_circ_struct},
 {"RNAc::cofold", _wrap_cofold},
 {"RNAc::free_co_arrays", _wrap_free_co_arrays},
 {"RNAc::initialize_cofold", _wrap_initialize_cofold},
@@ -6310,6 +6900,9 @@ static swig_command_info swig_commands[] = {
 {"RNAc::new_bondT", _wrap_new_bondT},
 {"RNAc::delete_bondT", _wrap_delete_bondT},
 {"RNAc::option_string", _wrap_option_string},
+{"RNAc::alifold", _wrap_alifold},
+{"RNAc::consensus", _wrap_consensus},
+{"RNAc::consens_mis", _wrap_consens_mis},
 {"RNAc::SOLUTION_energy_set", _wrap_SOLUTION_energy_set},
 {"RNAc::SOLUTION_energy_get", _wrap_SOLUTION_energy_get},
 {"RNAc::SOLUTION_structure_set", _wrap_SOLUTION_structure_set},
@@ -6364,6 +6957,17 @@ static swig_command_info swig_commands[] = {
 {"RNAc::get_aligned_line", _wrap_get_aligned_line},
 {"RNAc::make_loop_index", _wrap_make_loop_index},
 {"RNAc::energy_of_move", _wrap_energy_of_move},
+{"RNAc::duplexT_i_set", _wrap_duplexT_i_set},
+{"RNAc::duplexT_i_get", _wrap_duplexT_i_get},
+{"RNAc::duplexT_j_set", _wrap_duplexT_j_set},
+{"RNAc::duplexT_j_get", _wrap_duplexT_j_get},
+{"RNAc::duplexT_structure_set", _wrap_duplexT_structure_set},
+{"RNAc::duplexT_structure_get", _wrap_duplexT_structure_get},
+{"RNAc::duplexT_energy_set", _wrap_duplexT_energy_set},
+{"RNAc::duplexT_energy_get", _wrap_duplexT_energy_get},
+{"RNAc::new_duplexT", _wrap_new_duplexT},
+{"RNAc::delete_duplexT", _wrap_delete_duplexT},
+{"RNAc::duplexfold", _wrap_duplexfold},
 {"RNAc::PS_rna_plot", _wrap_PS_rna_plot},
 {"RNAc::PS_rna_plot_a", _wrap_PS_rna_plot_a},
 {"RNAc::gmlRNA", _wrap_gmlRNA},
@@ -6395,6 +6999,7 @@ static swig_command_info swig_commands[] = {
 {"RNAc::new_plist", _wrap_new_plist},
 {"RNAc::delete_plist", _wrap_delete_plist},
 {"RNAc::PS_dot_plot_list", _wrap_PS_dot_plot_list},
+{"RNAc::PS_dot_plot_turn", _wrap_PS_dot_plot_turn},
 {0,0}
 };
 
@@ -6494,6 +7099,7 @@ XS(SWIG_init) {
     strcpy(symbolset, "AUGC");
     
     
+    SWIG_TypeClientData(SWIGTYPE_p_duplexT, (void*) "RNA::duplexT");
     SWIG_TypeClientData(SWIGTYPE_p_cpair, (void*) "RNA::cpair");
     SWIG_TypeClientData(SWIGTYPE_p_plist, (void*) "RNA::plist");
     ST(0) = &PL_sv_yes;

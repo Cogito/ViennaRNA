@@ -85,6 +85,36 @@ update_fold_params automatically when necessary.
 
 frees memory allocated internally when calling L<fold|/fold>.
 
+
+=item cofold SEQUENCE
+
+=item cofold SEQUENCE, CONSTRAINTS
+
+works as fold, but SEQUENCE may be the concatenation of two RNAs in order
+compute their hybridization structure. E.g.:
+
+  $seq1  ="CGCAGGGAUACCCGCG";
+  $seq2  ="GCGCCCAUAGGGACGC";
+  $RNA::cut_point = length($seq1)+1;
+  ($costruct, $comfe) = RNA::cofold($seq1 . $seq2);
+
+=item duplexfold SEQ1 SEQ2
+
+compute the structure upon hybridization of SEQ1 and SEQ2. In contrast to
+cofold only intra-molecular pairs are allowed. Thus, the algorithm runs in 
+O(n1*n2) time where n1 and n2 are the lengths of the sequences. The result
+is returned in a C struct containing the innermost base pair (i,j) the
+structure and energy. E.g:
+  
+  $seq1 ="CGCAGGGAUACCCGCG";
+  $seq2 ="GCGCCCAUAGGGACGC";
+  $dup  = RNA::duplexfold($seq1, $seq2);
+  print "Region ", $dup->{i}+1-length($seq1), " to ", 
+        $dup->{i}, " of seq1 ",
+        "pairs up with ", $dup->{j}, " to ", 
+	$dup->{j}+length($dup->{structure}-length($seq1)-2, 
+	" of seq2\n";
+
 =back
 
 Partition function Folding (from part_func.h)
@@ -123,6 +153,18 @@ recalculate energy parameters for pf_fold. In most cases (such as
 simple changes to L<$temperature|/$temperature>) C<pf_fold>
 will take appropriate action automatically.
 
+=item pbacktrack SEQUENCE
+
+return a random structure chosen according to it's Boltzmann probability.
+Use to produce samples representing the thermodynamic ensemble of
+structures.
+
+  RNA::pf_fold($sequence);
+  for (1..1000) {
+     push @sample, RNA::pbacktrack($sequence);
+  }
+
+
 =back
 
 Suboptimal Folding (from subopt.h)
@@ -144,6 +186,35 @@ accesses as follows:
      printf "%s %6.2f\n",  $solution->get($_)->{structure},
 			   $solution->get($_)->{energy};
   }
+
+=back
+
+Alignment Folding (from alifold.h)
+
+=over 4
+
+=item alifold REF
+
+=item fold REF, CONSTRAINTS
+
+similar to fold() but compute the consensus structure for a set of aligned
+sequences. E.g.:
+
+  @align = ("GCCAUCCGAGGGAAAGGUU", 
+	    "GAUCGACAGCGUCU-AUCG", 
+	    "CCGUCUUUAUGAGUCCGGC");
+  ($consens_struct, $consens_en) = RNA::alifold(\@align);
+  
+=item consensus REF
+=item consens_mis REF
+
+compute a simple consensus sequence or "most informative sequence" form an
+alignment. The simple consensus returns the most frequent character for
+each column, the MIS uses the IUPAC symbol that contains all characters
+that are overrepresented in the column. 
+
+  $mis = consensus_mis(\@align);
+
 
 =back
 
@@ -185,6 +256,13 @@ C<inverse_fold> and C<inverse_pf_fold>, the default alphabet is "AUGC"
 If non-zero stop optimization when its clear that no exact solution
 can be found. Else continue and eventually return an approximate
 solution. Default 0.
+
+=back
+
+Cofolding of two RNA molecules (from cofold.h)
+
+=over 4
+
 
 =back
 
@@ -667,6 +745,8 @@ package RNA;
 *free_arrays = *RNAc::free_arrays;
 *initialize_fold = *RNAc::initialize_fold;
 *update_fold_params = *RNAc::update_fold_params;
+*backtrack_fold_from_pair = *RNAc::backtrack_fold_from_pair;
+*energy_of_circ_struct = *RNAc::energy_of_circ_struct;
 *cofold = *RNAc::cofold;
 *free_co_arrays = *RNAc::free_co_arrays;
 *initialize_cofold = *RNAc::initialize_cofold;
@@ -681,6 +761,9 @@ package RNA;
 *inverse_fold = *RNAc::inverse_fold;
 *inverse_pf_fold = *RNAc::inverse_pf_fold;
 *option_string = *RNAc::option_string;
+*alifold = *RNAc::alifold;
+*consensus = *RNAc::consensus;
+*consens_mis = *RNAc::consens_mis;
 *subopt = *RNAc::subopt;
 *get_pr = *RNAc::get_pr;
 *b2HIT = *RNAc::b2HIT;
@@ -727,6 +810,7 @@ package RNA;
 *get_aligned_line = *RNAc::get_aligned_line;
 *make_loop_index = *RNAc::make_loop_index;
 *energy_of_move = *RNAc::energy_of_move;
+*duplexfold = *RNAc::duplexfold;
 *PS_rna_plot = *RNAc::PS_rna_plot;
 *PS_rna_plot_a = *RNAc::PS_rna_plot_a;
 *gmlRNA = *RNAc::gmlRNA;
@@ -736,6 +820,7 @@ package RNA;
 *PS_dot_plot = *RNAc::PS_dot_plot;
 *PS_color_dot_plot = *RNAc::PS_color_dot_plot;
 *PS_dot_plot_list = *RNAc::PS_dot_plot_list;
+*PS_dot_plot_turn = *RNAc::PS_dot_plot_turn;
 
 ############# Class : RNA::intArray ##############
 
@@ -925,6 +1010,50 @@ sub new {
     my $pkg = shift;
     my $self = RNAc::new_SOLUTION(@_);
     bless $self, $pkg if defined($self);
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
+############# Class : RNA::duplexT ##############
+
+package RNA::duplexT;
+@ISA = qw( RNA );
+%OWNER = ();
+%ITERATORS = ();
+*swig_i_get = *RNAc::duplexT_i_get;
+*swig_i_set = *RNAc::duplexT_i_set;
+*swig_j_get = *RNAc::duplexT_j_get;
+*swig_j_set = *RNAc::duplexT_j_set;
+*swig_structure_get = *RNAc::duplexT_structure_get;
+*swig_structure_set = *RNAc::duplexT_structure_set;
+*swig_energy_get = *RNAc::duplexT_energy_get;
+*swig_energy_set = *RNAc::duplexT_energy_set;
+sub new {
+    my $pkg = shift;
+    my $self = RNAc::new_duplexT(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        RNAc::delete_duplexT($self);
+        delete $OWNER{$self};
+    }
 }
 
 sub DISOWN {

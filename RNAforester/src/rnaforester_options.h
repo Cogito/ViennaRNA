@@ -1,5 +1,5 @@
 #ifndef _RNAFORESTER_OPTIONS_H
-#define _RNAFORESTER_OPTIONS_H 
+#define _RNAFORESTER_OPTIONS_H
 
 //#include <string>
 #ifndef WIN32
@@ -24,7 +24,7 @@ class RNAforesterOptions
     string description;
     bool hidden;
   };
-  
+
  public:
   enum RNAforesterOption
   {
@@ -39,7 +39,7 @@ class RNAforesterOptions
     Multiple,
     ClusterThreshold,
     ClusterJoinCutoff,
-#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library    
+#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library
     PredictProfile,
     PredictMinPairProb,
 #endif
@@ -54,7 +54,7 @@ class RNAforesterOptions
     BDelScore,
     RIBOSUMScore,
     ConsensusMinPairProb,
-#ifdef HAVE_LIBG2  // This features require the g2 library    
+#ifdef HAVE_LIBG2  // This features require the g2 library
     MakeSquigglePlot,
     SquiggleHideBaseNumbers,
     SquiggleBaseNumberInterval,
@@ -71,9 +71,9 @@ class RNAforesterOptions
     ReadFromFile,
     NoScale,
     MakeDotForInputTrees,
-#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library        
+#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library
     GenerateXML,
-#endif    
+#endif
     SpaceTimeInfo,
     SecretHelp,
     NumberOfOptions,  // this must always be the last entry in the enum
@@ -84,11 +84,11 @@ class RNAforesterOptions
     private:
       string m_tag1;
       string m_tag2;
-      
+
     public:
       IncompatibleException(string tag1,string tag2)
 	: m_tag1(tag1), m_tag2(tag2) {};
-      
+
       void showError();
     };
 
@@ -97,11 +97,11 @@ class RNAforesterOptions
     private:
       string m_tag1;
       string m_tag2;
-      
+
     public:
       RequiresException(string tag1,string tag2)
 	: m_tag1(tag1), m_tag2(tag2) {};
-      
+
       void showError();
     };
 
@@ -115,7 +115,7 @@ class RNAforesterOptions
     {
       m_args->get(m_options[option].tag,var,def);
     }
-  
+
   void help();
   void secretHelp();
   string generateFilename(RNAforesterOption option, const string &suffix, const string &defName, Uint count=0) const;
@@ -126,8 +126,8 @@ private:
   const char **m_argv;
 
   inline void setOption(RNAforesterOption,string tag, string parameter, string filler, string description, bool hidden);
-  void RNAforesterOptions::exclude(RNAforesterOption opt1, RNAforesterOption opt2);
-  void RNAforesterOptions::requires(RNAforesterOption opt1, RNAforesterOption opt2);
+  void exclude(RNAforesterOption opt1, RNAforesterOption opt2);
+  void requires(RNAforesterOption opt1, RNAforesterOption opt2);
 
 };
 

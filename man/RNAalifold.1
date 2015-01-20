@@ -47,6 +47,10 @@ Avoid structures without lonely pairs (helices of length 1). In the mfe
 case structures with lonely pairs are strictly forbidden. For partition
 function folding this disallows pairs that can \fBonly\fP occur isolated.
 Setting this option provides a significant speedup.
+.TP
+.B \-circ
+Assume circular (instead of linear) RNA molecules. Currently works only
+for mfe folding.
 .PP 
 The \fB\-T\fP, \fB\-d\fP, \fB\-4\fP, \fB\-noGU\fP, \fB\-noCloseGU\fP,
 \fB\-e\fP, \fB\-P\fP, \fB\-nsp\fP, options \fUshould\fP work as in RNAfold
@@ -84,7 +88,7 @@ Ivo L. Hofacker, Martin Fekete, and Peter F. Stadler
 J.Mol.Biol. 319: 1059\-1066 (2002).
 .br 
 .SH "VERSION"
-This man page documents version 1.6 of the Vienna RNA Package.
+This man page documents version 1.6.1 of the Vienna RNA Package.
 .SH "AUTHORS"
 Ivo L Hofacker <ivo@tbi.univie.ac.at>
 .SH "BUGS"

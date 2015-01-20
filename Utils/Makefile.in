@@ -79,7 +79,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-pkgbin_PROGRAMS = b2ct$(EXEEXT) popt$(EXEEXT)
+pkgbin_PROGRAMS = b2ct$(EXEEXT) popt$(EXEEXT) ct2db$(EXEEXT)
 subdir = Utils
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/config/depcomp README
@@ -98,6 +98,10 @@ b2ct_SOURCES = b2ct.c
 b2ct_OBJECTS = b2ct.$(OBJEXT)
 b2ct_LDADD = $(LDADD)
 b2ct_DEPENDENCIES =
+am_ct2db_OBJECTS = ct2db_cmdl.$(OBJEXT) ct2db.$(OBJEXT)
+ct2db_OBJECTS = $(am_ct2db_OBJECTS)
+ct2db_LDADD = $(LDADD)
+ct2db_DEPENDENCIES =
 popt_SOURCES = popt.c
 popt_OBJECTS = popt.$(OBJEXT)
 popt_LDADD = $(LDADD)
@@ -158,8 +162,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = b2ct.c popt.c
-DIST_SOURCES = b2ct.c popt.c
+SOURCES = b2ct.c $(ct2db_SOURCES) popt.c
+DIST_SOURCES = b2ct.c $(ct2db_SOURCES) popt.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -230,6 +234,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISODATE = @ISODATE@
 LDFLAGS = @LDFLAGS@
+LIBGOMPFLAG = @LIBGOMPFLAG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBSVM_DIR = @LIBSVM_DIR@
@@ -321,9 +326,13 @@ top_srcdir = @top_srcdir@
 pkgbindir = $(pkgdatadir)/bin
 pscript = b2mt.pl ct2b.pl dpzoom.pl mountain.pl relplot.pl rotate_ss.pl cmount.pl colorrna.pl coloraln.pl refold.pl switch.pl
 pkgbin_SCRIPTS = $(pscript) Fold
-EXTRA_DIST = $(pscript) Fold
+AM_CFLAGS = $(OPENMP_CFLAGS)
+GENGETOPT_CMDL = ct2db_cmdl.c ct2db_cmdl.h
+GENGETOPT_FILES = ct2db.ggo
+EXTRA_DIST = $(pscript) Fold ${GENGETOPT_FILES} ${GENGETOPT_CMDL}
 LDADD = -L../lib -lRNA -lm
 AM_CPPFLAGS = -I$(srcdir)/../H
+ct2db_SOURCES = ct2db_cmdl.c ct2db.c
 all: all-am
 
 .SUFFIXES:
@@ -405,6 +414,10 @@ b2ct$(EXEEXT): $(b2ct_OBJECTS) $(b2ct_DEPENDENCIES) $(EXTRA_b2ct_DEPENDENCIES)
 	@rm -f b2ct$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(b2ct_OBJECTS) $(b2ct_LDADD) $(LIBS)
 
+ct2db$(EXEEXT): $(ct2db_OBJECTS) $(ct2db_DEPENDENCIES) $(EXTRA_ct2db_DEPENDENCIES) 
+	@rm -f ct2db$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(ct2db_OBJECTS) $(ct2db_LDADD) $(LIBS)
+
 popt$(EXEEXT): $(popt_OBJECTS) $(popt_DEPENDENCIES) $(EXTRA_popt_DEPENDENCIES) 
 	@rm -f popt$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(popt_OBJECTS) $(popt_LDADD) $(LIBS)
@@ -451,6 +464,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/b2ct.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ct2db.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ct2db_cmdl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/popt.Po@am__quote@
 
 .c.o:
@@ -676,6 +691,9 @@ $(pscript) : Makefile
 	if test -n "@PerlCmd@"; then \
 	  @PerlCmd@ -npi -e 's|^#!\S+|#!@PerlCmd@|' $@ ; \
 	fi
+
+ct2db_cmdl.h ct2db_cmdl.c:  ct2db.ggo
+	gengetopt -i ct2db.ggo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

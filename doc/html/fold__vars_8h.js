@@ -27,5 +27,6 @@ var fold__vars_8h =
     [ "pf_scale", "fold__vars_8h.html#ad3b22044065acc6dee0af68931b52cfd", null ],
     [ "do_backtrack", "fold__vars_8h.html#ad512b5dd4dbec60faccfe137bb474489", null ],
     [ "backtrack_type", "fold__vars_8h.html#a83bdb43472a259c71e69fa9f70f420c3", null ],
-    [ "gquad", "fold__vars_8h.html#a25f2bdcdf56e813d288845484a13d704", null ]
+    [ "gquad", "fold__vars_8h.html#a25f2bdcdf56e813d288845484a13d704", null ],
+    [ "canonicalBPonly", "fold__vars_8h.html#a22ae821b8918930e20ffa3fa84802b4b", null ]
 ];

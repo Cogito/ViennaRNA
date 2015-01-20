@@ -1001,6 +1001,13 @@
       <anchor>a25f2bdcdf56e813d288845484a13d704</anchor>
       <arglist></arglist>
     </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>canonicalBPonly</name>
+      <anchorfile>fold__vars_8h.html</anchorfile>
+      <anchor>a22ae821b8918930e20ffa3fa84802b4b</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="file">
     <name>gquad.h</name>
@@ -3828,6 +3835,13 @@
       <name>gquad</name>
       <anchorfile>structmodel__detailsT.html</anchorfile>
       <anchor>aa1ecdce7bc3f375bd8a9a7b738abc0ea</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>canonicalBPonly</name>
+      <anchorfile>structmodel__detailsT.html</anchorfile>
+      <anchor>a20e38e8e65afedb3be9c16ae03d956c0</anchor>
       <arglist></arglist>
     </member>
   </compound>

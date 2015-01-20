@@ -39,6 +39,7 @@ const char *RNAfold_args_info_detailed_help[] = {
   "  Below are command line options which alter the general behavior of this \n  program\n\n",
   "  -C, --constraint              Calculate structures subject to constraints.\n                                    (default=off)",
   "  The program reads first the sequence, then a string containing constraints on \n  the structure encoded with the symbols:\n\n  . (no constraint for this base)\n\n  | (the corresponding base has to be paired\n\n  x (the base is unpaired)\n\n  < (base i is paired with a base j>i)\n\n  > (base i is paired with a base j<i)\n\n  and matching brackets ( ) (base i pairs base j)\n\n  With the exception of \"|\", constraints will disallow all pairs conflicting \n  with the constraint. This is usually sufficient to enforce the constraint, \n  but occasionally a base may stay unpaired in spite of constraints. PF folding \n  ignores constraints of type \"|\".\n\n",
+  "      --canonicalBPonly         Remove non-canonical base pairs from the \n                                  structure constraint\n\n                                    (default=off)",
   "      --noconv                  Do not automatically substitude nucleotide \n                                  \"T\" with \"U\"\n\n                                    (default=off)",
   "      --noPS                    Do not produce postscript drawing of the mfe \n                                  structure.\n\n                                    (default=off)",
   "\nAlgorithms:",
@@ -89,29 +90,30 @@ init_full_help_array(void)
   RNAfold_args_info_full_help[9] = RNAfold_args_info_detailed_help[10];
   RNAfold_args_info_full_help[10] = RNAfold_args_info_detailed_help[11];
   RNAfold_args_info_full_help[11] = RNAfold_args_info_detailed_help[12];
-  RNAfold_args_info_full_help[12] = RNAfold_args_info_detailed_help[14];
-  RNAfold_args_info_full_help[13] = RNAfold_args_info_detailed_help[16];
-  RNAfold_args_info_full_help[14] = RNAfold_args_info_detailed_help[18];
+  RNAfold_args_info_full_help[12] = RNAfold_args_info_detailed_help[13];
+  RNAfold_args_info_full_help[13] = RNAfold_args_info_detailed_help[15];
+  RNAfold_args_info_full_help[14] = RNAfold_args_info_detailed_help[17];
   RNAfold_args_info_full_help[15] = RNAfold_args_info_detailed_help[19];
-  RNAfold_args_info_full_help[16] = RNAfold_args_info_detailed_help[21];
-  RNAfold_args_info_full_help[17] = RNAfold_args_info_detailed_help[23];
+  RNAfold_args_info_full_help[16] = RNAfold_args_info_detailed_help[20];
+  RNAfold_args_info_full_help[17] = RNAfold_args_info_detailed_help[22];
   RNAfold_args_info_full_help[18] = RNAfold_args_info_detailed_help[24];
   RNAfold_args_info_full_help[19] = RNAfold_args_info_detailed_help[25];
   RNAfold_args_info_full_help[20] = RNAfold_args_info_detailed_help[26];
   RNAfold_args_info_full_help[21] = RNAfold_args_info_detailed_help[27];
-  RNAfold_args_info_full_help[22] = RNAfold_args_info_detailed_help[29];
-  RNAfold_args_info_full_help[23] = RNAfold_args_info_detailed_help[31];
+  RNAfold_args_info_full_help[22] = RNAfold_args_info_detailed_help[28];
+  RNAfold_args_info_full_help[23] = RNAfold_args_info_detailed_help[30];
   RNAfold_args_info_full_help[24] = RNAfold_args_info_detailed_help[32];
   RNAfold_args_info_full_help[25] = RNAfold_args_info_detailed_help[33];
-  RNAfold_args_info_full_help[26] = RNAfold_args_info_detailed_help[35];
-  RNAfold_args_info_full_help[27] = RNAfold_args_info_detailed_help[37];
+  RNAfold_args_info_full_help[26] = RNAfold_args_info_detailed_help[34];
+  RNAfold_args_info_full_help[27] = RNAfold_args_info_detailed_help[36];
   RNAfold_args_info_full_help[28] = RNAfold_args_info_detailed_help[38];
-  RNAfold_args_info_full_help[29] = RNAfold_args_info_detailed_help[40];
-  RNAfold_args_info_full_help[30] = 0; 
+  RNAfold_args_info_full_help[29] = RNAfold_args_info_detailed_help[39];
+  RNAfold_args_info_full_help[30] = RNAfold_args_info_detailed_help[41];
+  RNAfold_args_info_full_help[31] = 0; 
   
 }
 
-const char *RNAfold_args_info_full_help[31];
+const char *RNAfold_args_info_full_help[32];
 
 static void
 init_help_array(void)
@@ -128,23 +130,24 @@ init_help_array(void)
   RNAfold_args_info_help[9] = RNAfold_args_info_detailed_help[10];
   RNAfold_args_info_help[10] = RNAfold_args_info_detailed_help[11];
   RNAfold_args_info_help[11] = RNAfold_args_info_detailed_help[12];
-  RNAfold_args_info_help[12] = RNAfold_args_info_detailed_help[14];
-  RNAfold_args_info_help[13] = RNAfold_args_info_detailed_help[18];
-  RNAfold_args_info_help[14] = RNAfold_args_info_detailed_help[23];
+  RNAfold_args_info_help[12] = RNAfold_args_info_detailed_help[13];
+  RNAfold_args_info_help[13] = RNAfold_args_info_detailed_help[15];
+  RNAfold_args_info_help[14] = RNAfold_args_info_detailed_help[19];
   RNAfold_args_info_help[15] = RNAfold_args_info_detailed_help[24];
   RNAfold_args_info_help[16] = RNAfold_args_info_detailed_help[25];
   RNAfold_args_info_help[17] = RNAfold_args_info_detailed_help[26];
   RNAfold_args_info_help[18] = RNAfold_args_info_detailed_help[27];
-  RNAfold_args_info_help[19] = RNAfold_args_info_detailed_help[29];
-  RNAfold_args_info_help[20] = RNAfold_args_info_detailed_help[31];
+  RNAfold_args_info_help[19] = RNAfold_args_info_detailed_help[28];
+  RNAfold_args_info_help[20] = RNAfold_args_info_detailed_help[30];
   RNAfold_args_info_help[21] = RNAfold_args_info_detailed_help[32];
   RNAfold_args_info_help[22] = RNAfold_args_info_detailed_help[33];
-  RNAfold_args_info_help[23] = RNAfold_args_info_detailed_help[40];
-  RNAfold_args_info_help[24] = 0; 
+  RNAfold_args_info_help[23] = RNAfold_args_info_detailed_help[34];
+  RNAfold_args_info_help[24] = RNAfold_args_info_detailed_help[41];
+  RNAfold_args_info_help[25] = 0; 
   
 }
 
-const char *RNAfold_args_info_help[25];
+const char *RNAfold_args_info_help[26];
 
 typedef enum {ARG_NO
   , ARG_FLAG
@@ -177,6 +180,7 @@ void clear_given (struct RNAfold_args_info *args_info)
   args_info->full_help_given = 0 ;
   args_info->version_given = 0 ;
   args_info->constraint_given = 0 ;
+  args_info->canonicalBPonly_given = 0 ;
   args_info->noconv_given = 0 ;
   args_info->noPS_given = 0 ;
   args_info->partfunc_given = 0 ;
@@ -203,6 +207,7 @@ void clear_args (struct RNAfold_args_info *args_info)
 {
   FIX_UNUSED (args_info);
   args_info->constraint_flag = 0;
+  args_info->canonicalBPonly_flag = 0;
   args_info->noconv_flag = 0;
   args_info->noPS_flag = 0;
   args_info->partfunc_arg = 1;
@@ -242,25 +247,26 @@ void init_args_info(struct RNAfold_args_info *args_info)
   args_info->full_help_help = RNAfold_args_info_detailed_help[2] ;
   args_info->version_help = RNAfold_args_info_detailed_help[3] ;
   args_info->constraint_help = RNAfold_args_info_detailed_help[6] ;
-  args_info->noconv_help = RNAfold_args_info_detailed_help[8] ;
-  args_info->noPS_help = RNAfold_args_info_detailed_help[9] ;
-  args_info->partfunc_help = RNAfold_args_info_detailed_help[12] ;
-  args_info->MEA_help = RNAfold_args_info_detailed_help[14] ;
-  args_info->pfScale_help = RNAfold_args_info_detailed_help[16] ;
-  args_info->circ_help = RNAfold_args_info_detailed_help[18] ;
-  args_info->ImFeelingLucky_help = RNAfold_args_info_detailed_help[19] ;
-  args_info->bppmThreshold_help = RNAfold_args_info_detailed_help[21] ;
-  args_info->gquad_help = RNAfold_args_info_detailed_help[23] ;
-  args_info->temp_help = RNAfold_args_info_detailed_help[25] ;
-  args_info->noTetra_help = RNAfold_args_info_detailed_help[26] ;
-  args_info->dangles_help = RNAfold_args_info_detailed_help[27] ;
-  args_info->noLP_help = RNAfold_args_info_detailed_help[29] ;
-  args_info->noGU_help = RNAfold_args_info_detailed_help[31] ;
-  args_info->noClosingGU_help = RNAfold_args_info_detailed_help[32] ;
-  args_info->paramFile_help = RNAfold_args_info_detailed_help[33] ;
-  args_info->nsp_help = RNAfold_args_info_detailed_help[35] ;
-  args_info->energyModel_help = RNAfold_args_info_detailed_help[37] ;
-  args_info->betaScale_help = RNAfold_args_info_detailed_help[38] ;
+  args_info->canonicalBPonly_help = RNAfold_args_info_detailed_help[8] ;
+  args_info->noconv_help = RNAfold_args_info_detailed_help[9] ;
+  args_info->noPS_help = RNAfold_args_info_detailed_help[10] ;
+  args_info->partfunc_help = RNAfold_args_info_detailed_help[13] ;
+  args_info->MEA_help = RNAfold_args_info_detailed_help[15] ;
+  args_info->pfScale_help = RNAfold_args_info_detailed_help[17] ;
+  args_info->circ_help = RNAfold_args_info_detailed_help[19] ;
+  args_info->ImFeelingLucky_help = RNAfold_args_info_detailed_help[20] ;
+  args_info->bppmThreshold_help = RNAfold_args_info_detailed_help[22] ;
+  args_info->gquad_help = RNAfold_args_info_detailed_help[24] ;
+  args_info->temp_help = RNAfold_args_info_detailed_help[26] ;
+  args_info->noTetra_help = RNAfold_args_info_detailed_help[27] ;
+  args_info->dangles_help = RNAfold_args_info_detailed_help[28] ;
+  args_info->noLP_help = RNAfold_args_info_detailed_help[30] ;
+  args_info->noGU_help = RNAfold_args_info_detailed_help[32] ;
+  args_info->noClosingGU_help = RNAfold_args_info_detailed_help[33] ;
+  args_info->paramFile_help = RNAfold_args_info_detailed_help[34] ;
+  args_info->nsp_help = RNAfold_args_info_detailed_help[36] ;
+  args_info->energyModel_help = RNAfold_args_info_detailed_help[38] ;
+  args_info->betaScale_help = RNAfold_args_info_detailed_help[39] ;
   
 }
 
@@ -411,6 +417,8 @@ RNAfold_cmdline_parser_dump(FILE *outfile, struct RNAfold_args_info *args_info)
     write_into_file(outfile, "version", 0, 0 );
   if (args_info->constraint_given)
     write_into_file(outfile, "constraint", 0, 0 );
+  if (args_info->canonicalBPonly_given)
+    write_into_file(outfile, "canonicalBPonly", 0, 0 );
   if (args_info->noconv_given)
     write_into_file(outfile, "noconv", 0, 0 );
   if (args_info->noPS_given)
@@ -567,6 +575,11 @@ RNAfold_cmdline_parser_required2 (struct RNAfold_args_info *args_info, const cha
   /* checks for required options */
   
   /* checks for dependences among options */
+  if (args_info->canonicalBPonly_given && ! args_info->constraint_given)
+    {
+      fprintf (stderr, "%s: '--canonicalBPonly' option depends on option 'constraint'%s\n", prog_name, (additional_error ? additional_error : ""));
+      error = 1;
+    }
   if (args_info->betaScale_given && ! args_info->partfunc_given)
     {
       fprintf (stderr, "%s: '--betaScale' option depends on option 'partfunc'%s\n", prog_name, (additional_error ? additional_error : ""));
@@ -1340,6 +1353,7 @@ RNAfold_cmdline_parser_internal (
         { "full-help",	0, NULL, 0 },
         { "version",	0, NULL, 'V' },
         { "constraint",	0, NULL, 'C' },
+        { "canonicalBPonly",	0, NULL, 0 },
         { "noconv",	0, NULL, 0 },
         { "noPS",	0, NULL, 0 },
         { "partfunc",	2, NULL, 'p' },
@@ -1527,10 +1541,24 @@ RNAfold_cmdline_parser_internal (
             exit (EXIT_SUCCESS);
           }
 
+          /* Remove non-canonical base pairs from the structure constraint
+          
+.  */
+          if (strcmp (long_options[option_index].name, "canonicalBPonly") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->canonicalBPonly_flag), 0, &(args_info->canonicalBPonly_given),
+                &(local_args_info.canonicalBPonly_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "canonicalBPonly", '-',
+                additional_error))
+              goto failure;
+          
+          }
           /* Do not automatically substitude nucleotide \"T\" with \"U\"
           
 .  */
-          if (strcmp (long_options[option_index].name, "noconv") == 0)
+          else if (strcmp (long_options[option_index].name, "noconv") == 0)
           {
           
           

@@ -39,6 +39,7 @@ const char *RNAsubopt_args_info_detailed_help[] = {
   "  Below are command line options which alter the general behavior of this \n  program\n",
   "  -C, --constraint              Calculate structures subject to constraints.\n                                    (default=off)",
   "  The program reads first the sequence, then a string containing constraints on \n  the structure encoded with the symbols:\n\n  . (no constraint for this base)\n\n  | (the corresponding base has to be paired\n\n  x (the base is unpaired)\n\n  < (base i is paired with a base j>i)\n\n  > (base i is paired with a base j<i)\n\n  and matching brackets ( ) (base i pairs base j)\n\n  With the exception of \"|\", constraints will disallow all pairs conflicting \n  with the constraint. This is usually sufficient to enforce the constraint, \n  but occasionally a base may stay unpaired in spite of constraints. PF folding \n  ignores constraints of type \"|\".\n\n",
+  "      --canonicalBPonly         Remove non-canonical base pairs from the \n                                  structure constraint\n\n                                    (default=off)",
   "      --noconv                  Do not automatically substitude nucleotide \n                                  \"T\" with \"U\"\n\n                                    (default=off)",
   "\nAlgorithms:",
   "  Select the algorithms which should be applied to the given RNA sequence.\n",
@@ -90,30 +91,31 @@ init_full_help_array(void)
   RNAsubopt_args_info_full_help[9] = RNAsubopt_args_info_detailed_help[10];
   RNAsubopt_args_info_full_help[10] = RNAsubopt_args_info_detailed_help[11];
   RNAsubopt_args_info_full_help[11] = RNAsubopt_args_info_detailed_help[12];
-  RNAsubopt_args_info_full_help[12] = RNAsubopt_args_info_detailed_help[14];
-  RNAsubopt_args_info_full_help[13] = RNAsubopt_args_info_detailed_help[16];
+  RNAsubopt_args_info_full_help[12] = RNAsubopt_args_info_detailed_help[13];
+  RNAsubopt_args_info_full_help[13] = RNAsubopt_args_info_detailed_help[15];
   RNAsubopt_args_info_full_help[14] = RNAsubopt_args_info_detailed_help[17];
-  RNAsubopt_args_info_full_help[15] = RNAsubopt_args_info_detailed_help[19];
+  RNAsubopt_args_info_full_help[15] = RNAsubopt_args_info_detailed_help[18];
   RNAsubopt_args_info_full_help[16] = RNAsubopt_args_info_detailed_help[20];
-  RNAsubopt_args_info_full_help[17] = RNAsubopt_args_info_detailed_help[22];
+  RNAsubopt_args_info_full_help[17] = RNAsubopt_args_info_detailed_help[21];
   RNAsubopt_args_info_full_help[18] = RNAsubopt_args_info_detailed_help[23];
   RNAsubopt_args_info_full_help[19] = RNAsubopt_args_info_detailed_help[24];
   RNAsubopt_args_info_full_help[20] = RNAsubopt_args_info_detailed_help[25];
   RNAsubopt_args_info_full_help[21] = RNAsubopt_args_info_detailed_help[26];
   RNAsubopt_args_info_full_help[22] = RNAsubopt_args_info_detailed_help[27];
-  RNAsubopt_args_info_full_help[23] = RNAsubopt_args_info_detailed_help[29];
-  RNAsubopt_args_info_full_help[24] = RNAsubopt_args_info_detailed_help[31];
+  RNAsubopt_args_info_full_help[23] = RNAsubopt_args_info_detailed_help[28];
+  RNAsubopt_args_info_full_help[24] = RNAsubopt_args_info_detailed_help[30];
   RNAsubopt_args_info_full_help[25] = RNAsubopt_args_info_detailed_help[32];
   RNAsubopt_args_info_full_help[26] = RNAsubopt_args_info_detailed_help[33];
-  RNAsubopt_args_info_full_help[27] = RNAsubopt_args_info_detailed_help[35];
-  RNAsubopt_args_info_full_help[28] = RNAsubopt_args_info_detailed_help[37];
-  RNAsubopt_args_info_full_help[29] = RNAsubopt_args_info_detailed_help[39];
-  RNAsubopt_args_info_full_help[30] = RNAsubopt_args_info_detailed_help[41];
-  RNAsubopt_args_info_full_help[31] = 0; 
+  RNAsubopt_args_info_full_help[27] = RNAsubopt_args_info_detailed_help[34];
+  RNAsubopt_args_info_full_help[28] = RNAsubopt_args_info_detailed_help[36];
+  RNAsubopt_args_info_full_help[29] = RNAsubopt_args_info_detailed_help[38];
+  RNAsubopt_args_info_full_help[30] = RNAsubopt_args_info_detailed_help[40];
+  RNAsubopt_args_info_full_help[31] = RNAsubopt_args_info_detailed_help[42];
+  RNAsubopt_args_info_full_help[32] = 0; 
   
 }
 
-const char *RNAsubopt_args_info_full_help[32];
+const char *RNAsubopt_args_info_full_help[33];
 
 static void
 init_help_array(void)
@@ -130,27 +132,28 @@ init_help_array(void)
   RNAsubopt_args_info_help[9] = RNAsubopt_args_info_detailed_help[10];
   RNAsubopt_args_info_help[10] = RNAsubopt_args_info_detailed_help[11];
   RNAsubopt_args_info_help[11] = RNAsubopt_args_info_detailed_help[12];
-  RNAsubopt_args_info_help[12] = RNAsubopt_args_info_detailed_help[14];
-  RNAsubopt_args_info_help[13] = RNAsubopt_args_info_detailed_help[16];
-  RNAsubopt_args_info_help[14] = RNAsubopt_args_info_detailed_help[19];
+  RNAsubopt_args_info_help[12] = RNAsubopt_args_info_detailed_help[13];
+  RNAsubopt_args_info_help[13] = RNAsubopt_args_info_detailed_help[15];
+  RNAsubopt_args_info_help[14] = RNAsubopt_args_info_detailed_help[17];
   RNAsubopt_args_info_help[15] = RNAsubopt_args_info_detailed_help[20];
-  RNAsubopt_args_info_help[16] = RNAsubopt_args_info_detailed_help[22];
+  RNAsubopt_args_info_help[16] = RNAsubopt_args_info_detailed_help[21];
   RNAsubopt_args_info_help[17] = RNAsubopt_args_info_detailed_help[23];
   RNAsubopt_args_info_help[18] = RNAsubopt_args_info_detailed_help[24];
   RNAsubopt_args_info_help[19] = RNAsubopt_args_info_detailed_help[25];
   RNAsubopt_args_info_help[20] = RNAsubopt_args_info_detailed_help[26];
   RNAsubopt_args_info_help[21] = RNAsubopt_args_info_detailed_help[27];
-  RNAsubopt_args_info_help[22] = RNAsubopt_args_info_detailed_help[29];
-  RNAsubopt_args_info_help[23] = RNAsubopt_args_info_detailed_help[31];
+  RNAsubopt_args_info_help[22] = RNAsubopt_args_info_detailed_help[28];
+  RNAsubopt_args_info_help[23] = RNAsubopt_args_info_detailed_help[30];
   RNAsubopt_args_info_help[24] = RNAsubopt_args_info_detailed_help[32];
   RNAsubopt_args_info_help[25] = RNAsubopt_args_info_detailed_help[33];
-  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[37];
-  RNAsubopt_args_info_help[27] = RNAsubopt_args_info_detailed_help[41];
-  RNAsubopt_args_info_help[28] = 0; 
+  RNAsubopt_args_info_help[26] = RNAsubopt_args_info_detailed_help[34];
+  RNAsubopt_args_info_help[27] = RNAsubopt_args_info_detailed_help[38];
+  RNAsubopt_args_info_help[28] = RNAsubopt_args_info_detailed_help[42];
+  RNAsubopt_args_info_help[29] = 0; 
   
 }
 
-const char *RNAsubopt_args_info_help[29];
+const char *RNAsubopt_args_info_help[30];
 
 typedef enum {ARG_NO
   , ARG_FLAG
@@ -183,6 +186,7 @@ void clear_given (struct RNAsubopt_args_info *args_info)
   args_info->full_help_given = 0 ;
   args_info->version_given = 0 ;
   args_info->constraint_given = 0 ;
+  args_info->canonicalBPonly_given = 0 ;
   args_info->noconv_given = 0 ;
   args_info->deltaEnergy_given = 0 ;
   args_info->deltaEnergyPost_given = 0 ;
@@ -210,6 +214,7 @@ void clear_args (struct RNAsubopt_args_info *args_info)
 {
   FIX_UNUSED (args_info);
   args_info->constraint_flag = 0;
+  args_info->canonicalBPonly_flag = 0;
   args_info->noconv_flag = 0;
   args_info->deltaEnergy_orig = NULL;
   args_info->deltaEnergyPost_orig = NULL;
@@ -247,26 +252,27 @@ void init_args_info(struct RNAsubopt_args_info *args_info)
   args_info->full_help_help = RNAsubopt_args_info_detailed_help[2] ;
   args_info->version_help = RNAsubopt_args_info_detailed_help[3] ;
   args_info->constraint_help = RNAsubopt_args_info_detailed_help[6] ;
-  args_info->noconv_help = RNAsubopt_args_info_detailed_help[8] ;
-  args_info->deltaEnergy_help = RNAsubopt_args_info_detailed_help[11] ;
-  args_info->deltaEnergyPost_help = RNAsubopt_args_info_detailed_help[12] ;
-  args_info->sorted_help = RNAsubopt_args_info_detailed_help[14] ;
-  args_info->stochBT_help = RNAsubopt_args_info_detailed_help[16] ;
-  args_info->pfScale_help = RNAsubopt_args_info_detailed_help[17] ;
-  args_info->circ_help = RNAsubopt_args_info_detailed_help[19] ;
-  args_info->dos_help = RNAsubopt_args_info_detailed_help[20] ;
-  args_info->zuker_help = RNAsubopt_args_info_detailed_help[22] ;
-  args_info->gquad_help = RNAsubopt_args_info_detailed_help[23] ;
-  args_info->temp_help = RNAsubopt_args_info_detailed_help[25] ;
-  args_info->noTetra_help = RNAsubopt_args_info_detailed_help[26] ;
-  args_info->dangles_help = RNAsubopt_args_info_detailed_help[27] ;
-  args_info->noLP_help = RNAsubopt_args_info_detailed_help[29] ;
-  args_info->noGU_help = RNAsubopt_args_info_detailed_help[31] ;
-  args_info->noClosingGU_help = RNAsubopt_args_info_detailed_help[32] ;
-  args_info->logML_help = RNAsubopt_args_info_detailed_help[33] ;
-  args_info->betaScale_help = RNAsubopt_args_info_detailed_help[35] ;
-  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[37] ;
-  args_info->nsp_help = RNAsubopt_args_info_detailed_help[39] ;
+  args_info->canonicalBPonly_help = RNAsubopt_args_info_detailed_help[8] ;
+  args_info->noconv_help = RNAsubopt_args_info_detailed_help[9] ;
+  args_info->deltaEnergy_help = RNAsubopt_args_info_detailed_help[12] ;
+  args_info->deltaEnergyPost_help = RNAsubopt_args_info_detailed_help[13] ;
+  args_info->sorted_help = RNAsubopt_args_info_detailed_help[15] ;
+  args_info->stochBT_help = RNAsubopt_args_info_detailed_help[17] ;
+  args_info->pfScale_help = RNAsubopt_args_info_detailed_help[18] ;
+  args_info->circ_help = RNAsubopt_args_info_detailed_help[20] ;
+  args_info->dos_help = RNAsubopt_args_info_detailed_help[21] ;
+  args_info->zuker_help = RNAsubopt_args_info_detailed_help[23] ;
+  args_info->gquad_help = RNAsubopt_args_info_detailed_help[24] ;
+  args_info->temp_help = RNAsubopt_args_info_detailed_help[26] ;
+  args_info->noTetra_help = RNAsubopt_args_info_detailed_help[27] ;
+  args_info->dangles_help = RNAsubopt_args_info_detailed_help[28] ;
+  args_info->noLP_help = RNAsubopt_args_info_detailed_help[30] ;
+  args_info->noGU_help = RNAsubopt_args_info_detailed_help[32] ;
+  args_info->noClosingGU_help = RNAsubopt_args_info_detailed_help[33] ;
+  args_info->logML_help = RNAsubopt_args_info_detailed_help[34] ;
+  args_info->betaScale_help = RNAsubopt_args_info_detailed_help[36] ;
+  args_info->paramFile_help = RNAsubopt_args_info_detailed_help[38] ;
+  args_info->nsp_help = RNAsubopt_args_info_detailed_help[40] ;
   
 }
 
@@ -416,6 +422,8 @@ RNAsubopt_cmdline_parser_dump(FILE *outfile, struct RNAsubopt_args_info *args_in
     write_into_file(outfile, "version", 0, 0 );
   if (args_info->constraint_given)
     write_into_file(outfile, "constraint", 0, 0 );
+  if (args_info->canonicalBPonly_given)
+    write_into_file(outfile, "canonicalBPonly", 0, 0 );
   if (args_info->noconv_given)
     write_into_file(outfile, "noconv", 0, 0 );
   if (args_info->deltaEnergy_given)
@@ -574,6 +582,11 @@ RNAsubopt_cmdline_parser_required2 (struct RNAsubopt_args_info *args_info, const
   /* checks for required options */
   
   /* checks for dependences among options */
+  if (args_info->canonicalBPonly_given && ! args_info->constraint_given)
+    {
+      fprintf (stderr, "%s: '--canonicalBPonly' option depends on option 'constraint'%s\n", prog_name, (additional_error ? additional_error : ""));
+      error = 1;
+    }
   if (args_info->betaScale_given && ! args_info->stochBT_given)
     {
       fprintf (stderr, "%s: '--betaScale' option depends on option 'stochBT'%s\n", prog_name, (additional_error ? additional_error : ""));
@@ -1347,6 +1360,7 @@ RNAsubopt_cmdline_parser_internal (
         { "full-help",	0, NULL, 0 },
         { "version",	0, NULL, 'V' },
         { "constraint",	0, NULL, 'C' },
+        { "canonicalBPonly",	0, NULL, 0 },
         { "noconv",	0, NULL, 0 },
         { "deltaEnergy",	1, NULL, 'e' },
         { "deltaEnergyPost",	1, NULL, 0 },
@@ -1572,10 +1586,24 @@ RNAsubopt_cmdline_parser_internal (
             exit (EXIT_SUCCESS);
           }
 
+          /* Remove non-canonical base pairs from the structure constraint
+          
+.  */
+          if (strcmp (long_options[option_index].name, "canonicalBPonly") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->canonicalBPonly_flag), 0, &(args_info->canonicalBPonly_given),
+                &(local_args_info.canonicalBPonly_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "canonicalBPonly", '-',
+                additional_error))
+              goto failure;
+          
+          }
           /* Do not automatically substitude nucleotide \"T\" with \"U\"
           
 .  */
-          if (strcmp (long_options[option_index].name, "noconv") == 0)
+          else if (strcmp (long_options[option_index].name, "noconv") == 0)
           {
           
           

@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"structINTERVAL.html#a00b0d965c88837ac2154aa03cb9d88d1":[7,0,12,1],
 "structINTERVAL.html#a09319eb79af01cd6d567d828ab2dcb4a":[7,0,12,0],
 "structINTERVAL.html#aca2c87b8a7d08294fe2f7a0e6233fc82":[7,0,12,2],
 "structLIST.html":[7,0,13],
@@ -249,5 +250,4 @@ var NAVTREEINDEX3 =
 "structduplexT.html#ac8138ee4d83ab1b2045bcb68fafce199":[7,0,7,7],
 "structduplexT.html#add23a5303db25aabdb27753c02e99cf3":[7,0,7,4],
 "structduplexT.html#aef9a632d9694c7ea31483a7609a42967":[7,0,7,5],
-"structduplexT.html#afd18437773841e3c12a8ed0ab795c58f":[7,0,7,2],
 };

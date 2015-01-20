@@ -45,6 +45,12 @@ struct RNAfold_args_info
  (default=off).  */
   const char *constraint_help; /**< @brief Calculate structures subject to constraints.
  help description.  */
+  int canonicalBPonly_flag;	/**< @brief Remove non-canonical base pairs from the structure constraint
+  
+ (default=off).  */
+  const char *canonicalBPonly_help; /**< @brief Remove non-canonical base pairs from the structure constraint
+  
+ help description.  */
   int noconv_flag;	/**< @brief Do not automatically substitude nucleotide \"T\" with \"U\"
   
  (default=off).  */
@@ -163,6 +169,7 @@ struct RNAfold_args_info
   unsigned int full_help_given ;	/**< @brief Whether full-help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
   unsigned int constraint_given ;	/**< @brief Whether constraint was given.  */
+  unsigned int canonicalBPonly_given ;	/**< @brief Whether canonicalBPonly was given.  */
   unsigned int noconv_given ;	/**< @brief Whether noconv was given.  */
   unsigned int noPS_given ;	/**< @brief Whether noPS was given.  */
   unsigned int partfunc_given ;	/**< @brief Whether partfunc was given.  */

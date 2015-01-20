@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"group__mfe__cofold.html#gabc8517f22cfe70595ee81fc837910d52":[6,0,3,0,1],
 "group__mfe__cofold.html#gafe430060533f14b11fc611f60b3f1f6f":[6,0,0,0,2],
 "group__mfe__cofold.html#gafe430060533f14b11fc611f60b3f1f6f":[6,0,3,0,2],
 "group__mfe__fold.html":[6,0,0],
@@ -249,5 +250,4 @@ var NAVTREEINDEX2 =
 "structConcEnt.html#add4c33b94b34e847fbf5838b04cce346":[7,0,3,1],
 "structConcEnt.html#afdfab6d71e077828c528f4e8857adbb2":[7,0,3,3],
 "structINTERVAL.html":[7,0,12],
-"structINTERVAL.html#a00b0d965c88837ac2154aa03cb9d88d1":[7,0,12,1],
 };

@@ -139,7 +139,7 @@ DVIS = RNAlib.dvi
 PDFS = RNAlib.pdf
 PSS = RNAlib.ps
 HTMLS = RNAlib.html
-TEXINFOS = RNAlib.texinfo
+TEXINFOS = RNAlib.texi
 TEXI2DVI = texi2dvi
 TEXI2PDF = $(TEXI2DVI) --pdf --batch
 MAKEINFOHTML = $(MAKEINFO) --html
@@ -228,6 +228,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISODATE = @ISODATE@
 LDFLAGS = @LDFLAGS@
+LIBGOMPFLAG = @LIBGOMPFLAG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBSVM_DIR = @LIBSVM_DIR@
@@ -316,7 +317,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-info_TEXINFOS = RNAlib.texinfo
+info_TEXINFOS = RNAlib.texi
 dist_man_MANS = RNA2Dfold.1 RNAaliduplex.1 RNAalifold.1 RNAcofold.1 RNAduplex.1 RNAeval.1\
                 RNAfold.1 RNAheat.1 RNAinverse.1 RNALalifold.1 RNALfold.1\
                 RNApaln.1 RNAparconv.1 RNAplfold.1 RNAplot.1 RNAsubopt.1 RNAup.1\
@@ -325,7 +326,7 @@ dist_man_MANS = RNA2Dfold.1 RNAaliduplex.1 RNAalifold.1 RNAcofold.1 RNAduplex.1 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .dvi .html .info .pdf .ps .texinfo
+.SUFFIXES: .dvi .html .info .pdf .ps .texi
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -359,7 +360,7 @@ $(am__aclocal_m4_deps):
 cmdlopt.sh: $(top_builddir)/config.status $(srcdir)/cmdlopt.sh.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
-.texinfo.info:
+.texi.info:
 	$(AM_V_MAKEINFO)restore=: && backupdir="$(am__leading_dot)am$$$$" && \
 	am__cwd=`pwd` && $(am__cd) $(srcdir) && \
 	rm -rf $$backupdir && mkdir $$backupdir && \
@@ -381,19 +382,19 @@ cmdlopt.sh: $(top_builddir)/config.status $(srcdir)/cmdlopt.sh.in
 	fi; \
 	rm -rf $$backupdir; exit $$rc
 
-.texinfo.dvi:
+.texi.dvi:
 	$(AM_V_TEXI2DVI)TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
 	$(TEXI2DVI) $(AM_V_texinfo) --build-dir=$(@:.dvi=.t2d) -o $@ $(AM_V_texidevnull) \
 	$<
 
-.texinfo.pdf:
+.texi.pdf:
 	$(AM_V_TEXI2PDF)TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	MAKEINFO='$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir)' \
 	$(TEXI2PDF) $(AM_V_texinfo) --build-dir=$(@:.pdf=.t2p) -o $@ $(AM_V_texidevnull) \
 	$<
 
-.texinfo.html:
+.texi.html:
 	$(AM_V_MAKEINFO)rm -rf $(@:.html=.htp)
 	$(AM_V_at)if $(MAKEINFOHTML) $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
 	 -o $(@:.html=.htp) $<; \
@@ -406,10 +407,10 @@ cmdlopt.sh: $(top_builddir)/config.status $(srcdir)/cmdlopt.sh.in
 	    rm -rf $(@:.html=); else rm -Rf $(@:.html=.htp) $@; fi; \
 	  exit 1; \
 	fi
-$(srcdir)/RNAlib.info: RNAlib.texinfo 
-RNAlib.dvi: RNAlib.texinfo 
-RNAlib.pdf: RNAlib.texinfo 
-RNAlib.html: RNAlib.texinfo 
+$(srcdir)/RNAlib.info: RNAlib.texi 
+RNAlib.dvi: RNAlib.texi 
+RNAlib.pdf: RNAlib.texi 
+RNAlib.html: RNAlib.texi 
 .dvi.ps:
 	$(AM_V_DVIPS)TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
 	$(DVIPS) $(AM_V_texinfo) -o $@ $<

@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"structduplexT.html#afd18437773841e3c12a8ed0ab795c58f":[7,0,7,2],
 "structfolden.html":[7,0,9],
 "structfolden.html#a08bb583c59d84a0b8af89c9000c635ca":[7,0,9,0],
 "structfolden.html#aea469d5b92e82a659e9d70908bbc7787":[7,0,9,2],
@@ -21,6 +22,7 @@ var NAVTREEINDEX4 =
 "structintermediate__t.html#af84d640df33aea99e959b2e4f61a7367":[7,0,11,2],
 "structmodel__detailsT.html":[7,0,15],
 "structmodel__detailsT.html#a0f982e6904d012e4fe41e99daa797f5d":[7,0,15,3],
+"structmodel__detailsT.html#a20e38e8e65afedb3be9c16ae03d956c0":[7,0,15,8],
 "structmodel__detailsT.html#a415556dc150e02d108be81ecc5c48e85":[7,0,15,5],
 "structmodel__detailsT.html#a55f083dad18c216505805a8062e63074":[7,0,15,6],
 "structmodel__detailsT.html#a6fb076173d2cbc4259606ce23eedf17d":[7,0,15,2],
@@ -248,6 +250,4 @@ var NAVTREEINDEX4 =
 "utils_8h.html#aaa328491c84996e445d027fde9800f2e":[8,0,0,33,36],
 "utils_8h.html#ab213334ce977b6d21611cdea6b80c3bf":[8,0,0,33,38],
 "utils_8h.html#ab4db885222b3b69608310d7c7e63e286":[8,0,0,33,9],
-"utils_8h.html#abe51806d14cff0789a8c1df7dbc45b71":[8,0,0,33,43],
-"utils_8h.html#abec89c09874528c6cb73140a4c3d86d7":[8,0,0,33,22],
 };

@@ -1,5 +1,4 @@
-This is RNAlib.info, produced by makeinfo version 5.1 from
-RNAlib.texinfo.
+This is RNAlib.info, produced by makeinfo version 5.1 from RNAlib.texi.
 
 INFO-DIR-SECTION Vienna RNA library
 START-INFO-DIR-ENTRY
@@ -1570,29 +1569,29 @@ Variable Index
 
 
 Tag Table:
-Node: Top246
-Node: Introduction759
-Node: Folding Routines1773
-Node: mfe Fold2584
-Node: PF Fold4589
-Node: Inverse Fold8627
-Node: Suboptimal folding10268
-Node: Cofolding10950
-Node: Local Fold22337
-Node: Alignment Fold25049
-Node: Fold Vars27382
-Node: Param Files32014
-Node: Parsing and Comparing39348
-Node: notations39758
-Node: Parsing43286
-Node: Distances45929
-Node: Tree Distances49800
-Node: String Distances50579
-Node: Profile Distances51109
-Node: Utilities52191
-Node: Example56837
-Node: References60346
-Node: Function Index64443
-Node: Variable Index69994
+Node: Top243
+Node: Introduction756
+Node: Folding Routines1770
+Node: mfe Fold2581
+Node: PF Fold4586
+Node: Inverse Fold8624
+Node: Suboptimal folding10265
+Node: Cofolding10947
+Node: Local Fold22334
+Node: Alignment Fold25046
+Node: Fold Vars27379
+Node: Param Files32011
+Node: Parsing and Comparing39345
+Node: notations39755
+Node: Parsing43283
+Node: Distances45926
+Node: Tree Distances49797
+Node: String Distances50576
+Node: Profile Distances51106
+Node: Utilities52188
+Node: Example56834
+Node: References60343
+Node: Function Index64440
+Node: Variable Index69991
 
 End Tag Table

@@ -29,7 +29,7 @@
 #include "fold_vars.h"
 #include "pair_mat.h"
 /*@unused@*/
-static char rcsid[] = "$Id: inverse.c,v 1.11 2002/11/07 11:48:07 ivo Exp $";
+static char rcsid[] = "$Id: inverse.c,v 1.12 2007/12/19 10:29:01 ivo Exp $";
 #define PUBLIC
 #define PRIVATE static
 PRIVATE double  adaptive_walk(char *start, const char *target);

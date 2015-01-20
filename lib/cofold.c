@@ -23,7 +23,7 @@
 #include "params.h"
 
 /*@unused@*/
-static char rcsid[] UNUSED = "$Id: cofold.c,v 1.10 2006/10/03 13:43:17 ivo Exp $";
+static char rcsid[] UNUSED = "$Id: cofold.c,v 1.11 2007/12/19 10:28:00 ivo Exp $";
 
 #define PAREN
 

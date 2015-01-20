@@ -1,5 +1,4 @@
-This is RNAlib.info, produced by makeinfo version 4.8 from
-RNAlib.texinfo.
+This is RNAlib.info, produced by makeinfo version 4.11 from RNAlib.texinfo.
 
 
 File: RNAlib.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
@@ -1516,29 +1515,29 @@ Variable Index
 
 
 Tag Table:
-Node: Top76
-Node: Introduction601
-Node: Folding Routines1611
-Node: mfe Fold2422
-Node: PF Fold4292
-Node: Inverse Fold7638
-Node: Suboptimal folding9275
-Node: Cofolding9956
-Node: Local Fold21314
-Node: Alignment Fold23292
-Node: Fold Vars25619
-Node: Param Files30238
-Node: Parsing and Comparing37555
-Node: notations37965
-Node: Parsing41488
-Node: Distances44129
-Node: Tree Distances47992
-Node: String Distances48770
-Node: Profile Distances49300
-Node: Utilities50379
-Node: Example55015
-Node: References58514
-Node: Function Index61559
-Node: Variable Index66964
+Node: Top0
+Node: Introduction602
+Node: Folding Routines1612
+Node: mfe Fold2423
+Node: PF Fold4293
+Node: Inverse Fold7639
+Node: Suboptimal folding9276
+Node: Cofolding9957
+Node: Local Fold21315
+Node: Alignment Fold23293
+Node: Fold Vars25620
+Node: Param Files30239
+Node: Parsing and Comparing37556
+Node: notations37966
+Node: Parsing41489
+Node: Distances44130
+Node: Tree Distances47993
+Node: String Distances48771
+Node: Profile Distances49301
+Node: Utilities50380
+Node: Example55016
+Node: References58515
+Node: Function Index61560
+Node: Variable Index66965
 
 End Tag Table

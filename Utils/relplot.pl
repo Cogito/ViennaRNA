@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # -*-CPerl-*-
-# Last changed Time-stamp: <2005-03-09 19:45:55 ivo>
-# $Id: relplot.pl,v 1.7 2005/11/07 12:40:46 ivo Exp $
+# Last changed Time-stamp: <2008-01-03 16:47:15 ivo>
+# $Id: relplot.pl,v 1.9 2008/01/03 15:47:47 ivo Exp $
 # colorize a secondary structure plot with reliability annotation
 # from positional entropy
 use strict;
@@ -64,11 +64,11 @@ if (!$macro_seen) {
       10 tics div 1 scale
       0 1 tics
       {
-          dup 0 moveto 0.5 add
-          tics div range mul
-          invert {range exch sub} if
-          1 1 sethsbcolor
-          1 0 rlineto 0 1 rlineto -1 0 rlineto closepath fill
+	  dup 0 moveto 0.5 add
+	  tics div range mul
+	  invert {range exch sub} if
+	  1 1 sethsbcolor
+	  1 0 rlineto 0 1 rlineto -1 0 rlineto closepath fill
       } for
     grestore
     0 setgray
@@ -112,8 +112,9 @@ sub posent {
   my @pp;
   my @sp;
   while (<>) {
-    my ($i, $j, $p, $id) = split;
-    next unless defined $id && $id eq 'ubox';
+    next unless /(\d+)\s+(\d+)\s+([0-9.Ee-]+)\s+ubox/;
+    my ($i, $j, $p) = ($1, $2, $3);
+
     $p *= $p;
     if ($opt_p) {
       $sp[$i] = $sp[$j] = $p if exists  $mfe{$i,$j};
@@ -181,4 +182,3 @@ Ivo L. Hofacker <ivo@tbi.univie.ac.at>
 =cut
 
 #  End of file
-

@@ -26,6 +26,8 @@
 extern char *pbacktrack(char *seq);
 extern void  read_parameter_file(const char fname[]);
 extern void  write_parameter_file(const char fname[]);
+extern int simple_xy_coordinates(short *pair_table, float *X, float *Y);
+extern int naview_xy_coordinates(short *pair_table, float *X, float *Y);
 %}
 //
 %include carrays.i
@@ -189,6 +191,60 @@ char *my_alifold(char **strings, char *constraints = NULL, float *OUTPUT);
 %newobject consensus_mis;
 char *consensus(const char **AS);
 char *consens_mis(const char **AS);
+
+
+/*#######################################*/
+/* Get coordinates for xy plot           */
+/*#######################################*/
+
+%{
+  typedef struct {
+    float X; /* X coords */
+    float Y; /* Y coords */
+  } COORDINATE;
+
+  COORDINATE *get_xy_coordinates(const char *structure){
+    int i;
+    short *table = make_pair_table(structure);
+    short length = (short) strlen(structure);
+
+    COORDINATE *coords = (COORDINATE *) space((length+1)*sizeof(COORDINATE));
+    float *X = (float *) space((length+1)*sizeof(float));
+    float *Y = (float *) space((length+1)*sizeof(float));
+
+    if (rna_plot_type == 0)
+      simple_xy_coordinates(table, X, Y);
+    else
+      naview_xy_coordinates(table, X, Y);
+
+    for(i=0;i<=length;i++){
+      coords[i].X = X[i];
+      coords[i].Y = Y[i]; 
+    }
+    free(table);
+    free(X);
+    free(Y);
+    return(coords);
+  }
+%}
+
+typedef struct {
+  float X; /* X coords */
+  float Y; /* Y coords */
+} COORDINATE;
+
+COORDINATE *get_xy_coordinates(const char *structure);
+
+%extend COORDINATE {
+  COORDINATE *get(int i) {
+    return self+i;
+  }
+
+}
+
+/*#################################*/
+/* END get coordinates for xy plot */
+/*#################################*/
 
 
 //%include  "../H/subopt.h"
@@ -462,5 +518,24 @@ extern duplexT aliduplexfold(const char **s1, const char **s2);
 // problem: wrapper will not free the the structure hidden in duplexT
 // even more problem for duplex_subopt()
 
+%{
+short *encode_seq(char *sequence) {
+  unsigned int i,l;
+  short *S;
+  l = strlen(sequence);
+  S = (short *) space(sizeof(short)*(l+2));
+  S[0] = (short) l;
+
+  /* make numerical encoding of sequence */
+  for (i=1; i<=l; i++)
+    S[i]= (short) encode_char(toupper(sequence[i-1]));
+
+  /* for circular folding add first base at position n+1 */
+  S[l+1] = S[1];
+
+  return S;
+}
+%}
+short *encode_seq(char *sequence);
 
 %include  "../H/PS_dot.h"

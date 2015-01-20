@@ -6,11 +6,11 @@
 #
 
 # pick an ANSI C compiler (the default Sun CC is not ANSI)
-CC=gcc  # Gnu C Compiler
-#CC=cc  # SGI Irix
+#CC=gcc  # Gnu C Compiler
+CC=cc   # SGI Irix
 #CC=vcc # some DEC Ultrix
 
-CFLAGS= -g -O
+CFLAGS=
 #CFLAGS= -DSMALLCHECKSUM  # if you prefer to use a GCG-standard 13 bit checksum
 #    instead of a full 32 bit checksum. This may enhance compatibility w/ GCG software
 

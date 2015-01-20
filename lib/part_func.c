@@ -1,30 +1,37 @@
-/* Last changed Time-stamp: <2000-10-10 18:05:48 ivo> */
+/* Last changed Time-stamp: <2001-12-13 14:58:29 ivo> */
 /*                
 		  partiton function for RNA secondary structures
 
 		  Ivo L Hofacker
 		  Vienna RNA package
 */
+/*
+  $Log: part_func.c,v $
+  Revision 1.15  2002/03/19 16:51:12  ivo
+  more on stochastic backtracking (still incomplete)
 
+  Revision 1.13  2001/11/16 17:30:04  ivo
+  add stochastic backtracking (still incomplete)
+*/
+
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <float.h>    /* #defines FLT_MIN */
+#include <float.h>    /* #defines FLT_MAX ... */
 #include "utils.h"
 #include "energy_par.h"
 #include "fold_vars.h"
 #include "pair_mat.h"
+
 /*@unused@*/
-static char rcsid[] = "$Id: part_func.c,v 1.10 2000/10/10 16:29:00 ivo Rel $";
+static char rcsid[] UNUSED = "$Id: part_func.c,v 1.15 2002/03/19 16:51:12 ivo Exp $";
 
 #define MAX(x,y) (((x)>(y)) ? (x) : (y))
 #define MIN(x,y) (((x)<(y)) ? (x) : (y))
 #define PUBLIC
 #define PRIVATE static
-#define STACK_BULGE1  1   /* stacking energies for bulges of size 1 */
-#define NEW_NINIO     1   /* new asymetry penalty */
-
 
 PUBLIC  float pf_fold(char *sequence, char *structure);
 PUBLIC  void  init_pf_fold(int length);
@@ -36,6 +43,8 @@ PRIVATE void  scale_pf_params(unsigned int length);
 PRIVATE void  get_arrays(unsigned int length);
 PRIVATE double expLoopEnergy(int u1, int u2, int type, int type2,
 			     short si1, short sj1, short sp1, short sq1);
+PRIVATE double expHairpinEnergy(int u, int type, short si1, short sj1,
+				const char *string);
 PRIVATE void make_ptypes(const short *S, const char *structure);
 
 PRIVATE FLT_OR_DBL expMLclosing, expMLintern[NBPAIRS+1], *expMLbase;
@@ -61,21 +70,25 @@ PRIVATE int init_length; /* length in last call to init_pf_fold() */
 #define ISOLATED  256.0
 
 /*-----------------------------------------------------------------*/
+static  short *S, *S1;
 PUBLIC float pf_fold(char *sequence, char *structure)
 {
-  short *S, *S1;
+
   int n, i,j,k,l, ij, kl, u,u1,d,ii,ll, type, type_2, tt, ov=0;
   FLT_OR_DBL temp, Q, Qmax=0, prm_MLb;
   FLT_OR_DBL prmt,prmt1;
   FLT_OR_DBL qbt1, *tmp;
    
-  float free_energy;
+  double free_energy;
+  double max_real;
+
+  max_real = (sizeof(FLT_OR_DBL) == sizeof(float)) ? FLT_MAX : DBL_MAX;
 
   n = (int) strlen(sequence);
   if (n>init_length) init_pf_fold(n);  /* (re)allocate space */
 
-  S = (short *) space(sizeof(short)*(n+1));
-  S1= (short *) space(sizeof(short)*(n+1));
+  S = (short *) xrealloc(S, sizeof(short)*(n+1));
+  S1= (short *) xrealloc(S1, sizeof(short)*(n+1));
   S[0] = n;
   for (l=1; l<=n; l++) {
     S[l]  = (short) encode_char(toupper(sequence[l-1]));
@@ -106,31 +119,13 @@ PUBLIC float pf_fold(char *sequence, char *structure)
       if (type!=0) {
 	/*hairpin contribution*/
 	if (((type==3)||(type==4))&&no_closingGU) qbt1 = 0;
-	else {
-	  qbt1 = exphairpin[u];
-	  if ((tetra_loop)&&(u==4)) {
-	    char tl[7]={0}, *ts;
-	    strncpy(tl, sequence+i-1, 6);
-	    if ((ts=strstr(Tetraloops, tl)))
-	      qbt1 *= exptetra[(ts-Tetraloops)/7];
-	  } 
-	  if (u==3) {
-	    char tl[6]={0,0,0,0,0,0}, *ts;
-	    strncpy(tl, sequence+i-1, 5);
-	    if ((ts=strstr(Triloops, tl))) 
-	      qbt1 *= expTriloop[(ts-Triloops)/6];
-	    if (type>2) 
-	      qbt1 *= expTermAU;
-	  }
-	  else /* no mismatches for tri-loops */
-	    qbt1 *= expmismatchH[type][S1[i+1]][S1[j-1]];
-	  
-	  qbt1 *= scale[u+2];
-	}
+	else 
+	  qbt1 = expHairpinEnergy(u, type, S1[i+1], S1[j-1], sequence+i-1);
+	
 	/* interior loops with interior pair k,l */
 	for (k=i+1; k<=MIN(i+MAXLOOP+1,j-TURN-2); k++) {
 	  u1 = k-i-1;
-	  for (l=MAX(k+TURN+1,j-1-MAXLOOP+u1); l<=j-1; l++) {
+	  for (l=MAX(k+TURN+1,j-1-MAXLOOP+u1); l<j; l++) {
 	    type_2 = ptype[iindx[k]-l];
 	    if (type_2) {
 	      type_2 = rtype[type_2];
@@ -176,6 +171,7 @@ PUBLIC float pf_fold(char *sequence, char *structure)
       if (type) {
 	if (i>1) qbt1 *= expdangle5[type][S1[i-1]];
 	if (j<n) qbt1 *= expdangle3[type][S1[j+1]];
+	else if (type>2) qbt1 *= expTermAU;
       }
       qq[i] = qq1[i]*scale[1] + qbt1;
       
@@ -184,19 +180,17 @@ PUBLIC float pf_fold(char *sequence, char *structure)
       for (k=i; k<=j-1; k++) temp += q[ii-k]*qq[k+1];
       q[ij] = temp;
 
-#ifndef LARGE_PF
       if (temp>Qmax) {
 	Qmax = temp;
-	if (Qmax>FLT_MAX/10.)
-	  fprintf(stderr, "%d %d %g\n", i,j,temp);
+	if (Qmax>max_real/10.)
+	  fprintf(stderr, "Q close to overflow: %d %d %g\n", i,j,temp);
       }
-      if (temp>FLT_MAX) {
+      if (temp>=max_real) {
 	PRIVATE char msg[128];
 	sprintf(msg, "overflow in pf_fold while calculating q[%d,%d]\n"
 		"use larger pf_scale", i,j);
 	nrerror(msg);
       }
-#endif
     }
     tmp = qq1;  qq1 =qq;  qq =tmp;
     tmp = qqm1; qqm1=qqm; qqm=tmp;
@@ -298,17 +292,18 @@ PUBLIC float pf_fold(char *sequence, char *structure)
 	if (k>1) temp *= expdangle5[tt][S1[k-1]];
 	if (l<n) temp *= expdangle3[tt][S1[l+1]];
 	pr[kl] += temp;
-#ifndef LARGE_PF
+
 	if (pr[kl]>Qmax) {
 	  Qmax = pr[kl];
-	  if (Qmax>FLT_MAX/10.)
-	    fprintf(stderr, "%d %d %g %g\n", i,j,pr[kl],qb[kl]);
+	  if (Qmax>max_real/10.)
+	    fprintf(stderr, "P close to overflow: %d %d %g %g\n", 
+		    i, j, pr[kl], qb[kl]);
 	}
-	if (pr[kl]>FLT_MAX) {
+	if (pr[kl]>=max_real) {
 	  ov++;
 	  pr[kl]=FLT_MAX;
 	}
-#endif
+
       } /* end for (k=..) */
       tmp = prm_l1; prm_l1=prm_l; prm_l=tmp;
 
@@ -324,8 +319,6 @@ PUBLIC float pf_fold(char *sequence, char *structure)
       sprintf_bppm(n, structure);
   }   /* end if (do_backtrack)*/
    
-  free(S);
-  free(S1);
   if (ov>0) fprintf(stderr, "%d overflows occurred while backtracking;\n"
 		    "you might try a smaller pf_scale than %g\n",
 		    ov, pf_scale);
@@ -423,10 +416,13 @@ PRIVATE void scale_pf_params(unsigned int length)
       but make sure go smoothly to 0                        */
   for (i=0; i<=NBPAIRS; i++)
     for (j=0; j<=4; j++) {
-      GT = dangle5_H[i][j] - (dangle5_H[i][j] - dangle5_37[i][j])*TT;
-      expdangle5[i][j] = dangles?exp(SMOOTH(-GT)*10./kT):1.;
-      GT = dangle3_H[i][j] - (dangle3_H[i][j] - dangle3_37[i][j])*TT;
-      expdangle3[i][j] =  dangles?exp(SMOOTH(-GT)*10./kT):1.;
+      if (dangles) {
+	GT = dangle5_H[i][j] - (dangle5_H[i][j] - dangle5_37[i][j])*TT;
+	expdangle5[i][j] = exp(SMOOTH(-GT)*10./kT);
+	GT = dangle3_H[i][j] - (dangle3_H[i][j] - dangle3_37[i][j])*TT;
+	expdangle3[i][j] =  exp(SMOOTH(-GT)*10./kT);
+      } else
+	expdangle3[i][j] = expdangle5[i][j] = 1;
       if (i>2) /* add TermAU penalty into dangle3 */
 	expdangle3[i][j] *= expTermAU;
     }
@@ -487,6 +483,30 @@ PRIVATE void scale_pf_params(unsigned int length)
 }
 
 /*----------------------------------------------------------------------*/
+PRIVATE double expHairpinEnergy(int u, int type, short si1, short sj1,
+				const char *string) {
+  double q;
+  q = exphairpin[u];
+  if ((tetra_loop)&&(u==4)) {
+    char tl[7]={0}, *ts;
+    strncpy(tl, string, 6);
+    if ((ts=strstr(Tetraloops, tl)))
+      q *= exptetra[(ts-Tetraloops)/7];
+  } 
+  if (u==3) {
+    char tl[6]={0}, *ts;
+    strncpy(tl, string, 5);
+    if ((ts=strstr(Triloops, tl))) 
+      q *= expTriloop[(ts-Triloops)/6];
+    if (type>2) 
+      q *= expTermAU;
+  }
+  else /* no mismatches for tri-loops */
+    q *= expmismatchH[type][si1][sj1];
+  
+  q *= scale[u+2];
+  return q;
+}
 
 PRIVATE double expLoopEnergy(int u1, int u2, int type, int type2,
 			     short si1, short sj1, short sp1, short sq1) {
@@ -601,6 +621,8 @@ PUBLIC void free_pf_arrays(void)
 #endif
 #endif
   init_length=0;
+  free(S); S=NULL;
+  free(S1); S1=NULL;
 }
 /*---------------------------------------------------------------------------*/
 
@@ -714,5 +736,146 @@ PRIVATE void make_ptypes(const short *S, const char *structure) {
       nrerror("unbalanced brackets in constraint string");
     }
     free(stack);
+  }
+}
+
+/*
+  stochastic backtracking in pf_fold arrays
+  returns random structure S with Boltzman probabilty
+  p(S) = exp(-E(S)/kT)/Z
+*/
+static void backtrack(int i, int j);
+
+static char *pstruc;
+static char *sequence;
+char *pbacktrack(char *seq) {
+  double r, qt;
+  int i,j,n, start;
+
+  sequence = seq;
+  n = strlen(sequence);
+  
+  if (init_length<1)
+    nrerror("can't backtrack without pf arrays.\n"
+	    "Call pf_fold() before pbacktrack()");
+  pstruc = space((n+1)*sizeof(char));
+
+  for (i=0; i<n; i++) pstruc[i] = '.';
+
+  start = 1;
+  while (start<n) {
+  /* find i position of first pair */
+    for (i=start; i<n; i++) {
+      r = urn() * qln[i];
+      if (r > qln[i+1]/pf_scale)  break; /* i is paired */
+    }
+    if (i>=n) break; /* no more pairs */
+    /* now find the pairing partner j */
+    r = urn() * (qln[i] - qln[i+1]/pf_scale);
+    for (qt=0, j=i+1; j<=n; j++) {
+      int type;
+      type = ptype[iindx[i]-j];
+      if (type) {
+	double qkl;
+	qkl = qb[iindx[i]-j];
+	if (j<n) qkl *= qln[j+1];
+	if (j<n) qkl *= expdangle3[type][S1[j+1]];
+	else if (type>2) qkl *= expTermAU;
+	if (i>1) qkl *= expdangle5[type][S1[i-1]];
+	qt += qkl;
+	if (qt > r) break; /* j is paired */
+      }
+    }
+    if (j==n+1) nrerror("backtracking failed in ext loop");
+    start = j+1;
+    backtrack(i,j);
+  }
+
+  return pstruc;
+}
+
+static void bmulti(int i,int j) {
+}
+
+static void backtrack(int i, int j) {
+  int start, degree;
+  do {
+    double r, qbt1;
+    int k, l, type, u, u1;
+
+    pstruc[i-1] = '('; pstruc[j-1] = ')';
+    
+    r = urn() * qb[iindx[i]-j];
+    type = ptype[iindx[i]-j];
+    u = j-i-1;
+    /*hairpin contribution*/
+    if (((type==3)||(type==4))&&no_closingGU) qbt1 = 0;
+    else 
+      qbt1 = expHairpinEnergy(u, type, S1[i+1], S1[j-1], sequence+i-1);
+
+    if (qbt1>r) return; /* found the hairpin we're done */
+    
+    for (k=i+1; k<=MIN(i+MAXLOOP+1,j-TURN-2); k++) {
+      u1 = k-i-1;
+      for (l=MAX(k+TURN+1,j-1-MAXLOOP+u1); l<j; l++) {
+	int type_2;
+	type_2 = ptype[iindx[k]-l];
+	if (type_2) {
+	  type_2 = rtype[type_2];
+	  qbt1 += qb[iindx[k]-l] * 
+	    expLoopEnergy(u1, j-l-1, type, type_2,
+			  S1[i+1], S1[j-1], S1[k-1], S1[l+1]);
+	}
+	if (qbt1 > r) break;
+      }
+      if (qbt1 > r) break;
+    }
+    if (l<j) {
+      i=k; j=l;
+    }
+    else break;
+  } while (1);
+
+  /* backtrack in multi-loop */
+  start = i+1; degree=0;
+  while (start<j) {
+    double r, qt;
+    int k, l, type;
+
+    /* find i position of first pair */
+    for (k=start; k<j; k++) {
+      r = urn() * qm[iindx[k]-j-1];
+      if (r > qm[iindx[k+1]-j-1] * expMLbase[1])  break; /* k is paired */
+    }
+    if (k>=j) break; /* no more pairs */
+    
+    r = urn() * (qm[iindx[k]-j-1] - qm[iindx[k+1]-j-1]*expMLbase[1]);
+    for (qt=0, l=k+1; l<j; l++) {
+      int type;
+      type = ptype[iindx[k]-l];
+      if (type) {
+	double qkl;
+	qkl = qb[iindx[k]-l]*expMLintern[type];
+	qkl *= expdangle3[type][S1[l+1]];
+	qkl *= expdangle5[type][S1[k-1]];
+	if (degree>0) {
+	  double qq2;
+	  qq2 *= qkl * expMLbase[j-1-l];
+	  qt += qq2;
+	  if (qt > r) {
+	    /* k,l is at pair in this MLoop */
+	    start = j;
+	    break; 
+	  }
+	}
+	if (l<j-1) qkl *= qm[iindx[l+1]-j-1];  
+	qt += qkl;
+	if (qt > r) break; /* l pairs k, more pairs to come */
+      }
+    }
+    if ((k==j)||(l==j)) nrerror("backtracking failed in multi loop");
+    backtrack(k,l);
+    if (start<j) start = l+1;
+    degree++;
   }
 }

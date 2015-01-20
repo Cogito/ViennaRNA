@@ -4,18 +4,19 @@
 		 c  Ivo L Hofacker and Walter Fontana
 			  Vienna RNA package
 */
-/* Last changed Time-stamp: <2000-10-05 15:15:20 ivo> */
+/* Last changed Time-stamp: <2002-11-07 11:34:11 ivo> */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
 #include <string.h>
-#ifdef DMALLOC
+#include "../config.h"
+#ifdef WITH_DMALLOC
 #include "dmalloc.h"
 #endif
 /*@unused@*/
-static char rcsid[] = "$Id: utils.c,v 1.7 2000/10/05 13:16:23 ivo Rel $";
+static char rcsid[] = "$Id: utils.c,v 1.14 2002/11/07 12:04:55 ivo Exp $";
 
 #define PRIVATE  static
 #define PUBLIC
@@ -36,11 +37,8 @@ PUBLIC char  *get_line(FILE *fp);
 PUBLIC unsigned short xsubi[3];
 
 /*-------------------------------------------------------------------------*/
-#ifdef DMALLOC
-#define space(S) calloc(1,(S))
-#else
-PUBLIC void *space(unsigned size)
-{
+
+PUBLIC void *space(unsigned size) {
   void *pointer;
   
   if ( (pointer = (void *) calloc(1, (size_t) size)) == NULL) {
@@ -55,7 +53,30 @@ PUBLIC void *space(unsigned size)
   }
   return  pointer;
 }
+
+#ifdef WITH_DMALLOC
+#define space(S) calloc(1,(S))
 #endif
+
+#undef xrealloc
+/* dmalloc.h #define's xrealloc */
+void *xrealloc (void *p, unsigned size) {
+  if (p == 0)
+    return space(size);
+  p = (void *) realloc(p, size);
+  if (p == NULL) {
+#ifdef EINVAL
+    if (errno==EINVAL) {
+      fprintf(stderr,"xrealloc: requested size: %d\n", size);
+      nrerror("xrealloc allocation failure -> EINVAL");
+    }
+    if (errno==ENOMEM)
+#endif
+      nrerror("xrealloc allocation failure -> no memory");  
+  }
+  return p;
+}
+
 /*------------------------------------------------------------------------*/
 
 PUBLIC void nrerror(const char message[])       /* output message upon error */
@@ -69,19 +90,27 @@ PUBLIC void init_rand(void)
 {
   time_t t;
   (void) time(&t);
-  xsubi[0] = (unsigned short) t;
-  xsubi[1] = (unsigned short) ((unsigned)t >> 16);
-  xsubi[2] = 5246;
+  xsubi[0] = xsubi[1] = xsubi[2] = (unsigned short) t;  /* lower 16 bit */
+  xsubi[1] += (unsigned short) ((unsigned)t >> 6);
+  xsubi[2] += (unsigned short) ((unsigned)t >> 12);
+#ifndef HAVE_ERAND48
+  srand((unsigned int) t);
+#endif
 }
 
 /*------------------------------------------------------------------------*/
-extern double erand48(unsigned short[]); 
+
 PUBLIC double urn(void)    
      /* uniform random number generator; urn() is in [0,1] */
      /* uses a linear congruential library routine */ 
      /* 48 bit arithmetic */
 { 
+#ifdef HAVE_ERAND48
+  extern double erand48(unsigned short[]); 
   return erand48(xsubi);
+#else
+  return ((double) rand())/RAND_MAX;
+#endif
 }
 
 /*------------------------------------------------------------------------*/
@@ -152,13 +181,12 @@ PUBLIC char *get_line(FILE *fp) /* reads lines of arbitrary length from fp */
     if (line==NULL)
       line = space(strlen(s)+1);
     else
-      line = (char *) realloc(line, strlen(s)+strlen(line)+1);
-    strcat(line,s);
+      line = (char *) xrealloc(line, strlen(s)+strlen(line)+1);
+    strcat(line, s);
   } while(cp==NULL);
   
   return line;
 }
-
 
 /*-----------------------------------------------------------------*/
 
@@ -204,13 +232,11 @@ PUBLIC char *unpack_structure(const char *packed) {
   char code[3] = {'(', '.', ')'};
 
   l = (int) strlen(packed);
-  pp = (unsigned char *) packed;
+  pp = (const unsigned char *) packed;
   struc = (char *) space((l*5+1)*sizeof(char));   /* up to 4 byte extra */
 
-  j=0;
   for (i=j=0; i<l; i++) {
-    register int p;
-    int k, c;
+    register int p, c, k;
     
     p = (int) pp[i] - 1;
     for (k=4; k>=0; k--) {
@@ -227,8 +253,7 @@ PUBLIC char *unpack_structure(const char *packed) {
   return struc;
 }
 
-				   
-/*---------------------------------------------------------------------------*/ 
+/*--------------------------------------------------------------------------*/ 
 
 PUBLIC short *make_pair_table(const char *structure)
 {
@@ -295,3 +320,13 @@ PUBLIC int bp_distance(const char *str1, const char *str2)
    free(t1); free(t2);
    return dist;
 }
+
+#ifndef HAVE_STRDUP
+char *strdup(const char *s) {
+  char *dup;
+
+  dup = space(strlen(s)+1);
+  strcpy(dup, s);
+  return(new);
+}
+#endif

@@ -40,7 +40,8 @@ static int encode_char(char c) {
 /*@+boolint +charint@*/
 /*@null@*/
 extern char *nonstandards;
-static void make_pair_matrix(void)
+extern void   nrerror(const char message[]);
+static void make_pair_matrix(void) 
 {
    int i,j;
    
@@ -69,32 +70,48 @@ static void make_pair_matrix(void)
 	    pair[i][j] = 0;
       }
       if (energy_set==1) {
-	 for (i=1; i<=MAXALPHA;) {
+	 for (i=1; i<MAXALPHA;) {
 	    alias[i++] = 3;  /* A <-> G */
 	    alias[i++] = 2;  /* B <-> C */
 	 }
-	 for (i=1; i<=MAXALPHA; i++) {
+	 for (i=1; i<MAXALPHA; i++) {
 	    pair[i][i+1] = 2;    /* AB <-> GC */
 	    i++;
 	    pair[i][i-1] = 1;    /* BA <-> CG */
 	 }
       }
       else if (energy_set==2) {
-	 {
+	for (i=1; i<MAXALPHA;) {
 	    alias[i++] = 1;  /* A <-> A*/
 	    alias[i++] = 4;  /* B <-> U */
 	 }
-	 for (i=1; i<=MAXALPHA; i++) {
+	 for (i=1; i<MAXALPHA; i++) {
 	    pair[i][i+1] = 5;    /* AB <-> AU */
 	    i++;
 	    pair[i][i-1] = 6;    /* BA <-> UA */
 	 }
-      } else nrerror("What energy_set are YOU using??");
+      }
+      else if (energy_set==3) {
+	for (i=1; i<MAXALPHA-2; ) {
+	  alias[i++] = 3;  /* A <-> G */
+	  alias[i++] = 2;  /* B <-> C */
+	  alias[i++] = 1;  /* C <-> A */
+	  alias[i++] = 4;  /* D <-> U */
+	}
+	for (i=1; i<MAXALPHA-2; i++) {
+	  pair[i][i+1] = 2;    /* AB <-> GC */
+	  i++;
+	  pair[i][i-1] = 1;    /* BA <-> CG */
+	  i++;
+	  pair[i][i+1] = 5;    /* CD <-> AU */
+	  i++;
+	  pair[i][i-1] = 6;    /* DC <-> UA */
+	}
+      }
+      else nrerror("What energy_set are YOU using??");
       for (i=0; i<=MAXALPHA; i++) {
 	for (j=0; j<=MAXALPHA; j++) 
 	  rtype[pair[i][j]] = pair[j][i];
       }
    }
 }
-
-

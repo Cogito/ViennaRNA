@@ -1477,7 +1477,10 @@ unsigned long CRC32checksum(const char *seq, const long seqlen, unsigned long *c
   register unsigned long c = 0xffffffffL;
   register long n = seqlen;
 
-  while (n--) c = crctab[((int)c ^ (to_upper(*seq++))) & 0xff] ^ (c >> 8);
+  while (n--) {
+    c = crctab[((int)c ^ (to_upper(*seq))) & 0xff] ^ (c >> 8);
+    seq++; /* fixed aug'98 finally */
+    }
   c= c ^ 0xffffffffL;
   *checktotal += c;
   return c;
@@ -1787,13 +1790,14 @@ short writeSeq(FILE *outf, const char *seq, const long seqlen,
       fprintf(outf,">%s, %d bases, %X checksum.\n", seqname, seqlen, checksum);
       linesout += 1;
       break;
+
     default:
     case kVienna:   /* Vienna RNA Package Format */
       fprintf(outf,"> %s [%d bases, %X]\n", seqname, seqlen, checksum);
       fprintf(outf,"%s\n", seq);
       return 2;
    }
-  
+
   if (*nameform==0) sprintf(nameform, "%%%d.%ds ",namewidth,namewidth);
   if (numline) sprintf(numform, "%%%ds ",numwidth);
   else sprintf(numform, "%%%dd ",numwidth);

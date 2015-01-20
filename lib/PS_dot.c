@@ -5,6 +5,7 @@
 		 c  Ivo Hofacker and Peter F Stadler
 			  Vienna RNA package
 */
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -12,7 +13,9 @@
 #include <ctype.h>
 #include "utils.h"
 #include "fold_vars.h"
-static char rcsid[] = "$Id: PS_dot.c,v 1.13 2000/10/10 12:25:05 ivo Rel $";
+#include "PS_dot.h"
+
+static char UNUSED rcsid[] = "$Id: PS_dot.c,v 1.19 2002/11/06 13:28:28 ivo Exp $";
 
 #define PUBLIC
 #define  PRIVATE   static
@@ -23,6 +26,8 @@ static char rcsid[] = "$Id: PS_dot.c,v 1.13 2000/10/10 12:25:05 ivo Rel $";
 #define  PIHALF       PI/2.
 
 PUBLIC int   gmlRNA(char *string, char *structure, char *ssfile, char option);
+PUBLIC int   PS_rna_plot_a(char *string, char *structure, char *ssfile, 
+			   char *pre, char *post);
 PUBLIC int   PS_rna_plot(char *string, char *structure, char *ssfile);
 PUBLIC int   ssv_rna_plot(char *string, char *structure, char *ssfile);
 PUBLIC int   xrna_plot(char *string, char *structure, char *ssfile);
@@ -39,9 +44,9 @@ PRIVATE void   loop(int i, int j, short *pair_table);
 
 /* local variables for parsing routines */
 
-PRIVATE  float  *angle;
-PRIVATE  int    *loop_size, *stack_size;
-PRIVATE  int     lp, stk;
+PRIVATE float  *angle;
+PRIVATE int    *loop_size, *stack_size;
+PRIVATE int     lp, stk;
 
 /*---------------------------------------------------------------------------*/
 
@@ -52,7 +57,7 @@ PRIVATE  int     lp, stk;
    x X  simple xy plot
    (nothing else implemented at present)
    default:           no graphics data at all
-   */
+*/
 
 PUBLIC int gmlRNA(char *string, char *structure, char *ssfile, char option)
 {
@@ -94,13 +99,12 @@ PUBLIC int gmlRNA(char *string, char *structure, char *ssfile, char option)
     Y = NULL; 
   }
 
-  /* */
   fprintf(gmlfile, 
-	  "# Vienna RNA Package (rna2glm)\n"
+	  "# Vienna RNA Package %s\n"
           "# GML Output\n"
 	  "# CreationDate: %s\n"
 	  "# Name: %s\n"
-	  "# Options: %s\n", time_stamp(), ssfile, option_string());
+	  "# Options: %s\n", VERSION, time_stamp(), ssfile, option_string());
   fprintf(gmlfile, 
           "graph [\n"
           " directed 0\n");
@@ -131,8 +135,11 @@ PUBLIC int gmlRNA(char *string, char *structure, char *ssfile, char option)
 }
 
 /*---------------------------------------------------------------------------*/
+int PS_rna_plot(char *string, char *structure, char *ssfile) {
+  return PS_rna_plot_a(string, structure, ssfile, NULL, NULL);
+}
 
-int PS_rna_plot(char *string, char *structure, char *ssfile)
+int PS_rna_plot_a(char *string, char *structure, char *ssfile, char *pre, char *post)
 {
   float  xmin, xmax, ymin, ymax, size;
   int    i, length;
@@ -160,7 +167,7 @@ int PS_rna_plot(char *string, char *structure, char *ssfile)
 
   xmin = xmax = X[0];
   ymin = ymax = Y[0];
-  for (i = 1; i <= length; i++) {
+  for (i = 1; i < length; i++) {
      xmin = X[i] < xmin ? X[i] : xmin;
      xmax = X[i] > xmax ? X[i] : xmax;
      ymin = Y[i] < ymin ? Y[i] : ymin;
@@ -170,14 +177,14 @@ int PS_rna_plot(char *string, char *structure, char *ssfile)
   
   fprintf(xyplot,
 	  "%%!PS-Adobe-3.0 EPSF-3.0\n"
-	  "%%%%Creator: PS_dot.c, ViennaRNA Package\n"
+	  "%%%%Creator: %s, ViennaRNA-%s\n"
 	  "%%%%CreationDate: %s"
 	  "%%%%Title: Rna secondary Structure Plot\n"
 	  "%%%%BoundingBox: 66 210 518 662\n"
 	  "%%%%DocumentFonts: Helvetica\n"
 	  "%%%%Pages: 1\n"
 	  "%%%%EndComments\n\n"
-          "%%Options: %s\n", time_stamp(), option_string());
+          "%%Options: %s\n", rcsid+5, VERSION, time_stamp(), option_string());
   
   fprintf(xyplot,"100 dict begin\n");  /* DSC says EPS should create a dict */
   fprintf(xyplot,
@@ -186,6 +193,9 @@ int PS_rna_plot(char *string, char *structure, char *ssfile)
 	  "/drawbases   true def  %% set to  false  to leave out sequence\n"
 	  "/drawoutline true def  %% set to  false  to leave out backbone\n"
 	  "/drawpairs   true def  %% set to  false  to not draw lines connecting pairs\n"
+	  "/outlinecolor {0.2 setgray} bind def\n"
+	  "/paircolor    {0.2 setgray} bind def\n"
+	  "/seqcolor     {0   setgray} bind def\n"
 	  "%% data start here\n");
   /* sequence */
   fprintf(xyplot,"/sequence (\\\n");  
@@ -209,37 +219,105 @@ int PS_rna_plot(char *string, char *structure, char *ssfile)
    /* setup */
    fprintf(xyplot,
 	   "/cshow  { dup stringwidth pop fsize neg 3 div exch neg 2 div exch\n"
-	   "          rmoveto show} bind def\n"
+	   "          rmoveto show} bind def\n\n");
+   if (pre || post) {  /* macros for annotations */
+     fprintf(xyplot,
+	     "%% extra definitions for standard anotations\n"
+	     "/min { 2 copy gt { exch } if pop } bind def\n"
+	     "/BLACK { 0 0 0 } def\n"
+	     "/RED   { 1 0 0 } def\n"
+	     "/GREEN { 0 1 0 } def\n"
+	     "/BLUE  { 0 0 1 } def\n"
+	     "/WHITE { 1 1 1 } def\n"
+	     "/LabelFont { %% font size LabelFont\n"
+	     "   exch findfont exch fsize mul scalefont setfont\n"
+	     "} bind def\n"
+	     "/Label { %% i dx dy (text) Label\n"
+	     "   %% write text at base i plus offset dx, dy\n"
+	     "   4 3 roll 1 sub coor exch get aload pop moveto\n"
+	     "   3 1 roll fsize mul exch fsize mul exch rmoveto\n"
+	     "   show\n"
+	     "} bind def\n"
+	     "/cmark { %% i cmark   draw circle around base i\n"
+	     "   newpath 1 sub coor exch get aload pop\n"
+	     "   fsize 2 div 0 360 arc stroke\n"
+	     "} bind def\n"
+	     "/gmark { %% i j c cmark\n"
+	     "   %% draw basepair i,j with c counter examples in gray\n"
+	     "   gsave\n"
+	     "   3 min [0 0.33 0.66 0.9] exch get setgray\n"
+	     "   1 sub dup coor exch get aload pop moveto\n"
+	     "   sequence exch 1 getinterval cshow\n"
+	     "   1 sub dup coor exch get aload pop moveto\n"
+	     "   sequence exch 1 getinterval cshow\n"
+	     "   grestore\n"
+	     "} bind def\n"
+	     "/segmark { %% f i j lw r g b segmark\n"
+	     "   %% mark segment [i,j] with outline width lw and color rgb\n"
+	     "   %% use omark and Fomark instead\n"
+	     "   gsave\n"
+	     "    setrgbcolor setlinewidth\n"
+	     "    newpath\n"
+	     "    1 sub exch 1 sub dup\n"
+	     "    coor exch get aload pop moveto\n"
+	     "    exch 1 exch {\n"
+	     "	    coor exch get aload pop lineto\n"
+	     "    } for\n"
+	     "    { closepath fill } if  stroke\n"
+	     "   grestore\n"
+	     "} bind def\n"
+	     "/omark { %% i j lw r g b omark\n"
+	     "   %% stroke segment [i..j] with linewidth lw, color rgb\n"
+	     "   false 7 1 roll segmark\n"
+	     "} bind def\n"
+	     "/Fomark { %% i j r g b Fomark\n"
+	     "   %% fill segment [i..j] with color rgb\n"
+             "   %% should precede drawbases\n"
+	     "   1 4 1 roll true 7 1 roll segmark\n"
+	     "} bind def\n"
+	     "/BFmark{ %% i j k l r g b BFmark\n"
+	     "   %% fill block between pairs (i,j) and (k,l) with color rgb\n"
+	     "   %% should precede drawbases\n"
+	     "   gsave\n"
+	     "    setrgbcolor\n"
+	     "    newpath\n"
+	     "    exch 4 3 roll exch 1 sub exch 1 sub dup\n"
+	     "    coor exch get aload pop moveto\n"
+	     "    exch 1 exch { coor exch get aload pop lineto } for\n"
+	     "    exch 1 sub exch 1 sub dup\n"
+	     "    coor exch get aload pop lineto\n"
+	     "    exch 1 exch { coor exch get aload pop lineto } for\n"
+	     "    closepath fill stroke\n"
+	     "   grestore\n"
+	     "} bind def\n\n");
+   }
+   fprintf(xyplot,
 	   "1 setlinejoin\n"
 	   "1 setlinecap\n"
 	   "0.8 setlinewidth\n");
-
   fprintf(xyplot, "72 216 translate\n");
   fprintf(xyplot, "72 6 mul %3.3f div dup scale\n", size);
   fprintf(xyplot, "%4.3f %4.3f translate\n",
 	  (size-xmin-xmax)/2, (size-ymin-ymax)/2);
   fprintf(xyplot, "/Helvetica findfont fsize scalefont setfont\n");
   /* draw the data */
+  if (pre) {
+    fprintf(xyplot, "%% Start Annotations\n");
+    fprintf(xyplot, "%s\n", pre);
+    fprintf(xyplot, "%% End Annotations\n");
+  }
   fprintf(xyplot,
 	  "%% draw the outline\n"
 	  "drawoutline {\n"
+	  "  outlinecolor\n"
 	  "  newpath\n"
 	  "  coor 0 get aload pop 0.8 0 360 arc\n"
 	  "  coor {aload pop lineto} forall\n"
 	  "  stroke\n"
 	  "} if\n"
-	  "%% draw bases\n"
-	  "drawbases {\n"
-	  "  0\n"
-	  "  coor {\n"
-	  "    aload pop moveto\n"
-	  "    dup sequence exch 1 getinterval  cshow\n"
-	  "    1 add\n"
-	  "  } forall\n"
-	  "  pop\n"
-	  "} if\n"
 	  "%% draw base pairs\n"
 	  "drawpairs {\n"
+	  "  paircolor\n"
 	  "  0.7 setlinewidth\n"
 	  "  [9 3.01] 9 setdash\n"
 	  "  newpath\n"
@@ -248,10 +326,109 @@ int PS_rna_plot(char *string, char *structure, char *ssfile)
 	  "     coor exch 1 sub get aload pop lineto\n"
 	  "  } forall\n"
 	  "  stroke\n"
+	  "} if\n"
+	  "[] 0 setdash\n"
+	  "%% draw bases\n"
+	  "drawbases {\n"
+	  "  seqcolor\n"
+	  "  0\n"
+	  "  coor {\n"
+	  "    aload pop moveto\n"
+	  "    dup sequence exch 1 getinterval  cshow\n"
+	  "    1 add\n"
+	  "  } forall\n"
+	  "  pop\n"
 	  "} if\n");
+  
+  if (post) {
+    fprintf(xyplot, "%% Start Annotations\n");
+    fprintf(xyplot, "%s\n", post);
+    fprintf(xyplot, "%% End Annotations\n");
+  }
   fprintf(xyplot, "%% show it\nshowpage\n");
   fprintf(xyplot, "end\n");
   fprintf(xyplot, "%%%%EOF\n");
+  
+  fclose(xyplot);
+
+  free(pair_table);
+  free(X); free(Y);
+  return 1; /* success */
+}
+
+/*--------------------------------------------------------------------------*/
+
+#define SIZE 452
+
+int svg_rna_plot(char *string, char *structure, char *ssfile)
+{
+  float  xmin, xmax, ymin, ymax, size;
+  int    i, length;
+  float *X, *Y;
+  FILE  *xyplot;
+  short *pair_table;
+
+  length = strlen(string);
+
+  xyplot = fopen(ssfile, "w");
+  if (xyplot == NULL) {
+    fprintf(stderr, "can't open file %s - not doing xy_plot\n", ssfile);
+    return 0;
+  }
+  
+  pair_table = make_pair_table(structure);
+  
+  X = (float *) space((length+1)*sizeof(float));
+  Y = (float *) space((length+1)*sizeof(float));   
+  if (rna_plot_type == 0) 
+    i = simple_xy_coordinates(pair_table, X, Y);
+  else
+    i = naview_xy_coordinates(pair_table, X, Y);
+  if(i!=length) fprintf(stderr,"strange things happening in PS_rna_plot...\n");
+
+
+  xmin = xmax = X[0];
+  ymin = ymax = Y[0];
+  for (i = 1; i < length; i++) {
+     xmin = X[i] < xmin ? X[i] : xmin;
+     xmax = X[i] > xmax ? X[i] : xmax;
+     ymin = Y[i] < ymin ? Y[i] : ymin;
+     ymax = Y[i] > ymax ? Y[i] : ymax;
+  }
+  for (i = 0; i < length; i++)
+    Y[i] = ymin+ymax - Y[i]; /* mirror coordinates so they look as in PS */
+
+  size = MAX((xmax-xmin),(ymax-ymin));
+  size += 10; /* add some so the bounding box isn't too tight */
+
+  fprintf(xyplot,
+	  "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+	  "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"452\" width=\"452\">\n"
+	  "  <rect style=\"stroke: white; fill: white\" height=\"452\" x=\"0\" y=\"0\" width=\"452\" />\n"
+	  "  <g transform=\"scale(%7f,%7f) translate(%7f,%7f)\">\n",
+	  SIZE/size, SIZE/size, (size-xmin-xmax)/2, (size-ymin-ymax)/2);
+  
+  fprintf(xyplot,
+	  "    <polyline style=\"stroke: black; fill: none; stroke-width: 1.5\" id=\"outline\" points=\"\n");
+  for (i = 0; i < length; i++) 
+    fprintf(xyplot, "      %3.3f,%3.3f\n", X[i], Y[i]);
+  fprintf(xyplot,"    \" />\n");
+
+  fprintf(xyplot,"    <g style=\"stroke: black; stroke-width: 1\" id=\"pairs\">\n");
+  for (i = 1; i <= length; i++) {
+    int j;
+    if ((j=pair_table[i])>i)
+      fprintf(xyplot,
+	      "      \"<line id=\"%d,%d\" x1=\"%6.3f\" y1=\"%6.3f\" x2=\"%6.3f\" y2=\"%6.3f\" />\n",
+	      i,j, X[i-1], Y[i-1], X[j-1], Y[j-1]);
+  }
+  fprintf(xyplot, "    </g>\n");
+  fprintf(xyplot, "    <g style=\"font-family: SansSerif\" transform=\"translate(-4.6, 4)\" id=\"seq\">\n");
+  for (i = 0; i < length; i++)
+    fprintf(xyplot, "      <text x=\"%.3f\" y=\"%.3f\">%c</text>\n", X[i], Y[i], string[i]);
+  fprintf(xyplot, "    </g>\n");
+  fprintf(xyplot, "  </g>\n");
+  fprintf(xyplot, "</svg>\n");
   
   fclose(xyplot);
 
@@ -293,7 +470,7 @@ PUBLIC int ssv_rna_plot(char *string, char *structure, char *ssfile)
   /* make coords nonegative */
   xmin = xmax = X[0];
   ymin = ymax = Y[0];
-  for (i = 1; i <= length; i++) {
+  for (i = 1; i < length; i++) {
      xmin = X[i] < xmin ? X[i] : xmin;
      xmax = X[i] > xmax ? X[i] : xmax;
      ymin = Y[i] < ymin ? Y[i] : ymin;
@@ -326,11 +503,11 @@ PUBLIC int ssv_rna_plot(char *string, char *structure, char *ssfile)
   /* */
  
   fprintf(ssvfile, 
-	  "# Vienna RNA Package (rna2ssv)\n"
+	  "# Vienna RNA Package %s\n"
           "# SStructView Output\n"
 	  "# CreationDate: %s\n"
 	  "# Name: %s\n"
-	  "# Options: %s\n", time_stamp(), ssfile, option_string());
+	  "# Options: %s\n", VERSION, time_stamp(), ssfile, option_string());
   for (i=1; i<=length; i++)
     fprintf(ssvfile, "BASE\t%d\t%c\t%d\t%d\n",
 	    i, string[i-1], (int) (X[i-1]+0.5), (int) (Y[i-1]+0.5));
@@ -374,9 +551,9 @@ PUBLIC int xrna_plot(char *string, char *structure, char *ssfile)
     fprintf(stderr,"strange things happening in xrna_plot...\n");
  
   fprintf(ss_file, 
-	  "# Vienna RNA Package XRNA output\n"
+	  "# Vienna RNA Package %s, XRNA output\n"
 	  "# CreationDate: %s\n"
-	  "# Options: %s\n", time_stamp(), option_string());
+	  "# Options: %s\n", VERSION, time_stamp(), option_string());
   for (i=1; i<=length; i++)
     /* XRNA likes to have coordinate mirrored, so we use (-X, Y) */
     fprintf(ss_file, "%d %c %6.2f %6.2f %d %d\n", i, string[i-1],
@@ -390,56 +567,58 @@ PUBLIC int xrna_plot(char *string, char *structure, char *ssfile)
 
 /*---------------------------------------------------------------------------*/
 #define PMIN 0.00001
-int PS_dot_plot(char *string, char *wastlfile)
-{
-  /* produce PostScript dot plot from probabilities in pr[] array */
-   
-  FILE *wastl;
-  char name[31], *c;
-  int i, j, length;
-  double tmp;
-   
-  length= strlen(string);
-  wastl = fopen(wastlfile,"w");
-  if (wastl==NULL) {
-    fprintf(stderr, "can't open %s for dot plot\n", wastlfile);
-    return 0; /* return 0 for failure */
-  }
-  strncpy(name, wastlfile, 30);
-  if ((c=strrchr(name, '_'))!=0) *c='\0';
-  fprintf(wastl,"%%!PS-Adobe-3.0 EPSF-3.0\n");
-  fprintf(wastl,"%%%%Title: RNA DotPlot\n");
-  fprintf(wastl,"%%%%Creator: PS_dot.c, ViennaRNA Package\n");
-  fprintf(wastl,"%%%%CreationDate: %s", time_stamp());
-  fprintf(wastl,"%%%%BoundingBox: 66 211 518 662\n");
-  fprintf(wastl,"%%%%DocumentFonts: Helvetica\n");
-  fprintf(wastl,"%%%%Pages: 1\n");
-  fprintf(wastl,"%%%%EndComments\n\n");
-  fprintf(wastl,"%%Options: %s\n", option_string());
+PRIVATE void print_PSdot_header(FILE *wastl, char *title, char *seq) {
+  int i;
 
-  fprintf(wastl,"%%This file contains the square roots "
-	  "of the base pair probabilities in the form\n");
-  fprintf(wastl,"%% i  j  sqrt(p(i,j)) ubox\n");
+  fprintf(wastl,
+	  "%%!PS-Adobe-3.0 EPSF-3.0\n"
+	  "%%%%Title: RNA DotPlot\n"
+	  "%%%%Creator: %s, ViennaRNA-%s\n"
+	  "%%%%CreationDate: %s"
+	  "%%%%BoundingBox: 66 211 518 662\n"
+	  "%%%%DocumentFonts: Helvetica\n"
+	  "%%%%Pages: 1\n"
+	  "%%%%EndComments\n\n"
+	  "%%Options: %s\n", rcsid+5, VERSION, time_stamp(), option_string());
+
+  fprintf(wastl,
+	  "%%This file contains the square roots "
+	  "of the base pair probabilities in the form\n"
+	  "%% i  j  sqrt(p(i,j)) ubox\n");
    
-  fprintf(wastl,"100 dict begin\n");  /* DSC says EPS should create a dict */
-  fprintf(wastl,"\n/logscale false def\n\n");
-  fprintf(wastl,"%%delete next line to get rid of title\n"
+  fprintf(wastl,"100 dict begin\n"  /* DSC says EPS should create a dict */
+	  "\n/logscale false def\n\n"
+	  "%%delete next line to get rid of title\n"
 	  "270 665 moveto /Helvetica findfont 14 scalefont setfont "
-	  "(%s) show\n\n", name);
+	  "(%s) show\n\n", title);
+
   fprintf(wastl,"/lpmin {\n"
 	  "   %g log  %% log(pmin) only probs>pmin will be shown\n"
 	  "} bind def\n\n",PMIN);
+   
+  fprintf(wastl,"/box { %%size x y box - draws box centered on x,y\n"
+	  "   2 index 0.5 mul add            %% x += 0.5\n"
+	  "   exch 2 index 0.5 mul add exch  %% x += 0.5\n"
+	  "   newpath\n"
+	  "   moveto\n"
+	  "   dup neg   0 rlineto\n"
+	  "   dup neg   0 exch rlineto\n"
+	  "             0 rlineto\n"
+	  "   closepath\n"
+	  "   fill\n"
+	  "} bind def\n\n");
 
   /* EPS should not contain lines >255 characters */
   fprintf(wastl,"/sequence { (\\\n");
   i=0;
-  while (i<length) {
-    fprintf(wastl, "%.255s\\\n", string+i);
+  while (i<strlen(seq)) {
+    fprintf(wastl, "%.255s\\\n", seq+i);
     i+=255;
   }
   fprintf(wastl,") } def\n");
-  fprintf(wastl,"/len { sequence length } def\n\n");
-   
+  fprintf(wastl,"/len { sequence length } bind def\n\n");
+
+
   fprintf(wastl,"/ubox {\n"     /* upper triangle matrix */
 	  "   logscale {\n"
 	  "      log dup add lpmin div 1 exch sub dup 0 lt { pop 0 } if\n"
@@ -453,56 +632,26 @@ int PS_dot_plot(char *string, char *wastlfile)
 	  "   len exch sub 1 add box\n"
 	  "} bind def\n\n");
 
-  fprintf(wastl,"/box { %%size x y box - draws box centered on x,y\n"
-	  "   2 index 0.5 mul add            %% x += 0.5\n"
-	  "   exch 2 index 0.5 mul add exch  %% x += 0.5\n"
-	  "   newpath\n"
-	  "   moveto\n"
-	  "   dup neg   0 rlineto\n"
-	  "   dup neg   0 exch rlineto\n"
-	  "             0 rlineto\n"
-	  "   closepath\n"
-	  "   fill\n"
-	  "} def\n\n");
+  fprintf(wastl,"72 216 translate\n"
+	  "72 6 mul len 1 add div dup scale\n"
+	  "/Helvetica findfont 0.95 scalefont setfont\n\n");
 
-  fprintf(wastl,"72 216 translate\n");
-  fprintf(wastl,"72 6 mul len 1 add div dup scale\n");
-  fprintf(wastl,"/Helvetica findfont 0.95 scalefont setfont\n\n");
-
-   /* print sequence along all 4 sides */
-  fprintf(wastl,"%% print sequence along all 4 sides\n");
-  fprintf(wastl,"0 1 len 1 sub {\n");
-  fprintf(wastl,"    dup\n");
-  fprintf(wastl,"    0.7 add -0.3 moveto\n");
-  fprintf(wastl,"    sequence exch 1 getinterval\n");
-  fprintf(wastl,"    show\n");
-  fprintf(wastl,"} for\n");
-  fprintf(wastl,"\n");
-  fprintf(wastl,"0 1 len 1 sub {\n");
-  fprintf(wastl,"    dup\n");
-  fprintf(wastl,"    0.7 add 0.7 len add moveto\n");
-  fprintf(wastl,"    sequence exch 1 getinterval\n");
-  fprintf(wastl,"    show\n");
-  fprintf(wastl,"} for\n\n");
-
-  fprintf(wastl,"90  rotate\n");
-  fprintf(wastl,"0 1 len 1 sub {\n");
-  fprintf(wastl,"    dup\n");
-  fprintf(wastl,"    0.7 add -0.2 moveto\n");
-  fprintf(wastl,"    len 1 sub exch sub\n");
-  fprintf(wastl,"    sequence exch 1 getinterval\n");
-  fprintf(wastl,"    show\n");
-  fprintf(wastl,"} for\n");
-  fprintf(wastl,"270 rotate\n\n");
-
-  fprintf(wastl,"270 rotate\n");
-  fprintf(wastl,"0 1 len 1 sub {\n");
-  fprintf(wastl,"    dup\n");
-  fprintf(wastl,"    -0.3 add len sub  0.7 len add  moveto\n");
-  fprintf(wastl,"    sequence exch 1 getinterval\n");
-  fprintf(wastl,"    show\n");
-  fprintf(wastl,"} for\n");
-  fprintf(wastl,"90 rotate\n\n");
+  fprintf(wastl,
+	  "%% print sequence along all 4 sides\n"
+	  "[ [0.7 -0.3 0 ]\n"
+	  "  [0.7 0.7 len add 0]\n"
+	  "  [0.7 -0.2 90]\n" 
+	  "  [-0.3 len sub 0.7 len add -90]\n"
+	  "] {\n"
+	  "  gsave\n"
+	  "    aload pop rotate translate\n"
+	  "    0 1 len 1 sub {\n"
+	  "     dup 0 moveto\n"
+	  "     sequence exch 1 getinterval\n"
+	  "     show\n"
+	  "    } for\n"
+	  "  grestore\n"
+	  "} forall\n\n");
 
   /* do grid */
   fprintf(wastl,"0.5 dup translate\n"
@@ -525,6 +674,27 @@ int PS_dot_plot(char *string, char *wastlfile)
 	  "   stroke\n"
 	  "} for\n"
 	  "0.5 neg dup translate\n\n");
+}
+
+int PS_dot_plot(char *string, char *wastlfile)
+{
+  /* produce PostScript dot plot from probabilities in pr[] array */
+   
+  FILE *wastl;
+  char name[31], *c;
+  int i, j, length;
+  double tmp;
+   
+  length= strlen(string);
+  wastl = fopen(wastlfile,"w");
+  if (wastl==NULL) {
+    fprintf(stderr, "can't open %s for dot plot\n", wastlfile);
+    return 0; /* return 0 for failure */
+  }
+  strncpy(name, wastlfile, 30);
+  if ((c=strrchr(name, '_'))!=0) *c='\0';
+
+  print_PSdot_header(wastl, name, string);
 
   /* print boxes */
   for (i=1; i<length; i++)
@@ -539,11 +709,54 @@ int PS_dot_plot(char *string, char *wastlfile)
       fprintf(wastl,"%d %d 0.95 lbox\n",
 	      base_pair[i].i, base_pair[i].j); 
 
-  fprintf(wastl,"showpage\n");
-  fprintf(wastl,"end\n");
-  fprintf(wastl,"%%%%EOF\n");
+  fprintf(wastl,"showpage\n"
+	  "end\n"
+	  "%%%%EOF\n");
   fclose(wastl);
   return 1; /* success */
+}
+
+/*---------------------------------------------------------------------------*/
+int PS_color_dot_plot(char *string, cpair *pi, char *wastlfile)
+{
+  /* produce color PostScript dot plot from cpair */
+  
+  FILE *wastl;
+  char name[31], *c;
+  int i, length;
+   
+  length= strlen(string);
+  wastl = fopen(wastlfile,"w");
+  if (wastl==NULL) {
+    fprintf(stderr, "can't open %s for dot plot\n", wastlfile);
+    return 0; /* return 0 for failure */
+  }
+  strncpy(name, wastlfile, 30);
+  if ((c=strrchr(name, '_'))!=0) *c='\0';
+
+  print_PSdot_header(wastl, name, string);
+
+  fprintf(wastl, "/hsb {\n"
+	  "dup 0.3 mul 1 exch sub sethsbcolor\n"
+	  "} bind def\n\n");
+
+  /* print boxes */
+   i=0;
+   while (pi[i].j>0) {
+     fprintf(wastl,"%1.2f %1.2f hsb %d %d %1.4f ubox\n",
+	     pi[i].hue, pi[i].sat, pi[i].i, pi[i].j, pi[i].p);
+     
+     if (pi[i].mfe)
+       fprintf(wastl,"%1.2f %1.2f hsb %d %d %1.4f lbox\n",
+	       pi[i].hue, pi[i].sat, pi[i].i, pi[i].j, pi[i].p);
+     i++;
+   }
+
+   fprintf(wastl,"showpage\n"
+	   "end\n"
+	   "%%%%EOF\n");
+   fclose(wastl);
+   return 1; /* success */
 }
 
 /*---------------------------------------------------------------------------*/

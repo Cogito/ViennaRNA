@@ -16,7 +16,7 @@
 #include "energy_const.h"
 #include "energy_par.h"
 
-static char rcsid[] = "$Id: read_epars.c,v 1.6 2000/10/10 12:21:59 ivo Rel ivo $";
+static char rcsid[] = "$Id: read_epars.c,v 1.9 2002/11/07 12:04:55 ivo Exp $";
 
 #define PUBLIC
 #define PRIVATE   static
@@ -173,7 +173,7 @@ PRIVATE char *get_array1(int *arr, int size)
       if (buf[0]=='*') {i++; continue;}
       else if (buf[0]=='x') { /* should only be used for loop parameters */
 	if (i==0) nrerror("can't extrapolate first value");
-	p = arr[last] + rint(lxc37*log(((double) i)/(double)(last)));
+	p = arr[last] + (int) (0.5+ lxc37*log(((double) i)/(double)(last)));
       }
       else if (strcmp(buf,"DEF") == 0) p = DEF;
       else if (strcmp(buf,"INF") == 0) p = INF;
@@ -369,10 +369,10 @@ PRIVATE void  rd_Tetra_loop(void)
     buf = get_line(fp);
     if (buf==NULL) break;
     r = sscanf(buf,"%6s %d", &Tetraloops[7*i], &TETRA_ENERGY37[i]);
-    Tetraloops[7*i+6]=' ';
+    strcat(Tetraloops, " ");
     free(buf);
     i++;
-  } while((r==2)&&(i<80));
+  } while((r==2)&&(i<200));
   return;
 }
 

@@ -33,10 +33,10 @@ static unsigned cache_f (char *x);
 /* #define CACHESIZE 33554432 -1 */ /* 2^25 -1   must be power of 2 -1 */
 /* #define CACHESIZE 16777216 -1 */ /* 2^24 -1   must be power of 2 -1 */ 
 /* #define CACHESIZE  4194304 -1 */ /* 2^22 -1   must be power of 2 -1 */
-#define CACHESIZE  1048576 -1  /* 2^20 -1   must be power of 2 -1 */
+/* #define CACHESIZE  1048576 -1 */ /* 2^20 -1   must be power of 2 -1 */
 /* #define CACHESIZE   262144 -1 */ /* 2^18 -1   must be power of 2 -1 */
 /* next is default */
-/* #define CACHESIZE    65536 -1 */ /* 2^16 -1   must be power of 2 -1 */
+#define CACHESIZE    65536 -1  /* 2^16 -1   must be power of 2 -1 */
 /* #define CACHESIZE    16384 -1 */ /* 2^14 -1   must be power of 2 -1 */
 /* #define CACHESIZE     4096 -1 */ /* 2^12 -1   must be power of 2 -1 */
 

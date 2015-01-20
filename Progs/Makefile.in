@@ -40,7 +40,8 @@ bin_PROGRAMS = RNAfold$(EXEEXT) RNAeval$(EXEEXT) RNAheat$(EXEEXT) \
 	RNApdist$(EXEEXT) RNAdistance$(EXEEXT) RNAinverse$(EXEEXT) \
 	RNAplot$(EXEEXT) RNAsubopt$(EXEEXT) RNALfold$(EXEEXT) \
 	RNAcofold$(EXEEXT) RNApaln$(EXEEXT) RNAduplex$(EXEEXT) \
-	RNAalifold$(EXEEXT) RNAplfold$(EXEEXT) RNAup$(EXEEXT)
+	RNAalifold$(EXEEXT) RNAplfold$(EXEEXT) RNAup$(EXEEXT) \
+	RNAaliduplex$(EXEEXT)
 subdir = Progs
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -58,6 +59,10 @@ RNALfold_SOURCES = RNALfold.c
 RNALfold_OBJECTS = RNALfold.$(OBJEXT)
 RNALfold_LDADD = $(LDADD)
 RNALfold_DEPENDENCIES = ../lib/libRNA.a
+RNAaliduplex_SOURCES = RNAaliduplex.c
+RNAaliduplex_OBJECTS = RNAaliduplex.$(OBJEXT)
+RNAaliduplex_LDADD = $(LDADD)
+RNAaliduplex_DEPENDENCIES = ../lib/libRNA.a
 RNAalifold_SOURCES = RNAalifold.c
 RNAalifold_OBJECTS = RNAalifold.$(OBJEXT)
 RNAalifold_LDADD = $(LDADD)
@@ -121,12 +126,14 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = RNALfold.c RNAalifold.c RNAcofold.c RNAdistance.c \
-	RNAduplex.c RNAeval.c RNAfold.c RNAheat.c RNAinverse.c \
-	RNApaln.c RNApdist.c RNAplfold.c RNAplot.c RNAsubopt.c RNAup.c
-DIST_SOURCES = RNALfold.c RNAalifold.c RNAcofold.c RNAdistance.c \
-	RNAduplex.c RNAeval.c RNAfold.c RNAheat.c RNAinverse.c \
-	RNApaln.c RNApdist.c RNAplfold.c RNAplot.c RNAsubopt.c RNAup.c
+SOURCES = RNALfold.c RNAaliduplex.c RNAalifold.c RNAcofold.c \
+	RNAdistance.c RNAduplex.c RNAeval.c RNAfold.c RNAheat.c \
+	RNAinverse.c RNApaln.c RNApdist.c RNAplfold.c RNAplot.c \
+	RNAsubopt.c RNAup.c
+DIST_SOURCES = RNALfold.c RNAaliduplex.c RNAalifold.c RNAcofold.c \
+	RNAdistance.c RNAduplex.c RNAeval.c RNAfold.c RNAheat.c \
+	RNAinverse.c RNApaln.c RNApdist.c RNAplfold.c RNAplot.c \
+	RNAsubopt.c RNAup.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -284,6 +291,9 @@ clean-binPROGRAMS:
 RNALfold$(EXEEXT): $(RNALfold_OBJECTS) $(RNALfold_DEPENDENCIES) 
 	@rm -f RNALfold$(EXEEXT)
 	$(LINK) $(RNALfold_LDFLAGS) $(RNALfold_OBJECTS) $(RNALfold_LDADD) $(LIBS)
+RNAaliduplex$(EXEEXT): $(RNAaliduplex_OBJECTS) $(RNAaliduplex_DEPENDENCIES) 
+	@rm -f RNAaliduplex$(EXEEXT)
+	$(LINK) $(RNAaliduplex_LDFLAGS) $(RNAaliduplex_OBJECTS) $(RNAaliduplex_LDADD) $(LIBS)
 RNAalifold$(EXEEXT): $(RNAalifold_OBJECTS) $(RNAalifold_DEPENDENCIES) 
 	@rm -f RNAalifold$(EXEEXT)
 	$(LINK) $(RNAalifold_LDFLAGS) $(RNAalifold_OBJECTS) $(RNAalifold_LDADD) $(LIBS)
@@ -334,6 +344,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RNALfold.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RNAaliduplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RNAalifold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RNAcofold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RNAdistance.Po@am__quote@

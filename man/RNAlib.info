@@ -158,6 +158,14 @@ provided:
      * (1-p_ij). Uses the global `pr' array filled by a previous call
      to `pf_fold()'.
 
+ -- Function: char *centroid(int LENGTH, double *DIST)
+     Computes the centroid structure, i.e. the structure having the
+     lowest average base pair distance to all structures in the
+     Boltzmann ensemble. This can be computed trivially from the pair
+     probabilities by choosing all base pairs that have probability
+     greater 0.5. The distance of the centroid to the ensemble is
+     returned in DIST.
+
    Prototypes for these functions are declared in `part_func.h'.
 
 
@@ -1382,6 +1390,7 @@ Function Index
 * Menu:
 
 * **pf_interact:                         Cofolding.           (line 186)
+* *centroid:                             PF Fold.             (line  57)
 * *pf_unstru:                            Cofolding.           (line 156)
 * add_root:                              Parsing.             (line  31)
 * alifold:                               Alignment Fold.      (line  14)
@@ -1503,24 +1512,24 @@ Node: Introduction601
 Node: Folding Routines1611
 Node: mfe Fold2422
 Node: PF Fold4292
-Node: Inverse Fold7222
-Node: Suboptimal folding8859
-Node: Cofolding9540
-Node: Local Fold20339
-Node: Alignment Fold22317
-Node: Fold Vars24644
-Node: Param Files29263
-Node: Parsing and Comparing36580
-Node: notations36990
-Node: Parsing40513
-Node: Distances43154
-Node: Tree Distances47017
-Node: String Distances47795
-Node: Profile Distances48325
-Node: Utilities49404
-Node: Example54040
-Node: References57539
-Node: Function Index60584
-Node: Variable Index65916
+Node: Inverse Fold7637
+Node: Suboptimal folding9274
+Node: Cofolding9955
+Node: Local Fold20754
+Node: Alignment Fold22732
+Node: Fold Vars25059
+Node: Param Files29678
+Node: Parsing and Comparing36995
+Node: notations37405
+Node: Parsing40928
+Node: Distances43569
+Node: Tree Distances47432
+Node: String Distances48210
+Node: Profile Distances48740
+Node: Utilities49819
+Node: Example54455
+Node: References57954
+Node: Function Index60999
+Node: Variable Index66404
 
 End Tag Table

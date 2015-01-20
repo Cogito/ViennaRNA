@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2006-11-09 11:24:43 xtof>
+  Last changed Time-stamp: <2007-07-03 15:21:16 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: baum.c,v 1.7 2006/11/24 08:12:35 xtof Exp $
+  $Id: baum.c,v 1.8 2007/07/03 14:29:41 ivo Exp $
 */
 
 #include <stdio.h>
@@ -26,20 +26,19 @@ typedef struct _baum {
   int nummer; /* number of base in sequence */
   char typ;   /* 'r' virtualroot, 'p' or 'q' paired, 'u' unpaired */
   unsigned short base; /* 0<->unknown, 1<->A, 2<->C, 3<->G, 4<->U */
+  int loop_energy;
   struct _baum *up;
   struct _baum *next;
   struct _baum *prev;
   struct _baum *down;
 } baum;
 
-static char UNUSED rcsid[]="$Id: baum.c,v 1.7 2006/11/24 08:12:35 xtof Exp $";
-static int poListop = 0; /* polist counter = no_of_bp */
+static char UNUSED rcsid[]="$Id: baum.c,v 1.8 2007/07/03 14:29:41 ivo Exp $";
 static short *pairList = NULL;
 static short *typeList = NULL;
 static short *aliasList = NULL;
 static baum *rl = NULL;         /* ringlist */
 static baum *wurzl = NULL;      /* virtualroot of ringlist-tree */
-static baum **poList = NULL;    /* post order list of bp's */
 static char **ptype = NULL;
 
 static int comp_struc(const void *A, const void *B);
@@ -55,9 +54,10 @@ void clean_up_rl (void);
 static void ini_ringlist(void);
 static void reset_ringlist(void);
 static void struc2tree (char *struc);
+static void close_bp_en (baum *i, baum *j);
 static void close_bp (baum *i, baum *j);
 static void open_bp (baum *i);
-static void make_poList (baum *root);
+static void open_bp_en (baum *i);
 static void inb (baum *root);
 static void inb_nolp (baum *root);
 static void dnb (baum *rli);
@@ -100,11 +100,18 @@ static void struc2tree(char *struc) {
     exit(1);
   }
 
-  poListop = 1;
-  make_poList(NULL);
   GSV.currE = GSV.startE =
     (float )energy_of_struct_pt(GAV.farbe,
 				pairList, typeList, aliasList) / 100.0;
+  {
+    int i;
+    for(i = 0; i < GSV.len; i++) {
+      if (pairList[i+1]>i+1)
+	rl[i].loop_energy = loop_energy(pairList, typeList, aliasList,i+1);
+    }
+    wurzl->loop_energy = loop_energy(pairList, typeList, aliasList,0);
+  }
+
   free(struc_copy);
 }
 
@@ -134,8 +141,6 @@ static void ini_ringlist(void) {
   rl = (baum *)calloc(GSV.len+1, sizeof(baum));
   assert(rl != NULL);
   /* allocate PostOrderList */
-  poList = (baum **)calloc(GSV.len+2, sizeof(baum *));
-  assert(poList != NULL);
 
   /* initialize virtualroot */
   wurzl->typ = 'r';
@@ -143,7 +148,6 @@ static void ini_ringlist(void) {
   /* connect virtualroot to ringlist-tree in down direction */
   wurzl->down = &rl[GSV.len];
   /* initialize post-order list */
-  poList[poListop++] = wurzl;
 
   make_pair_matrix();
 
@@ -175,6 +179,7 @@ static void ini_ringlist(void) {
   /* make virtual basepair for virtualroot */
   rl[i].up = wurzl;
   rl[i].typ = 'x';
+
 }
 
 /**/
@@ -216,7 +221,6 @@ void ini_or_reset_rl(void) {
     if(GTV.start) struc2tree(GAV.startform);
     else {
       GSV.currE = GSV.startE;
-      poListop = 1;
     }
   }
 }
@@ -248,21 +252,21 @@ void update_tree(int i, int j) {
     if ((i > 0) && (j > 0)) { /* insert */
       rli = &rl[i-1];
       rlj = &rl[j-1];
-      close_bp(rli, rlj);
+      close_bp_en(rli, rlj);
     }
     else if ((i < 0)&&(j < 0)) { /* delete */
       i = -i;
       rli = &rl[i-1];
-      open_bp(rli);
+      open_bp_en(rli);
     }
     else { /* shift */
       if (i > 0) { /* i remains the same, j shifts */
 	j=-j;
 	rli=&rl[i-1];
 	rlj=&rl[j-1];
-	open_bp(rli);
+	open_bp_en(rli);
 	ORDER(rli, rlj);
-	close_bp(rli, rlj);
+	close_bp_en(rli, rlj);
       }
       else { /* j remains the same, i shifts */
 	baum *old_rli;
@@ -270,9 +274,9 @@ void update_tree(int i, int j) {
 	rli = &rl[i-1];
 	rlj = &rl[j-1];
 	old_rli = rlj->up;
-	open_bp(old_rli);
+	open_bp_en(old_rli);
 	ORDER(rli, rlj);
-	close_bp(rli, rlj);
+	close_bp_en(rli, rlj);
       }
     }
   } /* << single basepair move */
@@ -280,19 +284,17 @@ void update_tree(int i, int j) {
     if ((i > 0) && (j > 0)) { /* insert */
       rli = &rl[i-GSV.len-2];
       rlj = &rl[j-GSV.len-2];
-      close_bp(rli->next, rlj->prev);
-      close_bp(rli, rlj);
+      close_bp_en(rli->next, rlj->prev);
+      close_bp_en(rli, rlj);
     }
     else if ((i < 0)&&(j < 0)) { /* delete */
       i = -i;
       rli = &rl[i-GSV.len-2];
-      open_bp(rli);
-      open_bp(rli->next);
+      open_bp_en(rli);
+      open_bp_en(rli->next);
     }
   } /* << double basepair move */
 
-  poListop = 1;
-  make_poList(NULL);
 }
 
 /* open a particular base pair */
@@ -344,6 +346,7 @@ void close_bp (baum *i, baum *j) {
   i->next = jn;
 }
 
+# if 0
 /* for a given tree, generate postorder-list */
 static void make_poList (baum *root) {
 
@@ -367,14 +370,17 @@ static void make_poList (baum *root) {
   }
   return;
 }
+#endif
 
 /* for a given ringlist, generate all structures
    with one additional basepair */
 static void inb(baum *root) {
 
-  int EoT = 0;
+  int EoT;
+  int E_old, E_new_in, E_new_out;
   baum *stop,*rli,*rlj;
 
+  E_old = root->loop_energy;
   stop=root->down;
   /* loop ringlist over all possible i positions */
   for(rli=stop->next;rli!=stop;rli=rli->next){
@@ -390,8 +396,11 @@ static void inb(baum *root) {
       if(ptype[rli->nummer][rlj->nummer]){
 	/* close the base bair and ... */
 	close_bp(rli,rlj);
+	E_new_in  = loop_energy(pairList, typeList, aliasList,rli->nummer+1);
+	E_new_out = loop_energy(pairList, typeList, aliasList,root->nummer+1);
 	/* ... evaluate energy of the structure */
-	EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+	EoT = (int) (GSV.currE*100 + ((GSV.currE<0)?-0.4:0.4)) +  E_new_in + E_new_out - E_old ;
+	/* assert(EoT ==  energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList)); */
 	/* open the base pair again... */
 	open_bp(rli);
 	/* ... and put the move and the enegy
@@ -461,12 +470,22 @@ static void inb_nolp(baum *root) {
  with one less base pair */
 static void dnb(baum *rli){
 
-  int EoT = 0;
-  baum *rlj;
+  int EoT, E_old_in, E_old_out, E_new;
+
+  baum *rlj, *r;
 
   rlj=rli->down;
   open_bp(rli);
-  EoT = energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList);
+  /* ... evaluate energy of the structure */
+
+  for (r=rli->next; r->up==NULL; r=r->next);
+  E_old_in = rli->loop_energy;
+  E_old_out = r->up->loop_energy;
+  E_new = loop_energy(pairList,typeList,aliasList,r->up->nummer+1);
+  EoT = (int) (GSV.currE*100 + ((GSV.currE<0)?-0.4:0.4)) -
+    E_old_in - E_old_out + E_new;
+
+  /* assert(EoT== energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList));*/
   close_bp(rli,rlj);
   update_nbList(-(1 + rli->nummer), -(1 + rlj->nummer), EoT);
 }
@@ -634,35 +653,33 @@ static void fnb(baum *rli) {
    generate all neighbours according to moveset */
 void move_it (void) {
   int i;
-
+  
   GSV.currE =
     energy_of_struct_pt(GAV.farbe, pairList, typeList, aliasList)/100.;
-
+  
   if ( GTV.noLP ) { /* canonical neighbours only */
-    for (i = 0; i < poListop; i++) {
-      /* canonical base pair insert neighbours */
-      inb_nolp(poList[i]);
-
-      if (i > 0) { /* virtual root bp should never be removed !!! */
-	/* canonical base pair delete neighbours */
-	dnb_nolp(poList[i]);
+    inb_nolp(wurzl);
+    for (i = 0; i < GSV.len; i++) {
+      
+      if (pairList[i+1]>i+1) {
+	inb_nolp(rl+i);      /* insert pair neighbours */
+	dnb_nolp(rl+i);  /* delete pair neighbour */
       }
     }
   }
   else { /* all neighbours */
-    for (i = 0; i < poListop; i++) {
-      /* base pair insert neighbours */
-      inb(poList[i]);
-
-      if (i > 0) { /* virtual root bp should never be removed !!! */
-	/* base pair delete neighbours */
-	dnb(poList[i]);
-	/* base pair shift neighbours */
-	if ( GTV.noShift == 0 ) fnb(poList[i]);
+    inb(wurzl);
+    for (i = 0; i < GSV.len; i++) {
+      
+      if (pairList[i+1]>i+1) {
+	inb(rl+i); 	 /* insert pair neighbours */
+	dnb(rl+i);  /* delete pair neighbour */
+	if ( GTV.noShift == 0 ) fnb(rl+i);
       }
     }
   }
 }
+
 
 /**/
 void clean_up_rl(void) {
@@ -672,7 +689,6 @@ void clean_up_rl(void) {
   free(aliasList); aliasList = NULL;
   free(rl); rl=NULL;
   free(wurzl);  wurzl=NULL;
-  free(poList); poList=NULL; poListop=0;
   for (i=0; i<=GSV.len; i++)
     free(ptype[i]);
   free(ptype);
@@ -728,3 +744,21 @@ static void make_ptypes(const short *S) {
       }
     }
 }
+
+static void close_bp_en (baum *i, baum *j) {
+  /* close bp and update energy */
+  baum *r;
+  close_bp(i,j);
+  i->loop_energy = loop_energy(pairList,typeList,aliasList,i->nummer+1);
+  for (r=i->next; r->up==NULL; r=r->next);
+  r->up->loop_energy = loop_energy(pairList,typeList,aliasList,r->up->nummer+1);
+};
+
+static void open_bp_en (baum *i) {
+  /* open bp and update energy */
+  baum *r;
+  i->loop_energy=0;
+  open_bp(i);
+  for (r=i->next; r->up==NULL; r=r->next);
+  r->up->loop_energy = loop_energy(pairList,typeList,aliasList,r->up->nummer+1);
+};

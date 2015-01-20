@@ -1,24 +1,15 @@
 .\" .ER
 .TH "RNAPDIST" "l" "" "Ivo Hofacker" "Vienna RNA"
 .SH "NAME"
-RNApdist \- calculate distances between thermodynamic RNA secondary
-structures ensembles
+RNApaln \- RNA alignment based on sequence base pairing propensities
 .SH "SYNOPSIS"
-\fBRNApdist [\-Xp|m|f|c] [\-B\ [file]] [\-T\ temp] [\-4] [\-d] [\-noGU] [\-noCloseGU] [\-e\ e_set] [\-P\ paramfile] [\-nsp\ pairs]
+\fBRNApaln [\-Xp|m|f|c] [\-B\ [file]] [--gapo open] [--gape ext] [--seqw w] [--endgaps] [\-T\ temp] [\-4] [\-d] [\-noGU] [\-noCloseGU] [\-e\ e_set] [\-P\ paramfile] [\-nsp\ pairs]
 
 .SH "DESCRIPTION"
-.I RNApdist
-reads RNA sequences from stdin and calculates structure distances between
-the thermodynamic ensembles of their secondary structures.
-To do this the partition function and matrix of base pairing probabilities is
-computed for each sequence. The probability matrix is then condensed into a
-vector holding for each base the probabilities of being unpaired, paired
-upstream, or paired downstream, respectively. These profiles are compared
-by a standard alignment algorithm. 
+.I RNApaln
+Uses string-alignment techniques to perform fast pairwise structural alignments of RNAs. Similar to RNApdist secondary structure is incorporated in an approximate manner by computing base pair probabilities, which are then reduced to a vector holding the probability that a base is paired upstream, downstream, or remains unpaired. Such pair propsensity vectors can then be compared using standard alignment algorithms. In contrast to RNApdist, RNApaln performs similarity (instead of distance) alignments, considers both sequence and structure information, and uses affine (rather than linear) gap costs. RNApaln can perform semi-local alignments by using free end gaps, a true local alignment mode is planned.
 
-The base pair probabilities are also saved as postscript "dot plots" (as in
-RNAfold) in the files  "name_dp.ps", where name is the name of the sequence,
-or a number if unnamed.
+The same approach has since been used in the StraL program from Gerhard Steeger's group. Since StraL has optimized parameters and a multiple alignment mode, it be be currently the better option. 
 
 .SH "OPTIONS"
 .IP \fB\-Xp\fP
@@ -48,6 +39,16 @@ Print an "alignment" with gaps of the profiles, using the following symbols:
 The aligned structures are written to \fI<file>\fP, if specified. Otherwise
 output is written to stdout, unless the \-Xm option is set in which case
 "backtrack.file" is used.
+.TP
+.B \--gapo \fIopen\fP
+Set the gap open penalty to \fIopen\fP
+.B \--gape \fIext\fP
+Set the gap extension penalty to \fIext\fP
+.B \--seqw \fIw\fP
+Set the weight of sequence (compared to structure) in the scoring function.
+.B \--endgaps
+Use free end-gaps.
+
 .PP 
 The \fB\-T\fP, \fB\-d\fP, \fB\-4\fP, \fB\-noGU\fP, \fB\-noCloseGU\fP,
 \fB\-e\fP, \fB\-P\fP, \fB\-nsp\fP, options work as in RNAfold.

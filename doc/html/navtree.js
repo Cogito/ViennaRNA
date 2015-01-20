@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "RNAlib-2.1.4", "index.html", [
+  [ "RNAlib-2.1.5", "index.html", [
     [ "ViennaRNA Package core - RNAlib", "index.html", null ],
     [ "Parsing and Comparing - Functions to Manipulate Structures", "mp_parse.html", null ],
     [ "Utilities - Odds and Ends", "mp_utils.html", [

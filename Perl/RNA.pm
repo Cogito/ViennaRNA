@@ -17,7 +17,7 @@ Version 0.3
   ($struct, $mfe) = RNA::fold($seq);  #predict mfe structure of $seq
   RNA::PS_rna_plot($seq, $struct, "rna.ps");  # write PS plot to rna.ps
   $F = RNA::pf_fold($seq);   # compute partition function and pair pobabilities
-  RNA::PS_dot_plot($sseq, "dot.ps");          # write dot plot to dot.ps
+  RNA::PS_dot_plot($seq, "dot.ps");          # write dot plot to dot.ps
   ...
 
 =head1 DESCRIPTION
@@ -127,8 +127,6 @@ Suboptimal Folding (from subopt.h)
 
 =over 4
 
-=item subopt SEQUENCE, DELTA
-
 =item subopt SEQUENCE, CONSTRAINTS, DELTA
 
 =item subopt SEQUENCE, CONSTRAINTS, DELTA, FILEHANDLE
@@ -139,7 +137,7 @@ is returned. Else, the C function returnes a list of C structs of type
 SOLUTION. The list is wrapped by SWIG as a perl object that can be
 accesses as follows:
 
-  $solution = subopt($seq, 500);
+  $solution = subopt($seq, undef, 500);
   for (0..$solution->size()-1) {
      printf "%s %6.2f\n",  $solution->get($_)->{structure},
 			   $solution->get($_)->{energy};
@@ -624,6 +622,18 @@ sub FIRSTKEY { }
 
 sub NEXTKEY { }
 
+sub FETCH {
+    my ($self,$field) = @_;
+    my $member_func = "swig_${field}_get";
+    $self->$member_func();
+}
+
+sub STORE {
+    my ($self,$field,$newval) = @_;
+    my $member_func = "swig_${field}_set";
+    $self->$member_func($newval);
+}
+
 sub this {
     my $ptr = shift;
     return tied(%$ptr);
@@ -646,6 +656,10 @@ package RNA;
 *delete_doubleP = *RNAc::delete_doubleP;
 *doubleP_getitem = *RNAc::doubleP_getitem;
 *doubleP_setitem = *RNAc::doubleP_setitem;
+*new_shortP = *RNAc::new_shortP;
+*delete_shortP = *RNAc::delete_shortP;
+*shortP_getitem = *RNAc::shortP_getitem;
+*shortP_setitem = *RNAc::shortP_setitem;
 *cdata = *RNAc::cdata;
 *memmove = *RNAc::memmove;
 *fold = *RNAc::fold;
@@ -658,17 +672,12 @@ package RNA;
 *free_pf_arrays = *RNAc::free_pf_arrays;
 *update_pf_params = *RNAc::update_pf_params;
 *bppm_symbol = *RNAc::bppm_symbol;
+*mean_bp_dist = *RNAc::mean_bp_dist;
+*pbacktrack = *RNAc::pbacktrack;
 *inverse_fold = *RNAc::inverse_fold;
 *inverse_pf_fold = *RNAc::inverse_pf_fold;
 *option_string = *RNAc::option_string;
-sub subopt {
-    my @args = @_;
-    my $result = RNAc::subopt(@args);
-    return undef if (!defined($result));
-    my %resulthash;
-    tie %resulthash, ref($result), $result;
-    return bless \%resulthash, ref($result);
-}
+*subopt = *RNAc::subopt;
 *get_pr = *RNAc::get_pr;
 *b2HIT = *RNAc::b2HIT;
 *b2C = *RNAc::b2C;
@@ -711,6 +720,7 @@ sub subopt {
 *scale_parameters = *RNAc::scale_parameters;
 *copy_parameters = *RNAc::copy_parameters;
 *set_parameters = *RNAc::set_parameters;
+*get_aligned_line = *RNAc::get_aligned_line;
 *make_loop_index = *RNAc::make_loop_index;
 *energy_of_move = *RNAc::energy_of_move;
 *PS_rna_plot = *RNAc::PS_rna_plot;
@@ -730,13 +740,8 @@ package RNA::intArray;
 %ITERATORS = ();
 sub new {
     my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_intArray(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::intArray", $self;
-    return bless \%retval, $pkg;
+    my $self = RNAc::new_intArray(@_);
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -753,25 +758,18 @@ sub DESTROY {
 *getitem = *RNAc::intArray_getitem;
 *setitem = *RNAc::intArray_setitem;
 *cast = *RNAc::intArray_cast;
-sub frompointer {
-    my @args = @_;
-    my $result = RNAc::intArray_frompointer(@args);
-    return undef if (!defined($result));
-    my %resulthash;
-    tie %resulthash, ref($result), $result;
-    return bless \%resulthash, ref($result);
-}
+*frompointer = *RNAc::intArray_frompointer;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
+}
 
 
 ############# Class : RNA::floatArray ##############
@@ -782,13 +780,8 @@ package RNA::floatArray;
 %ITERATORS = ();
 sub new {
     my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_floatArray(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::floatArray", $self;
-    return bless \%retval, $pkg;
+    my $self = RNAc::new_floatArray(@_);
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -805,25 +798,18 @@ sub DESTROY {
 *getitem = *RNAc::floatArray_getitem;
 *setitem = *RNAc::floatArray_setitem;
 *cast = *RNAc::floatArray_cast;
-sub frompointer {
-    my @args = @_;
-    my $result = RNAc::floatArray_frompointer(@args);
-    return undef if (!defined($result));
-    my %resulthash;
-    tie %resulthash, ref($result), $result;
-    return bless \%resulthash, ref($result);
-}
+*frompointer = *RNAc::floatArray_frompointer;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
+}
 
 
 ############# Class : RNA::doubleArray ##############
@@ -834,13 +820,8 @@ package RNA::doubleArray;
 %ITERATORS = ();
 sub new {
     my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_doubleArray(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::doubleArray", $self;
-    return bless \%retval, $pkg;
+    my $self = RNAc::new_doubleArray(@_);
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -857,49 +838,35 @@ sub DESTROY {
 *getitem = *RNAc::doubleArray_getitem;
 *setitem = *RNAc::doubleArray_setitem;
 *cast = *RNAc::doubleArray_cast;
-sub frompointer {
-    my @args = @_;
-    my $result = RNAc::doubleArray_frompointer(@args);
-    return undef if (!defined($result));
-    my %resulthash;
-    tie %resulthash, ref($result), $result;
-    return bless \%resulthash, ref($result);
-}
+*frompointer = *RNAc::doubleArray_frompointer;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
+}
 
 
-############# Class : RNA::bond ##############
+############# Class : RNA::bondT ##############
 
-package RNA::bond;
+package RNA::bondT;
 @ISA = qw( RNA );
 %OWNER = ();
-%BLESSEDMEMBERS = (
-);
-
 %ITERATORS = ();
-*swig_i_get = *RNAc::bond_i_get;
-*swig_i_set = *RNAc::bond_i_set;
-*swig_j_get = *RNAc::bond_j_get;
-*swig_j_set = *RNAc::bond_j_set;
+*swig_i_get = *RNAc::bondT_i_get;
+*swig_i_set = *RNAc::bondT_i_set;
+*swig_j_get = *RNAc::bondT_j_get;
+*swig_j_set = *RNAc::bondT_j_set;
+*get = *RNAc::bondT_get;
 sub new {
     my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_bond(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::bond", $self;
-    return bless \%retval, $pkg;
+    my $self = RNAc::new_bondT(@_);
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -908,7 +875,7 @@ sub DESTROY {
     return unless defined $self;
     delete $ITERATORS{$self};
     if (exists $OWNER{$self}) {
-        RNAc::delete_bond($self);
+        RNAc::delete_bondT($self);
         delete $OWNER{$self};
     }
 }
@@ -917,35 +884,12 @@ sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
-
-sub FETCH {
-    my ($self,$field) = @_;
-    my $member_func = "swig_${field}_get";
-    my $val = $self->$member_func();
-    if (exists $BLESSEDMEMBERS{$field}) {
-        return undef if (!defined($val));
-        my %retval;
-        tie %retval,$BLESSEDMEMBERS{$field},$val;
-        return bless \%retval, $BLESSEDMEMBERS{$field};
-    }
-    return $val;
-}
-
-sub STORE {
-    my ($self,$field,$newval) = @_;
-    my $member_func = "swig_${field}_set";
-    if (exists $BLESSEDMEMBERS{$field}) {
-        $self->$member_func(tied(%{$newval}));
-    } else {
-        $self->$member_func($newval);
-    }
 }
 
 
@@ -954,34 +898,13 @@ sub STORE {
 package RNA::SOLUTION;
 @ISA = qw( RNA );
 %OWNER = ();
-%BLESSEDMEMBERS = (
-);
-
 %ITERATORS = ();
 *swig_energy_get = *RNAc::SOLUTION_energy_get;
 *swig_energy_set = *RNAc::SOLUTION_energy_set;
 *swig_structure_get = *RNAc::SOLUTION_structure_get;
 *swig_structure_set = *RNAc::SOLUTION_structure_set;
-sub get {
-    my @args = @_;
-    my $result = RNAc::SOLUTION_get(@args);
-    return undef if (!defined($result));
-    my %resulthash;
-    tie %resulthash, ref($result), $result;
-    return bless \%resulthash, ref($result);
-}
+*get = *RNAc::SOLUTION_get;
 *size = *RNAc::SOLUTION_size;
-sub new {
-    my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_SOLUTION(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::SOLUTION", $self;
-    return bless \%retval, $pkg;
-}
-
 sub DESTROY {
     return unless $_[0]->isa('HASH');
     my $self = tied(%{$_[0]});
@@ -993,39 +916,22 @@ sub DESTROY {
     }
 }
 
+sub new {
+    my $pkg = shift;
+    my $self = RNAc::new_SOLUTION(@_);
+    bless $self, $pkg if defined($self);
+}
+
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
-
-sub FETCH {
-    my ($self,$field) = @_;
-    my $member_func = "swig_${field}_get";
-    my $val = $self->$member_func();
-    if (exists $BLESSEDMEMBERS{$field}) {
-        return undef if (!defined($val));
-        my %retval;
-        tie %retval,$BLESSEDMEMBERS{$field},$val;
-        return bless \%retval, $BLESSEDMEMBERS{$field};
-    }
-    return $val;
-}
-
-sub STORE {
-    my ($self,$field,$newval) = @_;
-    my $member_func = "swig_${field}_set";
-    if (exists $BLESSEDMEMBERS{$field}) {
-        $self->$member_func(tied(%{$newval}));
-    } else {
-        $self->$member_func($newval);
-    }
 }
 
 
@@ -1034,9 +940,6 @@ sub STORE {
 package RNA::cpair;
 @ISA = qw( RNA );
 %OWNER = ();
-%BLESSEDMEMBERS = (
-);
-
 %ITERATORS = ();
 *swig_i_get = *RNAc::cpair_i_get;
 *swig_i_set = *RNAc::cpair_i_set;
@@ -1052,13 +955,8 @@ package RNA::cpair;
 *swig_sat_set = *RNAc::cpair_sat_set;
 sub new {
     my $pkg = shift;
-    my @args = @_;
-    my $self = RNAc::new_cpair(@args);
-    return undef if (!defined($self));
-    $OWNER{$self} = 1;
-    my %retval;
-    tie %retval, "RNA::cpair", $self;
-    return bless \%retval, $pkg;
+    my $self = RNAc::new_cpair(@_);
+    bless $self, $pkg if defined($self);
 }
 
 sub DESTROY {
@@ -1076,35 +974,12 @@ sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
     delete $OWNER{$ptr};
-    };
+}
 
 sub ACQUIRE {
     my $self = shift;
     my $ptr = tied(%$self);
     $OWNER{$ptr} = 1;
-    };
-
-sub FETCH {
-    my ($self,$field) = @_;
-    my $member_func = "swig_${field}_get";
-    my $val = $self->$member_func();
-    if (exists $BLESSEDMEMBERS{$field}) {
-        return undef if (!defined($val));
-        my %retval;
-        tie %retval,$BLESSEDMEMBERS{$field},$val;
-        return bless \%retval, $BLESSEDMEMBERS{$field};
-    }
-    return $val;
-}
-
-sub STORE {
-    my ($self,$field,$newval) = @_;
-    my $member_func = "swig_${field}_set";
-    if (exists $BLESSEDMEMBERS{$field}) {
-        $self->$member_func(tied(%{$newval}));
-    } else {
-        $self->$member_func($newval);
-    }
 }
 
 
@@ -1128,9 +1003,9 @@ package RNA;
 *cut_point = *RNAc::cut_point;
 
 my %__base_pair_hash;
-tie %__base_pair_hash,"RNA::bond", $RNAc::base_pair;
+tie %__base_pair_hash,"RNA::bondT", $RNAc::base_pair;
 $base_pair= \%__base_pair_hash;
-bless $base_pair, RNA::bond;
+bless $base_pair, RNA::bondT;
 *pr = *RNAc::pr;
 *iindx = *RNAc::iindx;
 *pf_scale = *RNAc::pf_scale;

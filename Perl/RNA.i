@@ -27,6 +27,7 @@
 %array_class(float, floatArray);
 %array_functions(double, doubleP);
 %array_class(double, doubleArray);
+%array_functions(short, shortP);
 %include cdata.i
 
 %constant double VERSION = 0.3;
@@ -85,6 +86,9 @@ char *my_pf_fold(char *string, char *constraints = NULL, float *OUTPUT);
 %ignore pf_fold;
 %include  "../H/part_func.h"
 
+%newobject pbacktrack;
+extern char *pbacktrack(char *sequence);
+
 //%subsection "Inverse Folding"
 
 %rename (inverse_fold) my_inverse_fold;
@@ -133,6 +137,12 @@ char * my_inverse_pf_fold(char *start, const char *target, float *OUTPUT);
 //%subsection "Global Variables to Modify Folding"
 //extern double *pr;  /*  base pairing prob. matrix */
 %include  "../H/fold_vars.h"
+%extend bondT {
+	bondT *get(int i) {
+	   return self+i;
+	}
+}
+
 //%include  "../H/subopt.h"
 // from subopt.h
 
@@ -141,10 +151,10 @@ typedef struct {
   char *structure;
 } SOLUTION;
 
+%newobject subopt;
 extern  SOLUTION *subopt (char *seq, char *constraint, int delta, FILE *fp=NULL);
 
 extern  int subopt_sorted;                       /* sort output by energy */
-
 %extend SOLUTION {
 	SOLUTION *get(int i) {
 	   return self+i;
@@ -154,6 +164,12 @@ extern  int subopt_sorted;                       /* sort output by energy */
 	   SOLUTION *s;
 	   for (s=self; s->structure; s++);
 	   return (int)(s-self);
+	}
+
+	~SOLUTION() {
+	   SOLUTION *s;
+	   for (s=self; s->structure; s++) free(s->structure);
+	   free(self);
 	}
 }
 %{
@@ -232,8 +248,20 @@ void *deref_any(void **ptr, int index) {
 extern paramT *scale_parameters(void);
 extern paramT *copy_parameters(void);
 extern paramT *set_parameters(paramT *dest);
+%{
+char *get_aligned_line(int i) {
+  i = i % 2;
+  return aligned_line[i];
+}
+%}
+
+char *get_aligned_line(int);
+
+
 
 //%include ptr2array.i
+
+
 
 %inline %{
   short *make_loop_index(const char *structure) {

@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2002-07-29 21:10:25 ivo> */
+/* Last changed Time-stamp: <2003-09-13 19:08:37 ivo> */
 /*                
 		  Access to alifold Routines
 
@@ -21,7 +21,7 @@
 #include "alifold.h"
 extern void  read_parameter_file(const char fname[]);
 /*@unused@*/
-static const char rcsid[] = "$Id: RNAalifold.c,v 1.6 2002/08/15 16:33:55 ivo Exp $";
+static const char rcsid[] = "$Id: RNAalifold.c,v 1.9 2003/09/15 11:34:42 ivo Exp $";
 
 #define PRIVATE static
 
@@ -46,15 +46,15 @@ int main(int argc, char *argv[])
   char  *ParamFile=NULL;
   char  *ns_bases=NULL, *c;
   int   n_seq, i, length, sym, r;
-  double min_en, sfact=1.07;
+  double min_en, real_en, sfact=1.07;
   int   pf=0, istty;
-  int noconv=0;
   char     *AS[MAX_NUM_NAMES];          /* aligned sequences */
   char     *names[MAX_NUM_NAMES];       /* sequence names */
   FILE     *clust_file = stdin;
 
   do_backtrack = 1; 
   string=NULL;
+  dangles=2;
   for (i=1; i<argc; i++) {
     if (argv[i][0]=='-') {
       switch ( argv[i][1] )
@@ -76,7 +76,6 @@ int main(int argc, char *argv[])
 	    if (i==argc-1) usage();
 	    ns_bases = argv[++i];
 	  }
-	  if ( strcmp(argv[i], "-noconv")==0) noconv=1;
 	  if ( strcmp(argv[i], "-nc")==0) {
 	    r=sscanf(argv[++i], "%lf", &nc_fact);
 	    if (!r) usage();
@@ -183,12 +182,21 @@ int main(int argc, char *argv[])
   }
   
   min_en = alifold(AS, structure);
+  {
+    int i; double s=0;
+    extern int eos_debug;
+    eos_debug=-1; /* shut off warnings about nonstandard pairs */
+    for (i=0; AS[i]!=NULL; i++) 
+      s += energy_of_struct(AS[i], structure);
+    real_en = s/i;
+  }
   string = consensus((const char **) AS);
   printf("%s\n%s", string, structure);
   if (istty)
-    printf("\n minimum free energy = %6.2f kcal/mol\n", min_en);
+    printf("\n minimum free energy = %6.2f kcal/mol (%6.2f + %6.2f)\n", 
+	   min_en, real_en, min_en - real_en);
   else
-    printf(" (%6.2f)\n", min_en);
+    printf(" (%6.2f = %6.2f + %6.2f) \n", min_en, real_en, min_en-real_en );
   
   if (fname[0]!='\0') {
     strcpy(ffname, fname);
@@ -199,7 +207,7 @@ int main(int argc, char *argv[])
     strcpy(ffname, "alirna.ps");
     strcpy(gfname, "alirna.g");
   }
-  if (length<2000) {
+  if (length<=2500) {
     char *A;
     A = annote(structure, (const char**) AS);
     (void) PS_rna_plot_a(string, structure, ffname, NULL, A);
@@ -363,7 +371,7 @@ void print_pi(const pair_info pi, FILE *file) {
   
   /* numbering starts with 1 in output */
   fprintf(file, "%5d %5d %2d %5.1f%% %7.3f",
-	  pi.i, pi.j, pi.bp[0], 100*pi.p, pi.ent);
+	  pi.i, pi.j, pi.bp[0], 100.*pi.p, pi.ent);
   for (i=1; i<=7; i++) 
     if (pi.bp[i]) fprintf(file, " %s:%-4d", pname[i], pi.bp[i]);
   /* if ((!pi.sym)&&(pi.j>=0)) printf(" *"); */
@@ -386,6 +394,7 @@ PRIVATE cpair *make_color_pinfo(const pair_info *pi) {
     for (ncomp=0, j=1; j<=6; j++) if (pi[i].bp[j]) ncomp++;
     cp[i].hue = (ncomp-1.0)/6.2;   /* hue<6/6.9 (hue=1 ==  hue=0) */
     cp[i].sat = 1 - MIN2( 1.0, pi[i].bp[0]/2.5);
+    cp[i].mfe = pi[i].comp;
   }
   return cp;
 }
@@ -419,7 +428,7 @@ PRIVATE char *annote(const char *structure, const char *AS[]) {
   ps = (char *) space(maxl);
   ptable = make_pair_table(structure);
   for (i=1; i<=n; i++) {
-    char pps[256], ci='\0', cj='\0';
+    char pps[64], ci='\0', cj='\0';
     int j, type, pfreq[8] = {0,0,0,0,0,0,0,0}, vi=0, vj=0;
     if ((j=ptable[i])<i) continue;
     for (s=0; AS[s]!=NULL; s++) {
@@ -436,15 +445,15 @@ PRIVATE char *annote(const char *structure, const char *AS[]) {
       if (ps==NULL) nrerror("out of memory in realloc");
     }
     if (pfreq[0]>0) {
-      sprintf(pps, "%d %d %d gmark\n", i, j, pfreq[0]);
+      snprintf(pps, 64, "%d %d %d gmark\n", i, j, pfreq[0]);
       strcat(ps, pps);
     }
     if (vi>1) {
-      sprintf(pps, "%d cmark\n", i);
+      snprintf(pps, 64, "%d cmark\n", i);
       strcat(ps, pps);
     }
     if (vj>1) {
-      sprintf(pps, "%d cmark\n", j);
+      snprintf(pps, 64, "%d cmark\n", j);
       strcat(ps, pps);
     }
   }
@@ -459,6 +468,6 @@ PRIVATE void usage(void)
   nrerror("usage:\n"
 	  "RNAalifold [-cv float] [-nc float]\n"
 	  "        [-p[0]] [-C] [-T temp] [-4] [-d] [-noGU] [-noCloseGU]\n" 
-	  "        [-noLP] [-e e_set] [-P paramfile] [-nsp pairs] [-S scale] "
-	  "[-noconv]\n");
+	  "        [-noLP] [-e e_set] [-P paramfile] [-nsp pairs] [-S scale]\n"
+	  );
 }

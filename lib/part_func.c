@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <2001-12-13 14:58:29 ivo> */
+/* Last changed Time-stamp: <2004-05-14 18:28:57 ivo> */
 /*                
 		  partiton function for RNA secondary structures
 
@@ -7,8 +7,26 @@
 */
 /*
   $Log: part_func.c,v $
+  Revision 1.20  2004/08/12 12:14:46  ivo
+  update
+
+  Revision 1.19  2004/05/14 16:28:05  ivo
+  fix the bug in make_ptype here too (fixed in 1.27 of fold.c)
+
+  Revision 1.18  2004/02/17 10:46:52  ivo
+  make sure init_pf_fold is called before scale_parameters
+
+  Revision 1.17  2004/02/09 18:37:59  ivo
+  new mean_bp_dist() function to compute ensemble diversity
+
+  Revision 1.16  2003/08/04 09:14:09  ivo
+  finish up stochastic backtracking
+
   Revision 1.15  2002/03/19 16:51:12  ivo
   more on stochastic backtracking (still incomplete)
+
+  Revision 1.14  2002/02/08 17:37:23  ivo
+  set freed S,S1 pointers to NULL
 
   Revision 1.13  2001/11/16 17:30:04  ivo
   add stochastic backtracking (still incomplete)
@@ -26,7 +44,7 @@
 #include "pair_mat.h"
 
 /*@unused@*/
-static char rcsid[] UNUSED = "$Id: part_func.c,v 1.15 2002/03/19 16:51:12 ivo Exp $";
+static char rcsid[] UNUSED = "$Id: part_func.c,v 1.20 2004/08/12 12:14:46 ivo Exp $";
 
 #define MAX(x,y) (((x)>(y)) ? (x) : (y))
 #define MIN(x,y) (((x)<(y)) ? (x) : (y))
@@ -38,6 +56,7 @@ PUBLIC  void  init_pf_fold(int length);
 PUBLIC  void  free_pf_arrays(void);
 PUBLIC  void  update_pf_params(int length);
 PUBLIC  char  bppm_symbol(float *x);
+PUBLIC  int   st_back=0;
 PRIVATE void  sprintf_bppm(int length, char *structure);
 PRIVATE void  scale_pf_params(unsigned int length);
 PRIVATE void  get_arrays(unsigned int length);
@@ -61,12 +80,13 @@ PRIVATE FLT_OR_DBL *exphairpin;
 PRIVATE FLT_OR_DBL expbulge[MAXLOOP+1];
 PRIVATE FLT_OR_DBL expinternal[MAXLOOP+1];
 PRIVATE FLT_OR_DBL expninio[5][MAXLOOP+1];
-PRIVATE FLT_OR_DBL *q, *qb, *qm, *qqm, *qqm1, *qq, *qq1;
+PRIVATE FLT_OR_DBL *q, *qb, *qm, *qm1, *qqm, *qqm1, *qq, *qq1;
 PRIVATE FLT_OR_DBL *prml, *prm_l, *prm_l1, *q1k, *qln;
 PRIVATE FLT_OR_DBL *scale;
 PRIVATE char *ptype; /* precomputed array of pair types */ 
 PRIVATE int *jindx;
-PRIVATE int init_length; /* length in last call to init_pf_fold() */
+PRIVATE int init_length;  /* length in last call to init_pf_fold() */
+PRIVATE double init_temp; /* temperature in last call to scale_pf_params */
 #define ISOLATED  256.0
 
 /*-----------------------------------------------------------------*/
@@ -86,6 +106,7 @@ PUBLIC float pf_fold(char *sequence, char *structure)
 
   n = (int) strlen(sequence);
   if (n>init_length) init_pf_fold(n);  /* (re)allocate space */
+  if ((init_temp - temperature)>1e-6) update_pf_params(n);
 
   S = (short *) xrealloc(S, sizeof(short)*(n+1));
   S1= (short *) xrealloc(S1, sizeof(short)*(n+1));
@@ -158,7 +179,8 @@ PUBLIC float pf_fold(char *sequence, char *structure)
 	else if (type>2) qbt1 *= expTermAU;
 	qqm[i] += qbt1;
       }
-	 
+      if (qm1) qm1[jindx[j]+i] = qqm[i]; /* for stochastic backtracking */
+
       /*construction of qm matrix containing multiple loop
 	partition function contributions from segment i,j */
       temp = 0.0;
@@ -335,6 +357,7 @@ PUBLIC float pf_fold(char *sequence, char *structure)
 #define SCALE 10
 #define SMOOTH(X) ((X)/SCALE<-1.2283697)?0:(((X)/SCALE>0.8660254)?(X):\
           SCALE*0.38490018*(sin((X)/SCALE-0.34242663)+1)*(sin((X)/SCALE-0.34242663)+1))
+/* #define SMOOTH(X) ((X)<0 ? 0 : (X)) */
 
 PRIVATE void scale_pf_params(unsigned int length)
 {
@@ -344,7 +367,7 @@ PRIVATE void scale_pf_params(unsigned int length)
   double  GT;
 
    
-   
+  init_temp = temperature;
   kT = (temperature+K0)*GASCONST;   /* kT in cal/mol  */
   TT = (temperature+K0)/(Tmeasure);
 
@@ -559,6 +582,10 @@ PRIVATE void get_arrays(unsigned int length)
   q   = (FLT_OR_DBL *) space(size);
   qb  = (FLT_OR_DBL *) space(size);
   qm  = (FLT_OR_DBL *) space(size);
+
+  if (st_back) {
+    qm1 = (FLT_OR_DBL *) space(size);
+  }
   ptype = (char *) space(sizeof(char)*((length+1)*(length+2)/2));
   q1k = (FLT_OR_DBL *) space(sizeof(FLT_OR_DBL)*(length+1));
   qln = (FLT_OR_DBL *) space(sizeof(FLT_OR_DBL)*(length+2));
@@ -601,9 +628,10 @@ PUBLIC void init_pf_fold(int length)
 
 PUBLIC void free_pf_arrays(void)
 {
-  free(q);
+  free(q); q=pr=NULL;
   free(qb);
   free(qm);
+  if (qm1 != NULL) {free(qm1); qm1 = NULL;}
   free(ptype);
   free(qq); free(qq1);
   free(qqm); free(qqm1);
@@ -628,8 +656,11 @@ PUBLIC void free_pf_arrays(void)
 
 PUBLIC void update_pf_params(int length)
 {
-  make_pair_matrix();
-  scale_pf_params((unsigned) length);
+  if (length>init_length) init_pf_fold(length);  /* init not update */
+  else {
+    make_pair_matrix();
+    scale_pf_params((unsigned) length);
+  }
 }
 
 /*---------------------------------------------------------------------------*/
@@ -676,10 +707,10 @@ PRIVATE void make_ptypes(const short *S, const char *structure) {
   int n,i,j,k,l;
   
   n=S[0];
-  for (k=1; k<n-TURN-1; k++) 
+  for (k=1; k<n-TURN; k++) 
     for (l=1; l<=2; l++) {
       int type,ntype=0,otype=0;
-      i=k; j = i+TURN+l;
+      i=k; j = i+TURN+l; if (j>n) continue; 
       type = pair[S[i]][S[j]];
       while ((i>=1)&&(j<=n)) {
 	if ((i>1)&&(j<n)) ntype = pair[S[i-1]][S[j+1]];
@@ -691,7 +722,6 @@ PRIVATE void make_ptypes(const short *S, const char *structure) {
 	type  = ntype;
 	i--; j++;
       }
-      
     }
   
   if (fold_constrained&&(structure!=NULL)) {
@@ -767,11 +797,11 @@ char *pbacktrack(char *seq) {
   /* find i position of first pair */
     for (i=start; i<n; i++) {
       r = urn() * qln[i];
-      if (r > qln[i+1]/pf_scale)  break; /* i is paired */
+      if (r > qln[i+1]*scale[1])  break; /* i is paired */
     }
     if (i>=n) break; /* no more pairs */
     /* now find the pairing partner j */
-    r = urn() * (qln[i] - qln[i+1]/pf_scale);
+    r = urn() * (qln[i] - qln[i+1]*scale[1]);
     for (qt=0, j=i+1; j<=n; j++) {
       int type;
       type = ptype[iindx[i]-j];
@@ -779,9 +809,9 @@ char *pbacktrack(char *seq) {
 	double qkl;
 	qkl = qb[iindx[i]-j];
 	if (j<n) qkl *= qln[j+1];
+	if (i>1) qkl *= expdangle5[type][S1[i-1]];
 	if (j<n) qkl *= expdangle3[type][S1[j+1]];
 	else if (type>2) qkl *= expTermAU;
-	if (i>1) qkl *= expdangle5[type][S1[i-1]];
 	qt += qkl;
 	if (qt > r) break; /* j is paired */
       }
@@ -794,11 +824,26 @@ char *pbacktrack(char *seq) {
   return pstruc;
 }
 
-static void bmulti(int i,int j) {
+static void backtrack_qm1(int i,int j) {
+  /* i is paired to l, i<l<j; backtrack in qm1 to find l */
+  int ii, l, type;
+  double qt, r;
+
+  r = urn() * qm1[jindx[j]+i];
+  ii = iindx[i];
+  for (qt=0., l=i+TURN+1; l<=j; l++) {
+    type = ptype[ii-l];
+    if (type) 
+      qt +=  qb[ii-l]*expMLintern[type]* 
+	expdangle5[type][S1[i-1]] * expdangle3[type][S1[l+1]] *  
+	expMLbase[j-l];
+    if (qt>=r) break;
+  }
+  if (l>j) nrerror("backtrack failed in qm1");
+  backtrack(i,l);
 }
 
 static void backtrack(int i, int j) {
-  int start, degree;
   do {
     double r, qbt1;
     int k, l, type, u, u1;
@@ -837,45 +882,61 @@ static void backtrack(int i, int j) {
   } while (1);
 
   /* backtrack in multi-loop */
-  start = i+1; degree=0;
-  while (start<j) {
+  {
     double r, qt;
-    int k, l, type;
+    int k, l, ii, jj, type;
 
-    /* find i position of first pair */
-    for (k=start; k<j; k++) {
-      r = urn() * qm[iindx[k]-j-1];
-      if (r > qm[iindx[k+1]-j-1] * expMLbase[1])  break; /* k is paired */
+    i++; j--;
+    /* find the first split index */
+    ii = iindx[i]; /* ii-j=[i,j] */
+    jj = jindx[j]; /* jj+i=[j,i] */
+    for (qt=0., k=i+1; k<j; k++) qt += qm[ii-(k-1)]*qm1[jj+k];
+    r = urn() * qt;
+    for (qt=0., k=i+1; k<j; k++) {
+      qt += qm[ii-(k-1)]*qm1[jj+k];
+      if (qt>=r) break;
     }
-    if (k>=j) break; /* no more pairs */
+    if (k>=j) nrerror("backtrack failed, can't find split index ");
     
-    r = urn() * (qm[iindx[k]-j-1] - qm[iindx[k+1]-j-1]*expMLbase[1]);
-    for (qt=0, l=k+1; l<j; l++) {
-      int type;
-      type = ptype[iindx[k]-l];
-      if (type) {
-	double qkl;
-	qkl = qb[iindx[k]-l]*expMLintern[type];
-	qkl *= expdangle3[type][S1[l+1]];
-	qkl *= expdangle5[type][S1[k-1]];
-	if (degree>0) {
-	  double qq2;
-	  qq2 *= qkl * expMLbase[j-1-l];
-	  qt += qq2;
-	  if (qt > r) {
-	    /* k,l is at pair in this MLoop */
-	    start = j;
-	    break; 
-	  }
+    backtrack_qm1(k, j);
+
+    j = k-1;
+    while (j>i) {
+      /* now backtrack  [i ... j] in qm[] */
+      jj = jindx[j];
+      ii = iindx[i];
+      r = urn() * qm[ii - j];
+      qt = qm1[jj+i]; k=i;
+      if (qt<r) 
+	for (k=i+1; k<=j; k++) {
+	  qt += (qm[ii-(k-1)]+expMLbase[k-i])*qm1[jj+k];
+	  if (qt >= r) break; 
 	}
-	if (l<j-1) qkl *= qm[iindx[l+1]-j-1];  
-	qt += qkl;
-	if (qt > r) break; /* l pairs k, more pairs to come */
-      }
-    }
-    if ((k==j)||(l==j)) nrerror("backtracking failed in multi loop");
-    backtrack(k,l);
-    if (start<j) start = l+1;
-    degree++;
+      if (k>j) nrerror("backtrack failed in qm");
+      
+      backtrack_qm1(k,j);
+
+      if (k<i+TURN) break; /* no more pairs */
+      r = urn() * (qm[ii-(k-1)] + expMLbase[k-i]);
+      if (expMLbase[k-i] >= r) break; /* no more pairs */
+      j = k-1;
+    } 
   }
+}
+
+PUBLIC double mean_bp_dist(int length) {
+  /* compute the mean base pair distance in the thermodynamic ensemble */
+  /* <d> = \sum_{a,b} p_a p_b d(S_a,S_b) 
+     this can be computed from the pair probs p_ij as 
+     <d> = \sum_{ij} p_{ij}(1-p_{ij}) */
+  int i,j;
+  double d=0;
+  
+  if (pr==NULL) 
+    nrerror("pr==NULL. You need to call pf_fold() before mean_bp_dist()");
+
+  for (i=1; i<=length; i++)
+    for (j=i+TURN+1; j<=length; j++)
+      d += pr[iindx[i]-j] * (1-pr[iindx[i]-j]);
+  return d;
 }

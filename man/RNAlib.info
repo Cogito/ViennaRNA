@@ -1,4 +1,4 @@
-This is RNAlib.info, produced by makeinfo version 4.2 from
+This is RNAlib.info, produced by makeinfo version 4.5 from
 RNAlib.texinfo.
 
 
@@ -11,10 +11,10 @@ File: RNAlib.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Menu:
 
 * Introduction::
-* Folding Routines::		Functions for Folding RNA Secondary Structures
-* Parsing and Comparing::	Functions to Manipulate Structures
-* Utilities::			Odds and Ends
-* Example::			A Small Example Program
+* Folding Routines::            Functions for Folding RNA Secondary Structures
+* Parsing and Comparing::       Functions to Manipulate Structures
+* Utilities::                   Odds and Ends
+* Example::                     A Small Example Program
 * References::
 * Function Index::
 * Variable Index::
@@ -49,11 +49,12 @@ Folding Routines
 
 * Menu:
 
-* mfe Fold::     Calculating Minimum Free Energy Structures
-* PF Fold::      Calculating Partition Functions and Pair Probabilities
-* Inverse Fold:: Searching for Predefined Structures
-* Fold Vars::    Global Variables for the Folding Routines
-* Param Files::  Reading Energy Parameters from File
+* mfe Fold::                    Calculating Minimum Free Energy Structures
+* PF Fold::                     Calculating Partition Functions and Pair Probabilities
+* Inverse Fold::                Searching for Predefined Structures
+* Suboptimal folding::          Enumerating suboptimal structures
+* Fold Vars::                   Global Variables for the Folding Routines
+* Param Files::                 Reading Energy Parameters from File
 
 
 File: RNAlib.info,  Node: mfe Fold,  Next: PF Fold,  Prev: Folding Routines,  Up: Folding Routines
@@ -142,10 +143,21 @@ are provided:
      parameters after a change in folding parameters like temperature
      (*note Variables: Fold Vars.).
 
+ - Function: double mean_bp_dist (int LENGTH)
+     computes the mean base pair distance in the equilibrium ensemble
+     as a measure of the structural diversity.  It is given by <d> =
+     sum_a,b p_a * p_b * d(a,b), where the sum goes over all pairs of
+     possible structure a,b, p_a is the Boltzmann weight of structure
+     a, and d(a,b) is the base pair distance (see `bp_distance()' in
+     *Note Distances::). The mean base pair distances can be computed
+     efficiently from the pair probabilities p_ij as <d> = sum_ij p_ij
+     * (1-p_ij). Uses the global `pr' array filled by a previous call
+     to `pf_fold()'.
+
    Prototypes for these functions are declared in `part_func.h'.
 
 
-File: RNAlib.info,  Node: Inverse Fold,  Next: Fold Vars,  Prev: PF Fold,  Up: Folding Routines
+File: RNAlib.info,  Node: Inverse Fold,  Next: Suboptimal folding,  Prev: PF Fold,  Up: Folding Routines
 
 Inverse Folding
 ===============
@@ -180,7 +192,25 @@ structure, thereby inverting the folding routines.
    Prototypes for these functions are declared in `inverse.h'.
 
 
-File: RNAlib.info,  Node: Fold Vars,  Next: Param Files,  Prev: Inverse Fold,  Up: Folding Routines
+File: RNAlib.info,  Node: Suboptimal folding,  Next: Fold Vars,  Prev: Inverse Fold,  Up: Folding Routines
+
+Suboptimal folding
+==================
+
+ - data type: SOLUTION struct {float energy; char *structure;}
+
+ - Function: SOLUTION* subopt (char* SEQUENCE, char* CONSTRAINT, int*
+          DELTA, FILE* FP)
+     poduces *all* suboptimal secondary structures within DELTA*0.01
+     kcal/mol of the optimum. The reults are either directly written to
+     a FP (if FP is not `NULL'), or (FP`==NULL') returned in a
+     `SOLUTION *' list terminated by an entry were the `structure'
+     pointer is `NULL'.
+
+   Prototypes for these functions are declared in `subopt.h'.
+
+
+File: RNAlib.info,  Node: Fold Vars,  Next: Param Files,  Prev: Suboptimal folding,  Up: Folding Routines
 
 Global Variables for the Folding Routines
 =========================================
@@ -468,9 +498,9 @@ Parsing and Comparing of Structures
 
 * Menu:
 
-* notations::			Representations of Secondary Structures.
-* Parsing::			Functions for Parsing and Coarse Graining.
-* Distances::			Distances for RNA Secondary Structures
+* notations::                   Representations of Secondary Structures.
+* Parsing::                     Functions for Parsing and Coarse Graining.
+* Distances::                   Distances for RNA Secondary Structures
 
 
 File: RNAlib.info,  Node: notations,  Next: Parsing,  Prev: Parsing and Comparing,  Up: Parsing and Comparing
@@ -621,9 +651,9 @@ Distance Measures
 
 * Menu:
 
-* Tree Distances::		Using Tree Edit Distances to Compare Structures
-* String Distances::		Using String Alignment for Comparison
-* Profile Distances::		Comparing Pair probability Matrices
+* Tree Distances::              Using Tree Edit Distances to Compare Structures
+* String Distances::            Using String Alignment for Comparison
+* Profile Distances::           Comparing Pair probability Matrices
 
    A simple measure of dissimilarity between secondary structures of
 equal length is the base pair distance, given by the number of pairs
@@ -782,7 +812,7 @@ library:
      global `base_pair' array anymore.
 
  - Function: int PS_rna_plot_a (char* SEQUENCE, char* STRUCTURE, char*
-          FILENAME, char* PRE), char* POST))
+          FILENAME, char* PRE, char* POST)
      Same as `PS_rna_plot' but adds extra PostScript macros for various
      annotations (see generated PS code). The PRE and POST variables
      contain PostScript code that is verbatim copied in the resulting
@@ -1063,6 +1093,7 @@ Function Index
 * make_pair_table:                       Utilities.
 * Make_swString:                         String Distances.
 * make_tree:                             Tree Distances.
+* mean_bp_dist:                          PF Fold.
 * nrerror:                               Utilities.
 * pack_structure:                        Utilities.
 * parse_structure:                       Parsing.
@@ -1075,6 +1106,7 @@ Function Index
 * read_parameter_file:                   Param Files.
 * space:                                 Utilities.
 * string_edit_distance:                  String Distances.
+* subopt:                                Suboptimal folding.
 * svg_RNA_plot:                          Utilities.
 * time_stamp:                            Utilities.
 * tree_edit_distance:                    Tree Distances.
@@ -1129,24 +1161,25 @@ Variable Index
 
 Tag Table:
 Node: Top76
-Node: Introduction551
-Node: Folding Routines1462
-Node: mfe Fold1911
-Node: PF Fold3769
-Node: Inverse Fold6061
-Node: Fold Vars7681
-Node: Param Files12276
-Node: Parsing and Comparing19851
-Node: notations20207
-Node: Parsing23725
-Node: Distances26345
-Node: Tree Distances30175
-Node: String Distances30938
-Node: Profile Distances31454
-Node: Utilities32521
-Node: Example37140
-Node: References40734
-Node: Function Index43469
-Node: Variable Index46132
+Node: Introduction601
+Node: Folding Routines1512
+Node: mfe Fold2102
+Node: PF Fold3960
+Node: Inverse Fold6879
+Node: Suboptimal folding8508
+Node: Fold Vars9177
+Node: Param Files13778
+Node: Parsing and Comparing21353
+Node: notations21759
+Node: Parsing25277
+Node: Distances27897
+Node: Tree Distances31758
+Node: String Distances32521
+Node: Profile Distances33037
+Node: Utilities34104
+Node: Example38721
+Node: References42315
+Node: Function Index45050
+Node: Variable Index47824
 
 End Tag Table

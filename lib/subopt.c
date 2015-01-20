@@ -1,5 +1,11 @@
 /*
   $Log: subopt.c,v $
+  Revision 1.18  2003/10/06 08:56:45  ivo
+  use P->TerminalAU
+
+  Revision 1.17  2003/08/26 09:26:08  ivo
+  don't modify print_energy in subopt(); use doubles instead of floats
+
   Revision 1.16  2001/10/01 13:50:00  ivo
   sorted -> subopt_sorted
 
@@ -71,7 +77,7 @@
 #define PRIVATE	  static
 
 /*@unused@*/
-PRIVATE char UNUSED rcsid[] = "$Id: subopt.c,v 1.16 2001/10/01 13:50:00 ivo Exp $";
+PRIVATE char UNUSED rcsid[] = "$Id: subopt.c,v 1.18 2003/10/06 08:56:45 ivo Exp $";
 
 /*Typedefinitions ---------------------------------------------------------- */
 
@@ -150,7 +156,7 @@ PRIVATE int minimal_energy;                           /* minimum free energy */
 PRIVATE int element_energy;       /* internal energy of a structural element */
 PRIVATE int threshold;                             /* minimal_energy + delta */
 PRIVATE char *sequence;
-PUBLIC  float print_energy = 9999;  /* printing threshold for use with logML */
+PUBLIC  double print_energy = 9999; /* printing threshold for use with logML */
 
 
 PRIVATE void encode_seq(char *sequence) {
@@ -435,7 +441,7 @@ PUBLIC SOLUTION *subopt(char *seq, char *structure, int delta, FILE *fp)
   unsigned long max_sol = 128, n_sol = 0;
 
   int maxlevel, count, partial_energy, old_dangles;
-  float structure_energy, min_en;
+  double structure_energy, min_en, eprint;
   char* struc;
 
   sequence = seq;
@@ -456,7 +462,7 @@ PUBLIC SOLUTION *subopt(char *seq, char *structure, int delta, FILE *fp)
   /* re-evaluate in case we're using logML etc */
   min_en = energy_of_struct(sequence, struc);
   free(struc);
-  print_energy += min_en;
+  eprint = print_energy + min_en;
   if (fp)
     fprintf(fp, "%s %6d %6d\n", sequence, (int) (-0.1+100*min_en), delta); 
   
@@ -528,7 +534,7 @@ PUBLIC SOLUTION *subopt(char *seq, char *structure, int delta, FILE *fp)
 	structure_energy = energy_of_struct(sequence, structure);
 	
 	if (!logML)
-	  if ((float) (state->partial_energy / 100.) != structure_energy) {
+	  if ((double) (state->partial_energy / 100.) != structure_energy) {
 	    fprintf(stderr, "%s %6.2f %6.2f\n", structure,
 		    state->partial_energy / 100., structure_energy );
 	    exit(1);
@@ -538,7 +544,7 @@ PUBLIC SOLUTION *subopt(char *seq, char *structure, int delta, FILE *fp)
 	  structure_energy = energy_of_struct(sequence, structure);
 	}
 	
-	if (structure_energy>print_energy) {
+	if (structure_energy>eprint) {
 	  free(structure);
 	} else {
 	  if (!subopt_sorted && fp) { 
@@ -757,7 +763,7 @@ scan_interval(int i, int j, int array_flag, STATE * state)
 	  element_energy = 0;
 	
 	if (type>2)
-	  element_energy += TerminalAU;
+	  element_energy += P->TerminalAU;
 
 	if (f5[k-1] + c[indx[j]+k] + element_energy + best_energy <= threshold)
 	  {
@@ -777,7 +783,7 @@ scan_interval(int i, int j, int array_flag, STATE * state)
 	  element_energy = 0;
 	
 	if (type>2)
-	  element_energy += TerminalAU;
+	  element_energy += P->TerminalAU;
 	
 	if (c[indx[j]+1] + element_energy + best_energy <= threshold)
 	  repeat(1, j, state, element_energy, 0);

@@ -1,6 +1,6 @@
-/* Last changed Time-stamp: <2001-11-15 12:25:06 ivo> */
+/* Last changed Time-stamp: <2004-08-12 12:45:17 ivo> */
 /*                
-		Ineractive Access to suboptimal folding
+		Ineractive access to suboptimal folding
 
 			   c Ivo L Hofacker
 			  Vienna RNA package
@@ -13,19 +13,21 @@
 #include <ctype.h>
 #include <string.h>
 #include "part_func.h"
+#include "fold.h"
 #include "fold_vars.h"
 #include "utils.h"
 #include "subopt.h"
 extern void  read_parameter_file(const char fname[]);
+extern int   st_back;
 /*@unused@*/
-static char UNUSED rcsid[] = "$Id: RNAsubopt.c,v 1.8 2001/11/16 17:29:27 ivo Exp $";
+static char UNUSED rcsid[] = "$Id: RNAsubopt.c,v 1.11 2004/08/12 10:59:31 ivo Exp $";
 
 #define PRIVATE static
 
 static char  scale[] = "....,....1....,....2....,....3....,....4"
                        "....,....5....,....6....,....7....,....8";
 
-extern float print_energy;
+extern double print_energy;
 PRIVATE void usage(void);
 extern char *pbacktrack(char *sequence);
 /*--------------------------------------------------------------------------*/
@@ -40,7 +42,7 @@ int main(int argc, char *argv[])
    char  *ns_bases = NULL, *c;
    int   i, length, l, sym, r;
    int   istty;
-   float deltaf, deltap=0;
+   double deltaf, deltap=0;
    int delta=100;
    int n_back = 0;
    
@@ -98,9 +100,9 @@ int main(int argc, char *argv[])
 	  case 'e':
 	    if (i>=argc-1) usage();
 	    if (strcmp(argv[i],"-ep")==0) 
-	      r=sscanf(argv[++i], "%f", &deltap);
+	      r=sscanf(argv[++i], "%lf", &deltap);
 	    else {
-	      r=sscanf(argv[++i], "%f", &deltaf);
+	      r=sscanf(argv[++i], "%lf", &deltaf);
 	      delta = (int) (0.1+deltaf*100);
 	    }
 	    if (r!=1) usage();
@@ -137,9 +139,6 @@ int main(int argc, char *argv[])
       /* printf("| : paired with another base\n"); */
       printf(". : no constraint at all\n");
       printf("x : base must not pair\n");
-      /* printf("< : base i is paired with a base j<i\n"); */
-      /* printf("> : base i is paired with a base j>i\n"); */
-      /* printf("matching brackets ( ): base i pairs base j\n"); */
    } 
 	
    do {				/* main loop: continue until end of file */
@@ -193,8 +192,18 @@ int main(int argc, char *argv[])
 
       if (n_back>0) {
 	int i;
-	(void) pf_fold(sequence, NULL);
+	double mfe, kT;
+	char *ss;
+	st_back=1;
+	ss = (char *) space(strlen(sequence)+1);
+	strncpy(ss, structure, length);
+	mfe = fold(sequence, ss);
+	kT = (temperature+273.15)*1.98717/1000.; /* in Kcal */
+	pf_scale = exp(-(1.03*mfe)/kT/length);
+	strncpy(ss, structure, length);
+	(void) pf_fold(sequence, ss);
 	init_rand();
+	free(ss);
 	for (i=0; i<n_back; i++) {
 	  char *s;
 	  s = pbacktrack(sequence);
@@ -202,9 +211,9 @@ int main(int argc, char *argv[])
 	  free(s);
 	}
 	free_pf_arrays();
+      } else {
+	subopt(sequence, structure, delta, stdout);
       }
-      subopt(sequence, structure, delta, stdout);
-      
       (void)fflush(stdout);
       
       free(sequence);

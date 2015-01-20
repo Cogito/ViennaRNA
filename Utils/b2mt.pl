@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 # -*-Perl-*-
 # Last changed Time-stamp: <95/05/22 17:52:36 ivo> 
 # produce Pauline's mountain representation from bracket notation

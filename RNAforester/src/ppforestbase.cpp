@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "misc.t.cpp"
 

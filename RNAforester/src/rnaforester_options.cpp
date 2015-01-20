@@ -27,6 +27,7 @@
 RNAforesterOptions::RNAforesterOptions(int argc, const char **argv)
 : m_argv(argv)
 {
+	nrArgs = argc;	
 	m_options=new OptionsInfo[NumberOfOptions];
 
 	setOption(Help,                      "--help","","                    ","shows this help info",false);
@@ -72,8 +73,13 @@ RNAforesterOptions::RNAforesterOptions(int argc, const char **argv)
 	//  setOption(SaveMultipleAliFile,       "-sm","=file","                  ","save multiple alignment as binary file",true);
 	setOption(NoScale,                   "--noscale","","                 ","suppress output of scale",false);
 	setOption(MakeDotForInputTrees,      "-idot","","                     ","make dot files for the input trees",true);
-#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library    	
-	setOption(GenerateXML,               "--xml","","                     ","generate xml output for Jforester",true);
+#ifdef HAVE_LIBRNA  // This features require the ViennaRNA library and the libxml++ library  
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2 	
+	setOption(GenerateXML,               "--xml","","                     ","generate xml file in RNAStructAlignmentML format",false);
+	setOption(XmlOutputFile,             "--xml_output","","                     ","name of xml output file",false);
+#endif
+#endif
 #endif       
 	setOption(SecretHelp,                "--shelp","","                   ","shows this help info",true);
 	setOption(ShowOnlyScore,             "--score","","                   ","compute only scores, no alignment",false);
@@ -147,6 +153,16 @@ inline void RNAforesterOptions::setOption(RNAforesterOption i,string tag, string
 bool RNAforesterOptions::has(RNAforesterOption option) const
 {
 	return m_args->has(m_options[option].tag);
+}
+
+const char** RNAforesterOptions::getArgs() const
+{
+	return m_argv;
+}
+
+const unsigned int RNAforesterOptions::getNrOfOptions() const
+{
+	return nrArgs;
 }
 
 void RNAforesterOptions::help()

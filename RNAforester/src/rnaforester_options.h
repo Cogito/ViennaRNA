@@ -72,11 +72,14 @@ class RNAforesterOptions
     NoScale,
     MakeDotForInputTrees,
 #ifdef HAVE_LIBRNA  // This features require the ViennaRNA library
+#ifdef HAVE_LIBXMLPLUSPLUS
     GenerateXML,
+    XmlOutputFile,
+#endif
 #endif
     SpaceTimeInfo,
     SecretHelp,
-    NumberOfOptions,  // this must always be the last entry in the enum
+    NumberOfOptions  // this must always be the last entry in the enum
   };
 
   class IncompatibleException
@@ -109,7 +112,9 @@ class RNAforesterOptions
   ~RNAforesterOptions();
 
   bool has(RNAforesterOption option) const;
-
+  const char** getArgs() const;
+  const unsigned int getNrOfOptions() const;
+  
   template<class T>
   void get(RNAforesterOption option, T &var, T def) const
     {
@@ -124,7 +129,8 @@ private:
   OptionsInfo *m_options;
   Arguments *m_args;
   const char **m_argv;
-
+  unsigned int nrArgs;
+  
   inline void setOption(RNAforesterOption,string tag, string parameter, string filler, string description, bool hidden);
   void exclude(RNAforesterOption opt1, RNAforesterOption opt2);
   void requires(RNAforesterOption opt1, RNAforesterOption opt2);

@@ -24,6 +24,7 @@
 //#include <sys/timeb.h>
 #include <sys/times.h>
 #include <unistd.h>
+#include <string.h>
 
 #ifndef WIN32
 #include "config.h"
@@ -36,6 +37,14 @@
 //#include "global_alignment.h"
 #include "treeedit.h"
 
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+#include <libxml++/libxml++.h>
+#include <libxml/xmlschemas.h>
+#include "xsd.h"
+#endif
+#endif
+
 #include "misc.h"
 #include "progressive_align.h"
 #include "rna_alignment.h"
@@ -45,7 +54,6 @@
 #include "rna_profile_alignment.h"
 #include "rna_algebra.h"
 #include "rnaforester_options.h"
-
 
 #include "alignment.t.cpp"
 //#include "global_alignment.t.cpp"
@@ -95,12 +103,20 @@ static const string RNAFORESTER_VERSION = "1.5";
 static const string PROMPT = "Input string (upper or lower case); & to end for multiple alignments, @ to quit\n";
 static const string SCALE = "....,....1....,....2....,....3....,....4....,....5....,....6....,....7....,....8\n";
 
-void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RNAforesterOptions &options);
-void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforesterOptions &options);
+void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RNAforesterOptions &options,RNAFuncs::AddXmlInfos &xmlInfos);
+void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforesterOptions &options,RNAFuncs::AddXmlInfos &xmlInfos);
 void cutAfterChar(string &s,char c);
 
 void editPairwise(list<RNAForestSZ*> &inputListSZ,Score &score,RNAforesterOptions &options);
 void alignPairwiseSimple(deque<RNAForest*> &inputListPW,Score &score,RNAforesterOptions &options);
+
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+extern "C" {
+  bool validateXSD(string filename);
+}
+#endif
+#endif
 
 static void showversion(const char *prog)
 {
@@ -117,11 +133,27 @@ int main(int argc, const char **argv)
 	deque<RNAProfileAlignment*> alignList;
 	bool showScale=true,multipleAlign=false;
 	istream *inputStream=NULL;
+	istringstream inputString;
+	string tmpInput = "";
 	ifstream *inputFile=NULL;
 	Uint structure_count=1;
 	int suboptPercent=100;
 	double minPairProb=0.25;
-
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+	xmlpp::Document* xmlDoc;
+#endif
+#endif
+	string xmlOrig;
+	map<int,string> comments;
+	map<int,string> idMapping;
+	map<int,string> descriptions;
+	map<int,string> names;
+	map<int,string> synonyms;
+	int seqID = 0;
+	stringstream ss;
+	RNAFuncs::AddXmlInfos xmlInfos;
+	
 	list<RNAForestSZ*> inputListSZ;
 
 	try
@@ -166,7 +198,7 @@ int main(int argc, const char **argv)
 #ifdef HAVE_LIBRNA  // This features require the ViennaRNA library		
 		options.get(RNAforesterOptions::PredictMinPairProb,minPairProb,0.25);
 		if(options.has(RNAforesterOptions::PredictProfile))
-		  cout << "Minumim required basepair probability (-pmin): " << minPairProb << endl;
+		  cout << "Minimum required basepair probability (-pmin): " << minPairProb << endl;
 #endif
 		
 		// show if suboptimals
@@ -200,14 +232,122 @@ int main(int argc, const char **argv)
 				cerr << "cannot open file: \"" << filename << "\"" << endl;
 				exit(EXIT_FAILURE);
 			}
-			inputStream=inputFile;
-		}
-		else
-		{
-			inputStream=&cin;
-		}
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2 							
+			// getline extracts all characters of the first line until '\n' to check whether inputFile is an xml file
+			getline(*inputFile,buffer);
+			
+			// input file is an xml file 
+			if(buffer.find("<?xml",0)==0){
+			  buffer="";
+			  
+			  // validation
+			  //if(!validateXSD(filename)){
+			  //  exit(EXIT_FAILURE);
+			  //}
+			  
+			  // create Dom parser
+			  xmlpp::DomParser domParser;
+			  domParser.parse_file(filename);
+			 			  
+			  xmlDoc = domParser.get_document();
+			  xmlpp::Element* elemRoot = xmlDoc->get_root_node();
+			  xmlpp::Node::NodeList nodeListRnaStructure = elemRoot->get_children();
+			  
+			  // for each rnastructure element
+			  xmlpp::Node::NodeList::iterator it1;
+			  xmlpp::Node::NodeList::iterator it2;
+			  xmlpp::Node::NodeList::iterator it3;
+			  for(it1=nodeListRnaStructure.begin();it1!=nodeListRnaStructure.end();it1++){
+			    if((*it1)->get_name() == "rnastructure"){
+			      seqID++;
+			      tmpInput.append(">");
+			      ss << seqID;
+			      tmpInput.append(ss.str());
+			      ss.str("");
+			      tmpInput.append("\n");
+			    }
+			   			       
+			    xmlpp::Node::NodeList nodeListSeq = (*it1)->get_children();
+			    for(it2=nodeListSeq.begin();it2!=nodeListSeq.end();it2++){
+			      if((*it2)->get_name()=="sequence"){
+				xmlpp::Element* elemSeq = (xmlpp::Element*)(*it2);
+				
+				// map internal id to seqID :: JK debug
+				cout << "seqID: " << seqID << endl;
+				cout << "idMapping[seqID]: " << elemSeq->get_attribute("seqID")->get_value() << endl;
+				//
+				idMapping[seqID] = elemSeq->get_attribute("seqID")->get_value();
 
+				xmlpp::Node::NodeList nodeListName = elemSeq->get_children();
+				for(it3=nodeListName.begin();it3!=nodeListName.end();it3++){
+				  if((*it3)->get_name()=="name" && ((xmlpp::Element*)(*it3))->get_child_text()){
+				    // map the name to seqID
+				    names[seqID] = ((xmlpp::Element*)(*it3))->get_child_text()->get_content();
+				  }
+				  if((*it3)->get_name()=="synonyms" && ((xmlpp::Element*)(*it3))->get_child_text()){
+				    // map synonyms to seqID
+				    synonyms[seqID] = ((xmlpp::Element*)(*it3))->get_child_text()->get_content();
+				  }
+				  if((*it3)->get_name()=="description" && ((xmlpp::Element*)(*it3))->get_child_text()){
+				    // map the description to seqID
+				    descriptions[seqID] = ((xmlpp::Element*)(*it3))->get_child_text()->get_content();
+				  }
+				  if((*it3)->get_name()=="freeSequence" || (*it3)->get_name()=="nucleicAcidSequence"){
+				    xmlpp::Element* elemFreeSequence = (xmlpp::Element*)(*it3);
+				    tmpInput.append(elemFreeSequence->get_child_text()->get_content());
+				    tmpInput.append("\n");
+				  }
+				} // end for it3
+			      }
+			      
+			      // get comment if available
+			      if((*it2)->get_name()=="comment" && ((xmlpp::Element*)(*it2))->get_child_text()){
+				comments[seqID] = ((xmlpp::Element*)(*it2))->get_child_text()->get_content();
+			      }
+			      			    			      
+			      // get structure
+			      if((*it2)->get_name()=="structure" && ((xmlpp::Element*)(*it2))->get_child_text()){
+				xmlpp::Element* elemStr = (xmlpp::Element*)(*it2);
+				tmpInput.append(elemStr->get_child_text()->get_content());
+				tmpInput.append("\n");
+			      }
+			    } // end for it2
+			    
+			  } // end for it1
+			  xmlOrig = xmlDoc->write_to_string();
 
+			  // struct with additional xml infos
+			  xmlInfos.idmapping = idMapping;
+			  xmlInfos.comments = comments;
+			  xmlInfos.descriptions = descriptions;
+			  xmlInfos.names = names;
+			  xmlInfos.synonyms = synonyms;
+			  xmlInfos.xmlInput = true;
+				  
+			  inputString.str(tmpInput.c_str());
+			  inputStream=&inputString;
+			  
+			} else {
+
+			  xmlInfos.xmlInput = false;
+			  // no xml file write the first line from buffer back to stream
+			  for(int i=buffer.size();i>=0;i--){
+			    inputFile->putback(buffer[i]);
+			  }
+#endif
+#endif
+			  inputStream=inputFile;
+
+#ifdef HAVE_LIBXMLPLUSPLUS	
+#ifdef HAVE_LIBXML2	  
+			}
+#endif
+#endif
+		} else {
+		  inputStream=&cin;
+		}
+		
 		if(showScale)
 		  {
 		    if(!options.has(RNAforesterOptions::NoScale) && !options.has(RNAforesterOptions::ReadFromFile))
@@ -217,10 +357,10 @@ int main(int argc, const char **argv)
 
 		for(;;)
 		{
-			getline(*inputStream,buffer);
-
+		  getline(*inputStream,buffer);
+		  
 			if(inputStream->eof())
-			  {			    
+			  {	
 			    if(options.has(RNAforesterOptions::Multiple) && !options.has(RNAforesterOptions::ProfileSearch))
 				buffer="&";
 			    else
@@ -232,7 +372,7 @@ int main(int argc, const char **argv)
 
 			// quit if character is @
 			if(buffer[0]=='@')
-				break;
+			  break;
 
 			// delete '\r' at line end from non unix files
 			if(buffer[buffer.size()-1]=='\r')
@@ -241,8 +381,14 @@ int main(int argc, const char **argv)
 			// check for name of structure
 			if(buffer[0]=='>')
 			{
-				nameStr=&buffer[1];
-				continue;
+			  /*if(buffer.find(" ",0) != string::npos){
+			    int t = buffer.find(" ",0);
+			    nameStr=&buffer[t];
+			  } else {
+			    nameStr=&buffer[1];
+			    }*/
+			  nameStr=&buffer[1];
+			  continue;
 			}
 
 			// cut after blank
@@ -349,13 +495,13 @@ int main(int argc, const char **argv)
 
 				structure_count++;      
 				showScale=true;
-			}
+			    }
 			}
 
 			// ***** multiple alignment
 			if((options.has(RNAforesterOptions::Multiple) && multipleAlign) || (options.has(RNAforesterOptions::ProfileSearch) && alignList.size()==2))
 			{
-				alignMultiple(alignList,score,options);
+				alignMultiple(alignList,score,options,xmlInfos);
 				multipleAlign=false;
 				structure_count=1;
 				
@@ -377,9 +523,10 @@ int main(int argc, const char **argv)
 			if(inputListPW.size()==2)
 			{
 			  if(options.has(RNAforesterOptions::GlobalAlignment))
+			  {
 			    alignPairwiseSimple(inputListPW,score,options);
-			  else
-			    alignPairwise(inputListPW,score,options);
+			  } else 
+			    alignPairwise(inputListPW,score,options,xmlInfos);
 			  break;
 			}
 			
@@ -393,12 +540,12 @@ int main(int argc, const char **argv)
 
 		// free dynamic allocated memory
 		deque<RNAForest*>::const_iterator it;
-		for(it = inputListPW.begin(); it!=inputListPW.end(); it++)
-			delete *it;
+		for(it = inputListPW.begin(); it!=inputListPW.end(); it++){
+		  delete *it;
+		}
 
 		DELETE(inputFile);
 
-		//	  getchar();	// only for testing
 		return (0);
 	}
 	catch(RNAforesterOptions::IncompatibleException e)
@@ -410,7 +557,27 @@ int main(int argc, const char **argv)
 	{
 		e.showError();
 		return(EXIT_FAILURE);
+	}
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+	catch(xmlpp::validity_error ve) 
+	{
+	  cout << ve.what() << endl;
+	//return(EXIT_FAILURE);
 	} 
+	catch(xmlpp::parse_error pe)
+	{
+	  cout << pe.what() << endl;
+	  //return(EXIT_FAILURE);
+	} 
+	catch(xmlpp::exception e)
+	{
+	  cout << e.what() << endl;
+	  //return(EXIT_FAILURE);
+	} 
+#endif
+#endif
+	  	
 }
 
 
@@ -421,13 +588,14 @@ void cutAfterChar(string &s,char c){
 		s.erase(pos);
 }
 
-void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RNAforesterOptions &options)
+void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RNAforesterOptions &options,RNAFuncs::AddXmlInfos &xmlInfos)
 {
 	DoubleScoreProfileAlgebraType *alg;
 	deque<pair<double,RNAProfileAlignment*> > resultList;
 //	double optScore;
 	Uint clusterNr=1;
 	double minPairProb;
+	string outputFile;
 
 	options.get(RNAforesterOptions::ConsensusMinPairProb,minPairProb,0.5);
 	
@@ -451,7 +619,6 @@ void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RN
 	    cout << "RNA Structure Cluster Nr: " << clusterNr << endl;
 	    cout << "Score: " << it->first << endl;
 	    cout << "Members: " << it->second->getNumStructures() << endl << endl;
-
 	    if(options.has(RNAforesterOptions::FastaOutput))
 	      {
 		it->second->printFastaAli(false);
@@ -474,7 +641,7 @@ void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RN
 	    {
 	      string filename;
 	      filename=options.generateFilename(RNAforesterOptions::SaveProfile,".pro", "rna.pro",clusterNr);
-	      it->second->save(filename);
+      it->second->save(filename);
 	    }
 	    
 
@@ -506,7 +673,20 @@ void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RN
 
 		clusterNr++;
 	  }
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+	if(options.has(RNAforesterOptions::XmlOutputFile)){
+	  options.get(RNAforesterOptions::XmlOutputFile,outputFile,string(""));
+	} else {
+	  outputFile = "result.xml";
+	}
 
+	if(options.has(RNAforesterOptions::GenerateXML))
+        { 
+		RNAFuncs::printMAliXML(resultList,options,minPairProb,xmlInfos,outputFile);	
+	}
+#endif
+#endif
 
 	/*
 	if(!options.has(RNAforesterOptions::ShowOnlyScore))
@@ -565,7 +745,7 @@ void alignMultiple(deque<RNAProfileAlignment*> &alignList, Score &score,const RN
 }
 
 
-void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforesterOptions &options)
+void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforesterOptions &options,RNAFuncs::AddXmlInfos &xmlInfos)
 {
 	IntScoreRNA_AlgebraType *alg;
 	Uint xbasepos,ybasepos,xlen,ylen;
@@ -577,6 +757,7 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 	Uint count=1;
 	RNAFuncs::SquigglePlotOptions sqOptions;
 	tms tmsStart, tmsEnd;
+	string outputFile;
 
 	// read options
 	options.get(RNAforesterOptions::LocalSubopts,suboptPercent,100);
@@ -598,7 +779,7 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 		
 	}
 #endif
-
+	
 	// distance or similarity
 	if(options.has(RNAforesterOptions::CalculateDistance))
 		alg=new IntDistRNA_Algebra(score);
@@ -695,10 +876,11 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 
 	    exit(EXIT_SUCCESS);
 	  }
-
+	
 	Alignment<int,RNA_Alphabet,RNA_AlphaPair> ali(f1,f2,*alg);
 	RNA_Alignment ppfali;
 	ppfali.setStructureNames(f1->getName(),f2->getName());
+	double optScore;
 
 
 	if(!options.has(RNAforesterOptions::ShowOnlyScore))
@@ -719,16 +901,19 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 	if(options.has(RNAforesterOptions::SmallInLarge))
 	  {
 	    cout << ali.getSILOptimum() << endl;
+	    optScore = ali.getSILOptimum();
 	  }
 	else
 	  {
 	    if(options.has(RNAforesterOptions::LocalSimilarity))
 	      {
 		cout << ali.getLocalOptimum() << endl;
+		optScore = ali.getLocalOptimum();
 	      }  
 	    else
 	      {
-		cout << ali.getGlobalOptimum() << endl;	  	  
+		cout << ali.getGlobalOptimum() << endl;
+		optScore = ali.getGlobalOptimum();
 		if(options.has(RNAforesterOptions::RelativeScore))
 		  cout << ali.getGlobalOptimumRelative() << endl;
 	      }
@@ -749,6 +934,8 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 		  ali.resetOptLocalAlignment(suboptPercent);
 		  ali.getOptLocalAlignment(ppfali,xbasepos,ybasepos);		      		    
 		  cout << "starting at positions: " << xbasepos << "," << ybasepos << endl << endl; 
+		  xmlInfos.xbasepos = xbasepos;
+		  xmlInfos.ybasepos = ybasepos;
 		}
 	      else		  
 		ali.getOptGlobalAlignment(ppfali);		  
@@ -762,19 +949,18 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 		ppfali.getStructureAlignment(str1,true);
 		ppfali.getStructureAlignment(str2,false);
 
-		if(options.has(RNAforesterOptions::FastaOutput))
-		  {
-		    cout << ppfali.getStructureNameX() << endl;
-		    cout << seq1 << endl;
-		    cout << str1 << endl;
-		    cout << ppfali.getStructureNameY() << endl;
-		    cout << seq2 << endl;
-		    cout << str2 << endl;
-		    cout << endl;
-		  }
-		else		
-		  RNAFuncs::printAli(ppfali.getStructureNameX(),ppfali.getStructureNameY(),seq1,seq2,str1,str2);  
-
+		if(options.has(RNAforesterOptions::FastaOutput)){
+		  cout << ppfali.getStructureNameX() << endl;
+		  cout << seq1 << endl;
+		  cout << str1 << endl;
+		  cout << ppfali.getStructureNameY() << endl;
+		  cout << seq2 << endl;
+		  cout << str2 << endl;
+		  cout << endl;
+		}
+		else {
+		  RNAFuncs::printAli(ppfali.getStructureNameX(),ppfali.getStructureNameY(),seq1,seq2,str1,str2);
+		}
 
 		xlen=seq1.size();
 		ylen=seq2.size();
@@ -826,16 +1012,21 @@ void alignPairwise(deque<RNAForest*> &inputListPW,Score &score,const RNAforester
 	}
 
 #ifdef HAVE_LIBRNA  // This features require the ViennaRNA library	
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
 	// generate xml
+	if(options.has(RNAforesterOptions::XmlOutputFile)){
+	  options.get(RNAforesterOptions::XmlOutputFile,outputFile,string(""));
+	} else {
+	  outputFile = "result.xml";
+	}
 	if(options.has(RNAforesterOptions::GenerateXML))
 	{
-		string filename;
-
-		filename=options.generateFilename(RNAforesterOptions::GenerateXML,".xml", "ali.xml");
-		ofstream s(filename.c_str());
-		ppfali.generateXML(s);
+	  RNAFuncs::printPAliXML(ppfali.getStructureNameX(),ppfali.getStructureNameY(),seq1,seq2,str1,str2,optScore,options,xmlInfos,outputFile);
 	}
 #endif	
+#endif
+#endif
 
 #ifdef HAVE_LIBG2  // This features require the g2 library
 	// generate squiggle plot
@@ -886,7 +1077,7 @@ void alignPairwiseSimple(deque<RNAForest*> &inputListPW,Score &score,RNAforester
   //  timeb t1,t2;
   IntScore_AlgebraType *alg;
 
-//  if(options.has(RNAforesterOptions::CalculateDistance))
+  //  if(options.has(RNAforesterOptions::CalculateDistance))
     alg=new IntDist_Algebra(score);
 //  else
 //    alg=new ScoreAlgebraSimple(score);
@@ -905,4 +1096,30 @@ void alignPairwiseSimple(deque<RNAForest*> &inputListPW,Score &score,RNAforester
   //  cout << "Calculation Time ms: " << (t2.time*1000+t2.millitm) - (t1.time*1000+t1.millitm) << endl;
 }
 
+#ifdef HAVE_LIBXML2
+#ifdef HAVE_LIBXMLPLUSPLUS
+extern "C" {
+  bool validateXSD(string filename){
+    xmlSchemaParserCtxtPtr ctxt;
+    xmlSchemaValidCtxtPtr valCtxt;
+    xmlSchemaPtr schema;
+    int val;
+
+    ctxt = xmlSchemaNewMemParserCtxt(XSD_STRING,sizeof(XSD_STRING));
+        
+    schema = xmlSchemaParse(ctxt);
+    
+    valCtxt = xmlSchemaNewValidCtxt(schema);
+
+    val = xmlSchemaValidateFile(valCtxt,filename.c_str(),0);
+
+    if(val==0){
+      return true;
+    } else {
+      return false;
+    }
+  } 
+}
+#endif
+#endif
 

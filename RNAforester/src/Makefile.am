@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-AM_CXXFLAGS = -Wall 
-
 bin_PROGRAMS = RNAforester 
 
 RNAforester_SOURCES = \

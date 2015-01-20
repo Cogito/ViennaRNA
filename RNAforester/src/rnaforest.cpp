@@ -19,6 +19,8 @@
 #undef HAVE_LIBG2
 #endif
 
+#include <string.h>
+
 #include "rnaforest.h"
 #include "rnafuncs.h"
 

@@ -12,6 +12,12 @@
 /* Define to 1 if you have the `RNA' library (-lRNA). */
 #undef HAVE_LIBRNA
 
+/* Define if you have libxml2 */
+#undef HAVE_LIBXML2
+
+/* Define if you have libxml++-1.0 */
+#undef HAVE_LIBXMLPLUSPLUS
+
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 

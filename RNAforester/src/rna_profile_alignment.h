@@ -98,6 +98,13 @@ public:
 	RNAProfileAlignment(const string &filename);
 
 	void printSeqAli() const;
+	deque<pair<string,string> > getSeqAli() const;
+	deque<string> getStrAli() const;
+	string getConsSeq() const;
+	string getConsStr(double minPairProb) const;
+	deque<double> getBaseProb() const;
+	//deque<pair<pair<int,int>,double> > getPairProb(double minPairProb);
+        void getPairProb(double &minPairProb, deque<pair<pair<int,int>,double> > &pairprobs);
 	void printStrAli() const;
 	void printConsensus(double minPairProb) const;
 	void printFastaAli(bool noStructure=false) const;
@@ -111,7 +118,7 @@ public:
 	const deque<string>& getStrNames() const {return m_strNames;};
 	void addStrNames(const deque<string>& strNames);       
 	void save(const string &filename);
-
+	
 	RNAProfileAlignment(Uint numStructuresX,Uint numStructuresY) : 
 	   PPForestAli<RNA_Alphabet_Profile,RNA_Alphabet_Profile>(),
 	   m_numStructures(numStructuresX + numStructuresY),
@@ -135,7 +142,6 @@ class Profile_RNA_Alignment: public Alignment<double,RNA_Alphabet_Profile,RNA_Al
     };
 
   string getName() const {return m_name;};
-};
-*/
+  };*/
 
 #endif

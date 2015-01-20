@@ -1,17 +1,27 @@
+
+#include <deque>
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <sstream>
+
+#ifndef WIN32
+#include "config.h"
+#endif
+
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+#include <libxml++/libxml++.h>
+#endif
+#endif
 
 #include "debug.h"
 #include "misc.h"
 #include "rnafuncs.h"
 #include "utils.h"
-
-#ifndef WIN32
-#include "config.h"
-#endif
+#include "rna_profile_alignment.h"
 
 #ifndef HAVE_LIBRNA
 #undef HAVE_LIBG2
@@ -792,18 +802,278 @@ void RNAFuncs::generateRNAAlignmentXML(const string &structure, const string &al
 }
 #endif
 
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+void RNAFuncs::printPAliXML(const string &id1, const string &id2, const string &seq1, const string &seq2, const string &str1, const string &str2, double &score, const RNAforesterOptions &options,AddXmlInfos &xmlInfos,const string &outputFile)
+{
+	char arr_Score[20];
+	const char** args;
+	int nrOptions;
+	string command;
+	bool xmlInput;
+	string comment1;
+	string comment2;
+	string description1;
+	string description2;
+	xmlpp::Document* xmlDocOrig;
+	xmlpp::DomParser domParser;
+	xmlpp::Element* elemRootOrig;
+	xmlpp::NodeSet nodeSetOrig;
+	
+	args = options.getArgs();
+	nrOptions = options.getNrOfOptions();
+		
+	for(int i=0;i<nrOptions;i++){
+	  command.append(args[i]);
+	  command.append(" ");
+	}
+
+	try
+        {
+	  xmlpp::Document document;
+	  xmlpp::Element* nodeSequences[2];
+	  xmlpp::Element* nodeProgram;
+	  string xsdurl;
+	  	 
+	  xsdurl = getXSDURL();
+	  	  
+	  //create root node
+	  xmlpp::Element* nodeRoot = document.create_root_node("rnastructAlignmentML", "", "");
+	  //set namespace declarations to root element
+
+	  nodeRoot->set_namespace_declaration(xsdurl, "");
+	  nodeRoot->set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance","xsi");
+	  nodeRoot->set_attribute("schemaLocation",xsdurl + " http://bibiserv.techfak.uni-bielefeld.de/xsd/net/sourceforge/hobit/20060515/rnastructAlignmentML.xsd","xsi");
+	  
+	  xmlpp::Element* nodeRnaStructAlignment = nodeRoot->add_child("rnastructurealignment");
+
+	  //convert double to char array to use in set_attribute
+	  sprintf(arr_Score,"%.0f",score);
+	  nodeRnaStructAlignment->set_attribute("score",arr_Score);
+
+          nodeSequences[1] = nodeRnaStructAlignment->add_child("sequence");
+          nodeSequences[1]->set_attribute("seqID",xmlInfos.idmapping[atoi(id1.c_str())]);
+
+	  if(options.has(RNAforesterOptions::LocalSimilarity)){
+	    stringstream ss;
+	    ss << xmlInfos.xbasepos;
+	    nodeSequences[1]->set_attribute("startingposition",ss.str());
+	  }
+
+	  if(xmlInfos.names.count(atoi(id1.c_str())) > 0){
+	    nodeSequences[1]->add_child("name")->set_child_text(xmlInfos.names[atoi(id1.c_str())]);
+	  } 
+	  if(xmlInfos.synonyms.count(atoi(id1.c_str())) > 0){
+	    nodeSequences[1]->add_child("synonyms")->set_child_text(xmlInfos.synonyms[atoi(id1.c_str())]);
+	  }
+	  if(xmlInfos.descriptions.count(atoi(id1.c_str())) > 0){
+	    nodeSequences[1]->add_child("description")->set_child_text(xmlInfos.descriptions[atoi(id1.c_str())]);
+	  } 
+	  nodeSequences[1]->add_child("alignedFreeSequence")->set_child_text(UpperCase(seq1));
+	  nodeSequences[1]->add_child("structure")->set_child_text(str1);	  
+	  // id is of type string index of map is of size int => convert
+	  if(xmlInfos.comments.count(atoi(id1.c_str())) > 0){
+	    nodeSequences[1]->add_child("comment")->set_child_text(xmlInfos.comments[atoi(id1.c_str())]);
+	  } 
+	  
+	  nodeSequences[2] = nodeRnaStructAlignment->add_child("sequence");
+	  nodeSequences[2]->set_attribute("seqID",xmlInfos.idmapping[atoi(id2.c_str())]);
+
+	  if(options.has(RNAforesterOptions::LocalSimilarity)){
+	    stringstream ss;
+	    ss << xmlInfos.ybasepos;
+	    nodeSequences[2]->set_attribute("startingposition",ss.str());
+	  }
+
+	  if(xmlInfos.names.count(atoi(id2.c_str())) > 0){
+	    nodeSequences[2]->add_child("name")->set_child_text(xmlInfos.names[atoi(id2.c_str())]);
+	  } 
+	  if(xmlInfos.synonyms.count(atoi(id2.c_str())) > 0){
+	    nodeSequences[2]->add_child("synonyms")->set_child_text(xmlInfos.synonyms[atoi(id2.c_str())]);
+	  }
+	  if(xmlInfos.descriptions.count(atoi(id2.c_str())) > 0){
+	    nodeSequences[2]->add_child("description")->set_child_text(xmlInfos.descriptions[atoi(id2.c_str())]);
+	  }  
+          
+          nodeSequences[2]->add_child("alignedFreeSequence")->set_child_text(UpperCase(seq2));
+	  nodeSequences[2]->add_child("structure")->set_child_text(str2);
+          // id is of type string index of map is of size int => convert
+	  if(xmlInfos.comments.count(atoi(id2.c_str())) > 0){
+	    nodeSequences[2]->add_child("comment")->set_child_text(xmlInfos.comments[atoi(id2.c_str())]);
+	  } 
+	  
+	  nodeRnaStructAlignment->add_child("program")->set_attribute("command",command); 
+
+	  document.write_to_file("./" + outputFile,"UTF-8");
+
+	  // display the mapping from the internal id to the name of the sequence / structure qualified in the name element in the rnastructML
+	  if(xmlInfos.xmlInput){
+	    printMapping(xmlInfos.idmapping);
+	  }
+	} catch(const std::exception& ex) {
+	  cout << "xml exception: " << ex.what() << std::endl;
+	}
+}
+
+void RNAFuncs::printMAliXML(deque<pair<double,RNAProfileAlignment*> > &resultList,const RNAforesterOptions &options, double &minPairProb,AddXmlInfos &xmlInfos,const string &outputFile)
+{
+	string xsdurl = getXSDURL();
+	int j;
+
+	// get RNAforester call
+	const char** args;
+        int nrOptions;
+        string command;
+
+        args = options.getArgs();
+        nrOptions = options.getNrOfOptions();
+
+        for(int i=0;i<nrOptions;i++)
+	{
+          command.append(args[i]);
+	  command.append(" ");
+	}
+	
+	try
+	{
+	  xmlpp::Document document;
+	  deque<pair<string,string> > seqAli;
+	  deque<string> strAli;
+	  string consSeq, consStr;
+	  deque<double> baseprobs;
+	  deque<pair<pair<int,int>,double> > pairprobs;
+	  stringstream tmpBase;
+
+	  //create root node
+	  xmlpp::Element* nodeRoot = document.create_root_node("rnastructAlignmentML", "", "");
+	  //set namespace declarations to root element
+	  nodeRoot->set_namespace_declaration(xsdurl, "");
+	  nodeRoot->set_namespace_declaration("http://www.w3.org/2001/XMLSchema-instance","xsi");
+	  nodeRoot->set_attribute("schemaLocation",xsdurl + " http://bibiserv.techfak.uni-bielefeld.de/xsd/net/sourceforge/hobit/20060515/rnastructAlignmentML.xsd","xsi");
+
+	  
+	  // N VALues in the deque are n cluster
+	  deque<pair<double,RNAProfileAlignment*> >::const_iterator it;
+	  for(it=resultList.begin();it!=resultList.end();it++)
+	  {
+
+	    // create node rnastructalignment
+	    xmlpp::Element* nodeRnaStructAlignment = nodeRoot->add_child("rnastructurealignment");
+			  
+	    //print aligned sequences and structures
+	    seqAli = it->second->getSeqAli();
+	    strAli = it->second->getStrAli();
+	    // j iterator to get structure alignment
+	    j=0;
+	    deque<pair<string,string> >::const_iterator it2;
+	    for(it2=seqAli.begin();it2!=seqAli.end();it2++)
+	    {
+	      xmlpp::Element* nodeSequence = nodeRnaStructAlignment->add_child("sequence");
+	      nodeSequence->set_attribute("seqID",xmlInfos.idmapping[atoi(it2->first.c_str())]);
+
+	      if(xmlInfos.names.count(atoi(it2->first.c_str())) > 0){
+		nodeSequence->add_child("name")->set_child_text(xmlInfos.names[atoi(it2->first.c_str())]);
+	      }
+
+	      if(xmlInfos.synonyms.count(atoi(it2->first.c_str())) > 0){
+		nodeSequence->add_child("synonyms")->set_child_text(xmlInfos.synonyms[atoi(it2->first.c_str())]);
+	      }
+	      
+	      if(xmlInfos.descriptions.count(atoi(it2->first.c_str())) > 0){
+		nodeSequence->add_child("description")->set_child_text(xmlInfos.descriptions[atoi(it2->first.c_str())]);
+	      } 
+
+	      xmlpp::Element* nodeAlignedFreeSequence = nodeSequence->add_child("alignedFreeSequence");      
+	      nodeAlignedFreeSequence->set_child_text(UpperCase(it2->second));
+
+	      xmlpp::Element* nodeStructure = nodeSequence->add_child("structure");
+	      nodeStructure->set_child_text(strAli[j]);
+	      
+	      if(xmlInfos.comments.count(atoi(it2->first.c_str())) > 0){
+		nodeSequence->add_child("comment")->set_child_text(xmlInfos.comments[atoi(it2->first.c_str())]);
+	      }
+	      
+	      j++;
+	    }
+	 
+	    // insert consensus element
+	    xmlpp::Element* nodeConsensus = nodeRnaStructAlignment->add_child("consensus");
+
+	    // get and insert structure pairprobs
+	    it->second->getPairProb(minPairProb, pairprobs);
+	    xmlpp::Element* nodeStrProbs = nodeConsensus->add_child("structureprobabilities");
+	    deque<pair<pair<int,int>,double> >::iterator it3;
+
+	    for(it3=pairprobs.begin();it3!=pairprobs.end();it3++) {
+	      xmlpp::Element* nodePt = nodeStrProbs->add_child("pt");
+	      tmpBase << it3->first.first;
+	      nodePt->set_attribute("a",tmpBase.str());
+	      tmpBase.str("");
+	      tmpBase << it3->first.second;
+	      nodePt->set_attribute("b",tmpBase.str());
+	      tmpBase.str("");
+	      tmpBase << it3->second;
+	      nodePt->set_attribute("probability",tmpBase.str());
+	      tmpBase.str("");
+	    }
+	    
+	    // get and insert consensus sequence 
+	    consSeq = it->second->getConsSeq();
+	    xmlpp::Element* nodeConsSeq = nodeConsensus->add_child("sequence");
+	    nodeConsSeq->set_attribute("seqID","consensus");
+	    xmlpp::Element* nodeAlignedFSCons = nodeConsSeq->add_child("alignedFreeSequence");
+	    nodeAlignedFSCons->set_child_text(UpperCase(consSeq));
+
+	    // get and insert consensus structure
+	    consStr = it->second->getConsStr(minPairProb);
+	    xmlpp::Element* nodeConsStr = nodeConsSeq->add_child("structure");
+	    nodeConsStr->set_child_text(consStr);
+	    //xmlpp::Element* nodeConsStr = nodeConsensus->add_child("structure");
+	    //nodeConsStr->set_child_text(consStr);
+
+	    // insert nodes program and attribute command
+	    xmlpp::Element* nodeProgram = nodeRnaStructAlignment->add_child("program");
+	    nodeProgram->set_attribute("command",command);
+	 
+	  } // end for
+	  document.write_to_file("./" + outputFile,"UTF-8");
+
+	  // display the mapping from the internal id to the name of the sequence / structure qualified in the name element in the rnastructML
+	  if(xmlInfos.xmlInput){
+	    printMapping(xmlInfos.idmapping);
+	  }
+ 
+	} catch(const std::exception& ex)
+        {
+	  cout << "xml exception: " << ex.what() << std::endl;
+        }
+}
+
+
+void RNAFuncs::printMapping(map<int,string> &mapping){
+   map<int,string>::iterator it;
+   cout << "mapping: " << endl;
+   for(it=mapping.begin();it!=mapping.end();it++) {
+     cout << it->first <<": " << it->second << endl;
+   }
+   cout << "\n";
+}
+
+#endif
+#endif
+
 void RNAFuncs::printAli(const string &name1, const string &name2, const string &seq1, const string &seq2, const string &str1, const string &str2)
 {
   Uint i;
   string info;
-
+  
   for(i=0;i<seq1.length();i++)		 
     info += seq1[i]==seq2[i] ? "*" : " ";		  		
 
   for(i=0;i<seq1.length();i+=55)
     {
-      cout << setw(20) << setfill(' ') << left << name1.substr(0,20) << setw(5) << " " << seq1.substr(i,55) << endl;
-      cout << setw(20) << setfill(' ') << left << name2.substr(0,20) << setw(5) << " " << seq2.substr(i,55) << endl;
+      cout << setw(20) << setfill(' ') << left << name1.substr(0,20) << setw(5) << " " << UpperCase(seq1.substr(i,55)) << endl;
+      cout << setw(20) << setfill(' ') << left << name2.substr(0,20) << setw(5) << " " << UpperCase(seq2.substr(i,55)) << endl;
       cout << setw(25) << " " << info.substr(i,55) << endl;
     }
 
@@ -821,7 +1091,6 @@ void RNAFuncs::printAli(const string &name1, const string &name2, const string &
     }
 
   cout << endl;
-
 }
 
 Uint RNAFuncs::treeSize(const string &viennaStr)
@@ -831,4 +1100,27 @@ Uint RNAFuncs::treeSize(const string &viennaStr)
    RNAFuncs::isViennaString(viennaStr,basePairCount,maxDepth);
    // the size of the forests is determined by the number of bases and basepairs	
    return viennaStr.length() + basePairCount;  
-};
+}
+
+#ifdef HAVE_LIBXMLPLUSPLUS
+#ifdef HAVE_LIBXML2
+// returns the URL of the actual rnastructAlignmentML 
+string RNAFuncs::getXSDURL()
+{
+	return "http://hobit.sourceforge.net/xsds/20060515/rnastructAlignmentML";
+}
+
+#endif
+#endif
+
+string RNAFuncs::UpperCase(const string &str)
+{
+	stringstream ss;
+	for(int i=0;i<str.length();i++)
+	{
+	  ss << (char)toupper(str.at(i));
+	}
+
+	return ss.str();
+}
+;

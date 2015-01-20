@@ -182,7 +182,6 @@ unsigned int Arguments::size() const throw()
 	return d_arguments.size();
 }
 
-
 // 
 // Arguments::has
 // --------------

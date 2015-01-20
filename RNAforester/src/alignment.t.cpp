@@ -16,6 +16,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <new>
+#include <exception>
+#include <limits.h>
 
 #include "alignment.h"
 #include "debug.h"
@@ -51,12 +54,26 @@ Alignment<R,L,AL>::Alignment(const PPForest<L> *ppfx, const PPForest<L> *ppfy, c
 	R score,h_score;
 
 	// alloc space for the score matrix, backtrack structure  and , if wanted, for the calculation-order-matrix
+	// check for an overflow
+	if (ppfx->getNumCSFs() > ULONG_MAX / ppfy->getNumCSFs()) { 
+	  cerr << "Error: Overflow in calculation matrix multiplication. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
+
 	m_mtrxSize=ppfx->getNumCSFs()*ppfy->getNumCSFs();
 
-	m_mtrx=new R[m_mtrxSize];
+	// maximum array size is 2GB
+	if(m_mtrxSize > 2000000000 || ppfx->getNumCSFs() > 2000000000) {
+	  cerr << "Error: Maximum array size of 2GB exceeded due to large input data. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
+
+	m_mtrx = new R[m_mtrxSize];
+		
 	m_rowStart=new Ulong[ppfx->getNumCSFs()];
-	m_ppfx = new PPForest<L>(*ppfx);				// copy the ppforests
+	m_ppfx = new PPForest<L>(*ppfx);			// copy the ppforests
 	m_ppfy = new PPForest<L>(*ppfy);
+	
 	m_rnaAlg=&rnaAlg;
 	m_alg=(const Algebra<R,L>*)&rnaAlg;
 	m_localOptimum=rnaAlg.worst_score();
@@ -65,11 +82,12 @@ Alignment<R,L,AL>::Alignment(const PPForest<L> *ppfx, const PPForest<L> *ppfy, c
 	m=ppfx->size();
 	n=ppfy->size();
 	cols=ppfy->getNumCSFs();
-
+	 
 	m_rowStart[0]=0;
-	for(h=1;h<ppfx->getNumCSFs();h++)
-		m_rowStart[h]=m_rowStart[h-1]+cols;
-
+	for(h=1;h<ppfx->getNumCSFs();h++){
+	  m_rowStart[h]=m_rowStart[h-1]+cols;
+	}
+		
 	// align forests fx and fy
 
 	// the easiest case .. 
@@ -78,15 +96,20 @@ Alignment<R,L,AL>::Alignment(const PPForest<L> *ppfx, const PPForest<L> *ppfy, c
 	// align fx to the empty forest (fill first row of array)
 	for(i=m-1;i>=0;i--)  // for all nodes in fx
 	{
+	  
 		for(j=1;j<=ppfx->getMaxLength(i);j++)  // for all non empty csfs induced by i
 		{
-			score = rnaAlg.del(ppfx->label(i),
+		  score = rnaAlg.del(ppfx->label(i),
 				               getMtrxVal(ppfx->down(i),0),
 				               getMtrxVal(ppfx->over(i,j),0));	  
 
+			
 			setMtrxVal(ppfx->indexpos(i,j),0,score);
+			
 		}
 	}
+
+	
 
 	// align fy to the empty forest (fill first column of array)
 	for(k=n-1;k>=0;k--)  // for all nodes in fx
@@ -97,6 +120,7 @@ Alignment<R,L,AL>::Alignment(const PPForest<L> *ppfx, const PPForest<L> *ppfy, c
 					              ppfy->label(k),
 					              getMtrxVal(0,ppfy->over(k,l)));
 
+			
 			setMtrxVal(0,ppfy->indexpos(k,l),score);
 		}
 	}
@@ -152,7 +176,6 @@ Alignment<R,L,AL>::Alignment(const PPForest<L> *ppfx, const PPForest<L> *ppfy, c
 						h=ppfx->rb(h);
 					}
 
-					// set value
 					setMtrxVal(ppfx->indexpos(i,j),ppfy->indexpos(k,l),score);
 				}
 
@@ -190,7 +213,17 @@ void Alignment<R,L,AL>::calculateLocal(const PPForest<L> *ppfx, const PPForest<L
 	R score,h_score;
 
 	// alloc space for the score matrix, backtrack structure  and , if wanted, for the calculation-order-matrix
+	if (ppfx->getNumCSFs() > ULONG_MAX / ppfy->getNumCSFs()) { 
+	  cerr << "Error: Overflow in calculation matrix multiplication. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
+
 	m_mtrxSize=ppfx->getNumCSFs()*ppfy->getNumCSFs();
+
+	if(m_mtrxSize > 2000000000 || ppfx->getNumCSFs() > 2000000000) {
+	  cerr << "Error: Maximum array size of 2GB exceeded due to large input data. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
 
 	m_mtrx=new R[m_mtrxSize];
 	m_rowStart=new Ulong[ppfx->getNumCSFs()];
@@ -371,12 +404,22 @@ void Alignment<R,L,AL>::calculateGlobal(const PPForest<L> *ppfx, const PPForest<
 	R score,h_score;
 
 	// alloc space for the score matrix, backtrack structure  and , if wanted, for the calculation-order-matrix
+	if (ppfx->getNumCSFs() > ULONG_MAX / ppfy->getNumCSFs()) { 
+	  cerr << "Error: Overflow in calculation matrix multiplication. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
+
 	m_mtrxSize=ppfx->getNumCSFs()*ppfy->getNumCSFs();
+
+	if(m_mtrxSize > 2000000000 || ppfx->getNumCSFs() > 2000000000) {
+	  cerr << "Error: Maximum array size of 2GB exceeded due to large input data. Calculation terminated." << endl;
+	  exit(EXIT_FAILURE);
+	}
 
 	m_mtrx=new R[m_mtrxSize];
 	m_rowStart=new Ulong[ppfx->getNumCSFs()];
-	m_ppfx = new PPForest<L>(*ppfx);				// copy the ppforests
-	m_ppfy = new PPForest<L>(*ppfy);
+	  m_ppfx = new PPForest<L>(*ppfx);				// copy the ppforests
+	  m_ppfy = new PPForest<L>(*ppfy); 
 	m_alg=&alg;
 	m_rnaAlg=NULL;
 	m_localOptimum=alg.worst_score();
@@ -769,8 +812,6 @@ Uint Alignment<R,L,AL>::backtrack(PPForestAli<L,AL> &ppf,Uint i, Uint j, Uint k,
 	cerr << "Strange things happening in backtrack" << endl;
 	exit(EXIT_FAILURE);
 } 
-
-
 
 /* ****************************************** */
 /*             Public functions               */

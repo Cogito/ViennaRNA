@@ -76,7 +76,7 @@ class Arguments
 		Arguments(int argc, const char** argv) 
 			throw(std::bad_alloc); 	
 
-		unsigned int size() const throw(); 
+		unsigned int size() const throw();
 
 		bool has(const std::string& arg) const throw(std::bad_alloc);
 		

@@ -26,6 +26,11 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <string.h>
+
+#ifdef HAVE_LIBXMLPLUSPLUS
+#include <libxml++/libxml++.h>
+#endif
 
 #include "matrix.h"
 #include "rna_profile_alignment.h"
@@ -892,7 +897,7 @@ void RNAProfileAlignment::squigglePlot(const string &filename, SquigglePlotOptio
 				g2_pen(id,ps_color_red);
 			else
 				g2_pen(id,ps_grey_colors[(int)floor(p*num_grey_colors-1)]);
-
+			  
 			base=getMlBase(baseprobs[i]);
 
 			xpos=X[i]-base.length()*base_fontsize/2.0;
@@ -982,12 +987,31 @@ void RNAProfileAlignment::printSeqAli() const
 		for(i=0;i<l;i+=55)
 		{
 			for(Uint r=0;r<m_numStructures;r++)
-				cout << setw(20) << setfill(' ') << left << m_strNames[r].substr(0,20) << setw(5) << " " << seqs[r].substr(i,55) << endl;
+				cout << setw(20) << setfill(' ') << left << m_strNames[r].substr(0,20) << setw(5) << " " << RNAFuncs::UpperCase(seqs[r].substr(i,55)) << endl;
 
 			cout << setw(25) << " " << info.substr(i,55) << endl;
 			cout << endl;
 		}
 		//	}
+}
+
+deque<pair<string,string> > RNAProfileAlignment::getSeqAli() const
+{
+	Uint i;
+	deque<pair<string,string> > seqAli;
+	pair<string,string> p;
+	string seq;
+
+	 // get alignment rows^M
+         for(i=0;i<m_numStructures;i++)
+         {
+           getSeqAli(seq,i,0,getMaxLength(0));
+	   p.first = m_strNames[i];
+	   p.second = seq;
+           seqAli.push_back(p);
+         }
+
+	 return seqAli; 
 }
 
 void RNAProfileAlignment::printStrAli() const
@@ -1000,6 +1024,7 @@ void RNAProfileAlignment::printStrAli() const
 	for(i=0;i<m_numStructures;i++)
 	{
 		getStructAli(str,i);
+
 		strs.push_back(str);
 	}
 
@@ -1017,7 +1042,7 @@ void RNAProfileAlignment::printStrAli() const
 		    equal=false;
 		    break;
 		  }
-			}
+              }
 	    
 	    info += equal ? "*" : " ";		  
 	  }  
@@ -1032,6 +1057,96 @@ void RNAProfileAlignment::printStrAli() const
 		cout << endl;
 	} 
   
+}
+
+deque<string> RNAProfileAlignment::getStrAli() const
+{
+	Uint i;
+	deque<string> strs;
+        string str;
+
+        // get alignment rows^M
+        for(i=0;i<m_numStructures;i++)
+        {
+          getStructAli(str,i);
+          strs.push_back(str);
+        }
+
+	return strs;
+}
+
+string RNAProfileAlignment::getConsSeq() const
+{
+	string seq;
+	deque<BaseProbs> baseprobs;
+	getSequenceAlignment(baseprobs);
+
+	 // build sequence
+	 deque<BaseProbs>::const_iterator it;
+	 for(it=baseprobs.begin();it!=baseprobs.end();it++)
+	 {
+	   seq += getMlBase(*it);
+	 }
+
+	 return seq;
+}
+
+string RNAProfileAlignment::getConsStr(double minPairProb) const
+{
+	string str;
+	deque<double> pairprob;
+	getStructureAlignment(minPairProb,str,pairprob);
+
+	return str;
+}
+
+deque<double> RNAProfileAlignment::getBaseProb() const
+{
+	deque<BaseProbs> baseprobs;
+	deque<double> bestBaseprob;
+
+	getSequenceAlignment(baseprobs);
+        // build sequence
+        deque<BaseProbs>::const_iterator it;
+        for(it=baseprobs.begin();it!=baseprobs.end();it++)
+        {
+           bestBaseprob.push_back(getMlBaseFreq(*it));
+        }
+
+	return bestBaseprob;
+}
+
+//deque<pair<pair<int,int>,double> > RNAProfileAlignment::getPairProb(double minPairProb)
+void RNAProfileAlignment::getPairProb(double &minPairProb, deque<pair<pair<int,int>,double> > &pairprobs)
+{
+  //deque<pair<pair<int,int>,double> > structureProbs;
+	deque<double> pairprob;
+	string str;
+	
+	getStructureAlignment(minPairProb,str,pairprob);
+
+	// store the position of open brackets in an integer deque 
+	deque<int> openBrackets;
+	// iterator for structureProbs
+	pair<int,int> tmpPair;
+	pair<pair<int,int>,double> tmpPair2;
+	
+	// iterate through structure str	
+	for(int i=0;i<=str.length();i++)
+	{
+	  if(str[i]=='(') {
+	    openBrackets.push_back(i);
+	  } else if(str[i]==')') {
+	    // insert the int value of the corresponding opening bracket into structureProbs
+	    // insert position of the actual closing bracket
+	    // insert probability according to the actual bases
+	    tmpPair = pair<int,int> (openBrackets.back(),i);
+	    tmpPair2 = pair<pair<int,int>,double> (tmpPair,pairprob[i]);
+	    pairprobs.push_back(tmpPair2);
+	    // delete position of the last opening bracket
+	    openBrackets.pop_back();
+	  }
+	}
 }
 
 void RNAProfileAlignment::printFastaAli(bool noStructure) const
@@ -1096,7 +1211,7 @@ void RNAProfileAlignment::printConsensus(double minPairProb) const
 			cout << endl;
 		}
 
-		cout << setw(25) << " " << seq.substr(i,55) << endl;
+		cout << setw(25) << " " << RNAFuncs::UpperCase(seq.substr(i,55)) << endl;
 		cout << setw(25) << " " << structure.substr(i,55) << endl;
 
 		// show structure frequency mountain

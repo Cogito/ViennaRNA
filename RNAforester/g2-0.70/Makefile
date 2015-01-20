@@ -22,16 +22,16 @@ INCDIR = /usr/local/include
 SHELL = /bin/sh
 
 CC           = gcc
-CFLAGS       = -I./src -g -O2  -I/usr/local/include -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1
+CFLAGS       = -I./src -g -O2  -I/usr/local/include -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DDO_GD=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1
 INSTALL      = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 FIND         = find
-MAKEDEPEND   = makedepend
+MAKEDEPEND   = :
 AR           = ar
 ARFLAGS      = -cr
 RANLIB       = ranlib
 LD           = ld
-LDFLAGS      =   -L/usr/lib64 -L/usr/local/lib -lm -lX11
+LDFLAGS      =   -L/usr/local/lib -lm -lX11 -lgd
 
 
 BASE_DIR = ./src
@@ -60,9 +60,9 @@ X11_INS = $(X11_DIR)/g2_X11.h
 #WIN32_SRC = $(WIN32_DIR)/g2_win32.c $(WIN32_DIR)/g2_win32_thread.c 
 #WIN32_INS = $(WIN32_DIR)/g2_win32.h
 
-#GD_DIR = ./src/GD
-#GD_SRC = $(GD_DIR)/g2_gd.c
-#GD_INS = $(GD_DIR)/g2_gd.h
+GD_DIR = ./src/GD
+GD_SRC = $(GD_DIR)/g2_gd.c
+GD_INS = $(GD_DIR)/g2_gd.h
 
 
 SRC = $(BASE_SRC) $(PS_SRC) $(FIG_SRC) $(X11_SRC) $(WIN32_SRC) $(GD_SRC)

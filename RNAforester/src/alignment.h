@@ -36,8 +36,8 @@ private:
 		CSFPair(Uint i, Uint j, Uint k, Uint l) : i(i),j(j),k(k),l(l) {};
 	};
 
-    R *m_mtrx;
-    Ulong *m_rowStart;
+	R *m_mtrx;
+	Ulong *m_rowStart;
     Ulong m_mtrxSize;
 
     PPForest<L> *m_ppfx;
@@ -53,16 +53,17 @@ private:
 
     inline R getMtrxVal(Ulong i,Ulong j) const          
       {
-		assert(m_rowStart[i]+j<m_mtrxSize);
-		return m_mtrx[m_rowStart[i]+j];
+	assert(m_rowStart[i]+j<m_mtrxSize);
+	return m_mtrx[m_rowStart[i]+j];
       };
 
     inline void setMtrxVal(Ulong i,Ulong j,R val)
       {
-		assert(m_rowStart[i]+j<m_mtrxSize);
+	assert(m_rowStart[i]+j<m_mtrxSize);
 
-		m_mtrx[m_rowStart[i]+j]=val;
-		m_localOptimum=m_alg->choice(m_localOptimum,val);   // here we calculate local similarity on the fly
+	m_mtrx[m_rowStart[i]+j]=val;
+	
+	m_localOptimum=m_alg->choice(m_localOptimum,val);   // here we calculate local similarity on the fly
       };
 
     void calculateLocal(const PPForest<L> *ppfx, const PPForest<L> *ppfy,const Algebra<R,L> &alg, bool noSpeedup=false);
@@ -75,7 +76,7 @@ public:
     
     R getGlobalOptimum();
 
-	/** This function should only be used in conjunction with
+    /** This function should only be used in conjunction with
 	 *  similarity based algebras
 	 */
     double getGlobalOptimumRelative();

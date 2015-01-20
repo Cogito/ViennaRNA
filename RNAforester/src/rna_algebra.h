@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <algorithm>
+#include <climits>
 
 #include "algebra.h"
 #include "debug.h"

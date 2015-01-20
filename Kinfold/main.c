@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2006-11-09 11:28:33 xtof>
+  Last changed Time-stamp: <2008-08-28 11:40:14 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: main.c,v 1.4 2006/11/24 08:13:55 xtof Exp $
+  $Id: main.c,v 1.5 2008/08/28 09:40:55 ivo Exp $
 */
 
 #include <stdio.h>
@@ -20,14 +20,13 @@
 #include "utils.h"
 #include "globals.h"
 
-static char UNUSED rcsid[] ="$Id: main.c,v 1.4 2006/11/24 08:13:55 xtof Exp $";
+static char UNUSED rcsid[] ="$Id: main.c,v 1.5 2008/08/28 09:40:55 ivo Exp $";
 extern void  read_parameter_file(const char fname[]);
 extern void get_from_cache(cache_entry *c);
 
 /* PRIVAT FUNCTIONS */
 static void ini_energy_model(void);
 static void read_data(void);
-static char *getline(FILE *fp);
 static void clean_up(void);
 
 /**/
@@ -133,7 +132,7 @@ static void read_data(void) {
   /*
     read sequence
   */
-  ctmp = getline(stdin);
+  ctmp = get_line(stdin);
   len = strlen(ctmp);
   GAV.farbe = (char *)calloc(len+1, sizeof(char));
   assert(GAV.farbe != NULL);
@@ -153,7 +152,7 @@ static void read_data(void) {
     read start structure
   */
   if (GTV.start) {
-    ctmp = getline(stdin);
+    ctmp = get_line(stdin);
     len = strlen(ctmp);
     sscanf(ctmp, "%s", GAV.startform);
 
@@ -174,7 +173,7 @@ static void read_data(void) {
   */
   if (GTV.stop) {
     s = GAV.stopform;
-    while (( ctmp = getline(stdin))) {
+    while (( ctmp = get_line(stdin))) {
       *s = (char *)calloc(GSV.len+1, sizeof(char));
       sscanf(ctmp, "%s", *s);
       
@@ -204,26 +203,6 @@ static void read_data(void) {
   GAV.farbe_full = strdup(GAV.farbe);
 
   GAV.sE = (float *)calloc(GSV.maxS, sizeof(float)); 
-}
-
-/**/
-static char *getline(FILE *fp) {
-  char s[512], *line, *cp;
-  
-  line = NULL;
-  do {
-    if (fgets(s, 512, fp) == NULL) break;
-    cp = strchr(s, '\n');
-    if (cp != NULL) *cp = '\0';
-    if (line == NULL) {
-      line = (char *)calloc((strlen(s) + 1), sizeof(char));
-      assert(line != NULL);
-    }
-    else
-      line = (char *)realloc(line, strlen(s) + strlen(line) + 1);
-    strcat(line, s);
-  } while(cp == NULL);
-  return(line);
 }
 
 /**/

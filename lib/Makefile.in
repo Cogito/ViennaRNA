@@ -70,7 +70,8 @@ am_libRNA_a_OBJECTS = libRNA_a-dist_vars.$(OBJEXT) \
 	libRNA_a-part_func_co.$(OBJEXT) libRNA_a-ProfileAln.$(OBJEXT) \
 	libRNA_a-duplex.$(OBJEXT) libRNA_a-alifold.$(OBJEXT) \
 	libRNA_a-alipfold.$(OBJEXT) libRNA_a-aln_util.$(OBJEXT) \
-	libRNA_a-LPfold.$(OBJEXT) libRNA_a-part_func_up.$(OBJEXT)
+	libRNA_a-LPfold.$(OBJEXT) libRNA_a-part_func_up.$(OBJEXT) \
+	libRNA_a-ribo.$(OBJEXT) libRNA_a-findpath.$(OBJEXT)
 libRNA_a_OBJECTS = $(am_libRNA_a_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -188,7 +189,7 @@ libRNA_a_SOURCES = dist_vars.c fold_vars.c part_func.c read_epars.c\
 	treedist.c energy_par.c inverse.c ProfileDist.c RNAstruct.c utils.c\
 	fold.c naview.c PS_dot.c stringdist.c params.c subopt.c list.c \
         Lfold.c cofold.c part_func_co.c ProfileAln.c duplex.c alifold.c \
-	alipfold.c aln_util.c LPfold.c part_func_up.c
+	alipfold.c aln_util.c LPfold.c part_func_up.c ribo.c findpath.c
 
 libRNA_a_CFLAGS = $(AM_CFLAGS) @FPIC@
 noinst_HEADERS = intloops.h list.h
@@ -280,6 +281,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-dist_vars.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-duplex.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-energy_par.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-findpath.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-fold.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-fold_vars.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-inverse.Po@am__quote@
@@ -290,6 +292,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-part_func_co.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-part_func_up.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-read_epars.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-ribo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-stringdist.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-subopt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libRNA_a-treedist.Po@am__quote@
@@ -686,6 +689,34 @@ libRNA_a-part_func_up.obj: part_func_up.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='part_func_up.c' object='libRNA_a-part_func_up.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-part_func_up.obj `if test -f 'part_func_up.c'; then $(CYGPATH_W) 'part_func_up.c'; else $(CYGPATH_W) '$(srcdir)/part_func_up.c'; fi`
+
+libRNA_a-ribo.o: ribo.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-ribo.o -MD -MP -MF $(DEPDIR)/libRNA_a-ribo.Tpo -c -o libRNA_a-ribo.o `test -f 'ribo.c' || echo '$(srcdir)/'`ribo.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libRNA_a-ribo.Tpo $(DEPDIR)/libRNA_a-ribo.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ribo.c' object='libRNA_a-ribo.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-ribo.o `test -f 'ribo.c' || echo '$(srcdir)/'`ribo.c
+
+libRNA_a-ribo.obj: ribo.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-ribo.obj -MD -MP -MF $(DEPDIR)/libRNA_a-ribo.Tpo -c -o libRNA_a-ribo.obj `if test -f 'ribo.c'; then $(CYGPATH_W) 'ribo.c'; else $(CYGPATH_W) '$(srcdir)/ribo.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libRNA_a-ribo.Tpo $(DEPDIR)/libRNA_a-ribo.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ribo.c' object='libRNA_a-ribo.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-ribo.obj `if test -f 'ribo.c'; then $(CYGPATH_W) 'ribo.c'; else $(CYGPATH_W) '$(srcdir)/ribo.c'; fi`
+
+libRNA_a-findpath.o: findpath.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-findpath.o -MD -MP -MF $(DEPDIR)/libRNA_a-findpath.Tpo -c -o libRNA_a-findpath.o `test -f 'findpath.c' || echo '$(srcdir)/'`findpath.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libRNA_a-findpath.Tpo $(DEPDIR)/libRNA_a-findpath.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='findpath.c' object='libRNA_a-findpath.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-findpath.o `test -f 'findpath.c' || echo '$(srcdir)/'`findpath.c
+
+libRNA_a-findpath.obj: findpath.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -MT libRNA_a-findpath.obj -MD -MP -MF $(DEPDIR)/libRNA_a-findpath.Tpo -c -o libRNA_a-findpath.obj `if test -f 'findpath.c'; then $(CYGPATH_W) 'findpath.c'; else $(CYGPATH_W) '$(srcdir)/findpath.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libRNA_a-findpath.Tpo $(DEPDIR)/libRNA_a-findpath.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='findpath.c' object='libRNA_a-findpath.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libRNA_a_CFLAGS) $(CFLAGS) -c -o libRNA_a-findpath.obj `if test -f 'findpath.c'; then $(CYGPATH_W) 'findpath.c'; else $(CYGPATH_W) '$(srcdir)/findpath.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

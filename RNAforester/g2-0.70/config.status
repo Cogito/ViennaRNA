@@ -331,7 +331,7 @@ Copyright (C) 2006 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/ivo/RNA/V/ViennaRNA/RNAforester/g2-0.70'
+ac_pwd='/tmp/ViennaRNA/RNAforester/g2-0.70'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 # If no file are specified by the user, then we need to provide default
@@ -497,7 +497,7 @@ s,@psdir@,|#_!!_#|${docdir},g
 s,@libdir@,|#_!!_#|${exec_prefix}/lib,g
 s,@localedir@,|#_!!_#|${datarootdir}/locale,g
 s,@mandir@,|#_!!_#|${datarootdir}/man,g
-s,@DEFS@,|#_!!_#|-DPACKAGE_NAME=\\"\\" -DPACKAGE_TARNAME=\\"\\" -DPACKAGE_VERSION=\\"\\" -DPACKAGE_STRING=\\"\\" -DPACKAGE_BUGREPORT=\\"\\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DDO_GD=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1,g
+s,@DEFS@,|#_!!_#|-DPACKAGE_NAME=\\"\\" -DPACKAGE_TARNAME=\\"\\" -DPACKAGE_VERSION=\\"\\" -DPACKAGE_STRING=\\"\\" -DPACKAGE_BUGREPORT=\\"\\" -DLINUX=1 -DDO_PS=1 -DDO_FIG=1 -DDO_X11=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_LIMITS_H=1,g
 s,@ECHO_C@,|#_!!_#|,g
 s,@ECHO_N@,|#_!!_#|-n,g
 s,@ECHO_T@,|#_!!_#|,g
@@ -505,13 +505,13 @@ s,@LIBS@,|#_!!_#|,g
 s,@build_alias@,|#_!!_#|,g
 s,@host_alias@,|#_!!_#|,g
 s,@target_alias@,|#_!!_#|,g
-s,@build@,|#_!!_#|i686-pc-linux-gnu,g
-s,@build_cpu@,|#_!!_#|i686,g
-s,@build_vendor@,|#_!!_#|pc,g
+s,@build@,|#_!!_#|x86_64-unknown-linux-gnu,g
+s,@build_cpu@,|#_!!_#|x86_64,g
+s,@build_vendor@,|#_!!_#|unknown,g
 s,@build_os@,|#_!!_#|linux-gnu,g
-s,@host@,|#_!!_#|i686-pc-linux-gnu,g
-s,@host_cpu@,|#_!!_#|i686,g
-s,@host_vendor@,|#_!!_#|pc,g
+s,@host@,|#_!!_#|x86_64-unknown-linux-gnu,g
+s,@host_cpu@,|#_!!_#|x86_64,g
+s,@host_vendor@,|#_!!_#|unknown,g
 s,@host_os@,|#_!!_#|linux-gnu,g
 s,@LD_SHARED@,|#_!!_#|ld,g
 s,@LD_SHARED_FLAGS@,|#_!!_#|-shared -soname libg2.so.0,g
@@ -519,7 +519,7 @@ s,@LD_SHARED_OPT@,|#_!!_#|,g
 s,@LD_SHARED_EXT@,|#_!!_#|so.0.$(G2_VERSION),g
 s,@CC@,|#_!!_#|gcc,g
 s,@CFLAGS@,|#_!!_#|-g -O2  -I/usr/local/include,g
-s,@LDFLAGS@,|#_!!_#|  -L/usr/local/lib -lm -lX11 -lgd,g
+s,@LDFLAGS@,|#_!!_#|  -L/usr/lib64 -L/usr/local/lib -lm -lX11,g
 s,@CPPFLAGS@,|#_!!_#|,g
 s,@ac_ct_CC@,|#_!!_#|gcc,g
 s,@EXEEXT@,|#_!!_#|,g
@@ -537,13 +537,13 @@ s,@MAKEDEPEND@,|#_!!_#|makedepend,g
 s,@XMKMF@,|#_!!_#|,g
 s,@X_CFLAGS@,|#_!!_#|,g
 s,@X_PRE_LIBS@,|#_!!_#| -lSM -lICE,g
-s,@X_LIBS@,|#_!!_#|,g
+s,@X_LIBS@,|#_!!_#| -L/usr/lib64,g
 s,@X_EXTRA_LIBS@,|#_!!_#|,g
 s,@DO_PS@,|#_!!_#|,g
 s,@DO_FIG@,|#_!!_#|,g
 s,@DO_X11@,|#_!!_#|,g
 s,@DO_WIN32@,|#_!!_#|#,g
-s,@DO_GD@,|#_!!_#|,g
+s,@DO_GD@,|#_!!_#|#,g
 s,@GREP@,|#_!!_#|/bin/grep,g
 s,@EGREP@,|#_!!_#|/bin/grep -E,g
 s,@LIBOBJS@,|#_!!_#|,g

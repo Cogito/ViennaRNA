@@ -1,9 +1,9 @@
 /*
-  Last changed Time-stamp: <2006-10-03 11:07:16 xtof>
+  Last changed Time-stamp: <2008-10-07 09:56:05 ivo>
   c  Christoph Flamm and Ivo L Hofacker
   {xtof,ivo}@tbi.univie.ac.at
   Kinfold: $Name:  $
-  $Id: globals.c,v 1.6 2006/10/04 12:45:13 xtof Exp $
+  $Id: globals.c,v 1.8 2008/10/07 09:03:14 ivo Exp $
 */
 
 #include <stdio.h>
@@ -14,6 +14,7 @@
 #include <getopt.h>
 #include "utils.h"
 #include "globals.h"
+#include "cmdline.h"
 
 /* forward declarations privat functions */
 static void ini_globs(void);
@@ -25,9 +26,10 @@ static void display_settings(void);
 static void display_fileformat(void);
 static char *verbose(int optval, const char *which);
 static int process_options (int argc, char *argv[]);
+static void process_options_gg (int argc, char *argv[]);
 
-static char UNUSED rcsid[] ="$Id: globals.c,v 1.6 2006/10/04 12:45:13 xtof Exp $";
-#define MAXMSG 8 
+static char UNUSED rcsid[] ="$Id: globals.c,v 1.8 2008/10/07 09:03:14 ivo Exp $";
+#define MAXMSG 8
 static char msg[MAXMSG][60] =
 {{"off"},
  {"on"},
@@ -62,7 +64,7 @@ static struct option const long_options[] =
   {"lmin",    no_argument,       &GTV.lmin, 1},
   {"cut",     required_argument, 0, 0},
   {"help",    no_argument,       0, 'h'},
-  {"verbose", no_argument,       0, 0},  
+  {"verbose", no_argument,       0, 0},
   {NULL, 0, NULL, 0}
 };
 
@@ -70,7 +72,7 @@ static struct option const long_options[] =
 void decode_switches(int argc, char *argv[]) {
   ini_globs();
   strcpy(GAV.ProgramName, argv[0]);
-  process_options(argc, argv);
+  process_options_gg(argc, argv);
 }
 
 /**/
@@ -249,17 +251,17 @@ static char *verbose (int optval, const char *which) {
 	      GAV.phi_bounds[0], GAV.phi_bounds[1], GAV.phi_bounds[2]);
       return msg[MAXMSG - 1];
     }
-    
+
     if ( strcmp(which, "met") == 0 ) {
       if ( optval == 0 ) return "Kawasaki";
       else return "Metropolis";
     }
-    
+
     if ( strcmp(which, "logML") == 0 ) {
       if ( optval == 0 ) return "linear";
       else return "logarithmic";
     }
-    
+
     if ( strcmp(which, "start") == 0 ) {
       if ( optval == 0 ) return "OpenChain";
       else return "input file";
@@ -272,7 +274,7 @@ static char *verbose (int optval, const char *which) {
   }
   return "hae?";
 }
-    
+
 /**/
 static void ini_globs (void) {
   ini_gtoggles();
@@ -280,13 +282,70 @@ static void ini_globs (void) {
   ini_garrays();
 }
 
+static void process_options_gg (int argc, char *argv[]) {
+  struct gengetopt_args_info args_info;
+  if (cmdline_parser (argc, argv, &args_info) != 0)
+    exit(1) ;
+  if (args_info.help_given) cmdline_parser_print_help();
+  if (args_info.full_help_given) cmdline_parser_print_full_help();
+
+  GTV.dangle = args_info.dangle_arg;
+  GSV.Temp = args_info.Temp_arg;
+  GAV.ParamFile = args_info.Par_arg;
+  GTV.Par = args_info.Par_given;
+  GTV.verbose = args_info.verbose_flag;
+  GTV.silent = (GTV.verbose==0)?
+    args_info.silent_flag : 0;
+  if (args_info.seed_given)
+    if (sscanf(args_info.seed_arg, "%hu=%hu=%hu",
+	       &GAV.subi[0], &GAV.subi[1], &GAV.subi[2]) != 3)
+      usage(EXIT_FAILURE);
+    else GTV.seed = 1;
+
+  /* laplace stuff */
+  if (args_info.phi_given) {
+    if (args_info.phi_arg>0) {
+      GTV.phi = 1;
+      GSV.phi = args_info.phi_arg;
+    }
+    else {
+      fprintf(stderr, "Value of --phi must be > 0 >%lf<\n", args_info.phi_arg);
+      exit(EXIT_FAILURE);
+    }
+  }
+  if (args_info.pbounds_given) {
+    if (sscanf(args_info.pbounds_arg, "%g=%g=%g",
+	       &GAV.phi_bounds[0],
+	       &GAV.phi_bounds[1],
+	       &GAV.phi_bounds[2]) == 0)
+      usage(EXIT_FAILURE);
+    else
+      GTV.phi = 1;
+    /* check if values are proper */
+    if (GAV.phi_bounds[0] > GAV.phi_bounds[2]
+	|| GAV.phi_bounds[1] > GAV.phi_bounds[2]) {
+      fprintf(stderr,
+	      "Unmet requirements for pbounds:\n"
+	      "phi_min < phi_max && phi_inc < phi_max\n"
+	      "phi_min: %g phi_inc: %g phi_max: %g\n",
+	      GAV.phi_bounds[0], GAV.phi_bounds[1], GAV.phi_bounds[2]);
+      exit(EXIT_FAILURE);
+    }
+  }
+  GSV.time = args_info.time_arg;
+  GSV.num = args_info.num_arg;
+  strncpy(GAV.BaseName, args_info.log_arg, 255);
+  GSV.cut = args_info.cut_arg;
+  GSV.grow = args_info.grow_arg;
+  GSV.glen = args_info.glen_arg;
+}
 /**/
 static int process_options (int argc, char *argv[]) {
   int c, itmp;
   float ftmp;
   double dtmp;
   int option_index = 0;
-  while ((c = getopt_long (argc, argv, "h", 
+  while ((c = getopt_long (argc, argv, "h",
 			     long_options, &option_index)) != EOF) {
       switch (c) {
       case 0:
@@ -313,7 +372,7 @@ static int process_options (int argc, char *argv[]) {
 	    usage (EXIT_FAILURE);
 	  }
 	}
-	
+
 	if (strcmp(long_options[option_index].name,"Par")==0) {
 	  if (sscanf(optarg, "%s", GAV.ParamFile) == 0)
 	    usage(EXIT_FAILURE);
@@ -331,7 +390,7 @@ static int process_options (int argc, char *argv[]) {
 	  if (GTV.silent == 0)
 	    GTV.verbose = 1;
 	}
-	
+
 	if (strcmp(long_options[option_index].name,"seed")==0) {
 	  if (sscanf(optarg, "%hu=%hu=%hu",
 		     &GAV.subi[0], &GAV.subi[1], &GAV.subi[2]) == 0)
@@ -397,12 +456,12 @@ static int process_options (int argc, char *argv[]) {
 	    fprintf(stderr, "Value of --num must be > 0 >%d<\n", itmp);
 	    usage(EXIT_FAILURE);
 	  }
-	}	  
+	}
 
 	if (strcmp(long_options[option_index].name,"log")==0)
 	  if (sscanf(optarg, "%s", GAV.BaseName) == 0)
 	    usage(EXIT_FAILURE);
-	
+
 	if (strcmp(long_options[option_index].name,"cut")==0)
 	  if (sscanf(optarg, "%f", &GSV.cut) == 0)
 	    usage(EXIT_FAILURE);
@@ -414,9 +473,9 @@ static int process_options (int argc, char *argv[]) {
 	if (strcmp(long_options[option_index].name,"glen")==0)
 	  if (sscanf(optarg, "%d", &GSV.glen) == 0)
 	    usage(EXIT_FAILURE);
-	
+
 	break;
-	
+
       case 'h':
 	usage (0);
       default:

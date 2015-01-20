@@ -52,8 +52,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_Kinfold_OBJECTS = baum.$(OBJEXT) cache.$(OBJEXT) globals.$(OBJEXT) \
-	main.$(OBJEXT) nachbar.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT)
+	main.$(OBJEXT) nachbar.$(OBJEXT) cmdline.$(OBJEXT)
 Kinfold_OBJECTS = $(am_Kinfold_OBJECTS)
 Kinfold_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@
@@ -184,14 +183,15 @@ top_srcdir = @top_srcdir@
 SUBDIRS = Example
 Kinfold_SOURCES = baum.c cache.c globals.c main.c nachbar.c \
 		  baum.h cache_util.h globals.h   nachbar.h \
-		  getopt.c getopt.h getopt1.c
+		  cmdline.c cmdline.h
 
 EXTRA_DIST = Laplace/extract_data.pl \
              Laplace/laplace.sh \
              Laplace/README \
              Laplace/seq1 \
              Laplace/seq1_ref.ps \
-             Laplace/to_boxplot.R
+             Laplace/to_boxplot.R \
+             kinfold.ggo
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -283,8 +283,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/baum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cache.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmdline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/globals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nachbar.Po@am__quote@
@@ -688,6 +687,11 @@ uninstall-am: uninstall-binPROGRAMS
 	ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
+
+globals.o: cmdline.h
+
+cmdline.h cmdline.c: kinfold.ggo
+	gengetopt -i kinfold.ggo
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

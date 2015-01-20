@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.61)
 
-AC_INIT([kinfold], [1.1], [rna@tbi.univie.ac.at], [Kinfold])
+AC_INIT([kinfold], [1.2], [rna@tbi.univie.ac.at], [Kinfold])
 AC_CONFIG_SRCDIR([cache_util.h])
 
 dnl Every other copy of the package version number gets its value from here

@@ -760,6 +760,7 @@ package RNA;
 *free_co_arrays = *RNAc::free_co_arrays;
 *initialize_cofold = *RNAc::initialize_cofold;
 *update_cofold_params = *RNAc::update_cofold_params;
+*zukersubopt = *RNAc::zukersubopt;
 *pf_fold = *RNAc::pf_fold;
 *init_pf_fold = *RNAc::init_pf_fold;
 *free_pf_arrays = *RNAc::free_pf_arrays;
@@ -776,6 +777,11 @@ package RNA;
 *option_string = *RNAc::option_string;
 *free_alifold_arrays = *RNAc::free_alifold_arrays;
 *alipf_fold = *RNAc::alipf_fold;
+*centroid_ali = *RNAc::centroid_ali;
+*readribosum = *RNAc::readribosum;
+*alipbacktrack = *RNAc::alipbacktrack;
+*free_alipf_arrays = *RNAc::free_alipf_arrays;
+*energy_of_alistruct = *RNAc::energy_of_alistruct;
 *circalifold = *RNAc::circalifold;
 *alipf_circ_fold = *RNAc::alipf_circ_fold;
 *alifold = *RNAc::alifold;
@@ -843,6 +849,8 @@ package RNA;
 *PS_dot_plot_list = *RNAc::PS_dot_plot_list;
 *PS_dot_plot_turn = *RNAc::PS_dot_plot_turn;
 *PS_color_aln = *RNAc::PS_color_aln;
+*find_saddle = *RNAc::find_saddle;
+*get_path = *RNAc::get_path;
 
 ############# Class : RNA::intArray ##############
 
@@ -1280,6 +1288,47 @@ sub ACQUIRE {
 }
 
 
+############# Class : RNA::path_t ##############
+
+package RNA::path_t;
+use vars qw(@ISA %OWNER %ITERATORS %BLESSEDMEMBERS);
+@ISA = qw( RNA );
+%OWNER = ();
+%ITERATORS = ();
+*swig_en_get = *RNAc::path_t_en_get;
+*swig_en_set = *RNAc::path_t_en_set;
+*swig_s_get = *RNAc::path_t_s_get;
+*swig_s_set = *RNAc::path_t_s_set;
+sub new {
+    my $pkg = shift;
+    my $self = RNAc::new_path_t(@_);
+    bless $self, $pkg if defined($self);
+}
+
+sub DESTROY {
+    return unless $_[0]->isa('HASH');
+    my $self = tied(%{$_[0]});
+    return unless defined $self;
+    delete $ITERATORS{$self};
+    if (exists $OWNER{$self}) {
+        RNAc::delete_path_t($self);
+        delete $OWNER{$self};
+    }
+}
+
+sub DISOWN {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    delete $OWNER{$ptr};
+}
+
+sub ACQUIRE {
+    my $self = shift;
+    my $ptr = tied(%$self);
+    $OWNER{$ptr} = 1;
+}
+
+
 # ------- VARIABLE STUBS --------
 
 package RNA;
@@ -1293,6 +1342,9 @@ package RNA;
 *tetra_loop = *RNAc::tetra_loop;
 *energy_set = *RNAc::energy_set;
 *dangles = *RNAc::dangles;
+*oldAliEn = *RNAc::oldAliEn;
+*ribo = *RNAc::ribo;
+*RibosumFile = *RNAc::RibosumFile;
 *nonstandards = *RNAc::nonstandards;
 *temperature = *RNAc::temperature;
 *james_rule = *RNAc::james_rule;

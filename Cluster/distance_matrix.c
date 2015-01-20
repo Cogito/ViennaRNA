@@ -227,7 +227,8 @@ PUBLIC float **Hamming_Distance_Matrix(char **seqs, int n_of_seqs)
             nrerror("Unequal Seqence Length for Hamming Distance.");
          D[i+1][j+1] = 0.0;
          for(k=0;k<strlen(seqs[i]);k++)
-            D[i+1][j+1] += (float)(seqs[i][k]!=seqs[j][k]);
+            D[i+1][j+1] += StrEditCost(k+1,k+1,seqs[i],seqs[j]);
+	 /* was :  (float)(seqs[i][k]!=seqs[j][k]); */
          D[j+1][i+1] = D[i+1][j+1];
       }
       D[n_of_seqs][n_of_seqs] = 0.;

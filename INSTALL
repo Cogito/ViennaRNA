@@ -10,20 +10,20 @@ Type
 to produce the library and the interactive programs, and
         make install
 to copy the executables, library and man pages into the appropriate
-directories. You may also want to install the header files in ./H in
-a suitable place. This is not done by the makefile. Also feel free to
-copy all header files into a single one, if you dislike using a lot of
-#includes in your programs.
+directories. You plan on using the library, you'll also want to install the
+header files from ./H in a suitable place. This is not done by the
+makefile. Also feel free to copy all header files into a single one, if you
+dislike using a lot of #includes in your programs.
 
 There are man pages for all executables, the library is documented in
 ./man/RNAlib.texinfo. You can either print this file as a manual using
 TeX (if you don't have texinfo.tex installed use the .dvi file) or use
 it as online documentation if you have the GNU texinfo package installed.
-Documentation in HTML can be found at http://www.tbi.univie.ac.at/~ivo/RNA.
+Documentation in HTML can be found at http://www.tbi.univie.ac.at/~ivo/RNA/
 
 
 System specific notes:
-calculating the partition function for long sequences ( >600 bases)
+calculating the partition function for long sequences ( >400 bases)
 generates a lot of floating point underflows. On some system this can slow
 down the calculation dramatically because an exception is invoked for each 
 underflow. How to avoid this problem is highly system specific:
@@ -32,16 +32,13 @@ On SunOS 4.1 the remedy is calling nonstandard_arithmetic() add a -DSUN4 to
 the CFLAGS in lib/makefile to do this. Use CC=gcc since SUN's standard cc
 doesn't understand ANSI C.
 
-On HP700/800 maschines running hpux9 add -DHP9 to the CFLAGS so that
+On HP machines running hpux-9 or hpux-10 add -DHP9 to the CFLAGS so that
 fpsetfastmode() will be called.
 
-On SGIs running IRIX 5 add -lfpe to the link flags in Progs/makefile
-and set the environment variable TRAP_FPE to "UNDERFL=FLUSH_ZERO" before 
-running RNAfold. See  `man 3 handle_sigfpes`  for details.
+Nothing special has to be done for AIX-3.2 and OSF/1. 
 
-Nothing special has to be done for AIX and OSF/1.
-
-If you want to fold sequences several 1000 bases in length and have you
-have lots of memory you may want to add -DPF_LARGE to the CFLAGS so that
+If you want to fold sequences several 1000 bases in length and if you
+have enough memory you may want to add -DPF_LARGE to the CFLAGS so that
 all partition function folding will use double precision floats (needing
-twice the amount of memory).
+twice the amount of memory). Make sure this is done for the makefiles in
+the ./lib as well as ./Prog directory.

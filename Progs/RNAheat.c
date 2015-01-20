@@ -22,6 +22,8 @@
 #define PUBLIC
 #define MAXWIDTH     201
 
+static char rcsid[] = "$Id: RNAheat.c,v 1.7 1997/12/14 16:10:09 ivo Exp $";
+
 PRIVATE float F[MAXWIDTH];
 PRIVATE float ddiff(float f[], float h, int m);
 PRIVATE void  usage(void);
@@ -32,7 +34,6 @@ PRIVATE void  usage(void);
 PRIVATE void heat_capacity(char *string, float T_min, float T_max,
 			  float h, int m)
 {
-   extern int pf_dangl;
    int length, i;
    char *structure=NULL;
    float hc, kT, min_en;
@@ -45,18 +46,18 @@ PRIVATE void heat_capacity(char *string, float T_min, float T_max,
    initialize_fold(length);
    structure = (char *) space(length+1);
    min_en = fold(string, structure);
-   pf_dangl=1;
+   dangles= 2; /* recompute energy treating dangles as in pf_fold() */
    min_en = energy_of_struct(string,structure);
    free(structure); structure=NULL; free_arrays();
    kT = (temperature+K0)*GASCONST/1000;    /* in kcal */
-   pf_scale = exp((1.07*min_en)/kT/length );
+   pf_scale = exp(-(1.07*min_en)/kT/length );
    init_pf_fold(length);
    
    for (i=0; i<2*m+1; i++) {
       F[i] = pf_fold(string, structure);   /* T_min -2h */
       temperature += h;
       kT = (temperature+K0)*GASCONST/1000;
-      pf_scale=exp((F[i]/length)/kT);
+      pf_scale=exp(-(F[i]/length)/kT);
       update_pf_params(length); 
    }
    while (temperature <= (T_max+m*h+h)) {
@@ -69,7 +70,7 @@ PRIVATE void heat_capacity(char *string, float T_min, float T_max,
       F[2*m] = pf_fold(string, structure); 
       temperature += h;
       kT = (temperature+K0)*GASCONST/1000;
-      pf_scale=exp((F[i]/length)/kT);
+      pf_scale=exp(-(F[i]/length)/kT);
       update_pf_params(length); 
    }
    free_pf_arrays();
@@ -105,7 +106,8 @@ int main(int argc, char *argv[])
 {
    char *string, *line;
    char  ns_bases[33]="", *c;
-   int  i, length, l, sym, r;
+   char  ParamFile[256]="";
+   int  i, length, l, sym;
    float T_min, T_max, h;
    int m_points;
    int istty;
@@ -117,66 +119,80 @@ int main(int argc, char *argv[])
 	 switch ( argv[i][1] ) {
 	  case 'T':
 	    if (strncmp(argv[i], "-Tmin", 5)==0) {
-	       r=sscanf(argv[++i], "%f", &T_min);
-	       if (!r) usage();
+	       if (i==argc-1) usage();
+	       if (sscanf(argv[++i], "%f", &T_min)==0)
+		 usage();
 	    }
 	    if (strncmp(argv[i], "-Tmax",5)==0) {
-	       r=sscanf(argv[++i], "%f", &T_max);
-	       if (!r) usage();
+	       if (i==argc-1) usage();
+	       if (sscanf(argv[++i], "%f", &T_max)==2)
+		 usage();
 	    }
 	    break;
 	  case 'h':
-	    if (i>argc-2) usage();
-	    r=sscanf(argv[++i],"%f",&h);
-	    if (!r) usage();
+	    if (i==argc-1) usage();
+	    if (sscanf(argv[++i],"%f",&h)==2)
+	      usage();
 	    break;
 	  case 'n':
 	    if ( strcmp(argv[i], "-noGU" )==0) noGU=1;
 	    if ( strcmp(argv[i], "-noCloseGU" ) ==0) no_closingGU=1;
 	    if ( strcmp(argv[i], "-nsp") ==0) {
-	       r=sscanf(argv[++i], "%32s", ns_bases);
-	       if (!r) usage();
+	      if (i==argc-1) usage();
+	      if (sscanf(argv[++i], "%32s", ns_bases)==0)
+		usage();
 	    }
 	    break;
 	  case '4':
 	    tetra_loop=0;
 	    break;
 	  case 'e':
-	    r=sscanf(argv[++i],"%d", &energy_set);
-	    if (!r) usage();
+	    if (i==argc-1) usage();
+	    if (sscanf(argv[++i],"%d", &energy_set)==0)
+	      usage();
 	    break;
 	  case 'm':
-	    r=sscanf(argv[++i],"%d", &m_points);
-	    if (!r) usage();
+	    if (i==argc-1) usage();
+	    if (sscanf(argv[++i],"%d", &m_points)==0)
+	      usage();
 	    if (m_points<1) m_points=1;
 	    if (m_points>100) m_points=100;
 	    break;
 	  case 'd': dangles=0;
-	    break;   
+	    break;
+	  case 'P':
+	    if (i==argc-1) usage();
+	    if (sscanf(argv[++i], "%255s", ParamFile)==0)
+	      usage();
+	    break;
 	  default: usage();
 	 }
    }
+
+   if (ParamFile[0])
+     read_parameter_file(ParamFile);
+   
    if (ns_bases[0]) {
-      nonstandards = space(33);
-      c=ns_bases;
-      i=sym=0;
-      if (*c=='-') {
-	 sym=1; c++;
-      }
-      while (*c) {
-	 if (*c!=',') {
-	    nonstandards[i++]=*c++;
-	    nonstandards[i++]=*c;
-	    if ((sym)&&(*c!=*(c-1))) {
-	       nonstandards[i++]=*c;
-	       nonstandards[i++]=*(c-1);
-	    }
+     nonstandards = space(33);
+     c=ns_bases;
+     i=sym=0;
+     if (*c=='-') {
+       sym=1; c++;
+     }
+     while (*c) {
+       if (*c!=',') {
+	 nonstandards[i++]=*c++;
+	 nonstandards[i++]=*c;
+	 if ((sym)&&(*c!=*(c-1))) {
+	   nonstandards[i++]=*c;
+	   nonstandards[i++]=*(c-1);
 	 }
-	 c++;
-      }
+       }
+       c++;
+     }
    }
    
-   istty = isatty(fileno(stdout));
+   istty = isatty(fileno(stdout))&&isatty(fileno(stdin));
    
    do {
       if (istty) {
@@ -205,6 +221,7 @@ int main(int argc, char *argv[])
 	 printf("length = %d\n", length);
       
       heat_capacity(string, T_min, T_max, h, m_points);
+      free(string);
       fflush(stdout);
    } while (1);
    return 0;
@@ -212,8 +229,6 @@ int main(int argc, char *argv[])
 
 PRIVATE void usage(void)
 {
-   nrerror("usage: RNAheat [-Tmin t1] [-Tmax t2] [-h stepsize] "
-	   "[-m ipoints] [-4]\n"
-	   "               [-noGU] [noCloseGU] [-d] [-nsp pairs] "
-	   "[-e e_set] \n");
+  nrerror("usage: RNAheat [-Tmin t1] [-Tmax t2] [-h stepsize] [-m ipoints] [-4] [-d]\n"
+	  "               [-noGU] [-noCloseGU] [-e 1|2] [-P paramfile] [-nsp pairs]");
 }

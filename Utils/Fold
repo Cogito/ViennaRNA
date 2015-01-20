@@ -10,6 +10,6 @@ exit
 nofile:
 echo "couldn't open file " $argv[$n]
 usage:
-echo "usage: Fold [RNAfold_options] filename"
+echo "usage: Fold [RNAfold_options] sequence_file"
 exit -1
 

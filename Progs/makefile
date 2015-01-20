@@ -5,11 +5,11 @@ SHELL	= /bin/sh
 
 #CC	= gcc   # insert your favorite C compiler
 
-CFLAGS  = -O -I../H
+COPT    = -O
 
-#On SGI IRIX >5 use
-#LIBS    = -L../lib -lRNA -lm -lfpe
-LIBS    = -L../lib -lRNA -lm 
+CFLAGS  = $(COPT) -I../H
+
+LDFLAGS = $(COPT) -L../lib -lRNA -lm 
 
 BINDIR	= /usr/local/bin
 MANDIR	= /usr/local/man/man1
@@ -18,8 +18,24 @@ ALL	= RNAfold RNAheat RNAeval RNAinverse RNAdistance RNApdist
 
 all:	$(ALL)
 
-$(ALL):	$$@.o
-	$(CC) -o $@ $(CFLAGS) $@.o $(LIBS)
+RNAfold: RNAfold.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
+RNAheat: RNAheat.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
+RNAeval: RNAeval.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
+RNAinverse: RNAinverse.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
+RNAdistance: RNAdistance.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
+RNApdist: RNApdist.o
+	$(CC) -o $@ $@.o $(LDFLAGS)
+
 
 install:	all
 	for i in $(ALL); do \
@@ -32,13 +48,3 @@ clean:
 	rm -f *.o
 	rm -f $(ALL)
 
-
-RNAdistance.o:	../H/dist_vars.h ../H/RNAstruct.h ../H/treedist.h \
-		../H/stringdist.h ../H/utils.h
-RNAeval.o:	../H/fold_vars.h ../H/fold.h ../H/utils.h
-RNAfold.o:	../H/fold.h ../H/part_func.h ../H/fold_vars.h ../H/utils.h
-RNAheat.o:	../H/utils.h ../H/fold_vars.h ../H/part_func.h
-RNAinverse.o:	../H/inverse.h ../H/fold_vars.h ../H/fold.h \
-		../H/part_func.h ../H/utils.h
-RNApdist.o:	../H/part_func.h ../H/fold_vars.h \
-		../H/profiledist.h ../H/dist_vars.h ../H/utils.h

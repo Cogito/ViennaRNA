@@ -21,12 +21,14 @@
 #define MAXLENGTH  10000
 #define MAXSEQ      1000
 
+static char rcsid[] = "$Id: RNApdist.c,v 1.3 1997/11/06 17:40:46 ivo Exp $";
 
 PRIVATE void command_line(int argc, char *argv[]);
 PRIVATE void usage(void);
 PRIVATE void print_aligned_lines(FILE *somewhere);
 
 PRIVATE char task;
+PRIVATE char  ParamFile[256]="";
 PRIVATE char outfile[50];
 PRIVATE char  ruler[] ="....,....1....,....2....,....3....,....4"
                        "....,....5....,....6....,....7....,....8";
@@ -45,12 +47,15 @@ int main(int argc, char *argv[])
    char      *line=NULL, *cp, fname[20], *list_title=NULL;
    
    command_line(argc, argv);
-
+   
    if((outfile[0]=='\0')&&(task=='m')&&(edit_backtrack)) 
       strcpy(outfile,"backtrack.file"); 
    if(outfile[0]!='\0') somewhere = fopen(outfile,"w");
    else somewhere = stdout;
-   istty   = isatty(fileno(stdout));
+   istty   = (isatty(fileno(stdout))&&isatty(fileno(stdin)));
+
+   if (ParamFile[0])
+     read_parameter_file(ParamFile);
 
    while (1) {
       if ((istty)&&(n==0)) {
@@ -69,8 +74,7 @@ int main(int argc, char *argv[])
 	       printf("%s\n", line);
 	       type = 0;
 	    } else {
-	       list_title = (char *) space(strlen(line));
-	       strcpy(list_title, line);
+	       list_title = strdup(line);
 	       type = 888;
 	    }
 	 }
@@ -97,14 +101,11 @@ int main(int argc, char *argv[])
          for (i=1; i<n; i++) {
             for (j=0; j<i; j++) {
                printf("%g ",profile_edit_distance(T[i], T[j]));
-               if(edit_backtrack) fprintf(somewhere,"> %d %d",i+1,j+1);
+               if(edit_backtrack) fprintf(somewhere,"> %d %d\n",i+1,j+1);
                print_aligned_lines(somewhere);
 	    }
 	    printf("\n");
 	 }
-         for (i=0; i<n; i++) {
-            for( j=0; j<=T[i][0][0]; j++) free(T[i][j]); free(T[i]);
-         }
 	 if (type==888) {  /* do another distance matrix */
 	    n = 0;
 	    printf("%s\n", list_title);
@@ -113,9 +114,8 @@ int main(int argc, char *argv[])
       }      
       
       if(type>800) {
-         for (i=0; i<n; i++) {
-            for( j=0; j<=T[i][0][0]; j++) free(T[i][j]); free(T[i]);
-         }
+	 for (i=0; i<n; i++) 
+	    free_profile(T[i]);
 	 if (type == 888) continue;
 	 if (outfile[0]!='\0') fclose(somewhere); 
          return 0; /* finito */
@@ -146,9 +146,8 @@ int main(int argc, char *argv[])
 	     dist = profile_edit_distance(T[0],T[1]);
 	     printf("%g\n",dist);
 	     print_aligned_lines(somewhere);
-	     printf("\n");
-	     for( j=0; j<=T[0][0][0]; j++) free(T[0][j]); free(T[0]);
-	     for( j=0; j<=T[1][0][0]; j++) free(T[1][j]); free(T[1]);
+	     free_profile(T[0]);
+	     free_profile(T[1]);
 	     n=0;
 	  }
 	  break;
@@ -157,19 +156,16 @@ int main(int argc, char *argv[])
 	      dist = profile_edit_distance(T[1], T[0]);
 	      printf("%g\n",dist);
 	      print_aligned_lines(somewhere);
-	      printf("\n");
-	      for( j=0; j<=T[1][0][0]; j++) free(T[1][j]); free(T[1]);
+	      free_profile(T[1]);
 	      n=1;
 	   }
 	  break;
 	case 'c' :
-	   
 	   if (n>1) {
 	      dist = profile_edit_distance(T[1], T[0]);
 	      printf("%g\n",dist);
 	      print_aligned_lines(somewhere);
-	      printf("\n");
-	      for( j=0; j<=T[0][0][0]; j++) free(T[0][j]); free(T[0]);
+	      free_profile(T[0]);
 	      T[0] = T[1]; 
 	      n=1; 
 	   }
@@ -190,25 +186,37 @@ int main(int argc, char *argv[])
 PRIVATE void command_line(int argc, char *argv[])
 {
 
-   int i;
-      
+   int i, sym, r;
+   char  ns_bases[33]="", *c;
+
    task = 'p';
    for (i=1; i<argc; i++) {
       if (argv[i][0]=='-') {
 	 switch (argv[i][1]) {
 	  case 'T':      /* temperature for folding */
              if (argv[i][2]!='\0') usage();
-	     sscanf(argv[++i], "%f", &temperature);
+	     if (sscanf(argv[++i], "%f", &temperature)==0)
+	       usage();
 	     break;
-	  case 'n':
-	     if ( strcmp(argv[i], "-noGU" )==0) noGU=1;
-             break;
 	  case '4':
 	     tetra_loop=0;
 	     break;
-	  case 'e':
-	     sscanf(argv[++i],"%d", &energy_set);
+ 	  case 'd':
+	     dangles=0;
 	     break;
+	  case 'e':
+	     if (sscanf(argv[++i],"%d", &energy_set)==0)
+	       usage();
+	     break;
+	  case 'n':
+            if ( strcmp(argv[i], "-noGU" )==0) noGU=1;
+            if ( strcmp(argv[i], "-noCloseGU" ) ==0) no_closingGU=1;
+            if ( strcmp(argv[i], "-nsp") ==0) {
+	      if (i==argc-1) usage();
+              r=sscanf(argv[++i], "%32s", ns_bases);
+              if (!r) usage();
+            }
+            break;
 	  case 'X':
 	    switch (task = argv[i][2]) {
 	     case 'p': break;
@@ -224,13 +232,36 @@ PRIVATE void command_line(int argc, char *argv[])
             else if (argv[i+1][0]=='-') outfile[0] = '\0';
             else {
                i++;
-               strcpy(outfile,argv[i]);
+               strncpy(outfile,argv[i],49);
             }
             edit_backtrack = 1;   
+	    break;
+	  case 'P':
+	    if (sscanf(argv[++i], "%255s", ParamFile)==0)
+	      usage();
 	    break;
 	  default:
 	    usage();
 	 }
+      }
+   }
+   if (ns_bases[0]) {
+      nonstandards = space(33);
+      c=ns_bases;
+      i=sym=0;
+      if (*c=='-') {
+         sym=1; c++;
+      }
+      while (*c) {
+         if (*c!=',') {
+            nonstandards[i++]=*c++;
+            nonstandards[i++]=*c;
+            if ((sym)&&(*c!=*(c-1))) {
+               nonstandards[i++]=*c;
+               nonstandards[i++]=*(c-1);
+            }
+         }
+         c++;
       }
    }
 }
@@ -239,8 +270,8 @@ PRIVATE void command_line(int argc, char *argv[])
 
 PRIVATE void usage(void)
 {
-   nrerror("usage: RNApdist [-T temp] [-4] [-noGU] [-e e_set] [-b base]\n"
-           "                [-Xpmfc] [-B [file]] ");
+  nrerror("usage: RNApdist [-Xpmfc] [-B [file]] [-T temp] [-4] [-d] [-noGU]\n"
+	  "                [-noCloseGU] [-e e_set] [-P paramfile] [-nsp pairs]");
 }
 
 /*--------------------------------------------------------------------------*/
@@ -248,7 +279,7 @@ PRIVATE void usage(void)
 PRIVATE void print_aligned_lines(FILE *somewhere)
 {
    if (edit_backtrack)
-   fprintf(somewhere, "\n%s\n%s\n", aligned_line[0], aligned_line[1]);
+     fprintf(somewhere, "%s\n%s\n", aligned_line[0], aligned_line[1]);
 }
 
 /*--------------------------------------------------------------------------*/

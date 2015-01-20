@@ -1,0 +1,7 @@
+Version 1.2 contained a bug in the RNAheat program causing overflow errors
+for most input sequences. 
+The PS_dot_plot() and PS_rna_plot() routines now return an int. The return 
+value is 0 if the file could not be written, 1 otherwise.
+This version contains the alpha version of a perl5 module, which let's you
+access all the capabilities of the Vienna RNA library from perl scripts.
+See the README file in the Perl directory for details.

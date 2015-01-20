@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <95/09/03 18:21:16 ivo> */
+/* Last changed Time-stamp: <97/11/05 22:24:48 ivo> */
 /*
 
 	  Calculate Energy of given Sequences and Structures
@@ -14,7 +14,8 @@
 #include "fold_vars.h"
 #include "fold.h"
 #include "utils.h"
-extern int pf_dangl;
+
+static char rcsid[] = "$Id: RNAeval.c,v 1.5 1997/11/05 21:25:53 ivo Exp $";
 
 #define  PUBLIC
 #define  PRIVATE   static
@@ -23,39 +24,54 @@ char  scale[] = "....,....1....,....2....,....3....,....4"
                 "....,....5....,....6....,....7....,....8";
 
 PRIVATE void usage(void);
+extern int logML;
+extern void  read_parameter_file(const char fname[]);
 
 int main(int argc, char *argv[])
 {
    char *line, *string, *structure;
    char  fname[12];
+   char  ParamFile[256]="";
    int   i, l, length1, length2;
    float energy;
    int   istty;
       
    string=NULL;
    for (i=1; i<argc; i++) {
-      if (argv[i][0]=='-')
-	 switch ( argv[i][1] ) {
-	  case 'T':  if (argv[i][2]!='\0') usage();
-	    sscanf(argv[++i], "%f", &temperature);
-	    break;
-	  case '4':
-	    tetra_loop=0;
-	    break;
-	  case 'e':
-	    sscanf(argv[++i],"%d", &energy_set);
-	    break;
-	  case 'd':
-	    dangles=0;
-            break;
-	  case 'p':
-	    pf_dangl=1;
-	    break;
-	  default: usage();
+     if (argv[i][0]=='-')
+       switch ( argv[i][1] )
+	 {
+	 case 'T':  if (argv[i][2]!='\0') usage();
+	   sscanf(argv[++i], "%f", &temperature);
+	   break;
+	 case '4':
+	   tetra_loop=0;
+	   break;
+	 case 'e':
+	   if (sscanf(argv[++i],"%d", &energy_set)==0)
+	     usage();
+	   break;
+	 case 'd': dangles=0;
+	   if (argv[i][2]!='\0')
+              sscanf(argv[i]+2, "%d", &dangles);
+	   break;
+	 case 'P':
+	   if (sscanf(argv[++i], "%255s", ParamFile)==0)
+	     usage();
+	   break;
+	 case 'l':
+	   if (strcmp(argv[i],"-logML")==0) {
+	     logML=1;
+	     break;
+	   }
+	 default: usage();
 	 }
    }
 
    istty = isatty(fileno(stdout))&&isatty(fileno(stdin));
+
+   if (ParamFile[0])
+     read_parameter_file(ParamFile);
 
    update_fold_params();
 
@@ -122,5 +138,5 @@ int main(int argc, char *argv[])
 
 PRIVATE void usage(void)
 {
-   nrerror("usage: RNAeval  [-T temp] [-4] [-e e_set] [-d]");
+  nrerror("usage: RNAeval  [-T temp] [-4] [-d[0|1|2]] [-e e_set] [-logML] [-P paramfile]");
 }

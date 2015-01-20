@@ -1,3 +1,4 @@
+/* Last Changed Time-stamp: <95/06/29 16:33:47 ivo> */
 /* This program converts the bracket notation for RNA secondary structures
    produced by RNAfold to .ct files used by Michael Zukers Program.
    To compile enter:
@@ -105,11 +106,11 @@ int make_pair_table(char *structure, short *table)
          break;
        case ')':
          j = stack[--hx];
-         if (hx<0) break;
+         if (hx<0) {i=strlen(structure); break;}
          table[i]=j;
          table[j]=i;
          break;
-       default: hx=1;
+       default: free(stack); return 1;
       }
    }
    free(stack);

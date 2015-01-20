@@ -7,14 +7,14 @@ programs:
 	cd Progs; $(MAKE)
 
 gammel:
-	cd Analyse; $(MAKE)
+	cd Cluster; $(MAKE)
 
 install:	all
 	cd lib; $(MAKE) install
 	cd Progs; $(MAKE) install
-	cd Analyse; $(MAKE) install
+	cd Cluster; $(MAKE) install
 
 clean:	
 	cd lib; $(MAKE) clean
 	cd Progs; $(MAKE) clean
-	cd Analyse; $(MAKE) clean
+	cd Cluster; $(MAKE) clean

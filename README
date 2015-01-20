@@ -1,8 +1,9 @@
-This is Version 1.1 of the Vienna RNA Package.
-----------------------------------------------
+This is Version 1.2.1 of the Vienna RNA Package.
+------------------------------------------------
+See the CHANGES file for differences to version 1.2.
 
-It consists of a few stand alone programs and a library that you can
-link your own programs with. The package allows you to
+The Vienna RNA packages consists of a few stand alone programs and a 
+library that you can link your own programs with. The package allows you to
 
 - predict minimum free energy secondary structures
 - calculate the partition function for the ensemble of structures
@@ -12,12 +13,14 @@ link your own programs with. The package allows you to
 
 There is also a set of programs for analysing sequence and distance
 data using split decomposition, statistical geometry, and cluster methods.
-This part of the package has not yet been tested extensively.
+This part of the package has not yet been tested as extensively.
+
+Please read the copyright notice in the file COPYING.
 
 The package is known to compile under
 SunOS 4.1, AIX 3.2, hpux8 and hpux9, IRIX 4.05 and IRIX 5, DEC OSF/1 and linux.
 Porting to other UN*X flavours should present no problems.
-You need a compiler that understands ANSI C.
+You need a compiler that understands ANSI C. See the INSTALL file for details.
 
 The following executables are provided:
 RNAfold		predict secondary structures
@@ -38,9 +41,25 @@ We have included a patched version of D.G. Gilbert's readseq program
 for those who often process sequence files from databanks. See the
 the documentation in that directory for details.
 
-If you need structures in the form of ".ct" files as produced by 
-Michael Zukers mfold Program, you'll find a small program b2ct.c to 
-convert the output of our RNAfold in the Utils directory. 
+NEWS
+-------
+This version features new energy parameters as described in Walter et.al
+(1994). In addition, energy parameters can now be read from file and
+therefore easily modified. The standard energy set can be found in the file 
+default.par. Many bugs have been fixed and the new version should need less 
+memory, give better error messages and (hopefully) produce fewer core dumps. 
+Almost all static arrays have been removed, all programs should work for 
+sequences up to a length of about 32700 (if you have lots of memory that is). 
+RNAeval now supports a logrithmic energy function for multi-loops in addition 
+to the usual linear one.
 
+Some useful utililities can be found in the Utils directory.
+
+If you're a commercial user and find these programs useful, please consider
+supporting further developments with a donation.
+
+The most recent source code and documentation is available on the web at
+http://www.tbi.univie.ac.at/~ivo/RNA/
 If you need help or have any questions send email to
 Ivo.Hofacker@tbi.univie.ac.at
+

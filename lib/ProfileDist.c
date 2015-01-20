@@ -3,9 +3,10 @@
 		      Peter F Stadler, Ivo L Hofacker
 			    Vienna RNA Package
 */ 
-/* Last changed Time-stamp: <> */
+/* Last changed Time-stamp: <97/11/28 22:35:20 ivo> */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
@@ -13,7 +14,12 @@
 #include  "fold_vars.h"
 #include  "part_func.h"
 #include  "utils.h"
+#ifdef dmalloc
+#include  "/usr/local/include/dmalloc.h"
+#define space(X) calloc(1,(X))
+#endif
 
+static char rcsid[] = "$Id: ProfileDist.c,v 1.3 1997/11/28 21:43:42 ivo Exp $";
 
 #define PUBLIC
 #define PRIVATE        static
@@ -26,7 +32,7 @@ PRIVATE int *alignment[2];
 PUBLIC float    profile_edit_distance(float **T1, float **T2);
 PUBLIC float  **Make_bp_profile(int length);
 PUBLIC void     free_profile(float **T);
-PUBLIC void     sprint_aligned_bppm(float **T1, float **T2);
+PRIVATE void    sprint_aligned_bppm(float **T1, float **T2);
 PRIVATE float   PrfEditCost(int i, int j, float **T1, float **T2);
 PRIVATE float   average(float x, float y);
 
@@ -207,7 +213,7 @@ PUBLIC float **Make_bp_profile(int length)
  
 /*---------------------------------------------------------------------------*/
          
-PUBLIC void sprint_aligned_bppm(float **T1, float **T2)
+PRIVATE void sprint_aligned_bppm(float **T1, float **T2)
 {
    int     i, length; 
    length = alignment[0][0];

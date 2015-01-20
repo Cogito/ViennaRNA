@@ -1,4 +1,4 @@
-/* Last changed Time-stamp: <95/08/09 18:17:21 ivo> */
+/* Last changed Time-stamp: <97/11/06 11:52:29 ivo> */
 /*                
 		Ineractive Access to folding Routines
 
@@ -14,15 +14,15 @@
 #include "fold.h"
 #include "part_func.h"
 #include "fold_vars.h"
+#include "PS_dot.h"
 #include "utils.h"
+static char rcsid[] = "$Id: RNAfold.c,v 1.7 1997/11/06 17:40:46 ivo Exp $";
 
 #define PRIVATE static
 
 static char  scale1[] = "....,....1....,....2....,....3....,....4";
 static char  scale2[] = "....,....5....,....6....,....7....,....8";
 
-extern void PS_rna_plot(char *string, char *file);
-extern void PS_dot_plot(char *string, char *file);
 PRIVATE void usage(void);
 
 static struct bond  *bp, *bpp;
@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
 {
    char *string, *line;
    char *structure=NULL, *cstruc=NULL;
-   char  fname[13], ffname[20];
+   char  fname[13], ffname[20], gfname[20];
+   char  ParamFile[256]="";
    char  ns_bases[33]="", *c;
    int   i, length, l, sym, r;
    float energy, min_en;
@@ -45,27 +46,31 @@ int main(int argc, char *argv[])
    string=NULL;
    for (i=1; i<argc; i++) {
       if (argv[i][0]=='-') 
-	 switch ( argv[i][1] ) {
+	switch ( argv[i][1] )
+	  {
 	  case 'T':  if (argv[i][2]!='\0') usage();
+	    if(i==argc-1) usage();
 	    r=sscanf(argv[++i], "%f", &temperature);
 	    if (!r) usage();
 	    break;
 	  case 'p':  pf=1;
 	    if (argv[i][2]!='\0')
-	       sscanf(argv[i]+2, "%d", &do_backtrack);
+	      sscanf(argv[i]+2, "%d", &do_backtrack);
 	    break;
 	  case 'n':
 	    if ( strcmp(argv[i], "-noGU" )==0) noGU=1;
 	    if ( strcmp(argv[i], "-noCloseGU" ) ==0) no_closingGU=1;
 	    if ( strcmp(argv[i], "-nsp") ==0) {
-	       r=sscanf(argv[++i], "%32s", ns_bases);
-	       if (!r) usage();
+	      if (i==argc-1) usage();
+	      r=sscanf(argv[++i], "%32s", ns_bases);
+	      if (!r) usage();
 	    }
 	    break;
 	  case '4':
 	    tetra_loop=0;
 	    break;
 	  case 'e':
+	    if(i==argc-1) usage();
 	    r=sscanf(argv[++i],"%d", &energy_set);
 	    if (!r) usage();
 	    break;
@@ -73,15 +78,24 @@ int main(int argc, char *argv[])
 	    fold_constrained=1;
 	    break;
 	  case 'S':
+	    if(i==argc-1) usage();
 	    r=sscanf(argv[++i],"%f", &sfact);
 	    if (!r) usage();
 	    break;
 	  case 'd': dangles=0;
-	    break;   
+	    break;
+	  case 'P':
+	    if (i==argc-1) usage();
+	    r=sscanf(argv[++i], "%255s", ParamFile);
+	    if (!r) usage();
+	    break;
 	  default: usage();
-	 } 
+	  } 
    }
 
+   if (ParamFile[0])
+     read_parameter_file(ParamFile);
+   
    if (ns_bases[0]) {
       nonstandards = space(33);
       c=ns_bases;
@@ -145,8 +159,8 @@ int main(int argc, char *argv[])
 	 printf("length = %d\n", length);
 
       initialize_fold(length);
-      if (fold_constrained)
-	 strcpy(structure,cstruc);
+      if (fold_constrained) 
+	strncpy(structure, cstruc, length+1);
       min_en = fold(string, structure);
       printf("%s\n%s", string, structure);
       if (istty)
@@ -159,9 +173,16 @@ int main(int argc, char *argv[])
       if (fname[0]!='\0') {
 	 strcpy(ffname, fname);
 	 strcat(ffname, "_ss.ps");
-      } else
+	 strcpy(gfname, fname);
+	 strcat(gfname, "_ss.g");
+      } else {
 	 strcpy(ffname, "rna.ps");
-      PS_rna_plot(string, ffname);
+	 strcpy(gfname, "rna.g");
+      }
+      PS_rna_plot(string, structure, ffname);
+#ifdef GML_OUTPUT
+      gmlRNA(string, structure, gfname, 'X');
+#endif
       bp = base_pair;
       bpp= space(16);
       base_pair=bpp;
@@ -169,19 +190,18 @@ int main(int argc, char *argv[])
       base_pair = bp;
        
       if (pf) {
-	 extern int pf_dangl;
 
-	 pf_dangl=1;   /* get min_en using energy_rules as in pf_fold() */
+	 if (dangles) dangles=2;   /* recompute with dangles as in pf_fold() */
 	 min_en = energy_of_struct(string, structure); 
 	 
 	 kT = (temperature+273.15)*1.98717/1000.; /* in Kcal */
-	 pf_scale = exp((sfact*min_en)/kT/length);
-	 if (length>1600) fprintf(stderr, "scaling factor %f\n", pf_scale);
+	 pf_scale = exp(-(sfact*min_en)/kT/length);
+	 if (length>2000) fprintf(stderr, "scaling factor %f\n", pf_scale);
 
 	 init_pf_fold(length);
 
 	 if (fold_constrained)
-	    strcpy(structure,cstruc);
+	    strncpy(structure, cstruc, length+1);
 	 energy = pf_fold(string, structure);
 	 
 	 if (do_backtrack) {
@@ -204,6 +224,8 @@ int main(int argc, char *argv[])
 	 free_pf_arrays();
 
       }
+      if (fold_constrained)
+	free(cstruc);
       free(base_pair);
       fflush(stdout);
       free(string);
@@ -214,6 +236,7 @@ int main(int argc, char *argv[])
 
 PRIVATE void usage(void)
 {
-   nrerror("usage: RNAfold [-p[0]] [-T temp] [-4] [-noGU] [-noCloseGU]\n" 
-	   "               [-e e_set] [-C] [-S scale] [-d] [-nsp pairs]");
+   nrerror("usage: "
+	   "RNAfold [-p[0]] [-C] [-T temp] [-4] [-d] [-noGU] [-noCloseGU]\n" 
+	   "               [-e e_set] [-P paramfile] [-nsp pairs] [-S scale]");
 }

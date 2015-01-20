@@ -28,6 +28,8 @@ OBJ	= \
 	ProfileDist.o \
 	dist_vars.o \
 	inverse.o \
+	energy_par.o \
+	read_epars.o \
 	utils.o
 
 all:	libRNA.a
@@ -44,13 +46,3 @@ install:
 clean:	
 	$(RM) libRNA.a $(OBJ)
 
-
-fold.o part_func.o: energy_par.h ./pair_mat.h ../H/fold_vars.h \
-		    ../H/utils.h
-PS_dot.o:	../H/utils.h ../H/fold_vars.h
-RNAstruct.o:	../H/utils.h
-treedist.c:	edit_cost.h ../H/dist_vars.h ../H/utils.h
-stringdist.c:	edit_cost.h ../H/dist_vars.h ../H/utils.h
-ProfileDist.c:	../H/fold_vars.h ../H/dist_vars.h ../H/utils.h ../H/part_func.h
-inverse.c:	../H/fold_vars.h ../H/dist_vars.h ../H/utils.h ../H/part_func.h\
-		../H/fold.h ./pair_mat.h ../H/treedist.h ../H/RNAstruct.h 
